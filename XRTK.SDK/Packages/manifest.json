@@ -3,8 +3,9 @@
     "com.unity.analytics": "3.2.2",
     "com.unity.package-manager-ui": "2.0.7",
     "com.unity.textmeshpro": "1.3.0",
-    "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#1.0.0",
-    "com.xrtk.xrtk-core": "https://github.com/XRTK/XRTK-Core.git#0.1.0",
+    "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.0",
+    "com.xrtk.xrtk-core": "https://github.com/XRTK/XRTK-Core.git#0.1.1",
+    "com.xrtk.xrtk-wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
@@ -37,13 +38,17 @@
     "com.unity.modules.xr": "1.0.0"
   },
   "lock": {
-    "com.xrtk.xrtk-core": {
-      "hash": "bd13b47126e68237174fa7d199908b104b6c3746",
+    "com.xrtk.upm-git-extension": {
+      "hash": "61758973ac97cbf031fe5bab047a43fe4edf28de",
+      "revision": "0.9.0"
+    },
+    "com.xrtk.xrtk-wmr": {
+      "hash": "8d373e6d9de3703f789f31441f17eb35965c719f",
       "revision": "0.1.0"
     },
-    "com.xrtk.upm-git-extension": {
-      "hash": "79454c7df6be6df97c1e3779aebda41651c5bfa8",
-      "revision": "1.0.0"
+    "com.xrtk.xrtk-core": {
+      "hash": "ecc68de0f09055fecd759c6f7f326a4f62b91900",
+      "revision": "0.1.1"
     }
   }
 }
