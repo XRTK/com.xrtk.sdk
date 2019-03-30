@@ -3,6 +3,7 @@
     "com.unity.analytics": "3.2.2",
     "com.unity.package-manager-ui": "2.0.7",
     "com.unity.textmeshpro": "1.3.0",
+    "com.unity.xr.oculus.standalone": "1.29.1",
     "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.0",
     "com.xrtk.xrtk-core": "https://github.com/XRTK/XRTK-Core.git#0.1.0",
     "com.xrtk.xrtk-wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.0",
@@ -42,12 +43,12 @@
       "hash": "61758973ac97cbf031fe5bab047a43fe4edf28de",
       "revision": "0.9.0"
     },
-    "com.xrtk.xrtk-core": {
-      "hash": "383fd0ea9b221065427a3e19f81f7e21e8992210",
-      "revision": "0.1.0"
-    },
     "com.xrtk.xrtk-wmr": {
       "hash": "8d373e6d9de3703f789f31441f17eb35965c719f",
+      "revision": "0.1.0"
+    },
+    "com.xrtk.xrtk-core": {
+      "hash": "2ca6ee7db30c36b06f9f7dff4623976343dc21ad",
       "revision": "0.1.0"
     }
   }
