@@ -42,13 +42,13 @@
       "hash": "61758973ac97cbf031fe5bab047a43fe4edf28de",
       "revision": "0.9.0"
     },
+    "com.xrtk.xrtk-core": {
+      "hash": "383fd0ea9b221065427a3e19f81f7e21e8992210",
+      "revision": "0.1.1"
+    },
     "com.xrtk.xrtk-wmr": {
       "hash": "8d373e6d9de3703f789f31441f17eb35965c719f",
       "revision": "0.1.0"
-    },
-    "com.xrtk.xrtk-core": {
-      "hash": "ecc68de0f09055fecd759c6f7f326a4f62b91900",
-      "revision": "0.1.1"
     }
   }
 }
