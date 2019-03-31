@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityCameraProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  isCameraPersistent: 0
+  isCameraPersistent: 1
   nearClipPlaneOpaqueDisplay: 0.1
   cameraClearFlagsOpaqueDisplay: 1
   backgroundColorOpaqueDisplay: {r: 0, g: 0, b: 0, a: 1}
