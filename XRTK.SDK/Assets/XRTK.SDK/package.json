@@ -12,5 +12,8 @@
     "src": "Assets/XRTK.Core",
     "author": "XRTK Team (https://github.com/XRTK)",
     "dependencies": {
+        "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.1",
+        "com.xrtk.core": "https://github.com/XRTK/XRTK-Core.git#0.1.0",
+        "com.xrtk.wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.0"
     }
 }
