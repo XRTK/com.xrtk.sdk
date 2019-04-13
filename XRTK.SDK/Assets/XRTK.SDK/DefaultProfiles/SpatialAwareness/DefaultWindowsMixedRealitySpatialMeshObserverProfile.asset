@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a70489fee51358439548f66c363038e, type: 3}
+  m_Script: {fileID: 11500000, guid: 68f87d1ac67141afaf834f81454c9aeb, type: 3}
   m_Name: DefaultWindowsMixedRealitySpatialMeshObserverProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
