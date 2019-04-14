@@ -1,0 +1,3 @@
+[submodule "Submodlues/XRTK-Core"]
+	path = Submodlues/XRTK-Core
+	url = https://github.com/XRTK/XRTK-Core.git
