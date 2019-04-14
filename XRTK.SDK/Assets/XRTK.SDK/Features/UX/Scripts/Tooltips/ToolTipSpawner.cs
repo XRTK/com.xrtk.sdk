@@ -263,7 +263,7 @@ namespace XRTK.SDK.UX.ToolTips
                         break;
                 }
 
-                await new WaitForUpdate();
+                await Awaiters.UnityMainThread;
             }
         }
 
