@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   symbolicLinks:
   - sourceRelativePath: /Submodules/XRTK-Core/XRTK-Core/Assets/XRTK
-    targetRelativePath: /XRTK.WindowsMixedReality/Assets/XRTK
+    targetRelativePath: /XRTK.SDK/Assets/XRTK
     isActive: 1
   - sourceRelativePath: /Submodules/WindowsMixedReality/XRTK.WindowsMixedReality/Assets/XRTK.WindowsMixedReality
     targetRelativePath: /XRTK.SDK/Assets/XRTK.WindowsMixedReality
