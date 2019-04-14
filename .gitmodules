@@ -1,5 +1,5 @@
-[submodule "Submodlues/XRTK-Core"]
-	path = Submodlues/XRTK-Core
+[submodule "Submodules/XRTK-Core"]
+	path = Submodules/XRTK-Core
 	url = https://github.com/XRTK/XRTK-Core.git
 [submodule "Submodules/WindowsMixedReality"]
 	path = Submodules/WindowsMixedReality
