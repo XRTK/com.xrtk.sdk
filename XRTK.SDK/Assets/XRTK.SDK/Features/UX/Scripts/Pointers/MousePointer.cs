@@ -50,6 +50,13 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         float IMixedRealityMousePointer.HideTimeout => hideTimeout;
 
+        [SerializeField]
+        [Range(0.1f, 1f)]
+        [Tooltip("Mouse cursor speed that gets applied to the mouse delta.")]
+        private float speed = 0.25f;
+
+        float IMixedRealityMousePointer.Speed => speed;
+
         #endregion IMixedRealityMousePointer Implementation
 
         #region IMixedRealityPointer Implementaiton
@@ -78,7 +85,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             transform.position = CameraCache.Main.transform.position;
 
-            if (TryGetPointingRay(out Ray pointingRay))
+            if (TryGetPointingRay(out var pointingRay))
             {
                 Rays[0].CopyRay(pointingRay, PointerExtent);
 
@@ -236,9 +243,11 @@ namespace XRTK.SDK.UX.Pointers
         private void UpdateMousePosition(float mouseX, float mouseY)
         {
             var shouldUpdate = false;
+            var scaledMouseX = mouseX * speed;
+            var scaledMouseY = mouseY * speed;
 
-            if (Mathf.Abs(mouseX) >= movementThresholdToUnHide ||
-                Mathf.Abs(mouseY) >= movementThresholdToUnHide)
+            if (Mathf.Abs(scaledMouseX) >= movementThresholdToUnHide ||
+                Mathf.Abs(scaledMouseY) >= movementThresholdToUnHide)
             {
                 if (isDisabled)
                 {
@@ -256,8 +265,8 @@ namespace XRTK.SDK.UX.Pointers
             }
 
             var newRotation = Vector3.zero;
-            newRotation.x += mouseX;
-            newRotation.y += mouseY;
+            newRotation.x += scaledMouseX;
+            newRotation.y += scaledMouseY;
             transform.Rotate(newRotation, Space.World);
         }
     }
