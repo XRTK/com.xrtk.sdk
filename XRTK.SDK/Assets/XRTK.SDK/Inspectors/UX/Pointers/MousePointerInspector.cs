@@ -12,6 +12,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty hideCursorWhenInactive;
         private SerializedProperty hideTimeout;
         private SerializedProperty movementThresholdToUnHide;
+        private SerializedProperty speed;
         private bool mousePointerFoldout = true;
 
         protected override void OnEnable()
@@ -22,6 +23,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             hideCursorWhenInactive = serializedObject.FindProperty("hideCursorWhenInactive");
             movementThresholdToUnHide = serializedObject.FindProperty("movementThresholdToUnHide");
             hideTimeout = serializedObject.FindProperty("hideTimeout");
+            speed = serializedObject.FindProperty("speed");
         }
 
         public override void OnInspectorGUI()
@@ -43,6 +45,8 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 }
 
                 EditorGUI.indentLevel--;
+
+                EditorGUILayout.PropertyField(speed);
             }
 
             serializedObject.ApplyModifiedProperties();
