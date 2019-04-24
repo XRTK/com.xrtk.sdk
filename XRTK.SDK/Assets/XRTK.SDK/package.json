@@ -2,7 +2,7 @@
   "name": "com.xrtk.sdk",
   "displayName": "XRTK.SDK",
   "description": "The SDK for the Mixed Reality Toolkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "unity": "2018.3",
   "license": "MIT",
   "repository": {
