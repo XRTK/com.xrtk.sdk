@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityToolkitConfigurationProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  enableCameraProfile: 1
+  enableCameraSystem: 1
+  cameraSystemType:
+    reference: XRTK.Services.CameraSystem.MixedRealityCameraSystem, XRTK
   cameraProfile: {fileID: 11400000, guid: 2b0ab6f5348646cebf8585d46c3a3edc, type: 2}
   enableInputSystem: 1
   inputSystemProfile: {fileID: 11400000, guid: a176466fbf4e44a087639abca7e5ba47, type: 2}
