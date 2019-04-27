@@ -31,7 +31,7 @@ namespace XRTK.SDK.UX.Pointers
             base.OnValidate();
             EnsureSetup();
 
-            if (parabolicLineData.LineTransform == transform)
+            if (Application.isPlaying && parabolicLineData.LineTransform == transform)
             {
                 Debug.LogWarning("Missing Parabolic line helper.\nThe Parabolic Teleport Pointer requires an empty GameObject child for calculating the parabola arc.");
             }

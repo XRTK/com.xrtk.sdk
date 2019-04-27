@@ -18,26 +18,26 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
     dataProviderName: Mouse Controller Data Provider
     priority: 5
-    runtimePlatform: -1
+    runtimePlatform: 15
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
     dataProviderName: Touch Screen Controller Data Provider
     priority: 5
-    runtimePlatform: -1
+    runtimePlatform: 15
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
         XRTK
     dataProviderName: Unity Joystick Controller Data Provider
     priority: 5
-    runtimePlatform: -1
+    runtimePlatform: 15
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
     dataProviderName: Open VR Controller Data Provider
     priority: 5
-    runtimePlatform: -1
+    runtimePlatform: 15
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityDataProvider,
@@ -58,4 +58,10 @@ MonoBehaviour:
     dataProviderName: Windows Dictation Data Provider
     priority: 5
     runtimePlatform: 9
+    profile: {fileID: 0}
+  - dataProviderType:
+      reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
+    dataProviderName: Lumin Controller Data Provider
+    priority: 5
+    runtimePlatform: 16
     profile: {fileID: 0}
