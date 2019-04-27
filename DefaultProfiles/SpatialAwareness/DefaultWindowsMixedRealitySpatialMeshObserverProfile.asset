@@ -26,3 +26,5 @@ MonoBehaviour:
   meshVisibleMaterial: {fileID: 2100000, guid: 58998db165b741089929938ea4d1b249, type: 2}
   meshOcclusionMaterial: {fileID: 2100000, guid: 0062b17981f34cf18ad1f9060db0cb2b,
     type: 2}
+  additionalComponents: []
+  meshObjectPrefab: {fileID: 0}
