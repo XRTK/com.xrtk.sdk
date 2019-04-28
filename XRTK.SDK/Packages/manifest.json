@@ -6,6 +6,7 @@
     "com.unity.xr.legacyinputhelpers": "2.0.2",
     "com.unity.xr.oculus.standalone": "1.29.1",
     "com.xrtk.core": "https://github.com/XRTK/XRTK-Core.git#0.1.4",
+    "com.xrtk.lumin": "https://github.com/XRTK/Lumin.git#0.1.0",
     "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.4",
     "com.xrtk.wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.1",
     "com.unity.modules.ai": "1.0.0",
@@ -51,6 +52,10 @@
     "com.xrtk.wmr": {
       "hash": "590a21635dff21d93fd8dd14e66fcdd0424cf63d",
       "revision": "0.1.1"
+    },
+    "com.xrtk.lumin": {
+      "hash": "cf91e467e7151a830e36d39ecad2cd34cff32ae0",
+      "revision": "0.1.0"
     }
   }
 }
