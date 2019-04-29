@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using XRTK.Definitions.Utilities;
 using XRTK.Extensions;
 using UnityEngine;
@@ -81,6 +82,20 @@ namespace XRTK.SDK.UX.Collections
             set => radialRange = value;
         }
 
+        [SerializeField]
+        [Tooltip("The offset for the first position in the radial layout.")]
+        [Range(0.0f, 1f)]
+        private float radialOffset = 0.0f;
+
+        /// <summary>
+        /// The offset for the first position in the radial layout.
+        /// </summary>
+        public float RadialOffset
+        {
+            get => radialOffset;
+            set => radialOffset = value;
+        }
+
         [Tooltip("Number of rows per column")]
         [SerializeField]
         private int rows = 3;
@@ -149,15 +164,13 @@ namespace XRTK.SDK.UX.Collections
         /// </summary>
         protected override void LayoutChildren()
         {
-            float startOffsetX;
-            float startOffsetY;
             var nodeGrid = new Vector3[NodeList.Count];
             Vector3 newPos;
 
             // Now lets lay out the grid
             Columns = Mathf.CeilToInt((float)NodeList.Count / rows);
-            startOffsetX = (Columns * 0.5f) * CellWidth;
-            startOffsetY = (rows * 0.5f) * CellHeight;
+            var startOffsetX = (Columns * 0.5f) * CellWidth;
+            var startOffsetY = (rows * 0.5f) * CellHeight;
             HalfCell = new Vector2(CellWidth * 0.5f, CellHeight * 0.5f);
 
             // First start with a grid then project onto surface
@@ -168,7 +181,7 @@ namespace XRTK.SDK.UX.Collections
                 case ObjectOrientationSurfaceType.Plane:
                     for (int i = 0; i < NodeList.Count; i++)
                     {
-                        ObjectCollectionNode node = NodeList[i];
+                        var node = NodeList[i];
                         newPos = nodeGrid[i];
                         //Debug.Log(newPos);
                         node.Transform.localPosition = newPos;
@@ -180,7 +193,7 @@ namespace XRTK.SDK.UX.Collections
                 case ObjectOrientationSurfaceType.Cylinder:
                     for (int i = 0; i < NodeList.Count; i++)
                     {
-                        ObjectCollectionNode node = NodeList[i];
+                        var node = NodeList[i];
                         newPos = VectorExtensions.CylindricalMapping(nodeGrid[i], radius);
                         node.Transform.localPosition = newPos;
                         UpdateNodeFacing(node);
@@ -192,7 +205,7 @@ namespace XRTK.SDK.UX.Collections
 
                     for (int i = 0; i < NodeList.Count; i++)
                     {
-                        ObjectCollectionNode node = NodeList[i];
+                        var node = NodeList[i];
                         newPos = VectorExtensions.SphericalMapping(nodeGrid[i], radius);
                         node.Transform.localPosition = newPos;
                         UpdateNodeFacing(node);
@@ -206,8 +219,8 @@ namespace XRTK.SDK.UX.Collections
 
                     for (int i = 0; i < NodeList.Count; i++)
                     {
-                        ObjectCollectionNode node = NodeList[i];
-                        newPos = VectorExtensions.RadialMapping(nodeGrid[i], radialRange, radius, curRow, rows, curColumn, Columns);
+                        var node = NodeList[i];
+                        newPos = VectorExtensions.RadialMapping(nodeGrid[i], radialRange, radius, curRow, rows, curColumn, Columns, radialOffset);
 
                         if (curColumn == (Columns - 1))
                         {
@@ -260,7 +273,7 @@ namespace XRTK.SDK.UX.Collections
         }
 
         /// <summary>
-        /// Update the facing of a node given the nodes new position for facing orign with node and orientation type
+        /// Update the facing of a node given the nodes new position for facing origin with node and orientation type
         /// </summary>
         /// <param name="node"></param>
         protected void UpdateNodeFacing(ObjectCollectionNode node)
@@ -317,7 +330,8 @@ namespace XRTK.SDK.UX.Collections
         // Gizmos to draw when the Collection is selected.
         protected virtual void OnDrawGizmosSelected()
         {
-            Vector3 scale = (2f * radius) * Vector3.one;
+            var scale = (2f * radius) * Vector3.one;
+
             switch (surfaceType)
             {
                 case ObjectOrientationSurfaceType.Plane:
@@ -327,6 +341,10 @@ namespace XRTK.SDK.UX.Collections
                     Gizmos.DrawWireMesh(CylinderMesh, transform.position, transform.rotation, scale);
                     break;
                 case ObjectOrientationSurfaceType.Sphere:
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawWireMesh(SphereMesh, transform.position, transform.rotation, scale);
+                    break;
+                case ObjectOrientationSurfaceType.Radial:
                     Gizmos.color = Color.green;
                     Gizmos.DrawWireMesh(SphereMesh, transform.position, transform.rotation, scale);
                     break;
