@@ -104,8 +104,8 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 5
-        description: Teleport Direction
+        id: 11
+        description: Scroll/Touch
         axisConstraint: 4
       keyCode: 0
       axisCodeX: 
@@ -214,8 +214,8 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 5
-        description: Teleport Direction
+        id: 11
+        description: Scroll/Touch
         axisConstraint: 4
       keyCode: 0
       axisCodeX: 
