@@ -94,11 +94,11 @@ namespace XRTK.SDK.UX.Controllers
                     case "pointing_pose":
                         pointingPose = child.gameObject;
                         PoseDriver = null;
-                        pointingPose.transform.parent = transform;
-                        transform.GetChild(0).parent = pointingPose.transform;
+                        var cachedTransform = pointingPose.transform.parent = transform;
+                        cachedTransform.GetChild(0).parent = pointingPose.transform;
                         PoseDriver = pointingPose.transform;
-                        transform.localPosition = Vector3.zero;
-                        transform.localRotation = Quaternion.identity;
+                        cachedTransform.localPosition = Vector3.zero;
+                        cachedTransform.localRotation = Quaternion.identity;
                         break;
                     case "pressed":
                         switch (child.parent.name.ToLower())

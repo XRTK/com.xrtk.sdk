@@ -66,13 +66,14 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnPreRaycast()
         {
+            var transformForward = transform.forward;
             parabolicLineData.LineTransform.rotation = Quaternion.identity;
-            parabolicLineData.Direction = transform.forward;
+            parabolicLineData.Direction = transformForward;
 
             // when pointing straight up, upDot should be close to 1.
             // when pointing straight down, upDot should be close to -1.
             // when pointing straight forward in any direction, upDot should be 0.
-            var upDot = Vector3.Dot(transform.forward, Vector3.up);
+            var upDot = Vector3.Dot(transformForward, Vector3.up);
 
             var velocity = minParabolaVelocity;
             var distance = minDistanceModifier;
