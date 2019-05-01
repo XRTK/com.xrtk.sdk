@@ -309,11 +309,12 @@ namespace XRTK.SDK.UX.Pointers
         public virtual float PointerOrientation
         {
             get => pointerOrientation + (raycastOrigin != null ? raycastOrigin.eulerAngles.y : transform.eulerAngles.y);
-            set =>
-                    pointerOrientation = value < 0
-                            ? Mathf.Clamp(value, -360f, 0f)
-                            : Mathf.Clamp(value, 0f, 360f);
+            set => pointerOrientation = value < 0
+                        ? Mathf.Clamp(value, -360f, 0f)
+                        : Mathf.Clamp(value, 0f, 360f);
         }
+
+        public bool IsTargetPositionLockedOnFocusLock { get; set; }
 
         /// <inheritdoc />
         public virtual void OnPreRaycast() { }
@@ -331,7 +332,7 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public virtual bool TryGetPointingRay(out Ray pointingRay)
         {
-            TryGetPointerPosition(out Vector3 pointerPosition);
+            TryGetPointerPosition(out var pointerPosition);
             pointingRay = pointerRay;
             pointingRay.origin = pointerPosition;
             pointingRay.direction = PointerDirection;
@@ -343,7 +344,7 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public virtual bool TryGetPointerRotation(out Quaternion rotation)
         {
-            Vector3 pointerRotation = raycastOrigin != null ? raycastOrigin.eulerAngles : transform.eulerAngles;
+            var pointerRotation = raycastOrigin != null ? raycastOrigin.eulerAngles : transform.eulerAngles;
             rotation = Quaternion.Euler(pointerRotation.x, PointerOrientation, pointerRotation.z);
             return true;
         }
@@ -397,6 +398,31 @@ namespace XRTK.SDK.UX.Pointers
         #endregion IEquality Implementation
 
         #endregion IMixedRealityPointer Implementation
+
+        #region IMixedRealitySourcePoseHandler Implementation
+
+        /// <inheritdoc />
+        public override void OnSourceLost(SourceStateEventData eventData)
+        {
+            base.OnSourceLost(eventData);
+
+            if (eventData.SourceId == InputSourceParent.SourceId)
+            {
+                if (requiresHoldAction)
+                {
+                    IsHoldPressed = false;
+                }
+
+                if (IsSelectPressed)
+                {
+                    MixedRealityToolkit.InputSystem.RaisePointerUp(this, pointerAction);
+                }
+
+                IsSelectPressed = false;
+            }
+        }
+
+        #endregion IMixedRealitySourcePoseHandler Implementation
 
         #region IMixedRealityInputHandler Implementation
 
