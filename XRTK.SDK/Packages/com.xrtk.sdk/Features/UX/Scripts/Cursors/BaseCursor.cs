@@ -413,9 +413,10 @@ namespace XRTK.SDK.UX.Cursors
                 : Time.deltaTime;
 
             // Use the lerp times to blend the position to the target position
-            transform.position = Vector3.Lerp(transform.position, targetPosition, deltaTime / positionLerpTime);
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, deltaTime / scaleLerpTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, deltaTime / rotationLerpTime);
+            var cachedTransform = transform;
+            transform.position = Vector3.Lerp(cachedTransform.position, targetPosition, deltaTime / positionLerpTime);
+            transform.localScale = Vector3.Lerp(cachedTransform.localScale, targetScale, deltaTime / scaleLerpTime);
+            transform.rotation = Quaternion.Lerp(cachedTransform.rotation, targetRotation, deltaTime / rotationLerpTime);
         }
 
         /// <summary>
