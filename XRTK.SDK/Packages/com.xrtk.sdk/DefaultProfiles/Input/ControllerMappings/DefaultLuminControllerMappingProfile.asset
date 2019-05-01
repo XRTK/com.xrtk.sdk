@@ -78,9 +78,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
-        id: 2
-        description: Menu
-        axisConstraint: 2
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: 
       axisCodeY: 
@@ -91,9 +91,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 2
+        description: Menu
+        axisConstraint: 2
       keyCode: 0
       axisCodeX: 
       axisCodeY: 
@@ -104,8 +104,8 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 5
-        description: Teleport Direction
+        id: 11
+        description: Scroll
         axisConstraint: 4
       keyCode: 0
       axisCodeX: 
@@ -188,9 +188,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
-        id: 2
-        description: Menu
-        axisConstraint: 2
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: 
       axisCodeY: 
@@ -201,9 +201,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 2
+        description: Menu
+        axisConstraint: 2
       keyCode: 0
       axisCodeX: 
       axisCodeY: 
@@ -214,8 +214,8 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 5
-        description: Teleport Direction
+        id: 11
+        description: Scroll
         axisConstraint: 4
       keyCode: 0
       axisCodeX: 
