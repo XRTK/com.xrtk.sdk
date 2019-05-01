@@ -318,8 +318,9 @@ namespace XRTK.SDK.UX.Pointers
                                 if (offsetStrafeAngle > 0 && offsetStrafeAngle < backStrafeActivationAngle)
                                 {
                                     canMove = false;
-                                    var height = MixedRealityToolkit.Instance.MixedRealityPlayspace.position.y;
-                                    var newPosition = -CameraCache.Main.transform.forward * strafeAmount + MixedRealityToolkit.Instance.MixedRealityPlayspace.position;
+                                    var playspacePosition = MixedRealityToolkit.Instance.MixedRealityPlayspace.position;
+                                    var height = playspacePosition.y;
+                                    var newPosition = -CameraCache.Main.transform.forward * strafeAmount + playspacePosition;
                                     newPosition.y = height;
                                     MixedRealityToolkit.Instance.MixedRealityPlayspace.position = newPosition;
                                 }

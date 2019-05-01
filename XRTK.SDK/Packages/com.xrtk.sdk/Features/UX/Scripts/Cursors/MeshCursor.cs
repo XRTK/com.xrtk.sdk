@@ -84,8 +84,9 @@ namespace XRTK.SDK.UX.Cursors
                     filter.mesh = stateDatum.CursorMesh;
                 }
 
-                TargetRenderer.transform.localPosition = stateDatum.LocalOffset;
-                TargetRenderer.transform.localScale = stateDatum.LocalScale;
+                var targetTransform = TargetRenderer.transform;
+                targetTransform.localPosition = stateDatum.LocalOffset;
+                targetTransform.localScale = stateDatum.LocalScale;
             }
         }
     }
