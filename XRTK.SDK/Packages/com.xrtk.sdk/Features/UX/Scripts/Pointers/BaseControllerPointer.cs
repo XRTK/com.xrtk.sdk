@@ -15,6 +15,7 @@ using XRTK.Interfaces.TeleportSystem;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
 using XRTK.Utilities.Async;
+using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
 {
@@ -276,7 +277,11 @@ namespace XRTK.SDK.UX.Pointers
 
                 return pointerExtent;
             }
-            set => pointerExtent = value;
+            set
+            {
+                pointerExtent = value;
+                overrideGlobalPointerExtent = false;
+            }
         }
 
         /// <inheritdoc />
@@ -292,7 +297,7 @@ namespace XRTK.SDK.UX.Pointers
         public IPointerResult Result { get; set; }
 
         /// <inheritdoc />
-        public IBaseRayStabilizer RayStabilizer { get; set; }
+        public IBaseRayStabilizer RayStabilizer { get; set; } = new GenericStabilizer();
 
         /// <inheritdoc />
         public RaycastMode RaycastMode { get; set; } = RaycastMode.Simple;

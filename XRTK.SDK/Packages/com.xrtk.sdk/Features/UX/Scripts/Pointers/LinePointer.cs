@@ -105,6 +105,12 @@ namespace XRTK.SDK.UX.Pointers
 
             lineBase.UpdateMatrix();
 
+            if (RayStabilizer != null)
+            {
+                RayStabilizer.UpdateStability(Rays[0].Origin, Rays[0].Direction);
+                Rays[0].CopyRay(RayStabilizer.StableRay, PointerExtent);
+            }
+
             TryGetPointerPosition(out var pointerPosition);
             TryGetPointerRotation(out var pointerRotation);
 
@@ -140,27 +146,31 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnPostRaycast()
         {
-            // The distance the ray travels through the world before it hits something. Measured in world-units (as opposed to normalized distance).
-            var clearWorldLength = 0f;
-            var lineColor = LineColorNoTarget;
+            base.OnPostRaycast();
+
+            Gradient lineColor;
 
             if (!IsInteractionEnabled)
             {
                 lineBase.enabled = false;
+                BaseCursor?.SetVisibility(false);
                 return;
             }
 
             lineBase.enabled = true;
+            BaseCursor?.SetVisibility(true);
 
+            // The distance the ray travels through the world before it hits something. Measured in world-units (as opposed to normalized distance).
+            float clearWorldLength;
             // Used to ensure the line doesn't extend beyond the cursor
-            float cursorOffsetWorldLength = (BaseCursor != null) ? BaseCursor.SurfaceCursorDistance : 0;
+            float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0;
 
             // If we hit something
             if (Result?.CurrentPointerTarget != null)
             {
                 clearWorldLength = Result.Details.RayDistance;
 
-                lineColor = LineColorValid;
+                lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
             }
             else
             {
@@ -187,7 +197,7 @@ namespace XRTK.SDK.UX.Pointers
 
             // If focus is locked, we're sticking to the target
             // So don't clamp the world length
-            if (IsFocusLocked)
+            if (IsFocusLocked && IsTargetPositionLockedOnFocusLock)
             {
                 float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);
                 LineBase.LineEndClamp = 1 - cursorOffsetLocalLength;
@@ -201,11 +211,5 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         #endregion IMixedRealityPointer Implementation
-
-        private void SetLinePoints(Vector3 startPoint, Vector3 endPoint, float distance)
-        {
-            lineBase.FirstPoint = startPoint;
-            lineBase.LastPoint = endPoint;
-        }
     }
 }
