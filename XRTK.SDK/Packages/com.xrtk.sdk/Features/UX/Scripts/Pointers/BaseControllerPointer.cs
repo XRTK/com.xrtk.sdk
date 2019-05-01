@@ -314,6 +314,7 @@ namespace XRTK.SDK.UX.Pointers
                         : Mathf.Clamp(value, 0f, 360f);
         }
 
+        /// <inheritdoc />
         public bool IsTargetPositionLockedOnFocusLock { get; set; }
 
         /// <inheritdoc />
