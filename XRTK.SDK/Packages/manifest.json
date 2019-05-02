@@ -5,7 +5,7 @@
     "com.unity.textmeshpro": "2.0.0",
     "com.unity.xr.legacyinputhelpers": "2.0.2",
     "com.unity.xr.oculus.standalone": "1.29.1",
-    "com.xrtk.core": "https://github.com/XRTK/XRTK-Core.git#0.1.8",
+    "com.xrtk.core": "https://github.com/XRTK/XRTK-Core.git#0.1.9",
     "com.xrtk.lumin": "https://github.com/XRTK/Lumin.git#0.1.1",
     "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.5",
     "com.xrtk.wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.2",
@@ -42,8 +42,8 @@
   },
   "lock": {
     "com.xrtk.core": {
-      "hash": "17e7e6673de647050f2c915d143fd042f40ad7c2",
-      "revision": "0.1.8"
+      "hash": "d4be87365d4a56d22bb908f3acc8b409cf10240c",
+      "revision": "0.1.9"
     },
     "com.xrtk.lumin": {
       "hash": "45da20dee3740ee5781aa380c962f1aa361c7a7c",
