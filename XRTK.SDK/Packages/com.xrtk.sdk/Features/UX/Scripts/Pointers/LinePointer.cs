@@ -12,7 +12,6 @@ namespace XRTK.SDK.UX.Pointers
     /// <summary>
     /// A simple line pointer for drawing lines from the input source origin to the current pointer position.
     /// </summary>
-    [RequireComponent(typeof(DistorterGravity))]
     public class LinePointer : BaseControllerPointer
     {
         [SerializeField]
@@ -59,14 +58,6 @@ namespace XRTK.SDK.UX.Pointers
             set => lineRenderers = value;
         }
 
-        [SerializeField]
-        private DistorterGravity gravityDistorter = null;
-
-        /// <summary>
-        /// The Gravity Distorter that is affecting the <see cref="BaseMixedRealityLineDataProvider"/> attached to this pointer.
-        /// </summary>
-        public DistorterGravity GravityDistorter => gravityDistorter;
-
         private void CheckInitialization()
         {
             if (lineBase == null)
@@ -77,11 +68,6 @@ namespace XRTK.SDK.UX.Pointers
             if (lineBase == null)
             {
                 Debug.LogError($"No Mixed Reality Line Data Provider found on {gameObject.name}. Did you forget to add a Line Data provider?");
-            }
-
-            if (gravityDistorter == null)
-            {
-                gravityDistorter = GetComponent<DistorterGravity>();
             }
 
             if (lineBase != null && (lineRenderers == null || lineRenderers.Length == 0))
@@ -117,20 +103,27 @@ namespace XRTK.SDK.UX.Pointers
         {
             Debug.Assert(lineBase != null);
 
-            TryGetPointerPosition(out Vector3 pointerPosition);
-
             lineBase.UpdateMatrix();
+
+            if (RayStabilizer != null)
+            {
+                RayStabilizer.UpdateStability(Rays[0].Origin, Rays[0].Direction);
+                Rays[0].CopyRay(RayStabilizer.StableRay, PointerExtent);
+            }
+
+            TryGetPointerPosition(out var pointerPosition);
+            TryGetPointerRotation(out var pointerRotation);
 
             // Set our first and last points
             lineBase.FirstPoint = pointerPosition;
 
-            if (IsFocusLocked)
+            if (IsFocusLocked && Result != null)
             {
                 lineBase.LastPoint = pointerPosition + ((Result.Details.Point - pointerPosition).normalized * PointerExtent);
             }
             else
             {
-                lineBase.LastPoint = pointerPosition + (PointerDirection * PointerExtent);
+                lineBase.LastPoint = pointerPosition + pointerRotation * Vector3.forward * PointerExtent;
             }
 
             // Make sure our array will hold
@@ -139,19 +132,12 @@ namespace XRTK.SDK.UX.Pointers
                 Rays = new RayStep[LineCastResolution];
             }
 
-            // Set up our rays
-            if (!IsFocusLocked)
-            {
-                // Turn off gravity so we get accurate rays
-                gravityDistorter.enabled = false;
-            }
-
-            float stepSize = 1f / Rays.Length;
-            Vector3 lastPoint = lineBase.GetUnClampedPoint(0f);
+            var stepSize = 1f / Rays.Length;
+            var lastPoint = lineBase.GetUnClampedPoint(0f);
 
             for (int i = 0; i < Rays.Length; i++)
             {
-                Vector3 currentPoint = lineBase.GetUnClampedPoint(stepSize * (i + 1));
+                var currentPoint = lineBase.GetUnClampedPoint(stepSize * (i + 1));
                 Rays[i].UpdateRayStep(ref lastPoint, ref currentPoint);
                 lastPoint = currentPoint;
             }
@@ -160,60 +146,37 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnPostRaycast()
         {
-            // Use the results from the last update to set our NavigationResult
-            float clearWorldLength = 0f;
-            gravityDistorter.enabled = false;
-            Gradient lineColor = LineColorNoTarget;
+            base.OnPostRaycast();
 
-            if (IsInteractionEnabled)
+            Gradient lineColor;
+
+            if (!IsInteractionEnabled)
             {
-                lineBase.enabled = true;
+                lineBase.enabled = false;
+                BaseCursor?.SetVisibility(false);
+                return;
+            }
 
-                if (IsSelectPressed)
-                {
-                    lineColor = LineColorSelected;
-                }
+            lineBase.enabled = true;
+            BaseCursor?.SetVisibility(true);
 
-                // If we hit something
-                if (Result.CurrentPointerTarget != null)
-                {
-                    // Use the step index to determine the length of the hit
-                    for (int i = 0; i <= Result.RayStepIndex; i++)
-                    {
-                        if (i == Result.RayStepIndex)
-                        {
-                            // Only add the distance between the start point and the hit
-                            clearWorldLength += Vector3.Distance(Rays[i].Origin, Result.Details.Point);
-                        }
-                        else if (i < Result.RayStepIndex)
-                        {
-                            // Add the full length of the step to our total distance
-                            clearWorldLength += Rays[i].Length;
-                        }
-                    }
+            // The distance the ray travels through the world before it hits something. Measured in world-units (as opposed to normalized distance).
+            float clearWorldLength;
+            // Used to ensure the line doesn't extend beyond the cursor
+            float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0;
 
-                    // Clamp the end of the line to the result hit's point
-                    lineBase.LineEndClamp = lineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, LineCastResolution);
+            // If we hit something
+            if (Result?.CurrentPointerTarget != null)
+            {
+                clearWorldLength = Result.Details.RayDistance;
 
-                    if (FocusTarget != null)
-                    {
-                        lineColor = LineColorValid;
-                    }
-
-                    if (IsFocusLocked)
-                    {
-                        gravityDistorter.enabled = true;
-                        gravityDistorter.WorldCenterOfGravity = Result.Details.Point;
-                    }
-                }
-                else
-                {
-                    lineBase.LineEndClamp = 1f;
-                }
+                lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
             }
             else
             {
-                lineBase.enabled = false;
+                clearWorldLength = PointerExtent;
+
+                lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
             }
 
             if (IsFocusLocked)
@@ -221,9 +184,29 @@ namespace XRTK.SDK.UX.Pointers
                 lineColor = LineColorLockFocus;
             }
 
-            for (int i = 0; i < lineRenderers.Length; i++)
+            int maxClampLineSteps = LineCastResolution;
+
+            for (var i = 0; i < lineRenderers.Length; i++)
             {
-                lineRenderers[i].LineColor = lineColor;
+                var lineRenderer = lineRenderers[i];
+                // Renderers are enabled by default if line is enabled
+                lineRenderer.enabled = true;
+                maxClampLineSteps = Mathf.Max(maxClampLineSteps, lineRenderer.LineStepCount);
+                lineRenderer.LineColor = lineColor;
+            }
+
+            // If focus is locked, we're sticking to the target
+            // So don't clamp the world length
+            if (IsFocusLocked && IsTargetPositionLockedOnFocusLock)
+            {
+                float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);
+                LineBase.LineEndClamp = 1 - cursorOffsetLocalLength;
+            }
+            else
+            {
+                // Otherwise clamp the line end by the clear distance
+                float clearLocalLength = lineBase.GetNormalizedLengthFromWorldLength(clearWorldLength - cursorOffsetWorldLength, maxClampLineSteps);
+                lineBase.LineEndClamp = clearLocalLength;
             }
         }
 

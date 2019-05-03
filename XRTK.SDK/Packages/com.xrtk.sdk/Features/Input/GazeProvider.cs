@@ -50,7 +50,7 @@ namespace XRTK.SDK.Input
         /// </summary>
         [SerializeField]
         [Tooltip("Stabilizer, if any, used to smooth out the gaze ray data.")]
-        private GazeStabilizer stabilizer = null;
+        private GenericStabilizer stabilizer = null;
 
         /// <summary>
         /// Transform that should be used as the source of the gaze position and rotation.

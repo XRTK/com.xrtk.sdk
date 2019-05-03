@@ -137,10 +137,6 @@ namespace XRTK.SDK.UX.Pointers
                 Rays = new RayStep[LineCastResolution];
             }
 
-            // Set up our rays
-            // Turn off gravity so we get accurate rays
-            GravityDistorter.enabled = false;
-
             float stepSize = 1f / Rays.Length;
             Vector3 lastPoint = LineBase.GetUnClampedPoint(0f);
 
@@ -150,9 +146,6 @@ namespace XRTK.SDK.UX.Pointers
                 Rays[i].UpdateRayStep(ref lastPoint, ref currentPoint);
                 lastPoint = currentPoint;
             }
-
-            // Re-enable gravity if we're looking at a hotspot
-            GravityDistorter.enabled = (TeleportSurfaceResult == TeleportSurfaceResult.HotSpot);
         }
 
         public override void OnPostRaycast()
@@ -160,7 +153,6 @@ namespace XRTK.SDK.UX.Pointers
             // Use the results from the last update to set our NavigationResult
             float clearWorldLength = 0f;
             TeleportSurfaceResult = TeleportSurfaceResult.None;
-            GravityDistorter.enabled = false;
 
             if (IsInteractionEnabled)
             {
@@ -176,9 +168,6 @@ namespace XRTK.SDK.UX.Pointers
                         if (TeleportHotSpot != null && TeleportHotSpot.IsActive)
                         {
                             TeleportSurfaceResult = TeleportSurfaceResult.HotSpot;
-                            // Turn on gravity, point it at hotspot
-                            GravityDistorter.WorldCenterOfGravity = TeleportHotSpot.Position;
-                            GravityDistorter.enabled = true;
                         }
                         else
                         {
