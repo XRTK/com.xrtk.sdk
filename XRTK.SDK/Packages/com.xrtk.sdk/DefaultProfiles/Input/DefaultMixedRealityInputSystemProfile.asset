@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityInputSystemProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
+  parentProfile: {fileID: 11400000, guid: 99874ef12e4f4f27ae4888ce1c693090, type: 2}
   focusProviderType:
     reference: XRTK.Services.InputSystem.FocusProvider, XRTK
   inputActionsProfile: {fileID: 11400000, guid: 399335ccc89c4d12b79f3539ca7771db,
