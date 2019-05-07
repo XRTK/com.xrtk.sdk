@@ -13,11 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityGesturesProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  manipulationGestures: 15
-  navigationGestures: 112
-  useRailsNavigation: 0
-  railsNavigationGestures: 896
-  windowsGestureAutoStart: 0
+  parentProfile: {fileID: 11400000, guid: a176466fbf4e44a087639abca7e5ba47, type: 2}
   gestures:
   - description: Hold
     gestureType: 3
