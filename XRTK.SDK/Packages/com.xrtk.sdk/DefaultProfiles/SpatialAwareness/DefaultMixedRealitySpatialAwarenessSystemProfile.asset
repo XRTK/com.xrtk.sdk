@@ -21,3 +21,9 @@ MonoBehaviour:
     priority: 5
     runtimePlatform: 8
     profile: {fileID: 11400000, guid: 8e73975fd19e4224b46d0b0fea26349b, type: 2}
+  - spatialObserverType:
+      reference: XRTK.Lumin.SpatialObservers.LuminSpatialMeshObserver, XRTK.Lumin
+    spatialObserverName: Lumin Spatial Observer Data Provider
+    priority: 5
+    runtimePlatform: 16
+    profile: {fileID: 11400000, guid: 6cbcb6266beaa724780d064525cf2896, type: 2}
