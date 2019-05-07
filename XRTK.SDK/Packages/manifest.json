@@ -8,7 +8,7 @@
     "com.xrtk.core": "https://github.com/XRTK/XRTK-Core.git#0.1.10",
     "com.xrtk.lumin": "https://github.com/XRTK/Lumin.git#0.1.2",
     "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.5",
-    "com.xrtk.wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.2",
+    "com.xrtk.wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.3",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
@@ -54,8 +54,8 @@
       "revision": "0.9.5"
     },
     "com.xrtk.wmr": {
-      "hash": "7b8d08a2318b9c5190608741debfb2d7078bdae7",
-      "revision": "0.1.2"
+      "hash": "40f707ba94f5b34d8969246ee980dbe9c3b8ff31",
+      "revision": "0.1.3"
     }
   }
 }
