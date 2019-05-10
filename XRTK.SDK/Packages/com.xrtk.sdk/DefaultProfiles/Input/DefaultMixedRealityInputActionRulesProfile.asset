@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityInputActionRulesProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: a176466fbf4e44a087639abca7e5ba47, type: 2}
   inputActionRulesDigital: []
   inputActionRulesSingleAxis: []
   inputActionRulesDualAxis: []
