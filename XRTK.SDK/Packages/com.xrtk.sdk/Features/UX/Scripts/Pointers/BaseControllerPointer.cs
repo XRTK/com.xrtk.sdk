@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using System.Collections;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
@@ -144,7 +145,15 @@ namespace XRTK.SDK.UX.Pointers
 
             if (lateRegisterTeleport && MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
             {
-                await new WaitUntil(() => MixedRealityToolkit.TeleportSystem != null);
+                try
+                {
+                    await MixedRealityToolkit.TeleportSystem.WaitUntil(system => system != null);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"{e.Message}\n{e.StackTrace}");
+                    return;
+                }
 
                 // We've been destroyed during the await.
                 if (this == null) { return; }
@@ -153,12 +162,13 @@ namespace XRTK.SDK.UX.Pointers
                 MixedRealityToolkit.TeleportSystem.Register(gameObject);
             }
 
-            await WaitUntilInputSystemValid;
+            if (await ValidateInputSystemAsync())
+            {
+                // We've been destroyed during the await.
+                if (this == null) { return; }
 
-            // We've been destroyed during the await.
-            if (this == null) { return; }
-
-            SetCursor();
+                SetCursor();
+            }
         }
 
         protected override void OnDisable()

@@ -1,17 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using UnityEngine;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Services;
 using XRTK.Services.InputSystem.Pointers;
 using XRTK.Services.InputSystem.Sources;
 using XRTK.Utilities;
-using XRTK.Utilities.Async;
 using XRTK.Utilities.Physics;
-using UnityEngine;
 
 namespace XRTK.SDK.Input
 {
@@ -258,14 +257,17 @@ namespace XRTK.SDK.Input
         {
             base.Start();
 
-            await WaitUntilInputSystemValid;
-
-            GazePointer.BaseCursor?.SetVisibility(true);
-
-            if (delayInitialization)
+            if (await ValidateInputSystemAsync())
             {
-                delayInitialization = false;
-                RaiseSourceDetected();
+                if (this == null) { return; }
+
+                GazePointer.BaseCursor?.SetVisibility(true);
+
+                if (delayInitialization)
+                {
+                    delayInitialization = false;
+                    RaiseSourceDetected();
+                }
             }
         }
 
@@ -382,9 +384,12 @@ namespace XRTK.SDK.Input
 
         private async void RaiseSourceDetected()
         {
-            await WaitUntilInputSystemValid;
-            MixedRealityToolkit.InputSystem.RaiseSourceDetected(GazeInputSource);
-            GazePointer.BaseCursor?.SetVisibility(true);
+            if (await ValidateInputSystemAsync())
+            {
+                if (this == null) { return; }
+                MixedRealityToolkit.InputSystem.RaiseSourceDetected(GazeInputSource);
+                GazePointer.BaseCursor?.SetVisibility(true);
+            }
         }
 
         /// <summary>

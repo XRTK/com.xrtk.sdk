@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using XRTK.Services;
 using XRTK.Utilities.Async;
@@ -14,11 +16,11 @@ namespace XRTK.SDK.Input
     {
         private bool lateInitialize = true;
 
-        protected readonly WaitUntil WaitUntilInputSystemValid = new WaitUntil(() => MixedRealityToolkit.InputSystem != null);
-
         protected virtual void OnEnable()
         {
-            if (MixedRealityToolkit.IsInitialized && MixedRealityToolkit.InputSystem != null && !lateInitialize)
+            if (!lateInitialize &&
+                MixedRealityToolkit.IsInitialized &&
+                MixedRealityToolkit.InputSystem != null)
             {
                 MixedRealityToolkit.InputSystem.Register(gameObject);
             }
@@ -26,10 +28,9 @@ namespace XRTK.SDK.Input
 
         protected virtual async void Start()
         {
-            if (lateInitialize)
+            if (lateInitialize &&
+                await ValidateInputSystemAsync())
             {
-                await WaitUntilInputSystemValid;
-
                 // We've been destroyed during the await.
                 if (this == null) { return; }
 
@@ -41,6 +42,21 @@ namespace XRTK.SDK.Input
         protected virtual void OnDisable()
         {
             MixedRealityToolkit.InputSystem?.Unregister(gameObject);
+        }
+
+        protected async Task<bool> ValidateInputSystemAsync()
+        {
+            try
+            {
+                await MixedRealityToolkit.InputSystem.WaitUntil(system => system != null);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{e.Message}\n{e.StackTrace}");
+                return false;
+            }
+
+            return true;
         }
     }
 }
