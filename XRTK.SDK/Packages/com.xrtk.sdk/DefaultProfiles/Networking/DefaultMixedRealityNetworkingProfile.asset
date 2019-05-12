@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityNetworkingProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: 99874ef12e4f4f27ae4888ce1c693090, type: 2}
   registeredNetworkDataProviders: []

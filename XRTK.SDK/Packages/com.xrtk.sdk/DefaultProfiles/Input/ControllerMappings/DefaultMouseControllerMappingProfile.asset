@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: DefaultMouseControllerMappingProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: f83e1d143c5a46dba5e70f497a7a996d, type: 2}
   hasSetupDefaults: 1
   controllerMappings:
   - description: Mouse Input
