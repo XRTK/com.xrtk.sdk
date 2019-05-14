@@ -1,17 +1,17 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using UnityEngine;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Services;
 using XRTK.Services.InputSystem.Pointers;
 using XRTK.Services.InputSystem.Sources;
 using XRTK.Utilities;
 using XRTK.Utilities.Async;
 using XRTK.Utilities.Physics;
-using UnityEngine;
 
 namespace XRTK.SDK.Input
 {
@@ -333,8 +333,8 @@ namespace XRTK.SDK.Input
             {
                 if (eventData.InputSource.Pointers[i].PointerId == GazePointer.PointerId)
                 {
-                    MixedRealityToolkit.InputSystem.RaisePointerClicked(gazePointer, eventData.MixedRealityInputAction, 0);
                     MixedRealityToolkit.InputSystem.RaisePointerUp(gazePointer, eventData.MixedRealityInputAction);
+                    MixedRealityToolkit.InputSystem.RaisePointerClicked(gazePointer, eventData.MixedRealityInputAction, 0);
                     return;
                 }
             }

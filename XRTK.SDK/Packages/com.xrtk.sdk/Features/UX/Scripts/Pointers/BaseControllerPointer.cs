@@ -23,7 +23,9 @@ namespace XRTK.SDK.UX.Pointers
     /// Base Pointer class for pointers that exist in the scene as GameObjects.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class BaseControllerPointer : ControllerPoseSynchronizer, IMixedRealityPointer, IMixedRealityTeleportHandler
+    public abstract class BaseControllerPointer : ControllerPoseSynchronizer,
+        IMixedRealityPointer,
+        IMixedRealityTeleportHandler
     {
         [SerializeField]
         private GameObject cursorPrefab = null;
