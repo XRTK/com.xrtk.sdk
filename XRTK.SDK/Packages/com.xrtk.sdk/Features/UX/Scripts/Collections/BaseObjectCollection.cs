@@ -18,7 +18,7 @@ namespace XRTK.SDK.UX.Collections
         /// <summary>
         /// List of objects with generated data on the object.
         /// </summary>
-        protected List<ObjectCollectionNode> NodeList { get; } = new List<ObjectCollectionNode>();
+        public List<ObjectCollectionNode> NodeList { get; } = new List<ObjectCollectionNode>();
 
         [Tooltip("Whether to include space for inactive transforms in the layout")]
         [SerializeField]
@@ -44,6 +44,41 @@ namespace XRTK.SDK.UX.Collections
         {
             get => sortType;
             set => sortType = value;
+        }
+
+        public virtual List<ObjectCollectionNode> GetCollection()
+        {
+            // Check for empty nodes and remove them
+            var emptyNodes = new List<ObjectCollectionNode>();
+
+            for (int i = 0; i < NodeList.Count; i++)
+            {
+                if (NodeList[i].Transform == null || (IgnoreInactiveTransforms && !NodeList[i].Transform.gameObject.activeSelf) || NodeList[i].Transform.parent == null || !(NodeList[i].Transform.parent.gameObject == gameObject))
+                {
+                    emptyNodes.Add(NodeList[i]);
+                }
+            }
+
+            // Now delete the empty nodes
+            for (int i = 0; i < emptyNodes.Count; i++)
+            {
+                NodeList.Remove(emptyNodes[i]);
+            }
+
+            emptyNodes.Clear();
+
+            // Check when children change and adjust
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+
+                if (!ContainsNode(child) && (child.gameObject.activeSelf || !IgnoreInactiveTransforms))
+                {
+                    NodeList.Add(new ObjectCollectionNode { Name = child.name, Transform = child });
+                }
+            }
+
+            return NodeList;
         }
 
         /// <summary>
