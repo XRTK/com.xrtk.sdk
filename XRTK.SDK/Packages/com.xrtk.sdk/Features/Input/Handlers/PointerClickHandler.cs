@@ -40,11 +40,6 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         /// <inheritdoc />
-        public void OnPointerUpdated(MixedRealityPointerEventData eventData)
-        {
-        }
-
-        /// <inheritdoc />
         public void OnPointerUp(MixedRealityPointerEventData eventData)
         {
             if (onPointerUpActionEvent.InputAction == MixedRealityInputAction.None) { return; }
