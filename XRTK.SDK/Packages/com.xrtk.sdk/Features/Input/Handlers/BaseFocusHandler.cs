@@ -39,7 +39,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The list of <see cref="IMixedRealityPointer"/>s that are currently focused on this <see cref="GameObject"/>
         /// </summary>
-        public List<IMixedRealityPointer> ActivePointers { get; } = new List<IMixedRealityPointer>(0);
+        public IReadOnlyList<IMixedRealityPointer> ActivePointers => activePointers;
+
+        private readonly List<IMixedRealityPointer> activePointers = new List<IMixedRealityPointer>(0);
 
         /// <inheritdoc />
         public virtual void OnFocusEnter(FocusEventData eventData) { }
@@ -55,13 +57,13 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.NewFocusedObject == gameObject)
             {
                 eventData.Pointer.FocusTarget = this;
-                ActivePointers.Add(eventData.Pointer);
+                activePointers.Add(eventData.Pointer);
             }
             // If we're the old focused target object,
             // remove the pointer from our list.
             else if (eventData.OldFocusedObject == gameObject)
             {
-                ActivePointers.Remove(eventData.Pointer);
+                activePointers.Remove(eventData.Pointer);
 
                 // If there is no new focused target
                 // clear the FocusTarget field from the Pointer.
