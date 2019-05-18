@@ -138,7 +138,7 @@ namespace XRTK.SDK.Inspectors.Input.Handlers
                     EditorGUILayout.HelpBox("Registered keyword is not recognized in the speech command profile!", MessageType.Error);
                 }
 
-                if (!elementRemoved && elementExpanded)
+                if (elementExpanded)
                 {
                     string[] keywords = availableKeywords.Concat(new[] { keywordProperty.stringValue }).OrderBy(keyword => keyword).ToArray();
                     int previousSelection = ArrayUtility.IndexOf(keywords, keywordProperty.stringValue);
