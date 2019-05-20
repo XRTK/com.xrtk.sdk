@@ -43,8 +43,8 @@ MonoBehaviour:
         description: Mouse Delta
         axisConstraint: 4
       keyCode: 0
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX: Mouse X
+      axisCodeY: Mouse Y
       invertXAxis: 0
       invertYAxis: 0
     - id: 2
@@ -56,10 +56,10 @@ MonoBehaviour:
         description: Scroll
         axisConstraint: 4
       keyCode: 0
-      axisCodeX: AXIS_3
-      axisCodeY: 
-      invertXAxis: 0
-      invertYAxis: 0
+      axisCodeX: Mouse ScrollWheel
+      axisCodeY: Mouse ScrollWheel
+      invertXAxis: 1
+      invertYAxis: 1
     - id: 3
       description: Left Mouse Button
       axisType: 2
