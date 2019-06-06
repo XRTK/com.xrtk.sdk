@@ -18,7 +18,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
     dataProviderName: Mouse Controller Data Provider
     priority: 5
-    runtimePlatform: -1
+    runtimePlatform: 95
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
@@ -37,7 +37,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
     dataProviderName: Open VR Controller Data Provider
     priority: 5
-    runtimePlatform: 15
+    runtimePlatform: 47
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityDataProvider,
