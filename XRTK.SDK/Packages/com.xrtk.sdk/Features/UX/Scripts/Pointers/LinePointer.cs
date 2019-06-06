@@ -5,7 +5,6 @@ using UnityEngine;
 using XRTK.Definitions.Physics;
 using XRTK.Utilities.Lines.DataProviders;
 using XRTK.Utilities.Lines.Renderers;
-using XRTK.Utilities.Physics.Distorters;
 
 namespace XRTK.SDK.UX.Pointers
 {
