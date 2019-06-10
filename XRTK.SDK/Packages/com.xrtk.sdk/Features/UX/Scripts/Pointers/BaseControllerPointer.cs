@@ -55,6 +55,10 @@ namespace XRTK.SDK.UX.Pointers
         [Tooltip("Does the interaction require hold?")]
         private bool requiresHoldAction = false;
 
+        [SerializeField]
+        [Tooltip("Enables the pointer ray when the pointer is started.")]
+        private bool enablePointerOnStart = false;
+
         /// <summary>
         /// True if select is pressed right now
         /// </summary>
@@ -112,11 +116,7 @@ namespace XRTK.SDK.UX.Pointers
                     BaseCursor.DefaultCursorDistance = PointerExtent;
                     BaseCursor.Pointer = this;
                     BaseCursor.SetVisibilityOnSourceDetected = setCursorVisibilityOnSourceDetected;
-
-                    if (disableCursorOnStart)
-                    {
-                        BaseCursor.SetVisibility(false);
-                    }
+                    BaseCursor.SetVisibility(!disableCursorOnStart);
                 }
                 else
                 {
@@ -259,7 +259,7 @@ namespace XRTK.SDK.UX.Pointers
                     return true;
                 }
 
-                return HasSelectPressedOnce;
+                return HasSelectPressedOnce || enablePointerOnStart;
             }
         }
 

@@ -72,6 +72,7 @@ namespace XRTK.SDK.Input.Handlers
             if (enabled && responses.TryGetValue(eventData.RecognizedText.ToLower(), out UnityEvent keywordResponse))
             {
                 keywordResponse.Invoke();
+                eventData.Use();
             }
         }
 

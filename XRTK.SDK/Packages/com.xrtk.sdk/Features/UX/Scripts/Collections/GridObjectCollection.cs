@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using UnityEngine;
 using XRTK.Definitions.Utilities;
 using XRTK.Extensions;
-using UnityEngine;
 
 namespace XRTK.SDK.UX.Collections
 {
@@ -14,8 +14,8 @@ namespace XRTK.SDK.UX.Collections
     /// </summary>
     public class GridObjectCollection : BaseObjectCollection
     {
-        [Tooltip("Type of surface to map the collection to")]
         [SerializeField]
+        [Tooltip("Type of surface to map the collection to")]
         private ObjectOrientationSurfaceType surfaceType = ObjectOrientationSurfaceType.Plane;
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace XRTK.SDK.UX.Collections
             set => surfaceType = value;
         }
 
-        [Tooltip("Should the objects in the collection be rotated / how should they be rotated")]
         [SerializeField]
-        private OrientationType orientType = OrientationType.FaceOrigin;
+        [Tooltip("Should the objects in the collection be rotated / how should they be rotated")]
+        private OrientationType orientType = OrientationType.None;
 
         /// <summary>
         /// Should the objects in the collection face the origin of the collection
@@ -40,8 +40,8 @@ namespace XRTK.SDK.UX.Collections
             set => orientType = value;
         }
 
-        [Tooltip("Whether to sort objects by row first or by column first")]
         [SerializeField]
+        [Tooltip("Whether to sort objects by row first or by column first")]
         private LayoutOrderType layout = LayoutOrderType.ColumnThenRow;
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace XRTK.SDK.UX.Collections
             set => layout = value;
         }
 
+        [SerializeField]
         [Range(0.05f, 100.0f)]
         [Tooltip("Radius for the sphere or cylinder")]
-        [SerializeField]
         private float radius = 2f;
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace XRTK.SDK.UX.Collections
         public float Radius
         {
             get => radius;
-            set => radius = value;
+            set => radius = Mathf.Clamp(value, 0.05f, 100f);
         }
 
         [SerializeField]
@@ -82,8 +82,8 @@ namespace XRTK.SDK.UX.Collections
         }
 
         [SerializeField]
-        [Tooltip("The offset for the first position in the radial layout.")]
         [Range(0.0f, 1f)]
+        [Tooltip("The offset for the first position in the radial layout.")]
         private float radialOffset = 0.0f;
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace XRTK.SDK.UX.Collections
             set => radialOffset = value;
         }
 
-        [Tooltip("Number of rows per column")]
         [SerializeField]
+        [Tooltip("Number of rows per column")]
         private int rows = 3;
 
         /// <summary>
@@ -104,12 +104,20 @@ namespace XRTK.SDK.UX.Collections
         /// </summary>
         public int Rows
         {
-            get => rows;
-            set => rows = value;
+            get
+            {
+                if (rows <= 0)
+                {
+                    return rows = 1;
+                }
+
+                return rows;
+            }
+            set => rows = value <= 0 ? 1 : value;
         }
 
-        [Tooltip("Width of cell per object")]
         [SerializeField]
+        [Tooltip("Width of cell per object")]
         private float cellWidth = 0.5f;
 
         /// <summary>
@@ -117,12 +125,20 @@ namespace XRTK.SDK.UX.Collections
         /// </summary>
         public float CellWidth
         {
-            get => cellWidth;
-            set => cellWidth = value;
+            get
+            {
+                if (cellWidth <= 0f)
+                {
+                    return cellWidth = 0.01f;
+                }
+
+                return cellWidth;
+            }
+            set => cellWidth = value <= 0f ? 0.01f : value;
         }
 
-        [Tooltip("Height of cell per object")]
         [SerializeField]
+        [Tooltip("Height of cell per object")]
         private float cellHeight = 0.5f;
 
         /// <summary>
@@ -130,8 +146,16 @@ namespace XRTK.SDK.UX.Collections
         /// </summary>
         public float CellHeight
         {
-            get => cellHeight;
-            set => cellHeight = value;
+            get
+            {
+                if (cellHeight <= 0f)
+                {
+                    return cellHeight = 0.01f;
+                }
+
+                return cellHeight;
+            }
+            set => cellHeight = cellHeight <= 0f ? 0.01f : value;
         }
 
         /// <summary>
@@ -142,7 +166,7 @@ namespace XRTK.SDK.UX.Collections
         /// <summary>
         /// Total Height of collection
         /// </summary>
-        public float Height => rows * CellHeight;
+        public float Height => Rows * CellHeight;
 
         /// <summary>
         /// Reference mesh to use for rendering the sphere layout
@@ -163,13 +187,13 @@ namespace XRTK.SDK.UX.Collections
         /// </summary>
         protected override void LayoutChildren()
         {
-            var nodeGrid = new Vector3[NodeList.Count];
             Vector3 newPos;
+            var nodeGrid = new Vector3[nodeList.Count];
 
             // Now lets lay out the grid
-            Columns = Mathf.CeilToInt((float)NodeList.Count / rows);
+            Columns = Mathf.CeilToInt((float)nodeList.Count / Rows);
             var startOffsetX = (Columns * 0.5f) * CellWidth;
-            var startOffsetY = (rows * 0.5f) * CellHeight;
+            var startOffsetY = (Rows * 0.5f) * CellHeight;
             HalfCell = new Vector2(CellWidth * 0.5f, CellHeight * 0.5f);
 
             // First start with a grid then project onto surface
@@ -178,37 +202,36 @@ namespace XRTK.SDK.UX.Collections
             switch (SurfaceType)
             {
                 case ObjectOrientationSurfaceType.Plane:
-                    for (int i = 0; i < NodeList.Count; i++)
+                    for (int i = 0; i < nodeList.Count; i++)
                     {
-                        var node = NodeList[i];
+                        var node = nodeList[i];
                         newPos = nodeGrid[i];
-                        //Debug.Log(newPos);
                         node.Transform.localPosition = newPos;
                         UpdateNodeFacing(node);
-                        NodeList[i] = node;
+                        nodeList[i] = node;
                     }
                     break;
 
                 case ObjectOrientationSurfaceType.Cylinder:
-                    for (int i = 0; i < NodeList.Count; i++)
+                    for (int i = 0; i < nodeList.Count; i++)
                     {
-                        var node = NodeList[i];
+                        var node = nodeList[i];
                         newPos = VectorExtensions.CylindricalMapping(nodeGrid[i], radius);
                         node.Transform.localPosition = newPos;
                         UpdateNodeFacing(node);
-                        NodeList[i] = node;
+                        nodeList[i] = node;
                     }
                     break;
 
                 case ObjectOrientationSurfaceType.Sphere:
 
-                    for (int i = 0; i < NodeList.Count; i++)
+                    for (int i = 0; i < nodeList.Count; i++)
                     {
-                        var node = NodeList[i];
+                        var node = nodeList[i];
                         newPos = VectorExtensions.SphericalMapping(nodeGrid[i], radius);
                         node.Transform.localPosition = newPos;
                         UpdateNodeFacing(node);
-                        NodeList[i] = node;
+                        nodeList[i] = node;
                     }
                     break;
 
@@ -216,10 +239,10 @@ namespace XRTK.SDK.UX.Collections
                     int curColumn = 0;
                     int curRow = 1;
 
-                    for (int i = 0; i < NodeList.Count; i++)
+                    for (int i = 0; i < nodeList.Count; i++)
                     {
-                        var node = NodeList[i];
-                        newPos = VectorExtensions.RadialMapping(nodeGrid[i], radialRange, radius, curRow, rows, curColumn, Columns, radialOffset);
+                        var node = nodeList[i];
+                        newPos = VectorExtensions.RadialMapping(nodeGrid[i], radialRange, radius, curRow, Rows, curColumn, Columns, radialOffset);
 
                         if (curColumn == (Columns - 1))
                         {
@@ -233,7 +256,7 @@ namespace XRTK.SDK.UX.Collections
 
                         node.Transform.localPosition = newPos;
                         UpdateNodeFacing(node);
-                        NodeList[i] = node;
+                        nodeList[i] = node;
                     }
                     break;
             }
@@ -241,9 +264,9 @@ namespace XRTK.SDK.UX.Collections
 
         protected void ResolveGridLayout(Vector3[] grid, float offsetX, float offsetY, LayoutOrderType order)
         {
-            int cellCounter = 0;
             float iMax;
             float jMax;
+            int cellCounter = 0;
 
             if (order == LayoutOrderType.RowThenColumn)
             {
@@ -260,11 +283,11 @@ namespace XRTK.SDK.UX.Collections
             {
                 for (int j = 0; j < jMax; j++)
                 {
-                    if (cellCounter < NodeList.Count)
+                    if (cellCounter < nodeList.Count)
                     {
-                        grid[cellCounter].Set(((i * CellWidth) - offsetX + HalfCell.x) + NodeList[cellCounter].Offset.x,
-                                             (-(j * CellHeight) + offsetY - HalfCell.y) + NodeList[cellCounter].Offset.y,
-                                             0.0f);
+                        var width = ((i * CellWidth) - offsetX + HalfCell.x) + nodeList[cellCounter].Offset.x;
+                        var height = (-(j * CellHeight) + offsetY - HalfCell.y) + nodeList[cellCounter].Offset.y;
+                        grid[cellCounter].Set(width, height, 0.0f);
                     }
                     cellCounter++;
                 }
@@ -279,26 +302,31 @@ namespace XRTK.SDK.UX.Collections
         {
             Vector3 centerAxis;
             Vector3 pointOnAxisNearestNode;
+
+            var up = transform.up;
+            var position = transform.position;
+            var nodePosition = node.Transform.position;
+
             switch (OrientType)
             {
                 case OrientationType.FaceOrigin:
-                    node.Transform.rotation = Quaternion.LookRotation(node.Transform.position - transform.position, transform.up);
+                    node.Transform.rotation = Quaternion.LookRotation(nodePosition - position, up);
                     break;
 
                 case OrientationType.FaceOriginReversed:
-                    node.Transform.rotation = Quaternion.LookRotation(transform.position - node.Transform.position, transform.up);
+                    node.Transform.rotation = Quaternion.LookRotation(position - nodePosition, up);
                     break;
 
                 case OrientationType.FaceCenterAxis:
-                    centerAxis = Vector3.Project(node.Transform.position - transform.position, transform.up);
-                    pointOnAxisNearestNode = transform.position + centerAxis;
-                    node.Transform.rotation = Quaternion.LookRotation(node.Transform.position - pointOnAxisNearestNode, transform.up);
+                    centerAxis = Vector3.Project(node.Transform.position - position, up);
+                    pointOnAxisNearestNode = position + centerAxis;
+                    node.Transform.rotation = Quaternion.LookRotation(nodePosition - pointOnAxisNearestNode, up);
                     break;
 
                 case OrientationType.FaceCenterAxisReversed:
-                    centerAxis = Vector3.Project(node.Transform.position - transform.position, transform.up);
-                    pointOnAxisNearestNode = transform.position + centerAxis;
-                    node.Transform.rotation = Quaternion.LookRotation(pointOnAxisNearestNode - node.Transform.position, transform.up);
+                    centerAxis = Vector3.Project(node.Transform.position - position, up);
+                    pointOnAxisNearestNode = position + centerAxis;
+                    node.Transform.rotation = Quaternion.LookRotation(pointOnAxisNearestNode - nodePosition, up);
                     break;
 
                 case OrientationType.FaceParentFoward:
@@ -330,6 +358,7 @@ namespace XRTK.SDK.UX.Collections
         protected virtual void OnDrawGizmosSelected()
         {
             var scale = (2f * radius) * Vector3.one;
+            var rotation = transform.rotation;
 
             switch (surfaceType)
             {
@@ -337,15 +366,15 @@ namespace XRTK.SDK.UX.Collections
                     break;
                 case ObjectOrientationSurfaceType.Cylinder:
                     Gizmos.color = Color.green;
-                    Gizmos.DrawWireMesh(CylinderMesh, transform.position, transform.rotation, scale);
+                    Gizmos.DrawWireMesh(CylinderMesh, transform.position, rotation, scale);
                     break;
                 case ObjectOrientationSurfaceType.Sphere:
                     Gizmos.color = Color.green;
-                    Gizmos.DrawWireMesh(SphereMesh, transform.position, transform.rotation, scale);
+                    Gizmos.DrawWireMesh(SphereMesh, transform.position, rotation, scale);
                     break;
                 case ObjectOrientationSurfaceType.Radial:
                     Gizmos.color = Color.green;
-                    Gizmos.DrawWireMesh(SphereMesh, transform.position, transform.rotation, scale);
+                    Gizmos.DrawWireMesh(SphereMesh, transform.position, rotation, scale);
                     break;
             }
         }
