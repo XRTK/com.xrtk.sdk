@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handedness: 0
   destroyOnSourceLost: 0
-  useSourcePoseData: 1
+  useSourcePoseData: 0
   poseAction:
     id: 12
     description: Mouse Delta
@@ -67,6 +67,7 @@ MonoBehaviour:
   overrideGlobalPointerExtent: 0
   pointerExtent: 10
   pointerOrientation: 0
-  hideCursorWhenInactive: 1
+  hideCursorWhenInactive: 0
   movementThresholdToUnHide: 0.5
   hideTimeout: 3
+  speed: 0.25
