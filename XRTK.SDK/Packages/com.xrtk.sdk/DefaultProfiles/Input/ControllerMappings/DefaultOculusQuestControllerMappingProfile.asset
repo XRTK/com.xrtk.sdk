@@ -203,6 +203,19 @@ MonoBehaviour:
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
+    - id: 14
+      description: Menu Button
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 336
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0    
   - description: Oculus Quest Controller Right
     controllerType:
       reference: XRTK.Providers.Controllers.OpenVR.OculusQuestController, XRTK
