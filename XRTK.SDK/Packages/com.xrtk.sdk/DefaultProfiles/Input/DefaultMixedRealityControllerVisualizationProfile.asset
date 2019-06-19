@@ -58,3 +58,54 @@ MonoBehaviour:
       id: 3
       description: Grip Pose
       axisConstraint: 7
+  - description: Oculus Go Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.OpenVR.OculusGoController, XRTK
+    handedness: 3
+    useDefaultModel: 1
+    overrideModel: {fileID: 0}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.DefaultMixedRealityControllerVisualizer,
+        XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Oculus Quest Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.OpenVR.OculusQuestController, XRTK
+    handedness: 1
+    useDefaultModel: 1
+    overrideModel: {fileID: 0}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.DefaultMixedRealityControllerVisualizer,
+        XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Oculus Quest Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.OpenVR.OculusQuestController, XRTK
+    handedness: 2
+    useDefaultModel: 1
+    overrideModel: {fileID: 0}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.DefaultMixedRealityControllerVisualizer,
+        XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7

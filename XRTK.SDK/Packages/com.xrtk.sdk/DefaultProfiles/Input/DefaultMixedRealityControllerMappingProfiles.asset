@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityControllerMappingProfiles
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: a176466fbf4e44a087639abca7e5ba47, type: 2}
   controllerMappingProfiles:
   - {fileID: 11400000, guid: a3d986e05a0242d9b4b4d1be1543149b, type: 2}
   - {fileID: 11400000, guid: 037f788d893441f289c4f87185f262cb, type: 2}
@@ -26,3 +25,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6419d794ce6246aeb1ff2a5554a2ed23, type: 2}
   - {fileID: 11400000, guid: 4a819f7672c7b1e4f8667519a153faa8, type: 2}
   - {fileID: 11400000, guid: 369b877ec9227dc48a689d463457deb9, type: 2}
+  - {fileID: 11400000, guid: 356e2f162fce26c44a281f0b3e9c7fbb, type: 2}
