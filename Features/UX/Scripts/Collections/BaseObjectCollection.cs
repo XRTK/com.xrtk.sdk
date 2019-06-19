@@ -49,12 +49,14 @@ namespace XRTK.SDK.UX.Collections
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.hierarchyChanged += () =>
             {
-                if (transform.hasChanged)
+                if (this != null &&
+                    transform.hasChanged)
                 {
                     UpdateCollection();
                 }
             };
-#endif
+#endif // UNITY_EDITOR
+
             UpdateCollection();
         }
 

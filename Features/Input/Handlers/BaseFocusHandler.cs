@@ -12,17 +12,18 @@ namespace XRTK.SDK.Input.Handlers
     /// <summary>
     /// Base Component for handling Focus on <see cref="GameObject"/>s.
     /// </summary>
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Collider))]
     public abstract class BaseFocusHandler : MonoBehaviour,
-            IMixedRealityFocusHandler,
-            IMixedRealityFocusChangedHandler
+        IMixedRealityFocusHandler,
+        IMixedRealityFocusChangedHandler
     {
         [SerializeField]
         [Tooltip("Is focus enabled for this component?")]
         private bool focusEnabled = true;
 
         /// <summary>
-        /// Is focus enabled for this <see cref="Component"/>?
+        /// Is focus enabled for this <see cref="GameObject"/>?
         /// </summary>
         public virtual bool FocusEnabled
         {
@@ -33,12 +34,14 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// Does this object currently have focus by any <see cref="IMixedRealityPointer"/>?
         /// </summary>
-        public virtual bool HasFocus => FocusEnabled && Focusers.Count > 0;
+        public virtual bool HasFocus => FocusEnabled && ActivePointers.Count > 0;
 
         /// <summary>
         /// The list of <see cref="IMixedRealityPointer"/>s that are currently focused on this <see cref="GameObject"/>
         /// </summary>
-        public List<IMixedRealityPointer> Focusers { get; } = new List<IMixedRealityPointer>(0);
+        public IReadOnlyList<IMixedRealityPointer> ActivePointers => activePointers;
+
+        private readonly List<IMixedRealityPointer> activePointers = new List<IMixedRealityPointer>(0);
 
         /// <inheritdoc />
         public virtual void OnFocusEnter(FocusEventData eventData) { }
@@ -54,13 +57,13 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.NewFocusedObject == gameObject)
             {
                 eventData.Pointer.FocusTarget = this;
-                Focusers.Add(eventData.Pointer);
+                activePointers.Add(eventData.Pointer);
             }
             // If we're the old focused target object,
             // remove the pointer from our list.
             else if (eventData.OldFocusedObject == gameObject)
             {
-                Focusers.Remove(eventData.Pointer);
+                activePointers.Remove(eventData.Pointer);
 
                 // If there is no new focused target
                 // clear the FocusTarget field from the Pointer.

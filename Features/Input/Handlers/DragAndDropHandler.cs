@@ -105,16 +105,7 @@ namespace XRTK.SDK.Input.Handlers
 
         #region IMixedRealityPointerHandler Implementation
 
-        void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData)
-        {
-            if (eventData.SourceId == currentInputSource.SourceId)
-            {
-                eventData.Use(); // Mark the event as used, so it doesn't fall through to other handlers.
-
-                StopDragging();
-            }
-        }
-
+        /// <inheritdoc />
         void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
         {
             if (isDragging)
@@ -141,6 +132,18 @@ namespace XRTK.SDK.Input.Handlers
             StartDragging(initialDraggingPosition);
         }
 
+        /// <inheritdoc />
+        void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData)
+        {
+            if (eventData.SourceId == currentInputSource.SourceId)
+            {
+                eventData.Use(); // Mark the event as used, so it doesn't fall through to other handlers.
+
+                StopDragging();
+            }
+        }
+
+        /// <inheritdoc />
         void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
 
         #endregion IMixedRealityPointerHandler Implementation
