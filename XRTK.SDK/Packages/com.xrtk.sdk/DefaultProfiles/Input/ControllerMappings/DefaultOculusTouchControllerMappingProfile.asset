@@ -17,7 +17,7 @@ MonoBehaviour:
   controllerMappings:
   - description: Oculus Touch Controller Left
     controllerType:
-      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchController, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchOpenVRController, XRTK
     handedness: 1
     useCustomInteractionMappings: 0
     interactions:

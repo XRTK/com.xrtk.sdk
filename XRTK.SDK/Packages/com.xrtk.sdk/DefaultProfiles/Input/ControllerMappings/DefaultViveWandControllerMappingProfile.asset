@@ -17,7 +17,7 @@ MonoBehaviour:
   controllerMappings:
   - description: Vive Wand Controller Left
     controllerType:
-      reference: XRTK.Providers.Controllers.OpenVR.ViveWandController, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.ViveWandOpenVRController, XRTK
     handedness: 1
     useCustomInteractionMappings: 0
     interactions:
