@@ -18,7 +18,7 @@ MonoBehaviour:
   controllerMappings:
   - description: Oculus Go Controller
     controllerType:
-      reference: XRTK.Providers.Controllers.OpenVR.OculusGoController, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.OculusGoOpenVRController, XRTK
     handedness: 3
     useCustomInteractionMappings: 0
     interactions:
