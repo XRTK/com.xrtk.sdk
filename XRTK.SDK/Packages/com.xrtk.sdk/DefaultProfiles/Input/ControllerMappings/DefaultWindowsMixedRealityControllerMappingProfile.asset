@@ -17,7 +17,7 @@ MonoBehaviour:
   controllerMappings:
   - description: Windows Mixed Reality HoloLens Hand Input
     controllerType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityController,
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityOpenVRController,
         XRTK.WindowsMixedReality
     handedness: 0
     useCustomInteractionMappings: 0
