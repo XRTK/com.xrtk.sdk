@@ -13,4 +13,11 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityInputSimulationDataProvidersProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  registeredInputSimulationDataProviders: []
+  registeredInputSimulationDataProviders:
+  - dataProviderType:
+      reference: XRTK.Providers.InputSystem.Simulation.CameraSimulationDataProvider,
+        XRTK
+    dataProviderName: Camera Input Simulation Data Provider
+    priority: 5
+    runtimePlatform: 1
+    profile: {fileID: 11400000, guid: 37cfa7f95b850de49a017cb945b66c44, type: 2}
