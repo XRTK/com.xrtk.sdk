@@ -279,15 +279,23 @@ namespace XRTK.SDK.UX.Pointers
                     }
                 }
 
+                if (pointerExtent.Equals(0f))
+                {
+                    pointerExtent = defaultPointerExtent;
+                }
+
+                Debug.Assert(pointerExtent > 0f);
                 return pointerExtent;
             }
             set
             {
                 pointerExtent = value;
+                Debug.Assert(pointerExtent > 0f, "Cannot set the pointer extent to 0. Resetting to the default pointer extent");
                 overrideGlobalPointerExtent = false;
             }
         }
 
+        [Min(0.01f)]
         [SerializeField]
         [FormerlySerializedAs("pointerExtent")]
         private float defaultPointerExtent = 10f;
