@@ -2,7 +2,10 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using UnityEngine.EventSystems;
+using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
+using XRTK.EventDatum.Input;
 using XRTK.Utilities.Lines.DataProviders;
 using XRTK.Utilities.Lines.Renderers;
 
@@ -55,6 +58,63 @@ namespace XRTK.SDK.UX.Pointers
         {
             get => lineRenderers;
             set => lineRenderers = value;
+        }
+
+        [SerializeField]
+        [Tooltip("Should the nudge capability be enabled?")]
+        private bool isNudgeEnabled = false;
+
+        /// <summary>
+        /// Is the nudge capability currently enabled?
+        /// </summary>
+        public bool IsNudgeEnabled
+        {
+            get => isNudgeEnabled;
+            set => isNudgeEnabled = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The action to use to nudge the pointer extent closer or further away from the pointer source")]
+        private MixedRealityInputAction nudgeAction = MixedRealityInputAction.None;
+
+        [SerializeField]
+        [Range(0.1f, 0.001f)]
+        [Tooltip("The amount to nudge the position of the GameObject")]
+        private float nudgeAmount = 0.01f;
+
+        /// <summary>
+        /// The amount to nudge the position of the <see cref="GameObject"/>
+        /// </summary>
+        public float NudgeAmount
+        {
+            get => nudgeAmount;
+            set => nudgeAmount = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The minimum distance a user can nudge an object before it can no longer move closer.")]
+        private float minimumNudgeDistance = 0.25f;
+
+        /// <summary>
+        /// The minimum distance a user can nudge an object before it can no longer move closer
+        /// </summary>
+        public float MinimumNudgeDistance
+        {
+            get => minimumNudgeDistance;
+            set => minimumNudgeDistance = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The maximum distance a user can nudge an object before it can no longer move further.")]
+        private float maximumNudgeDistance = 10f;
+
+        /// <summary>
+        /// The maximum distance a user can nudge an object before it can no longer move further
+        /// </summary>
+        public float MaximumNudgeDistance
+        {
+            get => maximumNudgeDistance;
+            set => maximumNudgeDistance = value;
         }
 
         private void CheckInitialization()
@@ -210,5 +270,52 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         #endregion IMixedRealityPointer Implementation
+
+        #region IMixedRealityInputHandler Implementation
+
+        /// <inheritdoc />
+        public override void OnInputChanged(InputEventData<Vector2> eventData)
+        {
+            base.OnInputChanged(eventData);
+
+            if (isNudgeEnabled && eventData.MixedRealityInputAction == nudgeAction)
+            {
+                if (Mathf.Abs(eventData.InputData.x) >= 0.25f) { return; }
+
+                var closer = eventData.InputData.y < 0;
+                var pointers = eventData.InputSource.Pointers;
+
+                for (int i = 0; i < pointers.Length; i++)
+                {
+                    var currentPointerExtent = pointers[i].PointerExtent;
+
+                    // Check to make sure we're not too close.
+                    if (closer)
+                    {
+                        if (currentPointerExtent - nudgeAmount >= minimumNudgeDistance)
+                        {
+                            pointers[i].PointerExtent -= nudgeAmount;
+                        }
+                        else
+                        {
+                            pointers[i].PointerExtent = minimumNudgeDistance;
+                        }
+                    }
+                    else
+                    {
+                        if (currentPointerExtent + nudgeAmount <= maximumNudgeDistance)
+                        {
+                            pointers[i].PointerExtent += nudgeAmount;
+                        }
+                        else
+                        {
+                            pointers[i].PointerExtent = maximumNudgeDistance;
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion IMixedRealityInputHandler Implementation
     }
 }

@@ -18,6 +18,10 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty lineColorLockFocus;
         private SerializedProperty lineCastResolution;
         private SerializedProperty lineRenderers;
+        private SerializedProperty nudgeAction;
+        private SerializedProperty nudgeAmount;
+        private SerializedProperty minimumNudgeDistance;
+        private SerializedProperty maximumNudgeDistance;
 
         private bool linePointerFoldout = true;
 
@@ -32,8 +36,13 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             lineColorLockFocus = serializedObject.FindProperty("LineColorLockFocus");
             lineCastResolution = serializedObject.FindProperty("LineCastResolution");
             lineRenderers = serializedObject.FindProperty("lineRenderers");
+            nudgeAction = serializedObject.FindProperty("nudgeAction");
+            nudgeAmount = serializedObject.FindProperty("nudgeAmount");
+            minimumNudgeDistance = serializedObject.FindProperty("minimumNudgeDistance");
+            maximumNudgeDistance = serializedObject.FindProperty("maximumNudgeDistance");
         }
 
+        /// <inheritdoc />
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
@@ -59,6 +68,12 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 EditorGUILayout.PropertyField(lineColorNoTarget);
                 EditorGUILayout.PropertyField(lineColorLockFocus);
                 EditorGUILayout.PropertyField(lineRenderers, true);
+
+                EditorGUILayout.LabelField("Extent Adjustments");
+                EditorGUILayout.PropertyField(nudgeAction);
+                EditorGUILayout.PropertyField(nudgeAmount);
+                EditorGUILayout.PropertyField(minimumNudgeDistance);
+                EditorGUILayout.PropertyField(maximumNudgeDistance);
                 EditorGUI.indentLevel--;
             }
 

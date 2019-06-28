@@ -1,10 +1,7 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
-using XRTK.Definitions;
 using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
@@ -19,6 +16,7 @@ namespace XRTK.SDK.Input.Handlers
     /// nudge, rotate, and scale the object.
     /// </summary>
     public class ManipulationHandler : BaseInputHandler,
+        IMixedRealityPointerHandler,
         IMixedRealityInputHandler,
         IMixedRealityInputHandler<Vector2>
     {
@@ -33,16 +31,11 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The action to use to select the GameObject and begin/end the manipulation phase
         /// </summary>
-        public MixedRealityInputAction SelectAction => selectAction;
-
-        [SerializeField]
-        [Tooltip("The action to use to nudge the GameObject closer or further away from the raycast pointer source")]
-        private MixedRealityInputAction nudgeAction = MixedRealityInputAction.None;
-
-        /// <summary>
-        /// The action to use to nudge the GameObject closer or further away from the raycast pointer source
-        /// </summary>
-        public MixedRealityInputAction NudgeAction => nudgeAction;
+        public MixedRealityInputAction SelectAction
+        {
+            get => selectAction;
+            set => selectAction = value;
+        }
 
         [SerializeField]
         [Tooltip("The action to use to rotate the GameObject")]
@@ -51,7 +44,11 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The action to use to rotate the GameObject
         /// </summary>
-        public MixedRealityInputAction RotateAction => rotateAction;
+        public MixedRealityInputAction RotateAction
+        {
+            get => rotateAction;
+            set => rotateAction = value;
+        }
 
         [SerializeField]
         [Tooltip("The action to use to scale the GameObject")]
@@ -60,13 +57,21 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The action to use to scale the GameObject
         /// </summary>
-        public MixedRealityInputAction ScaleAction => scaleAction;
+        public MixedRealityInputAction ScaleAction
+        {
+            get => scaleAction;
+            set => scaleAction = value;
+        }
 
         #endregion Input Actions
 
         #region Manipulation Options
 
         [Header("Options")]
+
+        [SerializeField]
+        [Tooltip("The object to manipulate using this handler. Automatically uses this transform if none is set.")]
+        private Transform manipulationTarget;
 
         [SerializeField]
         [Tooltip("Should the user press and hold the select action or press to hold and press again to release?")]
@@ -83,17 +88,27 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Range(0.1f, 0.001f)]
-        [Tooltip("The amount to nudge the position of the GameObject")]
-        private float nudgeAmount = 0.01f;
+        [Tooltip("The amount to scale the GameObject")]
+        private float scaleAmount = 0.01f;
 
         /// <summary>
-        /// The amount to nudge the position of the <see cref="GameObject"/>
+        /// The amount to scale the <see cref="GameObject"/>
         /// </summary>
-        public float NudgeAmount
+        public float ScaleAmount
         {
-            get => nudgeAmount;
-            set => nudgeAmount = value;
+            get => scaleAmount;
+            set => scaleAmount = value;
         }
+
+        //[PhysicsLayer]
+        //[SerializeField]
+        //[Tooltip("The physics layer to place the object in while doing manipulations")]
+        //private int manipulationLayer = 0;
+
+        ///// <summary>
+        ///// The default physics layer this <see cref="GameObject"/> is usually on when not in the manipulation phase.
+        ///// </summary>
+        //private int defaultLayer = 0;
 
         #endregion Manipulation Options
 
@@ -103,23 +118,118 @@ namespace XRTK.SDK.Input.Handlers
         /// <remarks>
         /// Used to determine if the <see cref="GameObject"/> is currently being manipulated by the user.
         /// </remarks>
-        [NonSerialized]
-        private bool isBeingHeld;
+        private bool isBeingHeld = false;
 
         /// <summary>
         /// The first input source to start the manipulation phase of this object.
         /// </summary>
-        [NonSerialized]
         private IMixedRealityInputSource primaryInputSource = null;
 
         /// <summary>
-        /// The second input source to start the manipulation phase of this object.
+        /// The first pointer to start the manipulation phase of this object.
         /// </summary>
-        /// <remarks>
-        /// Used for two handed manipulations
-        /// </remarks>
-        [NonSerialized]
-        private IMixedRealityInputSource secondaryInputSource = null;
+        private IMixedRealityPointer primaryPointer = null;
+
+        ///// <summary>
+        ///// The second input source detected during the manipulation phase of this object.
+        ///// </summary>
+        ///// <remarks>
+        ///// Used for two handed manipulations
+        ///// </remarks>
+        //private IMixedRealityInputSource secondaryInputSource = null;
+
+        ///// <summary>
+        ///// The second pointer detected during the manipulation phase of this object.
+        ///// </summary>
+        //private IMixedRealityPointer secondaryPointer = null;
+
+        ///// <summary>
+        ///// The collider used when doing manipulations.
+        ///// </summary>
+        //private Collider manipulationCollider = null;
+
+        #region Monobehaviour Implementation
+
+        private void Awake()
+        {
+            if (manipulationTarget == null)
+            {
+                manipulationTarget = transform;
+            }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+        }
+
+        private void Update()
+        {
+            if (isBeingHeld)
+            {
+                transform.position = primaryPointer != null
+                    ? primaryPointer.Result.Details.Point
+                    : MixedRealityToolkit.InputSystem.GazeProvider.GazePointer.Result.Details.Point;
+            }
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+        }
+
+        #endregion Monobehaviour Implementation
+
+        #region IMixedRealityPointerHandler Implementation
+
+        /// <inheritdoc />
+        public virtual void OnPointerDown(MixedRealityPointerEventData eventData)
+        {
+            if (eventData.MixedRealityInputAction == selectAction)
+            {
+                if (primaryInputSource == null)
+                {
+                    primaryPointer = eventData.Pointer;
+                    primaryInputSource = eventData.InputSource;
+                }
+                //else if (secondaryInputSource == null)
+                //{
+                //    secondaryPointer = eventData.Pointer;
+                //    secondaryInputSource = eventData.InputSource;
+                //}
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual void OnPointerUp(MixedRealityPointerEventData eventData)
+        {
+            if (eventData.MixedRealityInputAction == selectAction)
+            {
+                // var resetSecondary = false;
+
+                if (primaryInputSource != null &&
+                    primaryInputSource.SourceId == eventData.InputSource.SourceId)
+                {
+                    // Clear both primary and secondary input sources.
+                    primaryPointer = null;
+                    primaryInputSource = null;
+                    // resetSecondary = true;
+                }
+
+                //if (secondaryInputSource != null &&
+                //    (resetSecondary ||
+                //     eventData.InputSource.SourceId == secondaryInputSource.SourceId))
+                //{
+                //    secondaryPointer = null;
+                //    secondaryInputSource = null;
+                //}
+            }
+        }
+
+        /// <inheritdoc />
+        public virtual void OnPointerClicked(MixedRealityPointerEventData eventData) { }
+
+        #endregion IMixedRealityPointerHandler Implementation
 
         #region IMixedRealityInputHandler Implementation
 
@@ -132,10 +242,10 @@ namespace XRTK.SDK.Input.Handlers
                 {
                     primaryInputSource = eventData.InputSource;
                 }
-                else if (secondaryInputSource == null)
-                {
-                    secondaryInputSource = eventData.InputSource;
-                }
+                //else if (secondaryInputSource == null)
+                //{
+                //    secondaryInputSource = eventData.InputSource;
+                //}
             }
         }
 
@@ -144,69 +254,53 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (eventData.MixedRealityInputAction == selectAction)
             {
-                var resetSecondary = false;
+                // var resetSecondary = false;
 
                 if (primaryInputSource != null &&
                     primaryInputSource.SourceId == eventData.InputSource.SourceId)
                 {
                     // Clear both primary and secondary input sources.
-                    ResetPointerExtents(primaryInputSource);
+                    primaryPointer = null;
                     primaryInputSource = null;
-                    resetSecondary = true;
+                    // resetSecondary = true;
                 }
 
-                if (resetSecondary ||
-                    secondaryInputSource != null &&
-                    eventData.InputSource.SourceId == secondaryInputSource.SourceId)
-                {
-                    ResetPointerExtents(secondaryInputSource);
-                    secondaryInputSource = null;
-                }
+                //if (secondaryInputSource != null &&
+                //    (resetSecondary ||
+                //     eventData.InputSource.SourceId == secondaryInputSource.SourceId))
+                //{
+                //    secondaryPointer = null;
+                //    secondaryInputSource = null;
+                //}
             }
         }
 
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<Vector2> eventData)
         {
-            if (eventData.MixedRealityInputAction == nudgeAction)
-            {
-                if (eventData.InputSource.SourceId == primaryInputSource.SourceId)
-                {
-                    var closer = eventData.InputData.y < 0;
-                    var pointers = eventData.InputSource.Pointers;
+            if (!isBeingHeld) { return; }
 
-                    for (int i = 0; i < pointers.Length; i++)
-                    {
-                        pointers[i].PointerExtent = closer ? -nudgeAmount : nudgeAmount;
-                    }
-                }
-            }
-
-            if (eventData.MixedRealityInputAction == rotateAction)
+            if (primaryInputSource != null &&
+                eventData.MixedRealityInputAction == rotateAction)
             {
                 if (eventData.InputSource.SourceId == primaryInputSource.SourceId)
                 {
                 }
             }
 
-            if (eventData.MixedRealityInputAction == scaleAction)
+            if (primaryInputSource != null &&
+                eventData.MixedRealityInputAction == scaleAction)
             {
                 if (eventData.InputSource.SourceId == primaryInputSource.SourceId)
                 {
+                    if (Mathf.Abs(eventData.InputData.y) >= 0.1f) { return; }
+
+                    var smaller = eventData.InputData.x < 0;
+                    transform.localScale *= smaller ? -scaleAmount : scaleAmount;
                 }
             }
         }
 
         #endregion IMixedRealityInputHandler Implementation
-
-        private void ResetPointerExtents(IMixedRealityInputSource source)
-        {
-            var pointers = source.Pointers;
-
-            for (int i = 0; i < pointers.Length; i++)
-            {
-                pointers[i].PointerExtent = pointers[i].DefaultPointerExtent;
-            }
-        }
     }
 }
