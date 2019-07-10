@@ -1,7 +1,6 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using Ara3D.Experimental;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
@@ -86,9 +85,8 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         [SerializeField]
-        [Range(0.1f, 0.001f)]
         [Tooltip("The amount to scale the GameObject")]
-        private float scaleAmount = 0.01f;
+        private float scaleAmount = 0.5f;
 
         /// <summary>
         /// The amount to scale the <see cref="GameObject"/>
@@ -137,6 +135,8 @@ namespace XRTK.SDK.Input.Handlers
                 {
                     BeginHold(eventData);
                 }
+
+                eventData.Use();
             }
         }
 
@@ -145,15 +145,24 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (eventData.MixedRealityInputAction == selectAction)
             {
-                if (useHold && !isBeingHeld)
+                if (useHold)
                 {
-                    BeginHold(eventData);
+                    if (isBeingHeld)
+                    {
+                        EndHold(eventData);
+                    }
+                    else
+                    {
+                        BeginHold(eventData);
+                    }
                 }
 
                 if (!useHold && isBeingHeld)
                 {
                     EndHold(eventData);
                 }
+
+                eventData.Use();
             }
         }
 
@@ -169,9 +178,17 @@ namespace XRTK.SDK.Input.Handlers
                 {
                     if (Mathf.Abs(eventData.InputData.y) >= 0.1f) { return; }
 
-                    var smaller = eventData.InputData.x < 0;
-                    transform.localScale *= smaller ? -scaleAmount : scaleAmount;
+                    if (eventData.InputData.x < 0)
+                    {
+                        transform.localScale *= scaleAmount;
+                    }
+                    else
+                    {
+                        transform.localScale /= scaleAmount;
+                    }
                 }
+
+                eventData.Use();
             }
         }
 
