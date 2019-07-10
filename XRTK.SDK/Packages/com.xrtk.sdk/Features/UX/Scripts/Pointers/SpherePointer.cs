@@ -5,7 +5,7 @@ using UnityEngine;
 using XRTK.Definitions.Physics;
 using XRTK.Definitions.Utilities;
 using XRTK.Interfaces.InputSystem;
-using XRTK.Interfaces.Providers.Controllers;
+using XRTK.Providers.Controllers.Hands;
 using XRTK.Services;
 
 namespace XRTK.SDK.UX.Pointers
@@ -31,7 +31,7 @@ namespace XRTK.SDK.UX.Pointers
                 Vector3 position;
                 if (TryGetNearGraspPoint(out position))
                 {
-                    return UnityEngine.Physics.CheckSphere(position, SphereCastRadius + 0.05f, ~UnityEngine.Physics.IgnoreRaycastLayer);
+                    return Physics.CheckSphere(position, SphereCastRadius + 0.05f, ~Physics.IgnoreRaycastLayer);
                 }
 
                 return false;
@@ -41,7 +41,7 @@ namespace XRTK.SDK.UX.Pointers
         public override bool IsInteractionEnabled => IsFocusLocked || (IsNearObject && base.IsInteractionEnabled);
 
         /// <inheritdoc />
-        public override void OnPreSceneQuery()
+        public override void OnPreRaycast()
         {
             if (Rays == null)
             {
@@ -89,9 +89,9 @@ namespace XRTK.SDK.UX.Pointers
                     return true;
                 }
             }
-            else
+            else if (TryGetPointerPosition(out Vector3 position))
             {
-                result = Position;
+                result = position;
                 return true;
             }
 
