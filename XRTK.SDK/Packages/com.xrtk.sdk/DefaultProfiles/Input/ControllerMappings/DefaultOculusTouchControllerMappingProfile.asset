@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae182fe909d4e03ab1523c0c74b17f8, type: 3}
   m_Name: DefaultOculusTouchControllerMappingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isCustomProfile: 1
   hasSetupDefaults: 1
   controllerMappings:
   - description: Oculus Touch Controller Left
@@ -26,9 +26,9 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
-        id: 4
-        description: Pointer Pose
-        axisConstraint: 7
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: 
       axisCodeY: 
@@ -39,9 +39,9 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
-        id: 6
-        description: Trigger
-        axisConstraint: 3
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_9
       axisCodeY: 
@@ -81,8 +81,8 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
-      axisCodeX: AXIS_9
+      keyCode: 344
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -91,9 +91,9 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
-        id: 7
-        description: Grip Press
-        axisConstraint: 3
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_11
       axisCodeY: 
@@ -104,9 +104,9 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
-        id: 5
-        description: Teleport Direction
-        axisConstraint: 4
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_1
       axisCodeY: AXIS_2
@@ -146,7 +146,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 338
+      keyCode: 346
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -182,9 +182,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
-        id: 2
-        description: Menu
-        axisConstraint: 2
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 337
       axisCodeX: 
       axisCodeY: 
@@ -253,9 +253,9 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
-        id: 4
-        description: Pointer Pose
-        axisConstraint: 7
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: 
       axisCodeY: 
@@ -266,9 +266,9 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
-        id: 6
-        description: Trigger
-        axisConstraint: 3
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_10
       axisCodeY: 
@@ -308,8 +308,8 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
-      axisCodeX: AXIS_10
+      keyCode: 345
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -318,9 +318,9 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
-        id: 7
-        description: Grip Press
-        axisConstraint: 3
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_12
       axisCodeY: 
@@ -331,9 +331,9 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
-        id: 5
-        description: Teleport Direction
-        axisConstraint: 4
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_4
       axisCodeY: AXIS_5
@@ -373,7 +373,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 339
+      keyCode: 347
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
