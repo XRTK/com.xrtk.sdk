@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae182fe909d4e03ab1523c0c74b17f8, type: 3}
   m_Name: DefaultOculusTouchControllerMappingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
+  isCustomProfile: 0
+  parentProfile: {fileID: 11400000, guid: f83e1d143c5a46dba5e70f497a7a996d, type: 2}
   hasSetupDefaults: 1
   controllerMappings:
   - description: Oculus Touch Controller Left
