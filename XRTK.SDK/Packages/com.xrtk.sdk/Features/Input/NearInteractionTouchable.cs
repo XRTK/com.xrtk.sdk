@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using XRTK.Definitions.InputSystem;
 using XRTK.Extensions;
 
 namespace XRTK.SDK.Input

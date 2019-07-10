@@ -78,11 +78,11 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      axisCodeX: AXIS_9
+        id: 1
+        description: Select
+        axisConstraint: 2
+      keyCode: 344
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -146,7 +146,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 338
+      keyCode: 346
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -244,7 +244,7 @@ MonoBehaviour:
       invertYAxis: 0
   - description: Oculus Touch Controller Right
     controllerType:
-      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchController, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchOpenVRController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
     interactions:
@@ -305,11 +305,11 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      axisCodeX: AXIS_10
+        id: 1
+        description: Select
+        axisConstraint: 2
+      keyCode: 345
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -373,7 +373,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 339
+      keyCode: 347
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
