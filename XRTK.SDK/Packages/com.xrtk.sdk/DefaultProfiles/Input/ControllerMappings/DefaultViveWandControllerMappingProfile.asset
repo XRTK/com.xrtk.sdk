@@ -140,7 +140,7 @@ MonoBehaviour:
       invertYAxis: 0
   - description: Vive Wand Controller Right
     controllerType:
-      reference: XRTK.Providers.Controllers.OpenVR.ViveWandController, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.ViveWandOpenVRController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
     interactions:

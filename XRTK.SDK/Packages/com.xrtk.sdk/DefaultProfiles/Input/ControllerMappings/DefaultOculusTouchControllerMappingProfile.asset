@@ -244,7 +244,7 @@ MonoBehaviour:
       invertYAxis: 0
   - description: Oculus Touch Controller Right
     controllerType:
-      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchController, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchOpenVRController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
     interactions:
