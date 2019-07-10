@@ -2,6 +2,8 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using XRTK.Definitions.InputSystem;
+using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.SDK.Input;
@@ -25,7 +27,7 @@ namespace XRTK.SDK.UX.Pointers
 
         [SerializeField]
         protected GameObject visuals;
-        
+
         private float closestDistance = 0.0f;
 
         // The closest touchable component limits the set of objects which are currently touchable.
@@ -51,80 +53,83 @@ namespace XRTK.SDK.UX.Pointers
             get { return (closestProximityTouchable != null); }
         }
 
-        public override void OnPreSceneQuery()
+        public override void OnPreRaycast()
         {
             if (Rays == null)
             {
                 Rays = new RayStep[1];
             }
 
-            // Check proximity
-            NearInteractionTouchable newClosestTouchable = null;
+            if (TryGetPointerPosition(out Vector3 position) && TryGetPointerRotation(out Quaternion rotation))
             {
-                closestDistance = distFront; // NOTE: Start at distFront for cutoff
-                foreach (var prox in NearInteractionTouchable.Instances)
+                // Check proximity
+                NearInteractionTouchable newClosestTouchable = null;
                 {
-                    if (prox.ColliderEnabled)
+                    closestDistance = distFront; // NOTE: Start at distFront for cutoff
+                    foreach (var prox in NearInteractionTouchable.Instances)
                     {
-                       float dist = prox.DistanceToSurface(Position);
-                       if (dist < closestDistance)
-                       {
-   
-                           closestDistance = dist;
-                           newClosestTouchable = prox;
-                       }
+                        if (prox.ColliderEnabled)
+                        {
+                            float dist = prox.DistanceToSurface(position);
+                            if (dist < closestDistance)
+                            {
+
+                                closestDistance = dist;
+                                newClosestTouchable = prox;
+                            }
+                        }
                     }
                 }
-            }
 
-            // Determine ray direction
-            Vector3 rayDirection = Rotation * Vector3.forward;
-            if (newClosestTouchable != null)
-            {
-                rayDirection = -newClosestTouchable.Forward;
-            }
-
-            // Build ray (poke from in front to the back of the pointer position)
-            Vector3 start = Position - distBack * rayDirection;
-            Vector3 end = Position + distFront * rayDirection;
-            Rays[0].UpdateRayStep(ref start, ref end);
-
-            // Check if the currently touched object is still part of the new touchable.
-            if (currentTouchableObjectDown != null)
-            {
-                if (!IsObjectPartOfTouchable(currentTouchableObjectDown, newClosestTouchable))
+                // Determine ray direction
+                Vector3 rayDirection = rotation * Vector3.forward;
+                if (newClosestTouchable != null)
                 {
-                    TryRaisePokeUp(Result.CurrentPointerTarget, Position);
+                    rayDirection = -newClosestTouchable.Forward;
                 }
+
+                // Build ray (poke from in front to the back of the pointer position)
+                Vector3 start = position - distBack * rayDirection;
+                Vector3 end = position + distFront * rayDirection;
+                Rays[0].UpdateRayStep(ref start, ref end);
+
+                // Check if the currently touched object is still part of the new touchable.
+                if (currentTouchableObjectDown != null)
+                {
+                    if (!IsObjectPartOfTouchable(currentTouchableObjectDown, newClosestTouchable))
+                    {
+                        TryRaisePokeUp(Result.CurrentPointerTarget, position);
+                    }
+                }
+
+                line.SetPosition(0, position);
+                line.SetPosition(1, end);
+
+                // Set new touchable only now: If we have to raise a poke-up event for the previous touchable object,
+                // we need to do so using the previous touchable in TryRaisePokeUp().
+                closestProximityTouchable = newClosestTouchable;
+
+                //IsActive = IsNearObject;
+                visuals.SetActive(IsNearObject);
             }
-
-            line.SetPosition(0, Position);
-            line.SetPosition(1, end);
-
-            // Set new touchable only now: If we have to raise a poke-up event for the previous touchable object,
-            // we need to do so using the previous touchable in TryRaisePokeUp().
-            closestProximityTouchable = newClosestTouchable;
-
-            IsActive = IsNearObject;
-            visuals.SetActive(IsNearObject);
         }
 
-        public override void OnPostSceneQuery()
+        public override void OnPostRaycast()
         {
-            base.OnPostSceneQuery();
+            base.OnPostRaycast();
 
-            if (Result?.CurrentPointerTarget != null)
+            if (Result?.CurrentPointerTarget != null && TryGetPointerPosition(out Vector3 position))
             {
                 float dist = Vector3.Distance(Result.StartPoint, Result.Details.Point) - distBack;
                 bool newIsDown = (dist < debounceThreshold);
 
                 if (newIsDown)
                 {
-                    TryRaisePokeDown(Result.CurrentPointerTarget, Position);
+                    TryRaisePokeDown(Result.CurrentPointerTarget, position);
                 }
                 else
                 {
-                    TryRaisePokeUp(Result.CurrentPointerTarget, Position);
+                    TryRaisePokeUp(Result.CurrentPointerTarget, position);
                 }
             }
 
@@ -142,13 +147,13 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        public override void OnPreCurrentPointerTargetChange()
-        {
-            // We need to raise the event now, since the pointer's focused object or touchable will change 
-            // after we leave this function. This will make sure the same object that received the Down event
-            // will also receive the Up event.
-            TryRaisePokeUp();
-        }
+        //public override void OnPreCurrentPointerTargetChange()
+        //{
+        //    // We need to raise the event now, since the pointer's focused object or touchable will change 
+        //    // after we leave this function. This will make sure the same object that received the Down event
+        //    // will also receive the Up event.
+        //    TryRaisePokeUp();
+        //}
 
         private void TryRaisePokeDown(GameObject targetObject, Vector3 touchPosition)
         {
@@ -161,7 +166,7 @@ namespace XRTK.SDK.UX.Pointers
 
                     if (closestProximityTouchable.EventsToReceive == TouchableEventType.Pointer)
                     {
-                        MixedRealityToolkit.InputSystem?.RaisePointerDown(this, pointerAction, Handedness);
+                        MixedRealityToolkit.InputSystem?.RaisePointerDown(this, PointerAction);
                     }
                     else if (closestProximityTouchable.EventsToReceive == TouchableEventType.Touch)
                     {
@@ -183,8 +188,8 @@ namespace XRTK.SDK.UX.Pointers
 
                 if (closestProximityTouchable.EventsToReceive == TouchableEventType.Pointer)
                 {
-                    MixedRealityToolkit.InputSystem.RaisePointerClicked(this, pointerAction, 0, Handedness);
-                    MixedRealityToolkit.InputSystem?.RaisePointerUp(this, pointerAction, Handedness);
+                    MixedRealityToolkit.InputSystem.RaisePointerClicked(this, PointerAction, 0);
+                    MixedRealityToolkit.InputSystem?.RaisePointerUp(this, PointerAction);
                 }
                 else if (closestProximityTouchable.EventsToReceive == TouchableEventType.Touch)
                 {
@@ -197,9 +202,9 @@ namespace XRTK.SDK.UX.Pointers
 
         private void TryRaisePokeUp()
         {
-            if (currentTouchableObjectDown != null)
+            if (currentTouchableObjectDown != null && TryGetPointerPosition(out Vector3 position))
             {
-                TryRaisePokeUp(Result.CurrentPointerTarget, Position);
+                TryRaisePokeUp(Result.CurrentPointerTarget, position);
             }
         }
 

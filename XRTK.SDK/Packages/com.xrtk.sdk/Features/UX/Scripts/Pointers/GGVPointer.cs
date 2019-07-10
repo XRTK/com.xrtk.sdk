@@ -17,7 +17,7 @@ using XRTK.Definitions.Devices;
 
 namespace XRTK.SDK.UX.Pointers
 {
-    public class GGVPointer : InputSystemGlobalListener, IMixedRealityPointer, IMixedRealityInputHandler, IMixedRealityInputHandler<MixedRealityPose>, IMixedRealitySourcePoseHandler, IMixedRealitySourceStateHandler
+    /*public class GGVPointer : InputSystemGlobalListener, IMixedRealityPointer, IMixedRealityInputHandler, IMixedRealityInputHandler<MixedRealityPose>, IMixedRealitySourcePoseHandler, IMixedRealitySourceStateHandler
     {
         [Header("Pointer")]
         [SerializeField]
@@ -305,7 +305,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (isSelectPressed)
                 {
                     // Raise OnInputUp if pointer is lost while select is pressed
-                    InputSystem.RaisePointerUp(this, selectAction, lastControllerHandedness);
+                    MixedRealityToolkit.InputSystem.RaisePointerUp(this, selectAction);
                 }
 
                 if (gazeProvider != null)
@@ -341,5 +341,5 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
         #endregion
-    }
+    }*/
 }
