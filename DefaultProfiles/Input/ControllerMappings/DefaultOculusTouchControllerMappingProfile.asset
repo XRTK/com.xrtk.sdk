@@ -319,15 +319,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
-<<<<<<< HEAD
-        id: 0
-        description: None
-        axisConstraint: 0
-=======
         id: 1
         description: Select
         axisConstraint: 2
->>>>>>> fb9e8066f29091e4c2ab38a18a1a282618f90169
       keyCode: 345
       axisCodeX: 
       axisCodeY: 
