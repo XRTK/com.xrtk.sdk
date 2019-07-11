@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DefaultOculusTouchControllerMappingProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
+  parentProfile: {fileID: 11400000, guid: f83e1d143c5a46dba5e70f497a7a996d, type: 2}
   hasSetupDefaults: 1
   controllerMappings:
   - description: Oculus Touch Controller Left
@@ -78,16 +79,16 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      axisCodeX: AXIS_9
+        id: 1
+        description: Select
+        axisConstraint: 2
+      keyCode: 344
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 5
-      description: Axis1D.PrimaryHandTrigger Press
+      description: Axis1D.PrimaryHandTrigger
       axisType: 3
       inputType: 10
       inputAction:
@@ -99,14 +100,27 @@ MonoBehaviour:
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
+    - id: 5
+      description: Axis1D.PrimaryHandTrigger Press
+      axisType: 2
+      inputType: 13
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 334
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
     - id: 6
       description: Axis2D.PrimaryThumbstick
       axisType: 4
       inputType: 17
       inputAction:
-        id: 5
-        description: Teleport Direction
-        axisConstraint: 4
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_1
       axisCodeY: AXIS_2
@@ -146,7 +160,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 338
+      keyCode: 346
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -182,9 +196,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
-        id: 2
-        description: Menu
-        axisConstraint: 2
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 337
       axisCodeX: 
       axisCodeY: 
@@ -244,7 +258,7 @@ MonoBehaviour:
       invertYAxis: 0
   - description: Oculus Touch Controller Right
     controllerType:
-      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchController, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.OculusTouchOpenVRController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
     interactions:
@@ -253,9 +267,9 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
-        id: 4
-        description: Pointer Pose
-        axisConstraint: 7
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: 
       axisCodeY: 
@@ -266,9 +280,9 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
-        id: 6
-        description: Trigger
-        axisConstraint: 3
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_10
       axisCodeY: 
@@ -305,24 +319,37 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
+        id: 1
+        description: Select
+        axisConstraint: 2
+      keyCode: 345
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 5
+      description: Axis1D.SecondaryHandTrigger
+      axisType: 3
+      inputType: 10
+      inputAction:
         id: 0
         description: None
         axisConstraint: 0
       keyCode: 0
-      axisCodeX: AXIS_10
+      axisCodeX: AXIS_12
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 5
       description: Axis1D.SecondaryHandTrigger Press
-      axisType: 3
-      inputType: 10
+      axisType: 2
+      inputType: 13
       inputAction:
-        id: 7
-        description: Grip Press
-        axisConstraint: 3
-      keyCode: 0
-      axisCodeX: AXIS_12
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 335
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -331,9 +358,9 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
-        id: 5
-        description: Teleport Direction
-        axisConstraint: 4
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_4
       axisCodeY: AXIS_5
@@ -373,7 +400,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 339
+      keyCode: 347
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0

@@ -36,7 +36,7 @@ MonoBehaviour:
   - dataProviderType:
       reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
     dataProviderName: Open VR Controller Data Provider
-    priority: 5
+    priority: 2
     runtimePlatform: 47
     profile: {fileID: 0}
   - dataProviderType:
