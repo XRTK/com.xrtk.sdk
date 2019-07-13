@@ -4,8 +4,10 @@
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
+using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -15,6 +17,7 @@ namespace XRTK.SDK.Input.Handlers
     /// nudge, rotate, and scale the object.
     /// </summary>
     public class ManipulationHandler : BaseInputHandler,
+        IMixedRealityPointerHandler,
         IMixedRealityInputHandler,
         IMixedRealityInputHandler<Vector2>
     {
@@ -85,6 +88,20 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         [SerializeField]
+        [Tooltip("The dual axis zone to process and activate the scale action.\nNote: this is transformed into and used as absolute values.")]
+        private Vector2 scaleZone = new Vector2(0.25f, 1f);
+
+        /// <summary>
+        /// The dual axis zone to process and activate the scale action.
+        /// </summary>
+        /// <remarks>This is transformed into and used as absolute values.</remarks>
+        public Vector2 ScaleZone
+        {
+            get => scaleZone;
+            set => scaleZone = value;
+        }
+
+        [SerializeField]
         [Tooltip("The amount to scale the GameObject")]
         private float scaleAmount = 0.5f;
 
@@ -95,6 +112,46 @@ namespace XRTK.SDK.Input.Handlers
         {
             get => scaleAmount;
             set => scaleAmount = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The min and max size this object can be scaled to.")]
+        private Vector2 scaleConstraints = new Vector2(0.01f, 1f);
+
+        /// <summary>
+        /// The min and max size this object can be scaled to.
+        /// </summary>
+        public Vector2 ScaleConstraints
+        {
+            get => scaleConstraints;
+            set => scaleConstraints = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The dual axis zone to process and activate the rotation action.\nNote: this is transformed into and used as absolute values.")]
+        private Vector2 rotationZone = new Vector2(1f, 0.25f);
+
+        /// <summary>
+        /// The dual axis zone to process and activate the rotation action.
+        /// </summary>
+        /// <remarks>This is transformed into and used as absolute values.</remarks>
+        public Vector2 RotationZone
+        {
+            get => rotationZone;
+            set => rotationZone = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The amount to rotate the GameObject")]
+        private float rotationAmount = 1f;
+
+        /// <summary>
+        /// The amount to rotate the <see cref="GameObject"/>
+        /// </summary>
+        public float RotationAmount
+        {
+            get => rotationAmount;
+            set => rotationAmount = value;
         }
 
         #endregion Manipulation Options
@@ -112,6 +169,11 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         private IMixedRealityInputSource primaryInputSource = null;
 
+        /// <summary>
+        /// The first pointer to start the manipulation phase of this object.
+        /// </summary>
+        private IMixedRealityPointer primaryPointer = null;
+
         #region Monobehaviour Implementation
 
         private void Awake()
@@ -122,12 +184,120 @@ namespace XRTK.SDK.Input.Handlers
             }
         }
 
+        private void Update()
+        {
+            if (isBeingHeld)
+            {
+                transform.position = primaryPointer.Result.Details.Point;
+            }
+        }
+
         #endregion Monobehaviour Implementation
 
         #region IMixedRealityInputHandler Implementation
 
         /// <inheritdoc />
         public virtual void OnInputDown(InputEventData eventData)
+        {
+        }
+
+        /// <inheritdoc />
+        public virtual void OnInputUp(InputEventData eventData)
+        {
+        }
+
+        /// <inheritdoc />
+        public virtual void OnInputChanged(InputEventData<Vector2> eventData)
+        {
+            if (!isBeingHeld ||
+                primaryInputSource == null ||
+                eventData.InputSource.SourceId != primaryInputSource.SourceId)
+            {
+                return;
+            }
+
+            var absoluteInputData = eventData.InputData;
+            absoluteInputData.x = Mathf.Abs(absoluteInputData.x);
+            absoluteInputData.y = Mathf.Abs(absoluteInputData.y);
+
+            bool isScalePossible = eventData.MixedRealityInputAction == scaleAction && absoluteInputData.y > 0f;
+            bool isRotatePossible = eventData.MixedRealityInputAction == rotateAction && absoluteInputData.x > 0f;
+
+            if (isScalePossible &&
+                absoluteInputData.x >= scaleZone.x)
+            {
+                isScalePossible = false;
+            }
+
+            if (isRotatePossible &&
+                absoluteInputData.y >= RotationZone.y)
+            {
+                isRotatePossible = false;
+            }
+
+            if (absoluteInputData.y <= RotationZone.y && absoluteInputData.x <= scaleZone.x)
+            {
+                isScalePossible = false;
+                isRotatePossible = false;
+            }
+
+            if (isRotatePossible && isScalePossible)
+            {
+                isScalePossible = false;
+                isRotatePossible = false;
+            }
+
+            if (isScalePossible)
+            {
+                var newScale = transform.localScale;
+                var prevScale = newScale;
+
+                if (eventData.InputData.y < 0f)
+                {
+                    newScale *= scaleAmount;
+
+                    // We can check any axis, they should all be the same.
+                    if (newScale.x <= scaleConstraints.x)
+                    {
+                        newScale = prevScale;
+                    }
+                }
+                else
+                {
+                    newScale /= scaleAmount;
+
+                    // We can check any axis, they should all be the same.
+                    if (newScale.y >= scaleConstraints.y)
+                    {
+                        newScale = prevScale;
+                    }
+                }
+
+                transform.localScale = newScale;
+                eventData.Use();
+            }
+
+            if (isRotatePossible)
+            {
+                if (eventData.InputData.x < 0f)
+                {
+                    transform.Rotate(0f, rotationAmount, 0f, Space.Self);
+                }
+                else
+                {
+                    transform.Rotate(0f, -rotationAmount, 0f, Space.Self);
+                }
+
+                eventData.Use();
+            }
+        }
+
+        #endregion IMixedRealityInputHandler Implementation
+
+        #region IMixedRealityPointerHandler Implementation
+
+        /// <inheritdoc />
+        public virtual void OnPointerDown(MixedRealityPointerEventData eventData)
         {
             if (eventData.MixedRealityInputAction == selectAction)
             {
@@ -141,7 +311,7 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         /// <inheritdoc />
-        public virtual void OnInputUp(InputEventData eventData)
+        public virtual void OnPointerUp(MixedRealityPointerEventData eventData)
         {
             if (eventData.MixedRealityInputAction == selectAction)
             {
@@ -167,52 +337,42 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         /// <inheritdoc />
-        public virtual void OnInputChanged(InputEventData<Vector2> eventData)
+        public virtual void OnPointerClicked(MixedRealityPointerEventData eventData)
         {
-            if (!isBeingHeld) { return; }
-
-            if (primaryInputSource != null &&
-                eventData.MixedRealityInputAction == scaleAction)
-            {
-                if (eventData.InputSource.SourceId == primaryInputSource.SourceId)
-                {
-                    if (Mathf.Abs(eventData.InputData.y) >= 0.1f) { return; }
-
-                    if (eventData.InputData.x < 0)
-                    {
-                        transform.localScale *= scaleAmount;
-                    }
-                    else
-                    {
-                        transform.localScale /= scaleAmount;
-                    }
-                }
-
-                eventData.Use();
-            }
         }
 
-        #endregion IMixedRealityInputHandler Implementation
+        #endregion IMixedRealityPointerHandler Implementation
 
-        private void BeginHold(InputEventData eventData)
+        private void BeginHold(MixedRealityPointerEventData eventData)
         {
             isBeingHeld = true;
+            MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
 
             if (primaryInputSource == null)
             {
                 primaryInputSource = eventData.InputSource;
             }
+
+            if (primaryPointer == null)
+            {
+                primaryPointer = eventData.Pointer;
+            }
+
+            transform.SetCollidersActive(false);
         }
 
-        private void EndHold(InputEventData eventData)
+        private void EndHold(MixedRealityPointerEventData eventData)
         {
             if (primaryInputSource != null &&
                 primaryInputSource.SourceId == eventData.InputSource.SourceId)
             {
+                primaryPointer = null;
                 primaryInputSource = null;
             }
 
             isBeingHeld = false;
+            MixedRealityToolkit.InputSystem.PopModalInputHandler();
+            transform.SetCollidersActive(true);
         }
     }
 }
