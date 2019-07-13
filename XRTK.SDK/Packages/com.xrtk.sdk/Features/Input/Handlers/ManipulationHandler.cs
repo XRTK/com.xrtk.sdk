@@ -3,10 +3,12 @@
 
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
+using XRTK.Definitions.SpatialAwarenessSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Providers.SpatialObservers;
 using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
@@ -348,6 +350,15 @@ namespace XRTK.SDK.Input.Handlers
             isBeingHeld = true;
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
 
+
+            foreach (var observer in MixedRealityToolkit.SpatialAwarenessSystem.DetectedSpatialObservers)
+            {
+                if (observer is BaseMixedRealitySpatialMeshObserver meshObserver)
+                {
+                    meshObserver.MeshDisplayOption = SpatialMeshDisplayOptions.Collision;
+                }
+            }
+
             if (primaryInputSource == null)
             {
                 primaryInputSource = eventData.InputSource;
@@ -363,6 +374,14 @@ namespace XRTK.SDK.Input.Handlers
 
         private void EndHold(MixedRealityPointerEventData eventData)
         {
+            foreach (var observer in MixedRealityToolkit.SpatialAwarenessSystem.DetectedSpatialObservers)
+            {
+                if (observer is BaseMixedRealitySpatialMeshObserver meshObserver)
+                {
+                    meshObserver.MeshDisplayOption = SpatialMeshDisplayOptions.None;
+                }
+            }
+
             if (primaryInputSource != null &&
                 primaryInputSource.SourceId == eventData.InputSource.SourceId)
             {
