@@ -68,12 +68,6 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 EditorGUILayout.PropertyField(lineColorNoTarget);
                 EditorGUILayout.PropertyField(lineColorLockFocus);
                 EditorGUILayout.PropertyField(lineRenderers, true);
-
-                EditorGUILayout.LabelField("Extent Adjustments");
-                EditorGUILayout.PropertyField(nudgeAction);
-                EditorGUILayout.PropertyField(nudgeAmount);
-                EditorGUILayout.PropertyField(minimumNudgeDistance);
-                EditorGUILayout.PropertyField(maximumNudgeDistance);
                 EditorGUI.indentLevel--;
             }
 
