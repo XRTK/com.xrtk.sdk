@@ -41,8 +41,12 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         [SerializeField]
+        [Tooltip("The action to use to enable pressed actions")]
         private MixedRealityInputAction touchpadPressAction = MixedRealityInputAction.None;
 
+        /// <summary>
+        /// The action to use to enable pressed actions
+        /// </summary>
         public MixedRealityInputAction TouchpadPressAction
         {
             get => touchpadPressAction;
@@ -181,6 +185,20 @@ namespace XRTK.SDK.Input.Handlers
         #region Rotation Options
 
         [SerializeField]
+        [Tooltip("The min/max values to activate the rotate action.\nNote: this is transformed into and used as absolute values.")]
+        private Vector2 rotationZone = new Vector2(0.25f, 1f);
+
+        /// <summary>
+        /// The dual axis zone to process and activate the scale action.
+        /// </summary>
+        /// <remarks>This is transformed into and used as absolute values.</remarks>
+        public Vector2 RotationZone
+        {
+            get => rotationZone;
+            set => rotationZone = value;
+        }
+
+        [SerializeField]
         [Range(2.8125f, 45f)]
         [Tooltip("The amount a user has to scroll in a circular motion to activate the rotation action.")]
         private float rotationAngleActivation = 11.25f;
@@ -192,19 +210,6 @@ namespace XRTK.SDK.Input.Handlers
         {
             get => rotationAngleActivation;
             set => rotationAngleActivation = value;
-        }
-
-        [SerializeField]
-        [Tooltip("The amount to rotate the GameObject")]
-        private float rotationAmount = 1f;
-
-        /// <summary>
-        /// The amount to rotate the <see cref="GameObject"/>
-        /// </summary>
-        public float RotationAmount
-        {
-            get => rotationAmount;
-            set => rotationAmount = value;
         }
 
         #endregion Rotation Options
@@ -279,7 +284,9 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         private Vector2 lastPositionReading = Vector2.zero;
 
-        public bool IsPressed { get; private set; }
+        private bool isPressed = false;
+
+        private bool isRotating = false;
 
         #region Monobehaviour Implementation
 
@@ -299,6 +306,12 @@ namespace XRTK.SDK.Input.Handlers
             }
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            EndHold();
+        }
+
         #endregion Monobehaviour Implementation
 
         #region IMixedRealityInputHandler Implementation
@@ -308,23 +321,18 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (eventData.MixedRealityInputAction == cancelAction)
             {
-                EndHold(eventData);
+                EndHold();
             }
         }
 
         /// <inheritdoc />
         public virtual void OnInputUp(InputEventData eventData)
         {
-            if (eventData.MixedRealityInputAction == touchpadPressAction)
-            {
-                lastPositionReading.x = 0f;
-                lastPositionReading.y = 0f;
-                eventData.Use();
-            }
 
-            if (eventData.MixedRealityInputAction == cancelAction)
+            if (eventData.MixedRealityInputAction == cancelAction &&
+                eventData.InputSource.SourceId == primaryInputSource.SourceId)
             {
-                EndHold(eventData);
+                EndHold();
             }
         }
 
@@ -338,19 +346,30 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (!IsPressed &&
-                eventData.MixedRealityInputAction == touchpadPressAction &&
-                eventData.InputData >= pressThreshold)
+            if (eventData.MixedRealityInputAction == touchpadPressAction &&
+                eventData.InputData <= 0.00001f)
             {
-                IsPressed = true;
+                isRotating = false;
+                lastPositionReading.x = 0f;
+                lastPositionReading.y = 0f;
                 eventData.Use();
             }
 
-            if (IsPressed &&
+            if (isRotating) { return; }
+
+            if (!isPressed &&
+                eventData.MixedRealityInputAction == touchpadPressAction &&
+                eventData.InputData >= pressThreshold)
+            {
+                isPressed = true;
+                eventData.Use();
+            }
+
+            if (isPressed &&
                 eventData.MixedRealityInputAction == touchpadPressAction &&
                 eventData.InputData <= pressThreshold)
             {
-                IsPressed = false;
+                isPressed = false;
                 eventData.Use();
             }
         }
@@ -377,35 +396,31 @@ namespace XRTK.SDK.Input.Handlers
             absoluteInputData.x = Mathf.Abs(absoluteInputData.x);
             absoluteInputData.y = Mathf.Abs(absoluteInputData.y);
 
-            if (!IsPressed && eventData.MixedRealityInputAction == rotateAction)
+            var isRotationPossible = eventData.MixedRealityInputAction == rotateAction &&
+                                     (absoluteInputData.x >= rotationZone.x ||
+                                      absoluteInputData.y >= rotationZone.x);
+
+            if (!isPressed &&
+                isRotationPossible &&
+                !lastPositionReading.x.Equals(0f) && !lastPositionReading.y.Equals(0f))
             {
-                if (!lastPositionReading.x.Equals(0f) && !lastPositionReading.y.Equals(0f))
+                var rotationAngle = Vector2.SignedAngle(lastPositionReading, eventData.InputData);
+
+                if (Mathf.Abs(rotationAngle) > rotationAngleActivation)
                 {
-                    var rotationAngle = Vector2.SignedAngle(lastPositionReading, eventData.InputData);
-                    lastPositionReading = eventData.InputData;
-
-                    if (Mathf.Abs(rotationAngle) > rotationAngleActivation)
-                    {
-                        if (rotationAngle < 0f)
-                        {
-                            transform.Rotate(0f, rotationAmount, 0f, Space.Self);
-                        }
-                        else
-                        {
-                            transform.Rotate(0f, -rotationAmount, 0f, Space.Self);
-                        }
-
-                        eventData.Use();
-                        return;
-                    }
+                    isRotating = true;
                 }
-                else
+
+                if (isRotating)
                 {
-                    lastPositionReading = eventData.InputData;
+                    transform.Rotate(0f, -rotationAngle, 0f, Space.Self);
+                    eventData.Use();
                 }
             }
 
-            if (!IsPressed) { return; }
+            lastPositionReading = eventData.InputData;
+
+            if (!isPressed || isRotating) { return; }
 
             bool isScalePossible = eventData.MixedRealityInputAction == scaleAction && absoluteInputData.x > 0f;
             bool isNudgePossible = eventData.MixedRealityInputAction == nudgeAction && absoluteInputData.y > 0f;
@@ -526,13 +541,15 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnPointerUp(MixedRealityPointerEventData eventData)
         {
-            if (eventData.MixedRealityInputAction != selectAction) { return; }
+            if (eventData.used ||
+                eventData.MixedRealityInputAction != selectAction ||
+                primaryInputSource != null && eventData.InputSource.SourceId != primaryInputSource.SourceId) { return; }
 
             if (useHold)
             {
                 if (isBeingHeld)
                 {
-                    EndHold(eventData);
+                    EndHold();
                 }
                 else
                 {
@@ -542,7 +559,7 @@ namespace XRTK.SDK.Input.Handlers
 
             if (!useHold && isBeingHeld)
             {
-                EndHold(eventData);
+                EndHold();
             }
 
             eventData.Use();
@@ -555,7 +572,7 @@ namespace XRTK.SDK.Input.Handlers
 
         #endregion IMixedRealityPointerHandler Implementation
 
-        private void BeginHold(MixedRealityPointerEventData eventData)
+        public virtual void BeginHold(MixedRealityPointerEventData eventData)
         {
             if (isBeingHeld) { return; }
 
@@ -579,24 +596,18 @@ namespace XRTK.SDK.Input.Handlers
             eventData.Use();
         }
 
-        private void EndHold(BaseInputEventData eventData)
+        public virtual void EndHold()
         {
             if (!isBeingHeld) { return; }
 
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.None);
 
-            if (primaryInputSource != null &&
-                primaryInputSource.SourceId == eventData.InputSource.SourceId)
-            {
-                primaryPointer = null;
-                primaryInputSource = null;
-            }
+            primaryPointer = null;
+            primaryInputSource = null;
 
             isBeingHeld = false;
             MixedRealityToolkit.InputSystem.PopModalInputHandler();
             transform.SetCollidersActive(true);
-
-            eventData.Use();
         }
     }
 }
