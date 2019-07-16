@@ -288,6 +288,12 @@ namespace XRTK.SDK.Input.Handlers
 
         private bool isRotating = false;
 
+        private Vector3 prevPosition = Vector3.zero;
+
+        private Vector3 prevScale = Vector3.one;
+
+        private Quaternion prevRotation = Quaternion.identity;
+
         #region Monobehaviour Implementation
 
         private void Awake()
@@ -302,7 +308,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (isBeingHeld)
             {
-                transform.position = primaryPointer.Result.Details.Point;
+                manipulationTarget.position = primaryPointer.Result.Details.Point;
             }
         }
 
@@ -327,7 +333,7 @@ namespace XRTK.SDK.Input.Handlers
                 isBeingHeld &&
                 eventData.MixedRealityInputAction == cancelAction)
             {
-                EndHold();
+                EndHold(true);
                 eventData.Use();
             }
         }
@@ -339,7 +345,7 @@ namespace XRTK.SDK.Input.Handlers
                 isBeingHeld &&
                 eventData.MixedRealityInputAction == cancelAction)
             {
-                EndHold();
+                EndHold(true);
                 eventData.Use();
             }
         }
@@ -421,7 +427,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (isRotating)
                 {
-                    transform.Rotate(0f, -rotationAngle, 0f, Space.Self);
+                    manipulationTarget.Rotate(0f, -rotationAngle, 0f, Space.Self);
                     eventData.Use();
                 }
             }
@@ -508,8 +514,8 @@ namespace XRTK.SDK.Input.Handlers
 
             if (isScalePossible)
             {
-                var newScale = transform.localScale;
-                var prevScale = newScale;
+                var newScale = manipulationTarget.localScale;
+                var currentScale = newScale;
 
                 if (eventData.InputData.x < 0f)
                 {
@@ -518,7 +524,7 @@ namespace XRTK.SDK.Input.Handlers
                     // We can check any axis, they should all be the same as we do uniform scales.
                     if (newScale.x <= scaleConstraints.x)
                     {
-                        newScale = prevScale;
+                        newScale = currentScale;
                     }
                 }
                 else
@@ -528,11 +534,11 @@ namespace XRTK.SDK.Input.Handlers
                     // We can check any axis, they should all be the same as we do uniform scales.
                     if (newScale.y >= scaleConstraints.y)
                     {
-                        newScale = prevScale;
+                        newScale = currentScale;
                     }
                 }
 
-                transform.localScale = newScale;
+                manipulationTarget.localScale = newScale;
                 eventData.Use();
             }
         }
@@ -600,6 +606,10 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.Collision);
 
+            prevPosition = manipulationTarget.position;
+            prevScale = manipulationTarget.localScale;
+            prevRotation = manipulationTarget.rotation;
+
             if (primaryInputSource == null)
             {
                 primaryInputSource = eventData.InputSource;
@@ -610,12 +620,18 @@ namespace XRTK.SDK.Input.Handlers
                 primaryPointer = eventData.Pointer;
             }
 
-            transform.SetCollidersActive(false);
+            manipulationTarget.SetCollidersActive(false);
 
             eventData.Use();
         }
 
-        public virtual void EndHold()
+        /// <summary>
+        /// Ends the current hold on the manipulation target.
+        /// </summary>
+        /// <param name="isCanceled">
+        /// Is this a cancelled action? If so then the manipulation target will pop back into its prev position.
+        /// </param>
+        public virtual void EndHold(bool isCanceled = false)
         {
             if (!isBeingHeld) { return; }
 
@@ -624,9 +640,16 @@ namespace XRTK.SDK.Input.Handlers
             primaryPointer = null;
             primaryInputSource = null;
 
+            if (isCanceled)
+            {
+                manipulationTarget.position = prevPosition;
+                manipulationTarget.localScale = prevScale;
+                manipulationTarget.rotation = prevRotation;
+            }
+
             isBeingHeld = false;
             MixedRealityToolkit.InputSystem.PopModalInputHandler();
-            transform.SetCollidersActive(true);
+            manipulationTarget.SetCollidersActive(true);
         }
     }
 }
