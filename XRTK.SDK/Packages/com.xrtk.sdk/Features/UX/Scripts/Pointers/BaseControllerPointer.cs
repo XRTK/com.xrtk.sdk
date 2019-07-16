@@ -82,11 +82,6 @@ namespace XRTK.SDK.UX.Pointers
         public virtual Vector3 PointerDirection => raycastOrigin != null ? raycastOrigin.forward : transform.forward;
 
         /// <summary>
-        /// The action that will enable the raise the input event for this pointer.
-        /// </summary>
-        public MixedRealityInputAction PointerAction => pointerAction;
-
-        /// <summary>
         /// Set a new cursor for this <see cref="IMixedRealityPointer"/>
         /// </summary>
         /// <remarks>This <see cref="GameObject"/> must have a <see cref="IMixedRealityCursor"/> attached to it.</remarks>

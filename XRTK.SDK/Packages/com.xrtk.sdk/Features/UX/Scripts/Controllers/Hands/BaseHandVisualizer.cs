@@ -119,7 +119,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
         }
 
-        public void OnMeshUpdated(InputEventData<HandMeshUpdatedEventData> eventData)
+        void IMixedRealityHandMeshHandler.OnMeshUpdated(InputEventData<HandMeshUpdatedEventData> eventData)
         {
             if (eventData.Handedness != Controller?.ControllerHandedness)
             {
