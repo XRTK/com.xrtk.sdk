@@ -472,6 +472,15 @@ namespace XRTK.SDK.Input.Handlers
                 for (int i = 0; i < pointers.Length; i++)
                 {
                     var newExtent = pointers[i].PointerExtent;
+                    var currentRaycastDistance = pointers[i].Result.Details.RayDistance;
+
+                    // Reset the cursor extent to the nearest value in case we're hitting something close
+                    // and the user wants to adjust. That way it doesn't take forever to see the change.
+                    if (currentRaycastDistance < newExtent)
+                    {
+                        newExtent = currentRaycastDistance;
+                    }
+
                     var prevExtent = newExtent;
 
                     if (eventData.InputData.y < 0f)
