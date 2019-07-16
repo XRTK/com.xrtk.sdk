@@ -323,6 +323,11 @@ namespace XRTK.SDK.Input.Handlers
             {
                 EndHold();
             }
+
+            if (eventData.MixedRealityInputAction == selectAction)
+            {
+                isPressed = true;
+            }
         }
 
         /// <inheritdoc />
@@ -333,6 +338,11 @@ namespace XRTK.SDK.Input.Handlers
                 eventData.InputSource.SourceId == primaryInputSource.SourceId)
             {
                 EndHold();
+            }
+
+            if (eventData.MixedRealityInputAction == selectAction)
+            {
+                isPressed = false;
             }
         }
 
