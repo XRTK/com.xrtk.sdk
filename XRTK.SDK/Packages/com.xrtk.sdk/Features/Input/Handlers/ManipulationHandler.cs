@@ -309,7 +309,11 @@ namespace XRTK.SDK.Input.Handlers
         protected override void OnDisable()
         {
             base.OnDisable();
-            EndHold();
+
+            if (isBeingHeld)
+            {
+                EndHold();
+            }
         }
 
         #endregion Monobehaviour Implementation
@@ -319,20 +323,24 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputDown(InputEventData eventData)
         {
-            if (eventData.MixedRealityInputAction == cancelAction)
+            if (!eventData.used &&
+                isBeingHeld &&
+                eventData.MixedRealityInputAction == cancelAction)
             {
                 EndHold();
+                eventData.Use();
             }
         }
 
         /// <inheritdoc />
         public virtual void OnInputUp(InputEventData eventData)
         {
-
-            if (eventData.MixedRealityInputAction == cancelAction &&
-                eventData.InputSource.SourceId == primaryInputSource.SourceId)
+            if (!eventData.used &&
+                isBeingHeld &&
+                eventData.MixedRealityInputAction == cancelAction)
             {
                 EndHold();
+                eventData.Use();
             }
         }
 
@@ -551,8 +559,10 @@ namespace XRTK.SDK.Input.Handlers
         public virtual void OnPointerUp(MixedRealityPointerEventData eventData)
         {
             if (eventData.used ||
-                eventData.MixedRealityInputAction != selectAction ||
-                primaryInputSource != null && eventData.InputSource.SourceId != primaryInputSource.SourceId) { return; }
+                eventData.MixedRealityInputAction != selectAction)
+            {
+                return;
+            }
 
             if (useHold)
             {
