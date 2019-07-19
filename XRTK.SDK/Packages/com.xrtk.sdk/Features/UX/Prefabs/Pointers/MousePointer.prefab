@@ -45,14 +45,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handedness: 0
   destroyOnSourceLost: 0
-  useSourcePoseData: 1
+  useSourcePoseData: 0
   poseAction:
     id: 12
     description: Mouse Delta
     axisConstraint: 4
   cursorPrefab: {fileID: 1151083198953756, guid: 6c1001b7dc77435cbc62c5fd7fa5a923,
     type: 3}
-  disableCursorOnStart: 1
+  disableCursorOnStart: 0
   setCursorVisibilityOnSourceDetected: 0
   raycastOrigin: {fileID: 0}
   activeHoldAction:
@@ -64,9 +64,11 @@ MonoBehaviour:
     description: Select
     axisConstraint: 2
   requiresHoldAction: 0
+  enablePointerOnStart: 1
   overrideGlobalPointerExtent: 0
-  pointerExtent: 10
+  defaultPointerExtent: 2.5
   pointerOrientation: 0
-  hideCursorWhenInactive: 1
+  hideCursorWhenInactive: 0
   movementThresholdToUnHide: 0.5
   hideTimeout: 3
+  speed: 0.25

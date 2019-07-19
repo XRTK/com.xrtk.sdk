@@ -2,12 +2,12 @@
   "dependencies": {
     "com.unity.analytics": "3.3.2",
     "com.unity.package-manager-ui": "2.1.2",
-    "com.unity.textmeshpro": "2.0.0",
-    "com.unity.xr.legacyinputhelpers": "2.0.2",
-    "com.unity.xr.oculus.standalone": "1.29.1",
-    "com.xrtk.core": "https://github.com/XRTK/XRTK-Core.git#0.1.11",
-    "com.xrtk.lumin": "https://github.com/XRTK/Lumin.git#0.1.2",
-    "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.5",
+    "com.unity.textmeshpro": "2.0.1",
+    "com.unity.xr.legacyinputhelpers": "2.0.4",
+    "com.unity.xr.oculus.standalone": "1.36.0",
+    "com.xrtk.core": "https://github.com/XRTK/XRTK-Core.git#0.1.14",
+    "com.xrtk.lumin": "https://github.com/XRTK/Lumin.git#0.1.4",
+    "com.xrtk.upm-git-extension": "https://github.com/XRTK/UpmGitExtension.git#0.9.6",
     "com.xrtk.wmr": "https://github.com/XRTK/WindowsMixedReality.git#0.1.3",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -42,16 +42,16 @@
   },
   "lock": {
     "com.xrtk.core": {
-      "hash": "f6a39a3fce074f7de2e6dc0153839d9ebcfeabf4",
-      "revision": "0.1.11"
+      "hash": "f3d90444787469d69c52e481404fd97771620555",
+      "revision": "0.1.14"
     },
     "com.xrtk.lumin": {
-      "hash": "a196ab9a5e951eb79905a732dfbbd2a08becd78a",
-      "revision": "0.1.2"
+      "hash": "b0df55adbd089275ae68f19793f410ddcc8b622c",
+      "revision": "0.1.4"
     },
     "com.xrtk.upm-git-extension": {
-      "hash": "4e5c893cdbb28c82f8d23756696515108fe130ef",
-      "revision": "0.9.5"
+      "hash": "7b3f68261095ff54e889ba2ae16df0a551012977",
+      "revision": "0.9.6"
     },
     "com.xrtk.wmr": {
       "hash": "40f707ba94f5b34d8969246ee980dbe9c3b8ff31",

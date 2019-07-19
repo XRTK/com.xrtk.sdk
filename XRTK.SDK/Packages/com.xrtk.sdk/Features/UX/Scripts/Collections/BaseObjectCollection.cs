@@ -1,13 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using XRTK.Definitions.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using XRTK.Definitions.Utilities;
 
 namespace XRTK.SDK.UX.Collections
 {
+    [DisallowMultipleComponent]
     public abstract class BaseObjectCollection : MonoBehaviour
     {
         /// <summary>
@@ -15,13 +16,10 @@ namespace XRTK.SDK.UX.Collections
         /// </summary>
         public Action<BaseObjectCollection> OnCollectionUpdated { get; set; }
 
-        /// <summary>
-        /// List of objects with generated data on the object.
-        /// </summary>
-        protected List<ObjectCollectionNode> NodeList { get; } = new List<ObjectCollectionNode>();
+        protected readonly List<ObjectCollectionNode> nodeList = new List<ObjectCollectionNode>();
 
-        [Tooltip("Whether to include space for inactive transforms in the layout")]
         [SerializeField]
+        [Tooltip("Whether to include space for inactive transforms in the layout")]
         private bool ignoreInactiveTransforms = true;
 
         /// <summary>
@@ -33,8 +31,8 @@ namespace XRTK.SDK.UX.Collections
             set => ignoreInactiveTransforms = value;
         }
 
-        [Tooltip("Type of sorting to use")]
         [SerializeField]
+        [Tooltip("Type of sorting to use")]
         private CollationOrderType sortType = CollationOrderType.None;
 
         /// <summary>
@@ -46,27 +44,45 @@ namespace XRTK.SDK.UX.Collections
             set => sortType = value;
         }
 
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.hierarchyChanged += () =>
+            {
+                if (this != null &&
+                    transform.hasChanged)
+                {
+                    UpdateCollection();
+                }
+            };
+#endif // UNITY_EDITOR
+
+            UpdateCollection();
+        }
+
         /// <summary>
-        /// Rebuilds / updates the collection layout.
-        /// Update collection is called from the editor button on the inspector.
+        /// Gets the current list of <see cref="ObjectCollectionNode"/>s
         /// </summary>
-        public virtual void UpdateCollection()
+        public virtual List<ObjectCollectionNode> GetCollection()
         {
             // Check for empty nodes and remove them
             var emptyNodes = new List<ObjectCollectionNode>();
 
-            for (int i = 0; i < NodeList.Count; i++)
+            for (int i = 0; i < nodeList.Count; i++)
             {
-                if (NodeList[i].Transform == null || (IgnoreInactiveTransforms && !NodeList[i].Transform.gameObject.activeSelf) || NodeList[i].Transform.parent == null || !(NodeList[i].Transform.parent.gameObject == gameObject))
+                if (nodeList[i].Transform == null ||
+                    nodeList[i].Transform.parent == null ||
+                    !(nodeList[i].Transform.parent.gameObject == gameObject) ||
+                    !nodeList[i].Transform.gameObject.activeSelf && IgnoreInactiveTransforms)
                 {
-                    emptyNodes.Add(NodeList[i]);
+                    emptyNodes.Add(nodeList[i]);
                 }
             }
 
             // Now delete the empty nodes
             for (int i = 0; i < emptyNodes.Count; i++)
             {
-                NodeList.Remove(emptyNodes[i]);
+                nodeList.Remove(emptyNodes[i]);
             }
 
             emptyNodes.Clear();
@@ -74,32 +90,47 @@ namespace XRTK.SDK.UX.Collections
             // Check when children change and adjust
             for (int i = 0; i < transform.childCount; i++)
             {
-                Transform child = transform.GetChild(i);
+                var child = transform.GetChild(i);
+
+#if UNITY_EDITOR
+                UnityEditor.Undo.RecordObject(child, "ObjectCollection modify transform");
+#endif
 
                 if (!ContainsNode(child) && (child.gameObject.activeSelf || !IgnoreInactiveTransforms))
                 {
-                    NodeList.Add(new ObjectCollectionNode { Name = child.name, Transform = child });
+                    nodeList.Add(new ObjectCollectionNode { Name = child.name, Transform = child });
                 }
             }
+
+            return nodeList;
+        }
+
+        /// <summary>
+        /// Rebuilds / updates the collection layout.
+        /// Update collection is called from the editor button on the inspector.
+        /// </summary>
+        public virtual void UpdateCollection()
+        {
+            GetCollection();
 
             switch (SortType)
             {
                 case CollationOrderType.ChildOrder:
-                    NodeList.Sort((c1, c2) => (c1.Transform.GetSiblingIndex().CompareTo(c2.Transform.GetSiblingIndex())));
+                    nodeList.Sort((c1, c2) => (c1.Transform.GetSiblingIndex().CompareTo(c2.Transform.GetSiblingIndex())));
                     break;
 
                 case CollationOrderType.Alphabetical:
-                    NodeList.Sort((c1, c2) => (string.CompareOrdinal(c1.Name, c2.Name)));
+                    nodeList.Sort((c1, c2) => (string.CompareOrdinal(c1.Name, c2.Name)));
                     break;
 
                 case CollationOrderType.AlphabeticalReversed:
-                    NodeList.Sort((c1, c2) => (string.CompareOrdinal(c1.Name, c2.Name)));
-                    NodeList.Reverse();
+                    nodeList.Sort((c1, c2) => (string.CompareOrdinal(c1.Name, c2.Name)));
+                    nodeList.Reverse();
                     break;
 
                 case CollationOrderType.ChildOrderReversed:
-                    NodeList.Sort((c1, c2) => (c1.Transform.GetSiblingIndex().CompareTo(c2.Transform.GetSiblingIndex())));
-                    NodeList.Reverse();
+                    nodeList.Sort((c1, c2) => (c1.Transform.GetSiblingIndex().CompareTo(c2.Transform.GetSiblingIndex())));
+                    nodeList.Reverse();
                     break;
             }
 
@@ -113,9 +144,9 @@ namespace XRTK.SDK.UX.Collections
         /// </summary>
         protected bool ContainsNode(Transform node)
         {
-            for (int i = 0; i < NodeList.Count; i++)
+            for (int i = 0; i < nodeList.Count; i++)
             {
-                if (NodeList[i].Transform == node)
+                if (nodeList[i].Transform == node)
                 {
                     return true;
                 }

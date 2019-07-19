@@ -19,6 +19,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty pointerAction;
         private SerializedProperty pointerOrientation;
         private SerializedProperty requiresHoldAction;
+        private SerializedProperty enablePointerOnStart;
 
         private bool basePointerFoldout = true;
 
@@ -32,15 +33,17 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             disableCursorOnStart = serializedObject.FindProperty("disableCursorOnStart");
             setCursorVisibilityOnSourceDetected = serializedObject.FindProperty("setCursorVisibilityOnSourceDetected");
             raycastOrigin = serializedObject.FindProperty("raycastOrigin");
-            pointerExtent = serializedObject.FindProperty("pointerExtent");
+            pointerExtent = serializedObject.FindProperty("defaultPointerExtent");
             activeHoldAction = serializedObject.FindProperty("activeHoldAction");
             pointerAction = serializedObject.FindProperty("pointerAction");
             pointerOrientation = serializedObject.FindProperty("pointerOrientation");
             requiresHoldAction = serializedObject.FindProperty("requiresHoldAction");
+            enablePointerOnStart = serializedObject.FindProperty("enablePointerOnStart");
 
             DrawHandednessProperty = false;
         }
 
+        /// <inheritdoc />
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
@@ -56,6 +59,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 EditorGUILayout.PropertyField(cursorPrefab);
                 EditorGUILayout.PropertyField(disableCursorOnStart);
                 EditorGUILayout.PropertyField(setCursorVisibilityOnSourceDetected);
+                EditorGUILayout.PropertyField(enablePointerOnStart);
                 EditorGUILayout.PropertyField(raycastOrigin);
                 EditorGUILayout.PropertyField(pointerExtent);
                 EditorGUILayout.PropertyField(pointerOrientation);

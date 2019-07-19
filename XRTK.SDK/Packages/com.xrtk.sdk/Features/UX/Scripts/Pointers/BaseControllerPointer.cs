@@ -1,8 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
@@ -23,7 +25,9 @@ namespace XRTK.SDK.UX.Pointers
     /// Base Pointer class for pointers that exist in the scene as GameObjects.
     /// </summary>
     [DisallowMultipleComponent]
-    public abstract class BaseControllerPointer : ControllerPoseSynchronizer, IMixedRealityPointer, IMixedRealityTeleportHandler
+    public abstract class BaseControllerPointer : ControllerPoseSynchronizer,
+        IMixedRealityPointer,
+        IMixedRealityTeleportHandler
     {
         [SerializeField]
         private GameObject cursorPrefab = null;
@@ -53,6 +57,10 @@ namespace XRTK.SDK.UX.Pointers
         [SerializeField]
         [Tooltip("Does the interaction require hold?")]
         private bool requiresHoldAction = false;
+
+        [SerializeField]
+        [Tooltip("Enables the pointer ray when the pointer is started.")]
+        private bool enablePointerOnStart = false;
 
         /// <summary>
         /// True if select is pressed right now
@@ -111,11 +119,7 @@ namespace XRTK.SDK.UX.Pointers
                     BaseCursor.DefaultCursorDistance = PointerExtent;
                     BaseCursor.Pointer = this;
                     BaseCursor.SetVisibilityOnSourceDetected = setCursorVisibilityOnSourceDetected;
-
-                    if (disableCursorOnStart)
-                    {
-                        BaseCursor.SetVisibility(false);
-                    }
+                    BaseCursor.SetVisibility(!disableCursorOnStart);
                 }
                 else
                 {
@@ -249,7 +253,7 @@ namespace XRTK.SDK.UX.Pointers
                     return true;
                 }
 
-                return HasSelectPressedOnce;
+                return HasSelectPressedOnce || enablePointerOnStart;
             }
         }
 
@@ -259,8 +263,8 @@ namespace XRTK.SDK.UX.Pointers
         [SerializeField]
         private bool overrideGlobalPointerExtent = false;
 
-        [SerializeField]
-        private float pointerExtent = 10f;
+        [NonSerialized]
+        private float pointerExtent;
 
         /// <inheritdoc />
         public float PointerExtent
@@ -275,20 +279,35 @@ namespace XRTK.SDK.UX.Pointers
                     }
                 }
 
+                if (pointerExtent.Equals(0f))
+                {
+                    pointerExtent = defaultPointerExtent;
+                }
+
+                Debug.Assert(pointerExtent > 0f);
                 return pointerExtent;
             }
             set
             {
                 pointerExtent = value;
+                Debug.Assert(pointerExtent > 0f, "Cannot set the pointer extent to 0. Resetting to the default pointer extent");
                 overrideGlobalPointerExtent = false;
             }
         }
+
+        [Min(0.01f)]
+        [SerializeField]
+        [FormerlySerializedAs("pointerExtent")]
+        private float defaultPointerExtent = 10f;
+
+        /// <inheritdoc />
+        public float DefaultPointerExtent => defaultPointerExtent;
 
         /// <inheritdoc />
         public RayStep[] Rays { get; protected set; } = { new RayStep(Vector3.zero, Vector3.forward) };
 
         /// <inheritdoc />
-        public LayerMask[] PrioritizedLayerMasksOverride { get; set; }
+        public LayerMask[] PrioritizedLayerMasksOverride { get; set; } = null;
 
         /// <inheritdoc />
         public IMixedRealityFocusHandler FocusTarget { get; set; }
