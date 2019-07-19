@@ -34,6 +34,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             lineRenderers = serializedObject.FindProperty("lineRenderers");
         }
 
+        /// <inheritdoc />
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
