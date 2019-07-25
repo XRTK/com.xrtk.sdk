@@ -426,8 +426,6 @@ namespace XRTK.SDK.UX.Cursors
                 cachedTransform.localScale = Vector3.Slerp(cachedTransform.localScale, targetScale, deltaTime / scaleLerpTime);
                 cachedTransform.rotation = Quaternion.Slerp(cachedTransform.rotation, targetRotation, deltaTime / rotationLerpTime);
             }
-
-            return focusDetails;
         }
 
         /// <summary>
