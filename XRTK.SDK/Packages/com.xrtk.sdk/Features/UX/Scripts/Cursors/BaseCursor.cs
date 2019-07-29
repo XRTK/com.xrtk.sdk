@@ -303,7 +303,7 @@ namespace XRTK.SDK.UX.Cursors
 
         protected override void OnDisable()
         {
-            // We don't call base.OnDisable because we handle unregistering the global listener a bit differently.
+            // We don't call base.OnDisable because we handle un-registering the global listener a bit differently.
             TargetedObject = null;
             visibleSourcesCount = 0;
             OnCursorStateChange(CursorStateEnum.Contextual);

@@ -21,6 +21,10 @@ MonoBehaviour:
     type: 3}
   globalRightHandModel: {fileID: 1760394390528354, guid: 3c945620dae24228acea8b9402529ce6,
     type: 3}
+  globalPointerPose:
+    id: 4
+    description: Pointer Pose
+    axisConstraint: 7
   controllerVisualizationSettings:
   - description: Windows Mixed Reality Controller
     controllerType:
