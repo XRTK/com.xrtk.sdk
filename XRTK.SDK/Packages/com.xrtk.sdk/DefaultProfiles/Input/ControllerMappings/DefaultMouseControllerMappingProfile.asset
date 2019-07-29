@@ -43,9 +43,9 @@ MonoBehaviour:
         description: Mouse Delta
         axisConstraint: 4
       keyCode: 0
-      axisCodeX: Mouse X
-      axisCodeY: Mouse Y
-      invertXAxis: 0
+      axisCodeX: Mouse Y
+      axisCodeY: Mouse X
+      invertXAxis: 1
       invertYAxis: 0
     - id: 2
       description: Mouse Scroll Position
