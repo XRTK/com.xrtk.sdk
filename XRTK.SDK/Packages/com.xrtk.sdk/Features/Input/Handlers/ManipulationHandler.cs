@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using XRTK.Definitions;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.SpatialAwarenessSystem;
 using XRTK.EventDatum.Input;
@@ -137,6 +138,12 @@ namespace XRTK.SDK.Input.Handlers
             get => useHold;
             set => useHold = value;
         }
+
+        [SerializeField]
+        private HapticFeedbackType grabHapticFeedback = HapticFeedbackType.ForceDown;
+
+        [SerializeField]
+        private HapticFeedbackType releaseHapticFeedback = HapticFeedbackType.ForceUp;
 
         #region Scale Options
 
@@ -620,6 +627,7 @@ namespace XRTK.SDK.Input.Handlers
                 primaryPointer = eventData.Pointer;
             }
 
+            primaryPointer.Controller?.SendHapticFeedback(grabHapticFeedback, 10f);
             manipulationTarget.SetCollidersActive(false);
 
             eventData.Use();
@@ -636,6 +644,8 @@ namespace XRTK.SDK.Input.Handlers
             if (!isBeingHeld) { return; }
 
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.None);
+
+            primaryPointer?.Controller?.SendHapticFeedback(releaseHapticFeedback, 10f);
 
             primaryPointer = null;
             primaryInputSource = null;
