@@ -9,7 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7393bff647614a449a110d62bca0b16b, type: 3}
-  m_Name: DefaultMixedRealityCameraInputSimulationProfile
+  m_Script: {fileID: 11500000, guid: e575260027d17dc41a06f78eb50d0132, type: 3}
+  m_Name: ThumbsUpHandGesture
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
+  isCustomProfile: 0
+  gestureName: Thumbs Up
+  gestureDescription: OK sign.
+  isDefault: 0
+  keyCode: 54
+  data: {fileID: 4900000, guid: 71175c7404cbaee408470b929ff3ae1f, type: 3}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 288583c779deb874f80d0c0fb0db90fe, type: 3}
   m_Name: DefaultMixedRealityInputSimulationDataProvidersProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isCustomProfile: 1
   registeredInputSimulationDataProviders:
   - dataProviderType:
       reference: XRTK.Providers.InputSystem.Simulation.CameraSimulationDataProvider,

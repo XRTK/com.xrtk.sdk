@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityHandTrackingProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
-  jointPrefab: {fileID: 1955475817299902, guid: 401b93bc7cea27c41a997f11474e5d4a,
+  jointPrefab: {fileID: 1955475817299902, guid: effda710d14876d4eb459af7c4ec7bbf,
     type: 3}
   palmPrefab: {fileID: 6797406804172968804, guid: 80997b0aa2ab2d7429bb5e7f1cddbace,
     type: 3}
