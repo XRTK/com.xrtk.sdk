@@ -1,10 +1,15 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Serialization;
+using XRTK.Attributes;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
+using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.SDK.Input.Handlers;
@@ -12,11 +17,121 @@ using XRTK.Services;
 
 namespace XRTK.SDK.UX
 {
-    public class BoundingBox : BaseFocusHandler,
-            IMixedRealitySourceStateHandler,
-            IMixedRealityInputHandler,
-            IMixedRealityInputHandler<MixedRealityPose>
+    public class BoundingBox : MonoBehaviour
     {
+        private class BoundingBoxRig : BaseInputHandler,
+            IMixedRealitySourceStateHandler,
+            IMixedRealityPointerHandler,
+            IMixedRealityInputHandler<MixedRealityPose>
+        {
+            public override bool IsFocusRequired => false;
+
+            public BoundingBox BoundingBoxParent
+            {
+                get
+                {
+                    if (boundingBoxParent == null)
+                    {
+                        Destroy(gameObject);
+                    }
+
+                    return boundingBoxParent;
+                }
+                set => boundingBoxParent = value;
+            }
+
+            private BoundingBox boundingBoxParent;
+
+            /// <inheritdoc />
+            void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
+            {
+                if (BoundingBoxParent.currentInputSource != null) { return; }
+
+                var pointer = eventData.Pointer;
+
+                if (pointer.TryGetPointingRay(out var ray))
+                {
+                    BoundingBoxParent.handleMoveType = HandleMoveType.Ray;
+                    var grabbedCollider = BoundingBoxParent.GetGrabbedCollider(ray, out var distance);
+
+                    if (grabbedCollider == null) { return; }
+
+                    MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
+
+                    BoundingBoxParent.currentInputSource = eventData.InputSource;
+                    BoundingBoxParent.currentPointer = pointer;
+                    BoundingBoxParent.grabbedHandle = grabbedCollider.gameObject;
+                    BoundingBoxParent.currentHandleType = BoundingBoxParent.GetHandleType(BoundingBoxParent.grabbedHandle);
+                    BoundingBoxParent.currentRotationAxis = BoundingBoxParent.GetRotationAxis(BoundingBoxParent.grabbedHandle);
+                    BoundingBoxParent.currentPointer.TryGetPointingRay(out _);
+                    BoundingBoxParent.initialGrabMag = distance;
+                    BoundingBoxParent.initialGrabbedPosition = BoundingBoxParent.grabbedHandle.transform.position;
+                    BoundingBoxParent.initialScale = transform.localScale;
+                    pointer.TryGetPointerPosition(out BoundingBoxParent.initialGrabPoint);
+                    BoundingBoxParent.ShowOneHandle(BoundingBoxParent.grabbedHandle);
+                    BoundingBoxParent.initialGazePoint = Vector3.zero;
+                    eventData.Use();
+                }
+            }
+
+            /// <inheritdoc />
+            void IMixedRealityPointerHandler.OnPointerUp(MixedRealityPointerEventData eventData)
+            {
+                if (BoundingBoxParent.currentInputSource != null &&
+                    eventData.InputSource.SourceId == BoundingBoxParent.currentInputSource.SourceId)
+                {
+                    BoundingBoxParent.currentInputSource = null;
+                    BoundingBoxParent.currentHandleType = HandleType.None;
+                    BoundingBoxParent.currentPointer = null;
+                    BoundingBoxParent.grabbedHandle = null;
+                    BoundingBoxParent.ResetHandleVisibility();
+                    eventData.Use();
+                    MixedRealityToolkit.InputSystem.PopModalInputHandler();
+                }
+            }
+
+            /// <inheritdoc />
+            void IMixedRealityInputHandler<MixedRealityPose>.OnInputChanged(InputEventData<MixedRealityPose> eventData)
+            {
+                if (BoundingBoxParent.currentInputSource != null &&
+                    eventData.InputSource.SourceId == BoundingBoxParent.currentInputSource.SourceId)
+                {
+                    var point = eventData.InputData.Position;
+                    BoundingBoxParent.usingPose = true;
+
+                    if (BoundingBoxParent.initialGazePoint == Vector3.zero)
+                    {
+                        BoundingBoxParent.initialGazePoint = point;
+                    }
+
+                    BoundingBoxParent.currentPosePosition = BoundingBoxParent.initialGrabbedPosition + (point - BoundingBoxParent.initialGazePoint);
+                }
+                else
+                {
+                    BoundingBoxParent.usingPose = false;
+                }
+            }
+
+            /// <inheritdoc />
+            void IMixedRealitySourceStateHandler.OnSourceDetected(SourceStateEventData eventData) { }
+
+            /// <inheritdoc />
+            void IMixedRealitySourceStateHandler.OnSourceLost(SourceStateEventData eventData)
+            {
+                if (BoundingBoxParent.currentInputSource != null && eventData.InputSource.SourceId == BoundingBoxParent.currentInputSource.SourceId)
+                {
+                    BoundingBoxParent.currentInputSource = null;
+                    BoundingBoxParent.currentHandleType = HandleType.None;
+                    BoundingBoxParent.currentPointer = null;
+                    BoundingBoxParent.grabbedHandle = null;
+                    BoundingBoxParent.ResetHandleVisibility();
+                    MixedRealityToolkit.InputSystem.PopModalInputHandler();
+                }
+            }
+
+            void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
+        }
+
         #region Enums
 
         /// <summary>
@@ -68,26 +183,12 @@ namespace XRTK.SDK.UX
             Cylindrical
         }
 
-        /// <summary>
-        /// This enum defines which of the axes a given rotation handle revolves about.
-        /// </summary>
+        [Flags]
         private enum CardinalAxisType
         {
-            X = 0,
-            Y,
-            Z
-        }
-
-        /// <summary>
-        /// This enum is used internally to define how an object's bounds are calculated in order to fit the bounding box
-        /// to it.
-        /// </summary>
-        private enum BoundsCalculationMethod
-        {
-            Collider = 0,
-            Colliders,
-            Renderers,
-            MeshFilters
+            X = 1,
+            Y = 2,
+            Z = 3,
         }
 
         /// <summary>
@@ -106,6 +207,11 @@ namespace XRTK.SDK.UX
         #endregion Enums
 
         #region Serialized Fields
+
+        [Header("Debug Options")]
+
+        [SerializeField]
+        private bool showRig = false;
 
         [Header("Bounds Calculation")]
 
@@ -127,7 +233,8 @@ namespace XRTK.SDK.UX
         [Header("Wireframe")]
 
         [SerializeField]
-        private bool wireframeOnly = false;
+        [FormerlySerializedAs("wireframeOnly")]
+        private bool displayHandles = false;
 
         /// <summary>
         /// Public Property that displays simple wireframe around an object with no scale or rotate handles.
@@ -135,14 +242,14 @@ namespace XRTK.SDK.UX
         /// <remarks>
         /// this is useful when outlining an object without being able to edit it is desired.
         /// </remarks>
-        public bool WireframeOnly
+        public bool DisplayHandles
         {
-            get => wireframeOnly;
+            get => displayHandles;
             set
             {
-                if (wireframeOnly != value)
+                if (displayHandles != value)
                 {
-                    wireframeOnly = value;
+                    displayHandles = value;
                     ResetHandleVisibility();
                 }
             }
@@ -204,10 +311,18 @@ namespace XRTK.SDK.UX
                 if (showRotateHandles != value)
                 {
                     showRotateHandles = value;
+
+                    showRotationHandlesPerAxis = (CardinalAxisType)(!showRotateHandles ? 0 : -1);
+
                     ResetHandleVisibility();
                 }
             }
         }
+
+        [EnumFlags]
+        [SerializeField]
+        [Tooltip("Only show rotation handles for these specific axes.")]
+        private CardinalAxisType showRotationHandlesPerAxis = (CardinalAxisType)(-1);
 
         [SerializeField]
         private float linkRadius = 0.005f;
@@ -249,15 +364,13 @@ namespace XRTK.SDK.UX
 
         private IMixedRealityPointer currentPointer;
         private IMixedRealityInputSource currentInputSource;
+
         private Vector3 initialGazePoint = Vector3.zero;
-        private GameObject targetObject;
         private Transform rigRoot;
         private BoxCollider cachedTargetCollider;
         private Bounds cachedTargetColliderBounds;
-        private Vector3[] boundsCorners;
-        private Vector3 currentBoundsExtents;
-        private BoundsCalculationMethod boundsMethod;
         private HandleMoveType handleMoveType = HandleMoveType.Point;
+
         private List<Transform> links;
         private List<Transform> corners;
         private List<Transform> balls;
@@ -266,19 +379,29 @@ namespace XRTK.SDK.UX
         private List<Renderer> linkRenderers;
         private List<Collider> cornerColliders;
         private List<Collider> ballColliders;
-        private Vector3[] edgeCenters;
+
         private Ray currentGrabRay;
         private float initialGrabMag;
-        private Vector3 currentRotationAxis;
+
         private Vector3 initialScale;
-        private Vector3 initialGrabbedPosition;
         private Vector3 initialGrabPoint;
-        private CardinalAxisType[] edgeAxes;
-        private int[] flattenedHandles;
-        private GameObject grabbedHandle;
-        private bool usingPose = false;
+        private Vector3 currentRotationAxis;
+        private Vector3 currentBoundsExtents;
+        private Vector3 initialGrabbedPosition;
         private Vector3 currentPosePosition = Vector3.zero;
+
+        private int[] flattenedHandles;
+
+        private GameObject grabbedHandle;
+
+        private bool usingPose = false;
+
         private HandleType currentHandleType;
+
+        private Vector3[] boundsCorners = new Vector3[8];
+
+        private readonly CardinalAxisType[] edgeAxes = new CardinalAxisType[12];
+        private readonly Vector3[] edgeCenters = new Vector3[12];
 
         private static readonly int Color = Shader.PropertyToID("_Color");
         private static readonly int InnerGlow = Shader.PropertyToID("_InnerGlow");
@@ -288,14 +411,7 @@ namespace XRTK.SDK.UX
 
         private void Start()
         {
-            targetObject = this.gameObject;
-
-            if (MixedRealityToolkit.IsInitialized && MixedRealityToolkit.InputSystem != null)
-            {
-                MixedRealityToolkit.InputSystem.Register(targetObject);
-            }
-
-            if (activateOnStart == true)
+            if (activateOnStart)
             {
                 IsActive = true;
             }
@@ -313,7 +429,7 @@ namespace XRTK.SDK.UX
                 TransformRig();
             }
 
-            UpdateRigHandles();
+            UpdateRigTransform();
         }
 
         #endregion Monobehaviour Methods
@@ -322,14 +438,15 @@ namespace XRTK.SDK.UX
         {
             DestroyRig();
             SetMaterials();
-            InitializeDataStructures();
+            InstantiateRig();
 
             SetBoundingBoxCollider();
 
             UpdateBounds();
-            AddCorners();
-            AddLinks();
-            UpdateRigHandles();
+            CreateLinks();
+            CreateScaleHandles();
+            CreateRotationHandles();
+            UpdateRigTransform();
             Flatten();
             ResetHandleVisibility();
             rigRoot.gameObject.SetActive(false);
@@ -410,7 +527,7 @@ namespace XRTK.SDK.UX
             if (currentHandleType != HandleType.None)
             {
                 currentGrabRay = GetHandleGrabbedRay();
-                Vector3 grabRayPt = currentGrabRay.origin + (currentGrabRay.direction * initialGrabMag);
+                var grabRayPt = currentGrabRay.origin + (currentGrabRay.direction * initialGrabMag);
 
                 switch (currentHandleType)
                 {
@@ -435,7 +552,7 @@ namespace XRTK.SDK.UX
 
                 if (usingPose == false)
                 {
-                    currentPointer.TryGetPointerPosition(out Vector3 newRemotePoint);
+                    currentPointer.TryGetPointerPosition(out var newRemotePoint);
                     newGrabbedPosition = initialGrabbedPosition + (newRemotePoint - initialGrabPoint);
                 }
                 else
@@ -463,24 +580,24 @@ namespace XRTK.SDK.UX
         private void RotateByHandle(Vector3 newHandlePosition)
         {
             var rigTransformPosition = rigRoot.transform.position;
-            Vector3 projPt = Vector3.ProjectOnPlane((newHandlePosition - rigTransformPosition).normalized, currentRotationAxis);
-            Quaternion rotation = Quaternion.FromToRotation((grabbedHandle.transform.position - rigTransformPosition).normalized, projPt.normalized);
-            rotation.ToAngleAxis(out float angle, out Vector3 axis);
-            targetObject.transform.RotateAround(rigTransformPosition, axis, angle);
+            var projPt = Vector3.ProjectOnPlane((newHandlePosition - rigTransformPosition).normalized, currentRotationAxis);
+            var rotation = Quaternion.FromToRotation((grabbedHandle.transform.position - rigTransformPosition).normalized, projPt.normalized);
+            rotation.ToAngleAxis(out var angle, out var axis);
+            transform.RotateAround(rigTransformPosition, axis, angle);
         }
 
         private void ScaleByHandle(Vector3 newHandlePosition)
         {
-            Vector3 rigCentroid = rigRoot.transform.position;
-            Vector3 correctedPt = PointToRay(rigCentroid, grabbedHandle.transform.position, newHandlePosition);
-            float startMag = (initialGrabbedPosition - rigCentroid).magnitude;
-            float newMag = (correctedPt - rigCentroid).magnitude;
+            var rigCentroid = rigRoot.transform.position;
+            var correctedPt = PointToRay(rigCentroid, grabbedHandle.transform.position, newHandlePosition);
+            var startMag = (initialGrabbedPosition - rigCentroid).magnitude;
+            var newMag = (correctedPt - rigCentroid).magnitude;
 
-            float ratio = newMag / startMag;
-            Vector3 newScale = ClampScale(initialScale * ratio, out bool _);
+            var ratio = newMag / startMag;
+            var newScale = ClampScale(initialScale * ratio, out _);
 
             //scale from object center
-            targetObject.transform.localScale = newScale;
+            transform.localScale = newScale;
         }
 
         private Vector3 GetRotationAxis(GameObject handle)
@@ -492,11 +609,11 @@ namespace XRTK.SDK.UX
                     switch (edgeAxes[i])
                     {
                         case CardinalAxisType.X:
-                            return rigRoot.transform.right;
-                        case CardinalAxisType.Y:
                             return rigRoot.transform.up;
-                        default:
+                        case CardinalAxisType.Y:
                             return rigRoot.transform.forward;
+                        case CardinalAxisType.Z:
+                            return rigRoot.transform.right;
                     }
                 }
             }
@@ -504,17 +621,81 @@ namespace XRTK.SDK.UX
             return Vector3.zero;
         }
 
-        private void AddCorners()
+        private void CreateLinks()
         {
+            edgeAxes[0] = CardinalAxisType.Z;
+            edgeAxes[2] = CardinalAxisType.Z;
+            edgeAxes[4] = CardinalAxisType.Z;
+            edgeAxes[6] = CardinalAxisType.Z;
+
+            edgeAxes[1] = CardinalAxisType.X;
+            edgeAxes[3] = CardinalAxisType.X;
+            edgeAxes[5] = CardinalAxisType.X;
+            edgeAxes[7] = CardinalAxisType.X;
+
+            edgeAxes[08] = CardinalAxisType.Y;
+            edgeAxes[09] = CardinalAxisType.Y;
+            edgeAxes[10] = CardinalAxisType.Y;
+            edgeAxes[11] = CardinalAxisType.Y;
+
+            for (int i = 0; i < edgeCenters.Length; ++i)
+            {
+                var link = GameObject.CreatePrimitive(wireframeShape == WireframeType.Cubic
+                    ? PrimitiveType.Cube
+                    : PrimitiveType.Cylinder);
+
+                link.name = $"WireframeEdge_{edgeAxes[i]}_{i}";
+
+                var linkDimensions = GetLinkDimensions();
+
+                switch (edgeAxes[i])
+                {
+                    case CardinalAxisType.X:
+                        link.transform.localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
+                        link.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
+                        break;
+                    case CardinalAxisType.Y:
+                        link.transform.localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
+                        link.transform.Rotate(new Vector3(90.0f, 0.0f, 0.0f));
+                        break;
+                    case CardinalAxisType.Z:
+                        link.transform.localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
+                        link.transform.Rotate(new Vector3(0.0f, 0.0f, 90.0f));
+                        break;
+                }
+
+                link.transform.position = edgeCenters[i];
+                link.transform.parent = rigRoot.transform;
+
+                var linkRenderer = link.GetComponent<Renderer>();
+                linkRenderer.shadowCastingMode = ShadowCastingMode.Off;
+                linkRenderer.receiveShadows = false;
+                linkRenderers.Add(linkRenderer);
+
+                if (wireframeMaterial != null)
+                {
+                    linkRenderer.material = wireframeMaterial;
+                }
+
+                links.Add(link.transform);
+            }
+        }
+
+        private void CreateScaleHandles()
+        {
+            var scale = new Vector3(cornerRadius, cornerRadius, cornerRadius);
+
             for (int i = 0; i < boundsCorners.Length; ++i)
             {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.name = $"corner_{i}";
-                cube.transform.localScale = new Vector3(cornerRadius, cornerRadius, cornerRadius);
+                var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cube.name = $"ScaleHandle_{i}";
+                cube.transform.localScale = scale;
                 cube.transform.position = boundsCorners[i];
                 cube.transform.parent = rigRoot.transform;
 
                 var cubeRenderer = cube.GetComponent<Renderer>();
+                cubeRenderer.shadowCastingMode = ShadowCastingMode.Off;
+                cubeRenderer.receiveShadows = false;
                 cornerRenderers.Add(cubeRenderer);
                 cornerColliders.Add(cube.GetComponent<Collider>());
                 corners.Add(cube.transform);
@@ -526,21 +707,21 @@ namespace XRTK.SDK.UX
             }
         }
 
-        private void AddLinks()
+        private void CreateRotationHandles()
         {
-            edgeCenters = new Vector3[12];
-
-            CalculateEdgeCenters();
+            var radius = new Vector3(ballRadius, ballRadius, ballRadius);
 
             for (int i = 0; i < edgeCenters.Length; ++i)
             {
                 var ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                ball.name = $"midpoint_{i}";
-                ball.transform.localScale = new Vector3(ballRadius, ballRadius, ballRadius);
+                ball.name = $"RotationHandle_{edgeAxes[i]}_{i}";
+                ball.transform.localScale = radius;
                 ball.transform.position = edgeCenters[i];
                 ball.transform.parent = rigRoot.transform;
 
                 var ballRenderer = ball.GetComponent<Renderer>();
+                ballRenderer.shadowCastingMode = ShadowCastingMode.Off;
+                ballRenderer.receiveShadows = false;
                 ballRenderers.Add(ballRenderer);
                 ballColliders.Add(ball.GetComponent<Collider>());
                 balls.Add(ball.transform);
@@ -549,60 +730,12 @@ namespace XRTK.SDK.UX
                 {
                     ballRenderer.material = handleMaterial;
                 }
-            }
 
-            edgeAxes = new CardinalAxisType[12];
-
-            edgeAxes[0] = CardinalAxisType.X;
-            edgeAxes[1] = CardinalAxisType.Y;
-            edgeAxes[2] = CardinalAxisType.X;
-            edgeAxes[3] = CardinalAxisType.Y;
-            edgeAxes[4] = CardinalAxisType.X;
-            edgeAxes[5] = CardinalAxisType.Y;
-            edgeAxes[6] = CardinalAxisType.X;
-            edgeAxes[7] = CardinalAxisType.Y;
-            edgeAxes[8] = CardinalAxisType.Z;
-            edgeAxes[9] = CardinalAxisType.Z;
-            edgeAxes[10] = CardinalAxisType.Z;
-            edgeAxes[11] = CardinalAxisType.Z;
-
-            for (int i = 0; i < edgeCenters.Length; ++i)
-            {
-                var link = GameObject.CreatePrimitive(wireframeShape == WireframeType.Cubic
-                    ? PrimitiveType.Cube
-                    : PrimitiveType.Cylinder);
-                link.name = $"link_{i}";
-
-                Vector3 linkDimensions = GetLinkDimensions();
-
-                switch (edgeAxes[i])
+                if (showRotationHandlesPerAxis == 0 ||
+                    showRotationHandlesPerAxis != (CardinalAxisType)(-1) && (showRotationHandlesPerAxis ^ edgeAxes[i]) != 0)
                 {
-                    case CardinalAxisType.Y:
-                        link.transform.localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
-                        link.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
-                        break;
-                    case CardinalAxisType.Z:
-                        link.transform.localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
-                        link.transform.Rotate(new Vector3(90.0f, 0.0f, 0.0f));
-                        break;
-                    case CardinalAxisType.X:
-                        link.transform.localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
-                        link.transform.Rotate(new Vector3(0.0f, 0.0f, 90.0f));
-                        break;
+                    ball.SetActive(false);
                 }
-
-                link.transform.position = edgeCenters[i];
-                link.transform.parent = rigRoot.transform;
-
-                var linkRenderer = link.GetComponent<Renderer>();
-                linkRenderers.Add(linkRenderer);
-
-                if (wireframeMaterial != null)
-                {
-                    linkRenderer.material = wireframeMaterial;
-                }
-
-                links.Add(link.transform);
             }
         }
 
@@ -619,163 +752,14 @@ namespace XRTK.SDK.UX
             }
             else
             {
-                Bounds bounds = GetTargetBounds();
-                cachedTargetCollider = targetObject.AddComponent<BoxCollider>();
 
-                switch (boundsMethod)
-                {
-                    case BoundsCalculationMethod.Renderers:
-                        cachedTargetCollider.center = bounds.center;
-                        cachedTargetCollider.size = bounds.size;
-                        break;
-                    case BoundsCalculationMethod.Colliders:
-                        cachedTargetCollider.center = bounds.center;
-                        cachedTargetCollider.size = bounds.size;
-                        break;
-                    default:
-                        Debug.LogWarning($"Unexpected Bounds Calculation Method {boundsMethod}");
-                        break;
-                }
+                var bounds = transform.GetColliderBounds();
+                cachedTargetCollider = gameObject.EnsureComponent<BoxCollider>();
+                cachedTargetCollider.center = bounds.center - transform.position;
+                cachedTargetCollider.size = bounds.size;
             }
 
             cachedTargetCollider.size += wireframePadding;
-        }
-
-        private Bounds GetTargetBounds()
-        {
-            Bounds bounds = default;
-
-            if (targetObject.transform.childCount == 0)
-            {
-                bounds = GetSingleObjectBounds(targetObject);
-                boundsMethod = BoundsCalculationMethod.Collider;
-                return bounds;
-            }
-
-            for (int i = 0; i < targetObject.transform.childCount; ++i)
-            {
-                if (bounds.size == Vector3.zero)
-                {
-                    bounds = GetSingleObjectBounds(targetObject.transform.GetChild(i).gameObject);
-                }
-                else
-                {
-                    Bounds childBounds = GetSingleObjectBounds(targetObject.transform.GetChild(i).gameObject);
-
-                    if (childBounds.size != Vector3.zero)
-                    {
-                        bounds.Encapsulate(childBounds);
-                    }
-                }
-            }
-
-            if (bounds.size != Vector3.zero)
-            {
-                boundsMethod = BoundsCalculationMethod.Colliders;
-                return bounds;
-            }
-
-            // simple case: sum of existing colliders
-            Collider[] colliders = targetObject.GetComponentsInChildren<Collider>();
-
-            if (colliders.Length > 0)
-            {
-                // Collider.bounds is in world space.
-                bounds = colliders[0].bounds;
-
-                for (int i = 0; i < colliders.Length; ++i)
-                {
-                    if (colliders[i].bounds.size != Vector3.zero)
-                    {
-                        bounds.Encapsulate(colliders[i].bounds);
-                    }
-                }
-
-                if (bounds.size != Vector3.zero)
-                {
-                    boundsMethod = BoundsCalculationMethod.Colliders;
-                    return bounds;
-                }
-            }
-
-            // Renderer bounds is local. Requires transform to global coordinate system.
-            Renderer[] childRenderers = targetObject.GetComponentsInChildren<Renderer>();
-
-            if (childRenderers.Length > 0)
-            {
-                bounds = childRenderers[0].bounds;
-
-                for (int i = 0; i < childRenderers.Length; ++i)
-                {
-                    bounds.Encapsulate(childRenderers[i].bounds);
-                }
-
-                GetCornerPositionsFromBounds(bounds, ref boundsCorners);
-
-                for (int cornerIndex = 0; cornerIndex < boundsCorners.Length; ++cornerIndex)
-                {
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.name = cornerIndex.ToString();
-                    cube.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-                    cube.transform.position = boundsCorners[cornerIndex];
-                }
-
-                boundsMethod = BoundsCalculationMethod.Renderers;
-                return bounds;
-            }
-
-            MeshFilter[] meshFilters = targetObject.GetComponentsInChildren<MeshFilter>();
-
-            if (meshFilters.Length > 0)
-            {
-                // Mesh.bounds is local space bounding volume
-                bounds.size = meshFilters[0].mesh.bounds.size;
-                bounds.center = meshFilters[0].mesh.bounds.center;
-
-                for (int i = 0; i < meshFilters.Length; ++i)
-                {
-                    bounds.Encapsulate(meshFilters[i].mesh.bounds);
-                }
-
-                if (bounds.size != Vector3.zero)
-                {
-                    bounds.center = targetObject.transform.position;
-                    boundsMethod = BoundsCalculationMethod.MeshFilters;
-                    return bounds;
-                }
-            }
-
-            var boxCollider = targetObject.AddComponent<BoxCollider>();
-            bounds = boxCollider.bounds;
-            Destroy(boxCollider);
-            boundsMethod = BoundsCalculationMethod.Collider;
-            return bounds;
-        }
-
-        private static Bounds GetSingleObjectBounds(GameObject boundsObject)
-        {
-            var bounds = new Bounds(Vector3.zero, Vector3.zero);
-            Component[] components = boundsObject.GetComponents<Component>();
-
-            if (components.Length < 3)
-            {
-                return bounds;
-            }
-
-            var boxCollider = boundsObject.GetComponent<BoxCollider>();
-
-            if (boxCollider == null)
-            {
-                boxCollider = boundsObject.AddComponent<BoxCollider>();
-                bounds = boxCollider.bounds;
-                Destroy(boxCollider);
-            }
-            else
-            {
-                bounds = boxCollider.bounds;
-            }
-
-            return bounds;
         }
 
         private void SetMaterials()
@@ -783,7 +767,7 @@ namespace XRTK.SDK.UX
             if (wireframeMaterial == null)
             {
                 Shader.EnableKeyword("_InnerGlow");
-                Shader shader = Shader.Find("Mixed Reality Toolkit/Standard");
+                var shader = Shader.Find("Mixed Reality Toolkit/Standard");
 
                 wireframeMaterial = new Material(shader);
                 wireframeMaterial.SetColor(Color, new Color(0.0f, 0.63f, 1.0f));
@@ -794,7 +778,7 @@ namespace XRTK.SDK.UX
                 float[] color = { 1.0f, 1.0f, 1.0f, 0.75f };
 
                 Shader.EnableKeyword("_InnerGlow");
-                Shader shader = Shader.Find("Mixed Reality Toolkit/Standard");
+                var shader = Shader.Find("Mixed Reality Toolkit/Standard");
 
                 handleMaterial = new Material(shader);
                 handleMaterial.SetColor(Color, new Color(0.0f, 0.63f, 1.0f));
@@ -807,7 +791,7 @@ namespace XRTK.SDK.UX
                 float[] color = { 1.0f, 1.0f, 1.0f, 0.75f };
 
                 Shader.EnableKeyword("_InnerGlow");
-                Shader shader = Shader.Find("Mixed Reality Toolkit/Standard");
+                var shader = Shader.Find("Mixed Reality Toolkit/Standard");
 
                 handleGrabbedMaterial = new Material(shader);
                 handleGrabbedMaterial.SetColor(Color, new Color(0.0f, 0.63f, 1.0f));
@@ -816,11 +800,19 @@ namespace XRTK.SDK.UX
             }
         }
 
-        private void InitializeDataStructures()
+        private void InstantiateRig()
         {
-            var rigRootObject = new GameObject("rigRoot") { hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector };
+            var rigRootObject = new GameObject($"{gameObject.name}_BB_RigRoot");
+
+            var rig = rigRootObject.AddComponent<BoundingBoxRig>();
+            rig.BoundingBoxParent = this;
+
+            if (!showRig)
+            {
+                rigRootObject.hideFlags = hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+            }
+
             rigRoot = rigRootObject.transform;
-            boundsCorners = new Vector3[8];
 
             corners = new List<Transform>();
             cornerColliders = new List<Collider>();
@@ -855,8 +847,8 @@ namespace XRTK.SDK.UX
 
         private Vector3 ClampScale(Vector3 scale, out bool clamped)
         {
-            Vector3 finalScale = scale;
-            Vector3 maximumScale = initialScale * scaleMaximum;
+            var finalScale = scale;
+            var maximumScale = initialScale * scaleMaximum;
             clamped = false;
 
             if (scale.x > maximumScale.x || scale.y > maximumScale.y || scale.z > maximumScale.z)
@@ -865,7 +857,7 @@ namespace XRTK.SDK.UX
                 clamped = true;
             }
 
-            Vector3 minimumScale = initialScale * scaleMinimum;
+            var minimumScale = initialScale * scaleMinimum;
 
             if (finalScale.x < minimumScale.x || finalScale.y < minimumScale.y || finalScale.z < minimumScale.z)
             {
@@ -878,7 +870,9 @@ namespace XRTK.SDK.UX
 
         private Vector3 GetLinkDimensions()
         {
-            float linkLengthAdjustor = wireframeShape == WireframeType.Cubic ? 2.0f : 1.0f - (6.0f * linkRadius);
+            var linkLengthAdjustor = wireframeShape == WireframeType.Cubic
+                ? 2.0f
+                : 1.0f - (6.0f * linkRadius);
             return (currentBoundsExtents * linkLengthAdjustor) + new Vector3(linkRadius, linkRadius, linkRadius);
         }
 
@@ -889,7 +883,7 @@ namespace XRTK.SDK.UX
             //set balls visibility
             if (balls != null)
             {
-                isVisible = (!wireframeOnly && showRotateHandles);
+                isVisible = (!displayHandles && showRotateHandles);
 
                 for (int i = 0; i < ballRenderers.Count; ++i)
                 {
@@ -901,7 +895,7 @@ namespace XRTK.SDK.UX
             //set corner visibility
             if (corners != null)
             {
-                isVisible = (!wireframeOnly && showScaleHandles);
+                isVisible = (!displayHandles && showScaleHandles);
 
                 for (int i = 0; i < cornerRenderers.Count; ++i)
                 {
@@ -948,20 +942,20 @@ namespace XRTK.SDK.UX
 
             // Store current rotation then zero out the rotation so that the bounds
             // are computed when the object is in its 'axis aligned orientation'.
-            Quaternion currentRotation = targetObject.transform.rotation;
-            targetObject.transform.rotation = Quaternion.identity;
+            var currentRotation = transform.rotation;
+            transform.rotation = Quaternion.identity;
             Physics.SyncTransforms(); // Update collider bounds
-            Vector3 boundsExtents = cachedTargetCollider.bounds.extents;
+            var boundsExtents = cachedTargetCollider.bounds.extents;
             // After bounds are computed, restore rotation...
             // ReSharper disable once Unity.InefficientPropertyAccess
-            targetObject.transform.rotation = currentRotation;
+            transform.rotation = currentRotation;
             Physics.SyncTransforms();
 
             if (boundsExtents != Vector3.zero)
             {
                 if (flattenAxis == FlattenModeType.FlattenAuto)
                 {
-                    float min = Mathf.Min(boundsExtents.x, Mathf.Min(boundsExtents.y, boundsExtents.z));
+                    var min = Mathf.Min(boundsExtents.x, Mathf.Min(boundsExtents.y, boundsExtents.z));
                     flattenAxis = min.Equals(boundsExtents.x)
                             ? FlattenModeType.FlattenX
                             : (min.Equals(boundsExtents.y)
@@ -979,9 +973,9 @@ namespace XRTK.SDK.UX
             }
         }
 
-        private void UpdateRigHandles()
+        private void UpdateRigTransform()
         {
-            if (rigRoot == null || targetObject == null) { return; }
+            if (rigRoot == null) { return; }
 
             rigRoot.rotation = Quaternion.identity;
             rigRoot.position = Vector3.zero;
@@ -991,7 +985,7 @@ namespace XRTK.SDK.UX
                 corners[i].position = boundsCorners[i];
             }
 
-            Vector3 linkDimensions = GetLinkDimensions();
+            var linkDimensions = GetLinkDimensions();
 
             for (int i = 0; i < edgeCenters.Length; ++i)
             {
@@ -1000,21 +994,21 @@ namespace XRTK.SDK.UX
 
                 switch (edgeAxes[i])
                 {
-                    case CardinalAxisType.X:
+                    case CardinalAxisType.Z:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
                         break;
-                    case CardinalAxisType.Y:
+                    case CardinalAxisType.X:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
                         break;
-                    case CardinalAxisType.Z:
+                    case CardinalAxisType.Y:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
                         break;
                 }
             }
 
-            //move rig into position and rotation
-            rigRoot.position = cachedTargetCollider.bounds.center;
-            rigRoot.rotation = targetObject.transform.rotation;
+            // Move rig into position and rotation
+            rigRoot.position = transform.TransformPoint(cachedTargetCollider.center);
+            rigRoot.rotation = transform.rotation;
         }
 
         private HandleType GetHandleType(GameObject handle)
@@ -1046,25 +1040,23 @@ namespace XRTK.SDK.UX
 
             for (int i = 0; i < cornerColliders.Count; ++i)
             {
-                if (cornerRenderers[i].enabled && cornerColliders[i].bounds.IntersectRay(ray, out currentDistance))
+                if (cornerRenderers[i].enabled &&
+                    cornerColliders[i].bounds.IntersectRay(ray, out currentDistance) &&
+                    currentDistance < closestDistance)
                 {
-                    if (currentDistance < closestDistance)
-                    {
-                        closestDistance = currentDistance;
-                        closestCollider = cornerColliders[i];
-                    }
+                    closestDistance = currentDistance;
+                    closestCollider = cornerColliders[i];
                 }
             }
 
             for (int i = 0; i < ballColliders.Count; ++i)
             {
-                if (ballRenderers[i].enabled && ballColliders[i].bounds.IntersectRay(ray, out currentDistance))
+                if (ballRenderers[i].enabled &&
+                    ballColliders[i].bounds.IntersectRay(ray, out currentDistance) &&
+                    currentDistance < closestDistance)
                 {
-                    if (currentDistance < closestDistance)
-                    {
-                        closestDistance = currentDistance;
-                        closestCollider = ballColliders[i];
-                    }
+                    closestDistance = currentDistance;
+                    closestCollider = ballColliders[i];
                 }
             }
 
@@ -1121,111 +1113,34 @@ namespace XRTK.SDK.UX
 
         private static void GetCornerPositionsFromBounds(Bounds bounds, ref Vector3[] positions)
         {
-            int numCorners = 1 << 3;
+            const int numCorners = 1 << 3;
+
             if (positions == null || positions.Length != numCorners)
             {
                 positions = new Vector3[numCorners];
             }
 
             // Permutate all axes using minCorner and maxCorner.
-            Vector3 minCorner = bounds.center - bounds.extents;
-            Vector3 maxCorner = bounds.center + bounds.extents;
-            for (int c = 0; c < numCorners; c++)
+            var minCorner = bounds.center - bounds.extents;
+            var maxCorner = bounds.center + bounds.extents;
+
+            for (int cornerIndex = 0; cornerIndex < numCorners; cornerIndex++)
             {
-                positions[c] = new Vector3(
-                    (c & (1 << 0)) == 0 ? minCorner[0] : maxCorner[0],
-                    (c & (1 << 1)) == 0 ? minCorner[1] : maxCorner[1],
-                    (c & (1 << 2)) == 0 ? minCorner[2] : maxCorner[2]);
+                positions[cornerIndex] = new Vector3(
+                    (cornerIndex & (1 << 0)) == 0 ? minCorner[0] : maxCorner[0],
+                    (cornerIndex & (1 << 1)) == 0 ? minCorner[1] : maxCorner[1],
+                    (cornerIndex & (1 << 2)) == 0 ? minCorner[2] : maxCorner[2]);
             }
         }
 
         private static Vector3 PointToRay(Vector3 origin, Vector3 end, Vector3 closestPoint)
         {
-            Vector3 originToPoint = closestPoint - origin;
-            Vector3 originToEnd = end - origin;
-            float magnitudeAb = originToEnd.sqrMagnitude;
-            float dotProduct = Vector3.Dot(originToPoint, originToEnd);
-            float distance = dotProduct / magnitudeAb;
+            var originToPoint = closestPoint - origin;
+            var originToEnd = end - origin;
+            var magnitudeAb = originToEnd.sqrMagnitude;
+            var dotProduct = Vector3.Dot(originToPoint, originToEnd);
+            var distance = dotProduct / magnitudeAb;
             return origin + (originToEnd * distance);
-        }
-
-        /// <inheritdoc />
-        void IMixedRealityInputHandler.OnInputDown(InputEventData eventData)
-        {
-            if (currentInputSource == null)
-            {
-                IMixedRealityPointer pointer = eventData.InputSource.Pointers[0];
-
-                if (pointer.TryGetPointingRay(out Ray ray))
-                {
-                    handleMoveType = HandleMoveType.Ray;
-                    Collider grabbedCollider = GetGrabbedCollider(ray, out float distance);
-
-                    if (grabbedCollider != null)
-                    {
-                        currentInputSource = eventData.InputSource;
-                        currentPointer = pointer;
-                        grabbedHandle = grabbedCollider.gameObject;
-                        currentHandleType = GetHandleType(grabbedHandle);
-                        currentRotationAxis = GetRotationAxis(grabbedHandle);
-                        currentPointer.TryGetPointingRay(out _);
-                        initialGrabMag = distance;
-                        initialGrabbedPosition = grabbedHandle.transform.position;
-                        initialScale = targetObject.transform.localScale;
-                        pointer.TryGetPointerPosition(out initialGrabPoint);
-                        ShowOneHandle(grabbedHandle);
-                        initialGazePoint = Vector3.zero;
-                    }
-                }
-            }
-        }
-
-        /// <inheritdoc />
-        void IMixedRealityInputHandler.OnInputUp(InputEventData eventData)
-        {
-            if (currentInputSource != null && eventData.InputSource.SourceId == currentInputSource.SourceId)
-            {
-                currentInputSource = null;
-                currentHandleType = HandleType.None;
-                currentPointer = null;
-                grabbedHandle = null;
-                ResetHandleVisibility();
-            }
-        }
-
-        /// <inheritdoc />
-        void IMixedRealityInputHandler<MixedRealityPose>.OnInputChanged(InputEventData<MixedRealityPose> eventData)
-        {
-            if (currentInputSource != null && eventData.InputSource.SourceId == currentInputSource.SourceId)
-            {
-                Vector3 pos = eventData.InputData.Position;
-                usingPose = true;
-                if (initialGazePoint == Vector3.zero)
-                {
-                    initialGazePoint = pos;
-                }
-                currentPosePosition = initialGrabbedPosition + (pos - initialGazePoint);
-            }
-            else
-            {
-                usingPose = false;
-            }
-        }
-
-        /// <inheritdoc />
-        void IMixedRealitySourceStateHandler.OnSourceDetected(SourceStateEventData eventData) { }
-
-        /// <inheritdoc />
-        void IMixedRealitySourceStateHandler.OnSourceLost(SourceStateEventData eventData)
-        {
-            if (currentInputSource != null && eventData.InputSource.SourceId == currentInputSource.SourceId)
-            {
-                currentInputSource = null;
-                currentHandleType = HandleType.None;
-                currentPointer = null;
-                grabbedHandle = null;
-                ResetHandleVisibility();
-            }
         }
     }
 }
