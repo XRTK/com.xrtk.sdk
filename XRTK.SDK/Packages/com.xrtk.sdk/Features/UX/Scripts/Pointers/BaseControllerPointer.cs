@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
@@ -269,10 +270,20 @@ namespace XRTK.SDK.UX.Pointers
         public bool IsFocusLocked { get; set; }
 
         [SerializeField]
-        private bool overrideGlobalPointerExtent = false;
+        private bool isTargetPositionLockedOnFocusLock;
+
+        /// <inheritdoc />
+        public bool IsTargetPositionLockedOnFocusLock
+        {
+            get => isTargetPositionLockedOnFocusLock;
+            set => isTargetPositionLockedOnFocusLock = value;
+        }
 
         [SerializeField]
-        private float pointerExtent = 10f;
+        private bool overrideGlobalPointerExtent = false;
+
+        [NonSerialized]
+        private float pointerExtent;
 
         /// <inheritdoc />
         public float PointerExtent
@@ -287,20 +298,35 @@ namespace XRTK.SDK.UX.Pointers
                     }
                 }
 
+                if (pointerExtent.Equals(0f))
+                {
+                    pointerExtent = defaultPointerExtent;
+                }
+
+                Debug.Assert(pointerExtent > 0f);
                 return pointerExtent;
             }
             set
             {
                 pointerExtent = value;
+                Debug.Assert(pointerExtent > 0f, "Cannot set the pointer extent to 0. Resetting to the default pointer extent");
                 overrideGlobalPointerExtent = false;
             }
         }
+
+        [Min(0.01f)]
+        [SerializeField]
+        [FormerlySerializedAs("pointerExtent")]
+        private float defaultPointerExtent = 10f;
+
+        /// <inheritdoc />
+        public float DefaultPointerExtent => defaultPointerExtent;
 
         /// <inheritdoc />
         public RayStep[] Rays { get; protected set; } = { new RayStep(Vector3.zero, Vector3.forward) };
 
         /// <inheritdoc />
-        public LayerMask[] PrioritizedLayerMasksOverride { get; set; }
+        public LayerMask[] PrioritizedLayerMasksOverride { get; set; } = null;
 
         /// <inheritdoc />
         public IMixedRealityFocusHandler FocusTarget { get; set; }
@@ -330,9 +356,6 @@ namespace XRTK.SDK.UX.Pointers
                         ? Mathf.Clamp(value, -360f, 0f)
                         : Mathf.Clamp(value, 0f, 360f);
         }
-
-        /// <inheritdoc />
-        public bool IsTargetPositionLockedOnFocusLock { get; set; }
 
         /// <inheritdoc />
         public virtual void OnPreRaycast() { }
