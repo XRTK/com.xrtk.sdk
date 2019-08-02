@@ -157,6 +157,7 @@ namespace XRTK.SDK.UX.Cursors
         /// <inheritdoc />
         public virtual Vector3 LocalScale => transform.localScale;
 
+        /// <inheritdoc />
         public virtual void SetVisibility(bool visible)
         {
             if (PrimaryCursorVisual != null &&
@@ -289,7 +290,7 @@ namespace XRTK.SDK.UX.Cursors
 
         #region MonoBehaviour Implementation
 
-        private void Update()
+        private void LateUpdate()
         {
             UpdateCursorState();
             UpdateCursorTransform();
@@ -362,7 +363,7 @@ namespace XRTK.SDK.UX.Cursors
                 return;
             }
 
-            if (!MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out FocusDetails focusDetails))
+            if (!MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out var focusDetails))
             {
                 if (MixedRealityToolkit.InputSystem.FocusProvider.IsPointerRegistered(Pointer))
                 {
@@ -372,7 +373,7 @@ namespace XRTK.SDK.UX.Cursors
                 return;
             }
 
-            GameObject newTargetedObject = MixedRealityToolkit.InputSystem.FocusProvider.GetFocusedObject(Pointer);
+            var newTargetedObject = MixedRealityToolkit.InputSystem.FocusProvider.GetFocusedObject(Pointer);
             Vector3 lookForward;
 
             // Normalize scale on before update
@@ -384,7 +385,7 @@ namespace XRTK.SDK.UX.Cursors
                 TargetedObject = null;
                 targetPosition = RayStep.GetPointByDistance(Pointer.Rays, defaultCursorDistance);
                 lookForward = -RayStep.GetDirectionByDistance(Pointer.Rays, defaultCursorDistance);
-                targetRotation = lookForward.magnitude > 0 ? Quaternion.LookRotation(lookForward, Vector3.up) : transform.rotation;
+                targetRotation = lookForward.magnitude > 0f ? Quaternion.LookRotation(lookForward, Vector3.up) : transform.rotation;
             }
             else
             {
@@ -400,10 +401,10 @@ namespace XRTK.SDK.UX.Cursors
                     // If no modifier is on the target, just use the hit result to set cursor position
                     // Get the look forward by using distance between pointer origin and target position
                     // (This may not be strictly accurate for extremely wobbly pointers, but it should produce usable results)
-                    float distanceToTarget = Vector3.Distance(Pointer.Rays[0].Origin, focusDetails.Point);
+                    var distanceToTarget = Vector3.Distance(Pointer.Rays[0].Origin, focusDetails.Point);
                     lookForward = -RayStep.GetDirectionByDistance(Pointer.Rays, distanceToTarget);
                     targetPosition = focusDetails.Point + (lookForward * surfaceCursorDistance);
-                    Vector3 lookRotation = Vector3.Slerp(focusDetails.Normal, lookForward, lookRotationBlend);
+                    var lookRotation = Vector3.Slerp(focusDetails.Normal, lookForward, lookRotationBlend);
                     targetRotation = Quaternion.LookRotation(lookRotation == Vector3.zero ? lookForward : lookRotation, Vector3.up);
                 }
             }
@@ -414,9 +415,17 @@ namespace XRTK.SDK.UX.Cursors
 
             // Use the lerp times to blend the position to the target position
             var cachedTransform = transform;
-            transform.position = Vector3.Lerp(cachedTransform.position, targetPosition, deltaTime / positionLerpTime);
-            transform.localScale = Vector3.Lerp(cachedTransform.localScale, targetScale, deltaTime / scaleLerpTime);
-            transform.rotation = Quaternion.Lerp(cachedTransform.rotation, targetRotation, deltaTime / rotationLerpTime);
+
+            if (Pointer.IsFocusLocked && Pointer.IsTargetPositionLockedOnFocusLock && focusDetails.Object != null)
+            {
+                cachedTransform.position = focusDetails.Point;
+            }
+            else
+            {
+                cachedTransform.position = Vector3.Slerp(cachedTransform.position, targetPosition, deltaTime / positionLerpTime);
+                cachedTransform.localScale = Vector3.Slerp(cachedTransform.localScale, targetScale, deltaTime / scaleLerpTime);
+                cachedTransform.rotation = Quaternion.Slerp(cachedTransform.rotation, targetRotation, deltaTime / rotationLerpTime);
+            }
         }
 
         /// <summary>
