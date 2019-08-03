@@ -261,6 +261,16 @@ namespace XRTK.SDK.UX.Pointers
         public bool IsFocusLocked { get; set; }
 
         [SerializeField]
+        private bool isTargetPositionLockedOnFocusLock;
+
+        /// <inheritdoc />
+        public bool IsTargetPositionLockedOnFocusLock
+        {
+            get => isTargetPositionLockedOnFocusLock;
+            set => isTargetPositionLockedOnFocusLock = value;
+        }
+
+        [SerializeField]
         private bool overrideGlobalPointerExtent = false;
 
         [NonSerialized]
@@ -337,9 +347,6 @@ namespace XRTK.SDK.UX.Pointers
                         ? Mathf.Clamp(value, -360f, 0f)
                         : Mathf.Clamp(value, 0f, 360f);
         }
-
-        /// <inheritdoc />
-        public bool IsTargetPositionLockedOnFocusLock { get; set; }
 
         /// <inheritdoc />
         public virtual void OnPreRaycast() { }
