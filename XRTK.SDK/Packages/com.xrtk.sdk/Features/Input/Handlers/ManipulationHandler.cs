@@ -299,8 +299,6 @@ namespace XRTK.SDK.Input.Handlers
 
         private bool isRotationPossible = false;
 
-        private IMixedRealityPointer[] pointers = null;
-
         private Vector3 prevPosition = Vector3.zero;
 
         private Vector3 prevScale = Vector3.one;
@@ -324,12 +322,9 @@ namespace XRTK.SDK.Input.Handlers
                 manipulationTarget.position = primaryPointer.Result.Details.Point;
             }
 
-            if (isPressed && isNudgePossible && pointers != null)
+            if (isPressed && isNudgePossible && primaryPointer != null)
             {
-                for (int i = 0; i < pointers.Length; i++)
-                {
-                    pointers[i].PointerExtent = updatedExtent;
-                }
+                primaryPointer.PointerExtent = updatedExtent;
             }
         }
 
@@ -458,7 +453,7 @@ namespace XRTK.SDK.Input.Handlers
             if (!isPressed || isRotating) { return; }
 
             isScalePossible = eventData.MixedRealityInputAction == scaleAction && absoluteInputData.x > 0f;
-            isNudgePossible = eventData.MixedRealityInputAction == nudgeAction && absoluteInputData.y > 0f;
+            isNudgePossible = eventData.MixedRealityInputAction == nudgeAction && absoluteInputData.y > 0f && primaryPointer != null;
 
             // Check to make sure that input values fall between min/max zone values
             if (isScalePossible &&
@@ -492,12 +487,9 @@ namespace XRTK.SDK.Input.Handlers
 
             if (isNudgePossible)
             {
-                pointers = eventData.InputSource.Pointers;
-
-
-                // We assume all pointers currently have the same length
-                var newExtent = pointers[0].PointerExtent;
-                var currentRaycastDistance = pointers[0].Result.Details.RayDistance;
+                Debug.Assert(primaryPointer != null);
+                var newExtent = primaryPointer.PointerExtent;
+                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
 
                 // Reset the cursor extent to the nearest value in case we're hitting something close
                 // and the user wants to adjust. That way it doesn't take forever to see the change.
@@ -524,6 +516,7 @@ namespace XRTK.SDK.Input.Handlers
                         newExtent = prevExtent;
                     }
                 }
+
                 updatedExtent = newExtent;
                 eventData.Use();
             }
