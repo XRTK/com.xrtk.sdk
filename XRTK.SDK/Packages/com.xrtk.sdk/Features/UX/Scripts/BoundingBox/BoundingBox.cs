@@ -211,6 +211,7 @@ namespace XRTK.SDK.UX
         [Header("Debug Options")]
 
         [SerializeField]
+        [Tooltip("Displays the rig in the hierarchy window. Useful for debugging the rig elements.")]
         private bool showRig = false;
 
         [Header("Bounds Calculation")]
@@ -400,9 +401,10 @@ namespace XRTK.SDK.UX
 
         private Vector3[] boundsCorners = new Vector3[8];
 
-        private readonly CardinalAxisType[] edgeAxes = new CardinalAxisType[12];
         private readonly Vector3[] edgeCenters = new Vector3[12];
+        private readonly CardinalAxisType[] edgeAxes = new CardinalAxisType[12];
 
+        private static readonly int numCorners = 8;
         private static readonly int Color = Shader.PropertyToID("_Color");
         private static readonly int InnerGlow = Shader.PropertyToID("_InnerGlow");
         private static readonly int InnerGlowColor = Shader.PropertyToID("_InnerGlowColor");
@@ -994,14 +996,14 @@ namespace XRTK.SDK.UX
 
                 switch (edgeAxes[i])
                 {
-                    case CardinalAxisType.Z:
-                        links[i].localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
-                        break;
                     case CardinalAxisType.X:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
                         break;
                     case CardinalAxisType.Y:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
+                        break;
+                    case CardinalAxisType.Z:
+                        links[i].localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
                         break;
                 }
             }
@@ -1113,8 +1115,6 @@ namespace XRTK.SDK.UX
 
         private static void GetCornerPositionsFromBounds(Bounds bounds, ref Vector3[] positions)
         {
-            const int numCorners = 1 << 3;
-
             if (positions == null || positions.Length != numCorners)
             {
                 positions = new Vector3[numCorners];
