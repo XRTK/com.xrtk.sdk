@@ -429,6 +429,7 @@ namespace XRTK.SDK.UX
                 if (showRotationHandlesPerAxis != value)
                 {
                     showRotationHandlesPerAxis = value;
+                    showRotateHandles = true;
 
                     ResetHandleVisibility();
                 }
