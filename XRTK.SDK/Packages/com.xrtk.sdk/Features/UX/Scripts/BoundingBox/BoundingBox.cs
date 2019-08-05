@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -17,8 +16,14 @@ using XRTK.Services;
 
 namespace XRTK.SDK.UX
 {
+    /// <summary>
+    /// The bounding box is a component for easily manipulating an object using a visual wireframe and handles.
+    /// </summary>
     public class BoundingBox : MonoBehaviour
     {
+        /// <summary>
+        /// Rig component for handling input events.
+        /// </summary>
         private class BoundingBoxRig : BaseInputHandler,
             IMixedRealitySourceStateHandler,
             IMixedRealityPointerHandler,
@@ -91,6 +96,9 @@ namespace XRTK.SDK.UX
             }
 
             /// <inheritdoc />
+            void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
+
+            /// <inheritdoc />
             void IMixedRealityInputHandler<MixedRealityPose>.OnInputChanged(InputEventData<MixedRealityPose> eventData)
             {
                 if (BoundingBoxParent.currentInputSource != null &&
@@ -128,35 +136,9 @@ namespace XRTK.SDK.UX
                     MixedRealityToolkit.InputSystem.PopModalInputHandler();
                 }
             }
-
-            void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
         }
 
         #region Enums
-
-        /// <summary>
-        /// Enum which describes how an object's bounding box is to be flattened.
-        /// </summary>
-        private enum FlattenModeType
-        {
-            DoNotFlatten = 0,
-            /// <summary>
-            /// Flatten the X axis
-            /// </summary>
-            FlattenX,
-            /// <summary>
-            /// Flatten the Y axis
-            /// </summary>
-            FlattenY,
-            /// <summary>
-            /// Flatten the Z axis
-            /// </summary>
-            FlattenZ,
-            /// <summary>
-            /// Flatten the smallest relative axis if it falls below threshold
-            /// </summary>
-            FlattenAuto,
-        }
 
         /// <summary>
         /// Enum which describes whether a bounding box handle which has been grabbed, is 
@@ -171,7 +153,7 @@ namespace XRTK.SDK.UX
 
         /// <summary>
         /// This enum describes which primitive type the wireframe portion of the bounding box
-        /// consists of. 
+        /// consists of.
         /// </summary>
         /// <remarks>
         /// Wireframe refers to the thin linkage between the handles. When the handles are invisible
@@ -181,14 +163,6 @@ namespace XRTK.SDK.UX
         {
             Cubic = 0,
             Cylindrical
-        }
-
-        [Flags]
-        private enum CardinalAxisType
-        {
-            X = 1,
-            Y = 2,
-            Z = 3,
         }
 
         /// <summary>
@@ -220,16 +194,52 @@ namespace XRTK.SDK.UX
         [Tooltip("For complex objects, automatic bounds calculation may not behave as expected. Use an existing Box Collider (even on a child object) to manually determine bounds of Bounding Box.")]
         private BoxCollider boxColliderToUse = null;
 
+        /// <summary>
+        /// For complex objects, automatic bounds calculation may not behave as expected.
+        /// Use an existing Box Collider (even on a child object) to manually determine bounds of Bounding Box.
+        /// </summary>
+        public BoxCollider BoxColliderToUse
+        {
+            get => boxColliderToUse;
+            set
+            {
+                if (boxColliderToUse != value)
+                {
+                    boxColliderToUse = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
         [Header("Behavior")]
 
         [SerializeField]
+        [Tooltip("Should the bounding box be visible when this object is started?")]
         private bool activateOnStart = false;
 
         [SerializeField]
         private float scaleMaximum = 2.0f;
 
+        /// <summary>
+        /// Maximum scale allowed for this object.
+        /// </summary>
+        public float ScaleMaximum
+        {
+            get => scaleMaximum;
+            set => scaleMaximum = value;
+        }
+
         [SerializeField]
         private float scaleMinimum = 0.2f;
+
+        /// <summary>
+        /// Minimum scale allowed for this object.
+        /// </summary>
+        public float ScaleMinimum
+        {
+            get => scaleMinimum;
+            set => scaleMinimum = value;
+        }
 
         [Header("Wireframe")]
 
@@ -259,8 +269,37 @@ namespace XRTK.SDK.UX
         [SerializeField]
         private Vector3 wireframePadding = Vector3.zero;
 
+        /// <summary>
+        /// The distance to pad the wireframe around the bounds of the encapsulated object(s).
+        /// </summary>
+        public Vector3 WireFramePadding
+        {
+            get => wireframePadding;
+            set
+            {
+                wireframePadding = value;
+                pendingRigReset = true;
+            }
+        }
+
         [SerializeField]
-        private FlattenModeType flattenAxis = FlattenModeType.DoNotFlatten;
+        private FlattenMode flattenAxis = FlattenMode.DoNotFlatten;
+
+        /// <summary>
+        /// Describes how the bounding box should be flattened
+        /// </summary>
+        public FlattenMode FlattenAxis
+        {
+            get => flattenAxis;
+            set
+            {
+                if (flattenAxis != value)
+                {
+                    flattenAxis = value;
+                    Flatten();
+                }
+            }
+        }
 
         [SerializeField]
         private WireframeType wireframeShape = WireframeType.Cubic;
@@ -268,14 +307,68 @@ namespace XRTK.SDK.UX
         [SerializeField]
         private Material wireframeMaterial;
 
+        /// <summary>
+        /// The material to use for the wireframe.
+        /// </summary>
+        public Material WireframeMaterial
+        {
+            get => wireframeMaterial;
+            set
+            {
+                if (wireframeMaterial != value)
+                {
+                    wireframeMaterial = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
         [Header("Handles")]
 
         [SerializeField]
         [Tooltip("Default materials will be created for Handles and Wireframe if none is specified.")]
         private Material handleMaterial;
 
+        /// <summary>
+        /// The material for all the handles to use.
+        /// </summary>
+        /// <remarks>
+        /// Default materials will be created for Handles and Wireframe if none is specified.
+        /// </remarks>
+        public Material HandleMaterial
+        {
+            get => handleMaterial;
+            set
+            {
+                if (handleMaterial != value)
+                {
+                    handleMaterial = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
         [SerializeField]
         private Material handleGrabbedMaterial;
+
+        /// <summary>
+        /// The material to use when the handles are interacted with.
+        /// </summary>
+        /// <remarks>
+        /// Default materials will be created for Handles and Wireframe if none is specified.
+        /// </remarks>
+        public Material HandleGrabbedMaterial
+        {
+            get => handleGrabbedMaterial;
+            set
+            {
+                if (handleGrabbedMaterial != value)
+                {
+                    handleGrabbedMaterial = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
 
         [SerializeField]
         private bool showScaleHandles = true;
@@ -313,7 +406,7 @@ namespace XRTK.SDK.UX
                 {
                     showRotateHandles = value;
 
-                    showRotationHandlesPerAxis = (CardinalAxisType)(!showRotateHandles ? 0 : -1);
+                    showRotationHandlesPerAxis = (CardinalAxis)(!showRotateHandles ? 0 : -1);
 
                     ResetHandleVisibility();
                 }
@@ -323,30 +416,102 @@ namespace XRTK.SDK.UX
         [EnumFlags]
         [SerializeField]
         [Tooltip("Only show rotation handles for these specific axes.")]
-        private CardinalAxisType showRotationHandlesPerAxis = (CardinalAxisType)(-1);
+        private CardinalAxis showRotationHandlesPerAxis = (CardinalAxis)(-1);
+
+        /// <summary>
+        /// Show the rotation handles based on the <see cref="CardinalAxis"/> bit mask.
+        /// </summary>
+        public CardinalAxis ShowRotationHandlesPerAxis
+        {
+            get => showRotationHandlesPerAxis;
+            set
+            {
+                if (showRotationHandlesPerAxis != value)
+                {
+                    showRotationHandlesPerAxis = value;
+
+                    ResetHandleVisibility();
+                }
+            }
+        }
 
         [SerializeField]
         private float linkRadius = 0.005f;
 
-        [SerializeField]
-        private float ballRadius = 0.035f;
+        /// <summary>
+        /// The thickness of the links connecting each of the bounding boxes handles.
+        /// </summary>
+        public float LinkRadius
+        {
+            get => linkRadius;
+            set
+            {
+                if (!linkRadius.Equals(value))
+                {
+                    linkRadius = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
 
         [SerializeField]
-        private float cornerRadius = 0.03f;
+        [FormerlySerializedAs("ballRadius")]
+        private float rotationHandleRadius = 0.035f;
+
+        /// <summary>
+        /// The size of the rotation handles.
+        /// </summary>
+        public float RotationHandleRadius
+        {
+            get => rotationHandleRadius;
+            set
+            {
+                if (!rotationHandleRadius.Equals(value))
+                {
+                    rotationHandleRadius = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
+        [SerializeField]
+        [FormerlySerializedAs("cornerRadius")]
+        private float scaleHandleRadius = 0.03f;
+
+        /// <summary>
+        /// The size of the scale handles.
+        /// </summary>
+        public float ScaleHandleRadius
+        {
+            get => scaleHandleRadius;
+            set
+            {
+                if (!scaleHandleRadius.Equals(value))
+                {
+                    scaleHandleRadius = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
 
         #endregion Serialized Fields
 
-        private bool isActive = false;
+        /// <summary>
+        /// Used to reset the rig when properties have changed.
+        /// </summary>
+        private bool pendingRigReset = false;
+
+        private bool isVisible = false;
 
         /// <summary>
-        /// This Public property sets whether the BoundingBox is active (visible)
+        /// Is the Bounding Box Rig visible?
         /// </summary>
-        public bool IsActive
+        public bool IsVisible
         {
-            get => isActive;
+            get => isVisible;
             set
             {
-                if (isActive != value)
+                if (isVisible != value)
                 {
                     if (value)
                     {
@@ -358,7 +523,7 @@ namespace XRTK.SDK.UX
                         DestroyRig();
                     }
 
-                    isActive = value;
+                    isVisible = value;
                 }
             }
         }
@@ -402,7 +567,7 @@ namespace XRTK.SDK.UX
         private Vector3[] boundsCorners = new Vector3[8];
 
         private readonly Vector3[] edgeCenters = new Vector3[12];
-        private readonly CardinalAxisType[] edgeAxes = new CardinalAxisType[12];
+        private readonly CardinalAxis[] edgeAxes = new CardinalAxis[12];
 
         private static readonly int numCorners = 8;
         private static readonly int Color = Shader.PropertyToID("_Color");
@@ -413,14 +578,29 @@ namespace XRTK.SDK.UX
 
         private void Start()
         {
+            // set false cause it'll get reset properly if we set
+            // the rig visibility true with manual or auto activation.
+            pendingRigReset = false;
+
             if (activateOnStart)
             {
-                IsActive = true;
+                IsVisible = true;
             }
         }
 
         private void Update()
         {
+            if (pendingRigReset)
+            {
+                if (IsVisible)
+                {
+                    IsVisible = false;
+                    IsVisible = true;
+                }
+
+                pendingRigReset = false;
+            }
+
             if (currentInputSource == null)
             {
                 UpdateBounds();
@@ -610,11 +790,11 @@ namespace XRTK.SDK.UX
                 {
                     switch (edgeAxes[i])
                     {
-                        case CardinalAxisType.X:
+                        case CardinalAxis.X:
                             return rigRoot.transform.up;
-                        case CardinalAxisType.Y:
+                        case CardinalAxis.Y:
                             return rigRoot.transform.forward;
-                        case CardinalAxisType.Z:
+                        case CardinalAxis.Z:
                             return rigRoot.transform.right;
                     }
                 }
@@ -625,20 +805,20 @@ namespace XRTK.SDK.UX
 
         private void CreateLinks()
         {
-            edgeAxes[0] = CardinalAxisType.Z;
-            edgeAxes[2] = CardinalAxisType.Z;
-            edgeAxes[4] = CardinalAxisType.Z;
-            edgeAxes[6] = CardinalAxisType.Z;
+            edgeAxes[0] = CardinalAxis.Z;
+            edgeAxes[2] = CardinalAxis.Z;
+            edgeAxes[4] = CardinalAxis.Z;
+            edgeAxes[6] = CardinalAxis.Z;
 
-            edgeAxes[1] = CardinalAxisType.X;
-            edgeAxes[3] = CardinalAxisType.X;
-            edgeAxes[5] = CardinalAxisType.X;
-            edgeAxes[7] = CardinalAxisType.X;
+            edgeAxes[1] = CardinalAxis.X;
+            edgeAxes[3] = CardinalAxis.X;
+            edgeAxes[5] = CardinalAxis.X;
+            edgeAxes[7] = CardinalAxis.X;
 
-            edgeAxes[08] = CardinalAxisType.Y;
-            edgeAxes[09] = CardinalAxisType.Y;
-            edgeAxes[10] = CardinalAxisType.Y;
-            edgeAxes[11] = CardinalAxisType.Y;
+            edgeAxes[08] = CardinalAxis.Y;
+            edgeAxes[09] = CardinalAxis.Y;
+            edgeAxes[10] = CardinalAxis.Y;
+            edgeAxes[11] = CardinalAxis.Y;
 
             for (int i = 0; i < edgeCenters.Length; ++i)
             {
@@ -652,15 +832,15 @@ namespace XRTK.SDK.UX
 
                 switch (edgeAxes[i])
                 {
-                    case CardinalAxisType.X:
+                    case CardinalAxis.X:
                         link.transform.localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
                         link.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
                         break;
-                    case CardinalAxisType.Y:
+                    case CardinalAxis.Y:
                         link.transform.localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
                         link.transform.Rotate(new Vector3(90.0f, 0.0f, 0.0f));
                         break;
-                    case CardinalAxisType.Z:
+                    case CardinalAxis.Z:
                         link.transform.localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
                         link.transform.Rotate(new Vector3(0.0f, 0.0f, 90.0f));
                         break;
@@ -685,7 +865,7 @@ namespace XRTK.SDK.UX
 
         private void CreateScaleHandles()
         {
-            var scale = new Vector3(cornerRadius, cornerRadius, cornerRadius);
+            var scale = new Vector3(scaleHandleRadius, scaleHandleRadius, scaleHandleRadius);
 
             for (int i = 0; i < boundsCorners.Length; ++i)
             {
@@ -711,7 +891,7 @@ namespace XRTK.SDK.UX
 
         private void CreateRotationHandles()
         {
-            var radius = new Vector3(ballRadius, ballRadius, ballRadius);
+            var radius = new Vector3(rotationHandleRadius, rotationHandleRadius, rotationHandleRadius);
 
             for (int i = 0; i < edgeCenters.Length; ++i)
             {
@@ -734,7 +914,7 @@ namespace XRTK.SDK.UX
                 }
 
                 if (showRotationHandlesPerAxis == 0 ||
-                    showRotationHandlesPerAxis != (CardinalAxisType)(-1) && (showRotationHandlesPerAxis ^ edgeAxes[i]) != 0)
+                    showRotationHandlesPerAxis != (CardinalAxis)(-1) && (showRotationHandlesPerAxis ^ edgeAxes[i]) != 0)
                 {
                     ball.SetActive(false);
                 }
@@ -880,29 +1060,29 @@ namespace XRTK.SDK.UX
 
         private void ResetHandleVisibility()
         {
-            bool isVisible;
+            bool isHandlesVisible;
 
             //set balls visibility
             if (balls != null)
             {
-                isVisible = (!displayHandles && showRotateHandles);
+                isHandlesVisible = (!displayHandles && showRotateHandles);
 
                 for (int i = 0; i < ballRenderers.Count; ++i)
                 {
                     ballRenderers[i].material = handleMaterial;
-                    ballRenderers[i].enabled = isVisible;
+                    ballRenderers[i].enabled = isHandlesVisible;
                 }
             }
 
             //set corner visibility
             if (corners != null)
             {
-                isVisible = (!displayHandles && showScaleHandles);
+                isHandlesVisible = (!displayHandles && showScaleHandles);
 
                 for (int i = 0; i < cornerRenderers.Count; ++i)
                 {
                     cornerRenderers[i].material = handleMaterial;
-                    cornerRenderers[i].enabled = isVisible;
+                    cornerRenderers[i].enabled = isHandlesVisible;
                 }
             }
 
@@ -955,19 +1135,19 @@ namespace XRTK.SDK.UX
 
             if (boundsExtents != Vector3.zero)
             {
-                if (flattenAxis == FlattenModeType.FlattenAuto)
+                if (flattenAxis == FlattenMode.FlattenAuto)
                 {
                     var min = Mathf.Min(boundsExtents.x, Mathf.Min(boundsExtents.y, boundsExtents.z));
                     flattenAxis = min.Equals(boundsExtents.x)
-                            ? FlattenModeType.FlattenX
+                            ? FlattenMode.FlattenX
                             : (min.Equals(boundsExtents.y)
-                                    ? FlattenModeType.FlattenY
-                                    : FlattenModeType.FlattenZ);
+                                    ? FlattenMode.FlattenY
+                                    : FlattenMode.FlattenZ);
                 }
 
-                boundsExtents.x = flattenAxis == FlattenModeType.FlattenX ? 0.0f : boundsExtents.x;
-                boundsExtents.y = flattenAxis == FlattenModeType.FlattenY ? 0.0f : boundsExtents.y;
-                boundsExtents.z = flattenAxis == FlattenModeType.FlattenZ ? 0.0f : boundsExtents.z;
+                boundsExtents.x = flattenAxis == FlattenMode.FlattenX ? 0.0f : boundsExtents.x;
+                boundsExtents.y = flattenAxis == FlattenMode.FlattenY ? 0.0f : boundsExtents.y;
+                boundsExtents.z = flattenAxis == FlattenMode.FlattenZ ? 0.0f : boundsExtents.z;
                 currentBoundsExtents = boundsExtents;
 
                 GetCornerPositionsFromBounds(new Bounds(Vector3.zero, boundsExtents * 2.0f), ref boundsCorners);
@@ -996,13 +1176,13 @@ namespace XRTK.SDK.UX
 
                 switch (edgeAxes[i])
                 {
-                    case CardinalAxisType.X:
+                    case CardinalAxis.X:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
                         break;
-                    case CardinalAxisType.Y:
+                    case CardinalAxis.Y:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
                         break;
-                    case CardinalAxisType.Z:
+                    case CardinalAxis.Z:
                         links[i].localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
                         break;
                 }
@@ -1082,13 +1262,13 @@ namespace XRTK.SDK.UX
         {
             switch (flattenAxis)
             {
-                case FlattenModeType.FlattenX:
+                case FlattenMode.FlattenX:
                     flattenedHandles = new[] { 0, 4, 2, 6 };
                     break;
-                case FlattenModeType.FlattenY:
+                case FlattenMode.FlattenY:
                     flattenedHandles = new[] { 1, 3, 5, 7 };
                     break;
-                case FlattenModeType.FlattenZ:
+                case FlattenMode.FlattenZ:
                     flattenedHandles = new[] { 9, 10, 8, 11 };
                     break;
             }
