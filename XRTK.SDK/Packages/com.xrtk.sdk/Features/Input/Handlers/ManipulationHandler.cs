@@ -267,6 +267,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <remarks>
         /// Used to determine if the <see cref="GameObject"/> is currently being manipulated by the user.
         /// </remarks>
+        public bool IsBeingHeld => isBeingHeld;
+
         private bool isBeingHeld = false;
 
         /// <summary>
@@ -289,13 +291,38 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         private Vector2 lastPositionReading = Vector2.zero;
 
+        /// <summary>
+        /// Is the <see cref="primaryInputSource"/> currently pressed?
+        /// </summary>
+        public bool IsPressed => isPressed;
+
         private bool isPressed = false;
+
+        /// <summary>
+        /// Is there currently a manipulation processing a rotation?
+        /// </summary>
+        public bool IsRotating => isRotating;
 
         private bool isRotating = false;
 
+        /// <summary>
+        /// Is scaling possible?
+        /// </summary>
+        public bool IsScalingPossible => isScalePossible;
+
         private bool isScalePossible = false;
 
+        /// <summary>
+        /// Is nudge possible?
+        /// </summary>
+        public bool IsNudgePossible => isNudgePossible;
+
         private bool isNudgePossible = false;
+
+        /// <summary>
+        /// Is rotation possible?
+        /// </summary>
+        public bool IsRotationPossible => isRotationPossible;
 
         private bool isRotationPossible = false;
 
