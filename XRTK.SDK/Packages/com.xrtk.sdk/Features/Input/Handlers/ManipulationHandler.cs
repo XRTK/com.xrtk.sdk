@@ -269,7 +269,9 @@ namespace XRTK.SDK.Input.Handlers
         /// </remarks>
         private bool isBeingHeld = false;
 
-        /// <summary>The updated extent</summary>
+        /// <summary>
+        /// The updated extent of the pointer.
+        /// </summary>
         private float updatedExtent;
 
         /// <summary>
