@@ -622,6 +622,10 @@ namespace XRTK.SDK.Input.Handlers
 
         #endregion IMixedRealityPointerHandler Implementation
 
+        /// <summary>
+        /// Begin a new hold on the manipulation target.
+        /// </summary>
+        /// <param name="eventData"></param>
         public virtual void BeginHold(MixedRealityPointerEventData eventData)
         {
             if (isBeingHeld) { return; }
