@@ -269,7 +269,6 @@ namespace XRTK.SDK.Input.Handlers
         /// </remarks>
         private bool isBeingHeld = false;
 
-
         /// <summary>The updated extent</summary>
         private float updatedExtent;
 
@@ -288,18 +287,15 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         private Vector2 lastPositionReading = Vector2.zero;
 
-        protected bool isPressed = false;
+        private bool isPressed = false;
 
-        protected bool isRotating = false;
+        private bool isRotating = false;
 
-        /// <summary>Flag if scale possible</summary>
-        protected bool isScalePossible = false;
+        private bool isScalePossible = false;
 
-        /// <summary>Flag if nudge possible</summary>
-        protected bool isNudgePossible = false;
+        private bool isNudgePossible = false;
 
-        /// <summary>Flag if rotation possible</summary>
-        protected bool isRotationPossible = false;
+        private bool isRotationPossible = false;
 
         private IMixedRealityPointer[] pointers = null;
 
