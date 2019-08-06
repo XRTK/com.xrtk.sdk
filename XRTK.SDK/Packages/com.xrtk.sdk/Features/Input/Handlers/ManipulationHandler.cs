@@ -326,6 +326,8 @@ namespace XRTK.SDK.Input.Handlers
 
         private bool isRotationPossible = false;
 
+        private Vector3 offsetPosition = Vector3.zero;
+
         private Vector3 prevPosition = Vector3.zero;
 
         private Vector3 prevScale = Vector3.one;
@@ -346,7 +348,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (isBeingHeld)
             {
-                manipulationTarget.position = primaryPointer.Result.Details.Point;
+                manipulationTarget.position = offsetPosition + primaryPointer.Result.Details.Point;
             }
 
             if (isPressed && isNudgePossible && primaryPointer != null)
@@ -656,6 +658,7 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.Collision);
 
             prevPosition = manipulationTarget.position;
+            offsetPosition = prevPosition - eventData.Pointer.Result.Details.Point;
             prevScale = manipulationTarget.localScale;
             prevRotation = manipulationTarget.rotation;
 
