@@ -268,6 +268,7 @@ namespace XRTK.SDK.UX
                 if (displayHandles != value)
                 {
                     displayHandles = value;
+
                     ResetHandleVisibility();
                 }
             }
@@ -392,6 +393,12 @@ namespace XRTK.SDK.UX
                 if (showScaleHandles != value)
                 {
                     showScaleHandles = value;
+
+                    if (value)
+                    {
+                        displayHandles = true;
+                    }
+
                     ResetHandleVisibility();
                 }
             }
@@ -412,6 +419,11 @@ namespace XRTK.SDK.UX
                 if (showRotateHandles != value)
                 {
                     showRotateHandles = value;
+
+                    if (value)
+                    {
+                        displayHandles = true;
+                    }
 
                     showRotationHandlesPerAxis = (CardinalAxis)(!showRotateHandles ? 0 : -1);
 
@@ -436,7 +448,7 @@ namespace XRTK.SDK.UX
                 if (showRotationHandlesPerAxis != value)
                 {
                     showRotationHandlesPerAxis = value;
-                    showRotateHandles = true;
+                    ShowRotateHandles = true;
 
                     ResetHandleVisibility();
                 }
@@ -674,6 +686,7 @@ namespace XRTK.SDK.UX
             {
                 if (cachedTargetCollider != null)
                 {
+                    cachedTargetCollider.size -= wireframePadding;
                     Destroy(cachedTargetCollider);
                 }
             }
@@ -978,27 +991,22 @@ namespace XRTK.SDK.UX
             {
                 cachedTargetCollider = boxColliderToUse;
                 cachedTargetCollider.transform.hasChanged = true;
+                cachedTargetCollider.size += wireframePadding;
             }
             else
             {
                 if (cachedTargetCollider != null)
                 {
+                    cachedTargetCollider.size -= wireframePadding;
                     Destroy(cachedTargetCollider);
                 }
 
                 var bounds = transform.GetColliderBounds();
 
                 cachedTargetCollider = gameObject.AddComponent<BoxCollider>();
-
-                Debug.Assert(!bounds.size.x.Equals(0));
-                Debug.Assert(!bounds.size.y.Equals(0));
-                Debug.Assert(!bounds.size.z.Equals(0));
-
                 cachedTargetCollider.center = transform.InverseTransformPoint(bounds.center);
-                cachedTargetCollider.size = bounds.size / transform.localScale.x;
+                cachedTargetCollider.size = (bounds.size / transform.localScale.x) + wireframePadding;
             }
-
-            cachedTargetCollider.size += wireframePadding;
         }
 
         private void SetMaterials()
