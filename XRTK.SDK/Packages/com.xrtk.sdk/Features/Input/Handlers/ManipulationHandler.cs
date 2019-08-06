@@ -8,6 +8,7 @@ using XRTK.EventDatum.Input;
 using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.SDK.UX;
 using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
@@ -23,6 +24,8 @@ namespace XRTK.SDK.Input.Handlers
         IMixedRealityInputHandler<float>,
         IMixedRealityInputHandler<Vector2>
     {
+        private const int IgnoreRaycastLayer = 2;
+
         #region Input Actions
 
         [Header("Input Actions")]
@@ -169,7 +172,7 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The min and max size this object can be scaled to.")]
-        private Vector2 scaleConstraints = new Vector2(0.01f, 1f);
+        private Vector2 scaleConstraints = new Vector2(0.02f, 2f);
 
         /// <summary>
         /// The min and max size this object can be scaled to.
@@ -333,6 +336,8 @@ namespace XRTK.SDK.Input.Handlers
         private Vector3 prevScale = Vector3.one;
 
         private Quaternion prevRotation = Quaternion.identity;
+
+        private int prevPhysicsLayer;
 
         #region Monobehaviour Implementation
 
@@ -677,8 +682,9 @@ namespace XRTK.SDK.Input.Handlers
                 primaryPointer = eventData.Pointer;
             }
 
-            manipulationTarget.SetCollidersActive(false);
-
+            var currentTarget = primaryPointer.Result.CurrentPointerTarget;
+            prevPhysicsLayer = currentTarget.layer;
+            manipulationTarget.SetLayerRecursively(IgnoreRaycastLayer);
             eventData.Use();
         }
 
@@ -706,7 +712,7 @@ namespace XRTK.SDK.Input.Handlers
 
             isBeingHeld = false;
             MixedRealityToolkit.InputSystem.PopModalInputHandler();
-            manipulationTarget.SetCollidersActive(true);
+            manipulationTarget.SetLayerRecursively(prevPhysicsLayer);
         }
     }
 }

@@ -77,6 +77,7 @@ namespace XRTK.SDK.UX
                     pointer.TryGetPointerPosition(out BoundingBoxParent.initialGrabPoint);
                     BoundingBoxParent.ShowOneHandle(BoundingBoxParent.grabbedHandle);
                     BoundingBoxParent.initialGazePoint = Vector3.zero;
+                    BoundingBoxParent.cachedTargetCollider.isTrigger = true;
                     BoundingBoxParent.transform.SetCollidersActive(false);
                     transform.SetCollidersActive(false);
                     eventData.Use();
@@ -95,6 +96,7 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.grabbedHandle = null;
                     BoundingBoxParent.ResetHandleVisibility();
                     MixedRealityToolkit.InputSystem.PopModalInputHandler();
+                    BoundingBoxParent.cachedTargetCollider.isTrigger = false;
                     BoundingBoxParent.transform.SetCollidersActive(true);
                     transform.SetCollidersActive(true);
                     eventData.Use();
@@ -223,30 +225,6 @@ namespace XRTK.SDK.UX
         [Tooltip("Should the bounding box be visible when this object is started?")]
         [FormerlySerializedAs("activateOnStart")]
         private bool activateOnEnable = false;
-
-        [SerializeField]
-        private float scaleMaximum = 2.0f;
-
-        /// <summary>
-        /// Maximum scale allowed for this object.
-        /// </summary>
-        public float ScaleMaximum
-        {
-            get => scaleMaximum;
-            set => scaleMaximum = value;
-        }
-
-        [SerializeField]
-        private float scaleMinimum = 0.2f;
-
-        /// <summary>
-        /// Minimum scale allowed for this object.
-        /// </summary>
-        public float ScaleMinimum
-        {
-            get => scaleMinimum;
-            set => scaleMinimum = value;
-        }
 
         [Header("Wireframe")]
 
@@ -560,9 +538,11 @@ namespace XRTK.SDK.UX
         private IMixedRealityPointer currentPointer;
         private IMixedRealityInputSource currentInputSource;
 
-        private Vector3 initialGazePoint = Vector3.zero;
+        private ManipulationHandler manipulationHandler;
+
         private Transform rigRoot;
         private BoxCollider cachedTargetCollider;
+
         private HandleMoveType handleMoveType = HandleMoveType.Point;
 
         private Ray currentGrabRay;
@@ -573,6 +553,7 @@ namespace XRTK.SDK.UX
         private Vector3 currentRotationAxis;
         private Vector3 currentBoundsExtents;
         private Vector3 initialGrabbedPosition;
+        private Vector3 initialGazePoint = Vector3.zero;
         private Vector3 currentPosePosition = Vector3.zero;
 
         private int[] flattenedHandles;
@@ -601,6 +582,8 @@ namespace XRTK.SDK.UX
 
         private void OnEnable()
         {
+            manipulationHandler = gameObject.EnsureComponent<ManipulationHandler>();
+
             if (activateOnEnable)
             {
                 IsVisible = true;
@@ -920,7 +903,7 @@ namespace XRTK.SDK.UX
                 linkRenderer.receiveShadows = false;
 
                 var linkCollider = link.GetComponent<Collider>();
-                linkCollider.enabled = false;
+                Destroy(linkCollider);
 
                 if (wireframeMaterial != null)
                 {
@@ -1090,7 +1073,7 @@ namespace XRTK.SDK.UX
         private Vector3 ClampScale(Vector3 scale, out bool clamped)
         {
             var finalScale = scale;
-            var maximumScale = initialScale * scaleMaximum;
+            var maximumScale = initialScale * manipulationHandler.ScaleConstraints.y;
             clamped = false;
 
             if (scale.x > maximumScale.x || scale.y > maximumScale.y || scale.z > maximumScale.z)
@@ -1099,7 +1082,7 @@ namespace XRTK.SDK.UX
                 clamped = true;
             }
 
-            var minimumScale = initialScale * scaleMinimum;
+            var minimumScale = initialScale * manipulationHandler.ScaleConstraints.x;
 
             if (finalScale.x < minimumScale.x || finalScale.y < minimumScale.y || finalScale.z < minimumScale.z)
             {
