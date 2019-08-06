@@ -545,6 +545,7 @@ namespace XRTK.SDK.UX
                     }
 
                     rigRoot.gameObject.SetActive(value);
+                    cachedTargetCollider.enabled = value;
 
                     if (value)
                     {
