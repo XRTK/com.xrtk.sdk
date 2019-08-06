@@ -8,7 +8,6 @@ using XRTK.EventDatum.Input;
 using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
-using XRTK.SDK.UX;
 using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
