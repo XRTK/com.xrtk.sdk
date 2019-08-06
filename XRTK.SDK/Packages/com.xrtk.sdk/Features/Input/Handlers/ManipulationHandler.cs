@@ -658,7 +658,12 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.Collision);
 
             prevPosition = manipulationTarget.position;
-            offsetPosition = prevPosition - eventData.Pointer.Result.Details.Point;
+
+            if (prevPosition != Vector3.zero)
+            {
+                offsetPosition = prevPosition - eventData.Pointer.Result.Details.Point;
+            }
+
             prevScale = manipulationTarget.localScale;
             prevRotation = manipulationTarget.rotation;
 
