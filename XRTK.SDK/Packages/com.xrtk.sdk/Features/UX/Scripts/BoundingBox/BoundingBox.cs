@@ -919,6 +919,9 @@ namespace XRTK.SDK.UX
                 linkRenderer.shadowCastingMode = ShadowCastingMode.Off;
                 linkRenderer.receiveShadows = false;
 
+                var linkCollider = link.GetComponent<Collider>();
+                linkCollider.enabled = false;
+
                 if (wireframeMaterial != null)
                 {
                     linkRenderer.material = wireframeMaterial;
