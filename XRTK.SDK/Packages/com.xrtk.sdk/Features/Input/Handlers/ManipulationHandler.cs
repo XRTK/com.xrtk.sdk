@@ -681,8 +681,7 @@ namespace XRTK.SDK.Input.Handlers
                 primaryPointer = eventData.Pointer;
             }
 
-            var currentTarget = primaryPointer.Result.CurrentPointerTarget;
-            prevPhysicsLayer = currentTarget.layer;
+            prevPhysicsLayer = manipulationTarget.gameObject.layer;
             manipulationTarget.SetLayerRecursively(IgnoreRaycastLayer);
             eventData.Use();
         }
