@@ -5,7 +5,6 @@ using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.SpatialAwarenessSystem;
 using XRTK.EventDatum.Input;
-using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Services;
@@ -126,6 +125,19 @@ namespace XRTK.SDK.Input.Handlers
         [SerializeField]
         [Tooltip("The object to manipulate using this handler. Automatically uses this transform if none is set.")]
         private Transform manipulationTarget;
+
+        [SerializeField]
+        [Tooltip("The spatial mesh visibility while manipulating an object.")]
+        private SpatialMeshDisplayOptions spatialMeshVisibility = SpatialMeshDisplayOptions.Visible;
+
+        /// <summary>
+        /// The spatial mesh visibility while manipulating an object.
+        /// </summary>
+        public SpatialMeshDisplayOptions SpatialMeshVisibility
+        {
+            get => spatialMeshVisibility;
+            set => spatialMeshVisibility = value;
+        }
 
         [SerializeField]
         [Tooltip("Should the user press and hold the select action or press to hold and press again to release?")]
@@ -659,7 +671,7 @@ namespace XRTK.SDK.Input.Handlers
             isBeingHeld = true;
 
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
-            MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.Collision);
+            MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(spatialMeshVisibility);
 
             prevPosition = manipulationTarget.position;
 
