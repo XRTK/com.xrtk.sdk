@@ -267,7 +267,14 @@ namespace XRTK.SDK.Input.Handlers
         /// <remarks>
         /// Used to determine if the <see cref="GameObject"/> is currently being manipulated by the user.
         /// </remarks>
+        public bool IsBeingHeld => isBeingHeld;
+
         private bool isBeingHeld = false;
+
+        /// <summary>
+        /// The updated extent of the pointer.
+        /// </summary>
+        private float updatedExtent;
 
         /// <summary>
         /// The first input source to start the manipulation phase of this object.
@@ -284,9 +291,40 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         private Vector2 lastPositionReading = Vector2.zero;
 
+        /// <summary>
+        /// Is the <see cref="primaryInputSource"/> currently pressed?
+        /// </summary>
+        public bool IsPressed => isPressed;
+
         private bool isPressed = false;
 
+        /// <summary>
+        /// Is there currently a manipulation processing a rotation?
+        /// </summary>
+        public bool IsRotating => isRotating;
+
         private bool isRotating = false;
+
+        /// <summary>
+        /// Is scaling possible?
+        /// </summary>
+        public bool IsScalingPossible => isScalePossible;
+
+        private bool isScalePossible = false;
+
+        /// <summary>
+        /// Is nudge possible?
+        /// </summary>
+        public bool IsNudgePossible => isNudgePossible;
+
+        private bool isNudgePossible = false;
+
+        /// <summary>
+        /// Is rotation possible?
+        /// </summary>
+        public bool IsRotationPossible => isRotationPossible;
+
+        private bool isRotationPossible = false;
 
         private Vector3 prevPosition = Vector3.zero;
 
@@ -309,6 +347,11 @@ namespace XRTK.SDK.Input.Handlers
             if (isBeingHeld)
             {
                 manipulationTarget.position = primaryPointer.Result.Details.Point;
+            }
+
+            if (isPressed && isNudgePossible && primaryPointer != null)
+            {
+                primaryPointer.PointerExtent = updatedExtent;
             }
         }
 
@@ -410,7 +453,7 @@ namespace XRTK.SDK.Input.Handlers
             absoluteInputData.x = Mathf.Abs(absoluteInputData.x);
             absoluteInputData.y = Mathf.Abs(absoluteInputData.y);
 
-            var isRotationPossible = eventData.MixedRealityInputAction == rotateAction &&
+            isRotationPossible = eventData.MixedRealityInputAction == rotateAction &&
                                      (absoluteInputData.x >= rotationZone.x ||
                                       absoluteInputData.y >= rotationZone.x);
 
@@ -436,8 +479,8 @@ namespace XRTK.SDK.Input.Handlers
 
             if (!isPressed || isRotating) { return; }
 
-            bool isScalePossible = eventData.MixedRealityInputAction == scaleAction && absoluteInputData.x > 0f;
-            bool isNudgePossible = eventData.MixedRealityInputAction == nudgeAction && absoluteInputData.y > 0f;
+            isScalePossible = eventData.MixedRealityInputAction == scaleAction && absoluteInputData.x > 0f;
+            isNudgePossible = eventData.MixedRealityInputAction == nudgeAction && absoluteInputData.y > 0f && primaryPointer != null;
 
             // Check to make sure that input values fall between min/max zone values
             if (isScalePossible &&
@@ -471,44 +514,37 @@ namespace XRTK.SDK.Input.Handlers
 
             if (isNudgePossible)
             {
-                var pointers = eventData.InputSource.Pointers;
+                Debug.Assert(primaryPointer != null);
+                var newExtent = primaryPointer.PointerExtent;
+                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
 
-                for (int i = 0; i < pointers.Length; i++)
+                // Reset the cursor extent to the nearest value in case we're hitting something close
+                // and the user wants to adjust. That way it doesn't take forever to see the change.
+                if (currentRaycastDistance < newExtent)
                 {
-                    var newExtent = pointers[i].PointerExtent;
-                    var currentRaycastDistance = pointers[i].Result.Details.RayDistance;
-
-                    // Reset the cursor extent to the nearest value in case we're hitting something close
-                    // and the user wants to adjust. That way it doesn't take forever to see the change.
-                    if (currentRaycastDistance < newExtent)
-                    {
-                        newExtent = currentRaycastDistance;
-                    }
-
-                    var prevExtent = newExtent;
-
-                    if (eventData.InputData.y < 0f)
-                    {
-                        newExtent = prevExtent - nudgeAmount;
-
-                        if (newExtent <= nudgeConstraints.x)
-                        {
-                            newExtent = prevExtent;
-                        }
-                    }
-                    else
-                    {
-                        newExtent = prevExtent + nudgeAmount;
-
-                        if (newExtent >= nudgeConstraints.y)
-                        {
-                            newExtent = prevExtent;
-                        }
-                    }
-
-                    pointers[i].PointerExtent = newExtent;
+                    newExtent = currentRaycastDistance;
                 }
 
+                var prevExtent = newExtent;
+                newExtent = CalculateNudgeDistance(eventData, prevExtent);
+
+                // check constraints
+                if (eventData.InputData.y < 0f)
+                {
+                    if (newExtent <= nudgeConstraints.x)
+                    {
+                        newExtent = prevExtent;
+                    }
+                }
+                else
+                {
+                    if (newExtent >= nudgeConstraints.y)
+                    {
+                        newExtent = prevExtent;
+                    }
+                }
+
+                updatedExtent = newExtent;
                 eventData.Use();
             }
 
@@ -541,6 +577,15 @@ namespace XRTK.SDK.Input.Handlers
                 manipulationTarget.localScale = newScale;
                 eventData.Use();
             }
+        }
+
+        /// <summary>Calculates the extent of the nudge.</summary>
+        /// <param name="eventData">The event data.</param>
+        /// <param name="prevExtent">The previous extent distance of the pointer and raycast.</param>
+        /// <returns></returns>
+        protected virtual float CalculateNudgeDistance(InputEventData<Vector2> eventData, float prevExtent)
+        {
+            return prevExtent + nudgeAmount * (eventData.InputData.y < 0f ? -1 : 1);
         }
 
         #endregion IMixedRealityInputHandler Implementation
@@ -597,6 +642,10 @@ namespace XRTK.SDK.Input.Handlers
 
         #endregion IMixedRealityPointerHandler Implementation
 
+        /// <summary>
+        /// Begin a new hold on the manipulation target.
+        /// </summary>
+        /// <param name="eventData"></param>
         public virtual void BeginHold(MixedRealityPointerEventData eventData)
         {
             if (isBeingHeld) { return; }

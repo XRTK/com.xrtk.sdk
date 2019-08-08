@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.HandTracking;
@@ -9,11 +8,12 @@ using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Providers.Controllers.Hands;
+using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
-    public class BaseHandVisualizer : DefaultMixedRealityControllerVisualizer, IMixedRealitySourceStateHandler, IMixedRealityHandJointHandler, IMixedRealityHandMeshHandler
+    public class BaseHandVisualizer : ControllerPoseSynchronizer, IMixedRealitySourceStateHandler, IMixedRealityHandJointHandler, IMixedRealityHandMeshHandler
     {
         protected readonly Dictionary<TrackedHandJoint, Transform> joints = new Dictionary<TrackedHandJoint, Transform>();
         protected MeshFilter handMeshFilter;
@@ -29,24 +29,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
             {
                 Destroy(handMeshFilter.gameObject);
             }
-        }
-
-        [Obsolete("Use HandJointUtils.TryGetJointPose instead of this")]
-        public bool TryGetJointTransform(TrackedHandJoint joint, out Transform jointTransform)
-        {
-            if (joints == null)
-            {
-                jointTransform = null;
-                return false;
-            }
-
-            if (joints.TryGetValue(joint, out jointTransform))
-            {
-                return true;
-            }
-
-            jointTransform = null;
-            return false;
         }
 
         void IMixedRealitySourceStateHandler.OnSourceDetected(SourceStateEventData eventData) { }
