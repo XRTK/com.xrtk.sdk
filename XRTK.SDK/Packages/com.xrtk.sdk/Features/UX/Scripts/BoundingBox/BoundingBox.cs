@@ -31,6 +31,8 @@ namespace XRTK.SDK.UX
             IMixedRealityPointerHandler,
             IMixedRealityInputHandler<MixedRealityPose>
         {
+            private const int IgnoreRaycastLayer = 2;
+
             public override bool IsFocusRequired => false;
 
             public BoundingBox BoundingBoxParent
@@ -48,6 +50,8 @@ namespace XRTK.SDK.UX
             }
 
             private BoundingBox boundingBoxParent;
+
+            private int cachedTargetPrevLayer;
 
             /// <inheritdoc />
             void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
@@ -77,7 +81,9 @@ namespace XRTK.SDK.UX
                     pointer.TryGetPointerPosition(out BoundingBoxParent.initialGrabPoint);
                     BoundingBoxParent.ShowOneHandle(BoundingBoxParent.grabbedHandle);
                     BoundingBoxParent.initialGazePoint = Vector3.zero;
-                    BoundingBoxParent.cachedTargetCollider.isTrigger = true;
+                    cachedTargetPrevLayer = BoundingBoxParent.cachedTargetCollider.gameObject.layer;
+                    BoundingBoxParent.cachedTargetCollider.transform.SetLayerRecursively(IgnoreRaycastLayer);
+                    BoundingBoxParent.cachedTargetCollider.enabled = false;
                     BoundingBoxParent.transform.SetCollidersActive(false);
                     transform.SetCollidersActive(false);
                     eventData.Use();
@@ -96,7 +102,7 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.grabbedHandle = null;
                     BoundingBoxParent.ResetHandleVisibility();
                     MixedRealityToolkit.InputSystem.PopModalInputHandler();
-                    BoundingBoxParent.cachedTargetCollider.isTrigger = false;
+                    BoundingBoxParent.cachedTargetCollider.transform.SetLayerRecursively(cachedTargetPrevLayer);
                     BoundingBoxParent.transform.SetCollidersActive(true);
                     transform.SetCollidersActive(true);
                     eventData.Use();
@@ -827,8 +833,8 @@ namespace XRTK.SDK.UX
             var ratio = newMag / startMag;
             var newScale = ClampScale(initialScale * ratio, out _);
 
-            //scale from object center
-            transform.localScale = newScale;
+            // scale from object center
+            transform.ScaleAround(rigCentroid, newScale);
         }
 
         private Vector3 GetRotationAxis(GameObject handle)
@@ -1111,14 +1117,14 @@ namespace XRTK.SDK.UX
 
                 for (int i = 0; i < rotationHandles.Count; ++i)
                 {
-                    (Transform _, Renderer handleRenderer, Collider _, CardinalAxis axis) = rotationHandles[i];
+                    (Transform handleTransform, Renderer handleRenderer, Collider _, CardinalAxis axis) = rotationHandles[i];
 
                     var IsDisabled = (showRotationHandlesPerAxis == 0 ||
                                      showRotationHandlesPerAxis != (CardinalAxis)(-1) &&
                                      (showRotationHandlesPerAxis & axis) == 0);
 
                     handleRenderer.material = handleMaterial;
-                    handleRenderer.enabled = isHandlesVisible && !IsDisabled;
+                    handleTransform.gameObject.SetRenderingActive(isHandlesVisible && !IsDisabled);
                 }
             }
 
@@ -1130,7 +1136,7 @@ namespace XRTK.SDK.UX
                 {
                     var scaleHandleRenderer = scaleHandles[i].Item2;
                     scaleHandleRenderer.material = handleMaterial;
-                    scaleHandleRenderer.enabled = isHandlesVisible;
+                    scaleHandleRenderer.gameObject.SetRenderingActive(isHandlesVisible);
                 }
             }
 
@@ -1330,7 +1336,7 @@ namespace XRTK.SDK.UX
             {
                 for (int i = 0; i < flattenedHandles.Length; ++i)
                 {
-                    links[flattenedHandles[i]].Item2.enabled = false;
+                    links[flattenedHandles[i]].Item2.gameObject.SetRenderingActive(false);
                 }
             }
         }
@@ -1341,7 +1347,7 @@ namespace XRTK.SDK.UX
             {
                 for (int i = 0; i < flattenedHandles.Length; ++i)
                 {
-                    rotationHandles[flattenedHandles[i]].Item2.enabled = false;
+                    rotationHandles[flattenedHandles[i]].Item1.gameObject.SetRenderingActive(false);
                 }
             }
         }
