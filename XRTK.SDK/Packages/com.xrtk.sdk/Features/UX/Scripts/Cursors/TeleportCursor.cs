@@ -102,11 +102,11 @@ namespace XRTK.SDK.UX.Cursors
                 return;
             }
 
-            if (pointer.Result == null) { return; }
+            if (pointer.Result.Details.Object == null) { return; }
 
             transform.position = pointer.Result.Details.Point;
 
-            Vector3 forward = CameraCache.Main.transform.forward;
+            var forward = CameraCache.Main.transform.forward;
             forward.y = 0f;
 
             // Smooth out rotation just a tad to prevent jarring transitions
