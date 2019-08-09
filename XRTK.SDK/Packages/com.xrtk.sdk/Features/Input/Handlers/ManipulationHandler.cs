@@ -376,6 +376,9 @@ namespace XRTK.SDK.Input.Handlers
 
             if (IsBeingHeld)
             {
+                // We don't pass IsCancelled here because 
+                // it's the intended behaviour to end the hold
+                // if the component is disabled.
                 EndHold();
             }
         }
@@ -702,7 +705,7 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
-            MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(spatialMeshVisibility);
+            MixedRealityToolkit.SpatialAwarenessSystem?.SetMeshVisibility(spatialMeshVisibility);
 
             var pointerPosition = primaryPointer.Result.Details.Point;
 
@@ -742,7 +745,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!IsBeingHeld) { return; }
 
-            MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.None);
+            MixedRealityToolkit.SpatialAwarenessSystem?.SetMeshVisibility(SpatialMeshDisplayOptions.None);
 
             primaryPointer = null;
             primaryInputSource = null;
