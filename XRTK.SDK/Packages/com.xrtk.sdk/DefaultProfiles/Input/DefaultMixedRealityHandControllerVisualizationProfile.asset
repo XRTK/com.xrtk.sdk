@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6db50e91a273f794eb6eca5e04679a59, type: 3}
-  m_Name: DefaultMixedRealityHandTrackingProfile
+  m_Name: DefaultMixedRealityHandControllerVisualizationProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
+  isCustomProfile: 0
   jointPrefab: {fileID: 1955475817299902, guid: effda710d14876d4eb459af7c4ec7bbf,
     type: 3}
   palmPrefab: {fileID: 6797406804172968804, guid: 80997b0aa2ab2d7429bb5e7f1cddbace,

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityControllerVisualizationProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
+  handVisualizationProfile: {fileID: 11400000, guid: 5a440b753cec67d458def6f54cf9f705,
+    type: 2}
   renderMotionControllers: 1
   controllerVisualizationType:
     reference: XRTK.SDK.UX.Controllers.DefaultMixedRealityControllerVisualizer, XRTK.SDK
