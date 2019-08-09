@@ -8,15 +8,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WireframeBlue
-  m_Shader: {fileID: 4800000, guid: 0b71556ee0d248e2853be63d4be8bc3e, type: 3}
+  m_Shader: {fileID: 4800000, guid: 4a2ab4faa2fc4a009bcfdf058d1e0659, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA _DIRECTIONAL_LIGHT _DISABLE_ALBEDO_MAP _HOVER_LIGHT
     _SPECULAR_HIGHLIGHTS
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
-  stringTagMap:
-    RenderType: Opaque
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -84,6 +83,9 @@ Material:
     - _BumpScale: 1
     - _ClippingBorder: 0
     - _ClippingBorderWidth: 0.025
+    - _ClippingBox: 0
+    - _ClippingPlane: 0
+    - _ClippingSphere: 0
     - _ColorWriteMask: 15
     - _CullMode: 2
     - _CustomMode: 0
