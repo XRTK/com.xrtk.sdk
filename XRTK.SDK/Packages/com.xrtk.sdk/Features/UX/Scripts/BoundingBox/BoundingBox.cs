@@ -17,13 +17,22 @@ using XRTK.Services;
 
 namespace XRTK.SDK.UX
 {
+    /// <summary>
+    /// The bounding box is a component for easily manipulating an object using a visual wireframe and handles.
+    /// </summary>
+    [RequireComponent(typeof(ManipulationHandler))]
     public class BoundingBox : MonoBehaviour
     {
+        /// <summary>
+        /// Rig component for handling input events.
+        /// </summary>
         private class BoundingBoxRig : BaseInputHandler,
             IMixedRealitySourceStateHandler,
             IMixedRealityPointerHandler,
             IMixedRealityInputHandler<MixedRealityPose>
         {
+            private const int IgnoreRaycastLayer = 2;
+
             public override bool IsFocusRequired => false;
 
             public BoundingBox BoundingBoxParent
@@ -41,6 +50,8 @@ namespace XRTK.SDK.UX
             }
 
             private BoundingBox boundingBoxParent;
+
+            private int cachedTargetPrevLayer;
 
             /// <inheritdoc />
             void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
@@ -70,6 +81,11 @@ namespace XRTK.SDK.UX
                     pointer.TryGetPointerPosition(out BoundingBoxParent.initialGrabPoint);
                     BoundingBoxParent.ShowOneHandle(BoundingBoxParent.grabbedHandle);
                     BoundingBoxParent.initialGazePoint = Vector3.zero;
+                    cachedTargetPrevLayer = BoundingBoxParent.cachedTargetCollider.gameObject.layer;
+                    BoundingBoxParent.cachedTargetCollider.transform.SetLayerRecursively(IgnoreRaycastLayer);
+                    BoundingBoxParent.cachedTargetCollider.enabled = false;
+                    BoundingBoxParent.transform.SetCollidersActive(false);
+                    transform.SetCollidersActive(false);
                     eventData.Use();
                 }
             }
@@ -85,10 +101,16 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.currentPointer = null;
                     BoundingBoxParent.grabbedHandle = null;
                     BoundingBoxParent.ResetHandleVisibility();
-                    eventData.Use();
                     MixedRealityToolkit.InputSystem.PopModalInputHandler();
+                    BoundingBoxParent.cachedTargetCollider.transform.SetLayerRecursively(cachedTargetPrevLayer);
+                    BoundingBoxParent.transform.SetCollidersActive(true);
+                    transform.SetCollidersActive(true);
+                    eventData.Use();
                 }
             }
+
+            /// <inheritdoc />
+            void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
 
             /// <inheritdoc />
             void IMixedRealityInputHandler<MixedRealityPose>.OnInputChanged(InputEventData<MixedRealityPose> eventData)
@@ -128,35 +150,9 @@ namespace XRTK.SDK.UX
                     MixedRealityToolkit.InputSystem.PopModalInputHandler();
                 }
             }
-
-            void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
         }
 
         #region Enums
-
-        /// <summary>
-        /// Enum which describes how an object's bounding box is to be flattened.
-        /// </summary>
-        private enum FlattenModeType
-        {
-            DoNotFlatten = 0,
-            /// <summary>
-            /// Flatten the X axis
-            /// </summary>
-            FlattenX,
-            /// <summary>
-            /// Flatten the Y axis
-            /// </summary>
-            FlattenY,
-            /// <summary>
-            /// Flatten the Z axis
-            /// </summary>
-            FlattenZ,
-            /// <summary>
-            /// Flatten the smallest relative axis if it falls below threshold
-            /// </summary>
-            FlattenAuto,
-        }
 
         /// <summary>
         /// Enum which describes whether a bounding box handle which has been grabbed, is 
@@ -171,7 +167,7 @@ namespace XRTK.SDK.UX
 
         /// <summary>
         /// This enum describes which primitive type the wireframe portion of the bounding box
-        /// consists of. 
+        /// consists of.
         /// </summary>
         /// <remarks>
         /// Wireframe refers to the thin linkage between the handles. When the handles are invisible
@@ -181,14 +177,6 @@ namespace XRTK.SDK.UX
         {
             Cubic = 0,
             Cylindrical
-        }
-
-        [Flags]
-        private enum CardinalAxisType
-        {
-            X = 1,
-            Y = 2,
-            Z = 3,
         }
 
         /// <summary>
@@ -212,7 +200,7 @@ namespace XRTK.SDK.UX
 
         [SerializeField]
         [Tooltip("Displays the rig in the hierarchy window. Useful for debugging the rig elements.")]
-        private bool showRig = false;
+        private bool showRigDebug = true;
 
         [Header("Bounds Calculation")]
 
@@ -220,16 +208,29 @@ namespace XRTK.SDK.UX
         [Tooltip("For complex objects, automatic bounds calculation may not behave as expected. Use an existing Box Collider (even on a child object) to manually determine bounds of Bounding Box.")]
         private BoxCollider boxColliderToUse = null;
 
+        /// <summary>
+        /// For complex objects, automatic bounds calculation may not behave as expected.
+        /// Use an existing Box Collider (even on a child object) to manually determine bounds of Bounding Box.
+        /// </summary>
+        public BoxCollider BoxColliderToUse
+        {
+            get => boxColliderToUse;
+            set
+            {
+                if (boxColliderToUse != value)
+                {
+                    boxColliderToUse = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
         [Header("Behavior")]
 
         [SerializeField]
-        private bool activateOnStart = false;
-
-        [SerializeField]
-        private float scaleMaximum = 2.0f;
-
-        [SerializeField]
-        private float scaleMinimum = 0.2f;
+        [Tooltip("Should the bounding box be visible when this object is started?")]
+        [FormerlySerializedAs("activateOnStart")]
+        private bool activateOnEnable = false;
 
         [Header("Wireframe")]
 
@@ -251,6 +252,7 @@ namespace XRTK.SDK.UX
                 if (displayHandles != value)
                 {
                     displayHandles = value;
+
                     ResetHandleVisibility();
                 }
             }
@@ -259,8 +261,37 @@ namespace XRTK.SDK.UX
         [SerializeField]
         private Vector3 wireframePadding = Vector3.zero;
 
+        /// <summary>
+        /// The distance to pad the wireframe around the bounds of the encapsulated object(s).
+        /// </summary>
+        public Vector3 WireFramePadding
+        {
+            get => wireframePadding;
+            set
+            {
+                wireframePadding = value;
+                pendingRigReset = true;
+            }
+        }
+
         [SerializeField]
-        private FlattenModeType flattenAxis = FlattenModeType.DoNotFlatten;
+        private FlattenMode flattenAxis = FlattenMode.DoNotFlatten;
+
+        /// <summary>
+        /// Describes how the bounding box should be flattened
+        /// </summary>
+        public FlattenMode FlattenAxis
+        {
+            get => flattenAxis;
+            set
+            {
+                if (flattenAxis != value)
+                {
+                    flattenAxis = value;
+                    Flatten();
+                }
+            }
+        }
 
         [SerializeField]
         private WireframeType wireframeShape = WireframeType.Cubic;
@@ -268,14 +299,68 @@ namespace XRTK.SDK.UX
         [SerializeField]
         private Material wireframeMaterial;
 
+        /// <summary>
+        /// The material to use for the wireframe.
+        /// </summary>
+        public Material WireframeMaterial
+        {
+            get => wireframeMaterial;
+            set
+            {
+                if (wireframeMaterial != value)
+                {
+                    wireframeMaterial = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
         [Header("Handles")]
 
         [SerializeField]
         [Tooltip("Default materials will be created for Handles and Wireframe if none is specified.")]
         private Material handleMaterial;
 
+        /// <summary>
+        /// The material for all the handles to use.
+        /// </summary>
+        /// <remarks>
+        /// Default materials will be created for Handles and Wireframe if none is specified.
+        /// </remarks>
+        public Material HandleMaterial
+        {
+            get => handleMaterial;
+            set
+            {
+                if (handleMaterial != value)
+                {
+                    handleMaterial = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
         [SerializeField]
         private Material handleGrabbedMaterial;
+
+        /// <summary>
+        /// The material to use when the handles are interacted with.
+        /// </summary>
+        /// <remarks>
+        /// Default materials will be created for Handles and Wireframe if none is specified.
+        /// </remarks>
+        public Material HandleGrabbedMaterial
+        {
+            get => handleGrabbedMaterial;
+            set
+            {
+                if (handleGrabbedMaterial != value)
+                {
+                    handleGrabbedMaterial = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
 
         [SerializeField]
         private bool showScaleHandles = true;
@@ -292,6 +377,12 @@ namespace XRTK.SDK.UX
                 if (showScaleHandles != value)
                 {
                     showScaleHandles = value;
+
+                    if (value)
+                    {
+                        displayHandles = true;
+                    }
+
                     ResetHandleVisibility();
                 }
             }
@@ -306,14 +397,19 @@ namespace XRTK.SDK.UX
         /// </summary>
         public bool ShowRotateHandles
         {
-            get => showRotateHandles;
+            get => ((showRotationHandlesPerAxis & (CardinalAxis)(-1)) != 0) && showRotateHandles;
             set
             {
                 if (showRotateHandles != value)
                 {
                     showRotateHandles = value;
 
-                    showRotationHandlesPerAxis = (CardinalAxisType)(!showRotateHandles ? 0 : -1);
+                    if (value)
+                    {
+                        displayHandles = true;
+                    }
+
+                    showRotationHandlesPerAxis = (CardinalAxis)(!showRotateHandles ? 0 : -1);
 
                     ResetHandleVisibility();
                 }
@@ -323,42 +419,124 @@ namespace XRTK.SDK.UX
         [EnumFlags]
         [SerializeField]
         [Tooltip("Only show rotation handles for these specific axes.")]
-        private CardinalAxisType showRotationHandlesPerAxis = (CardinalAxisType)(-1);
+        private CardinalAxis showRotationHandlesPerAxis = (CardinalAxis)(-1);
+
+        /// <summary>
+        /// Show the rotation handles based on the <see cref="CardinalAxis"/> bit mask.
+        /// </summary>
+        public CardinalAxis ShowRotationHandlesPerAxis
+        {
+            get => showRotationHandlesPerAxis;
+            set
+            {
+                if (showRotationHandlesPerAxis != value)
+                {
+                    showRotationHandlesPerAxis = value;
+                    ShowRotateHandles = true;
+
+                    ResetHandleVisibility();
+                }
+            }
+        }
 
         [SerializeField]
         private float linkRadius = 0.005f;
 
-        [SerializeField]
-        private float ballRadius = 0.035f;
+        /// <summary>
+        /// The thickness of the links connecting each of the bounding boxes handles.
+        /// </summary>
+        public float LinkRadius
+        {
+            get => linkRadius;
+            set
+            {
+                if (!linkRadius.Equals(value))
+                {
+                    linkRadius = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
 
         [SerializeField]
-        private float cornerRadius = 0.03f;
+        [FormerlySerializedAs("ballRadius")]
+        private float rotationHandleRadius = 0.035f;
+
+        /// <summary>
+        /// The size of the rotation handles.
+        /// </summary>
+        public float RotationHandleRadius
+        {
+            get => rotationHandleRadius;
+            set
+            {
+                if (!rotationHandleRadius.Equals(value))
+                {
+                    rotationHandleRadius = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
+
+        [SerializeField]
+        [FormerlySerializedAs("cornerRadius")]
+        private float scaleHandleRadius = 0.03f;
+
+        /// <summary>
+        /// The size of the scale handles.
+        /// </summary>
+        public float ScaleHandleRadius
+        {
+            get => scaleHandleRadius;
+            set
+            {
+                if (!scaleHandleRadius.Equals(value))
+                {
+                    scaleHandleRadius = value;
+                    pendingRigReset = true;
+                }
+            }
+        }
 
         #endregion Serialized Fields
 
-        private bool isActive = false;
+        /// <summary>
+        /// Used to reset the rig when properties have changed.
+        /// </summary>
+        [NonSerialized]
+        private bool pendingRigReset = false;
+
+        [NonSerialized]
+        private bool isVisible = false;
 
         /// <summary>
-        /// This Public property sets whether the BoundingBox is active (visible)
+        /// Is the Bounding Box Rig visible?
         /// </summary>
-        public bool IsActive
+        public bool IsVisible
         {
-            get => isActive;
+            get => isVisible;
             set
             {
-                if (isActive != value)
+                if (isVisible != value)
                 {
-                    if (value)
+                    if (rigRoot == null)
                     {
                         CreateRig();
-                        rigRoot.gameObject.SetActive(true);
                     }
                     else
                     {
-                        DestroyRig();
+                        ResetBoundingBoxBounds();
                     }
 
-                    isActive = value;
+                    rigRoot.gameObject.SetActive(value);
+                    cachedTargetCollider.enabled = value;
+
+                    if (value)
+                    {
+                        ResetHandleVisibility();
+                    }
+
+                    isVisible = value;
                 }
             }
         }
@@ -366,20 +544,12 @@ namespace XRTK.SDK.UX
         private IMixedRealityPointer currentPointer;
         private IMixedRealityInputSource currentInputSource;
 
-        private Vector3 initialGazePoint = Vector3.zero;
+        private ManipulationHandler manipulationHandler;
+
         private Transform rigRoot;
         private BoxCollider cachedTargetCollider;
-        private Bounds cachedTargetColliderBounds;
-        private HandleMoveType handleMoveType = HandleMoveType.Point;
 
-        private List<Transform> links;
-        private List<Transform> corners;
-        private List<Transform> balls;
-        private List<Renderer> cornerRenderers;
-        private List<Renderer> ballRenderers;
-        private List<Renderer> linkRenderers;
-        private List<Collider> cornerColliders;
-        private List<Collider> ballColliders;
+        private HandleMoveType handleMoveType = HandleMoveType.Point;
 
         private Ray currentGrabRay;
         private float initialGrabMag;
@@ -389,6 +559,7 @@ namespace XRTK.SDK.UX
         private Vector3 currentRotationAxis;
         private Vector3 currentBoundsExtents;
         private Vector3 initialGrabbedPosition;
+        private Vector3 initialGazePoint = Vector3.zero;
         private Vector3 currentPosePosition = Vector3.zero;
 
         private int[] flattenedHandles;
@@ -401,37 +572,83 @@ namespace XRTK.SDK.UX
 
         private Vector3[] boundsCorners = new Vector3[8];
 
-        private readonly Vector3[] edgeCenters = new Vector3[12];
-        private readonly CardinalAxisType[] edgeAxes = new CardinalAxisType[12];
-
         private static readonly int numCorners = 8;
         private static readonly int Color = Shader.PropertyToID("_Color");
         private static readonly int InnerGlow = Shader.PropertyToID("_InnerGlow");
         private static readonly int InnerGlowColor = Shader.PropertyToID("_InnerGlowColor");
 
+        private readonly Vector3[] edgeCenters = new Vector3[12];
+        private readonly CardinalAxis[] edgeAxes = new CardinalAxis[12];
+
+        private readonly List<Tuple<Transform, Renderer>> links = new List<Tuple<Transform, Renderer>>(8);
+        private readonly List<Tuple<Transform, Renderer, Collider>> scaleHandles = new List<Tuple<Transform, Renderer, Collider>>(8);
+        private readonly List<Tuple<Transform, Renderer, Collider, CardinalAxis>> rotationHandles = new List<Tuple<Transform, Renderer, Collider, CardinalAxis>>(8);
+
         #region Monobehaviour Methods
 
-        private void Start()
+        private void OnEnable()
         {
-            if (activateOnStart)
+            manipulationHandler = gameObject.EnsureComponent<ManipulationHandler>();
+
+            if (activateOnEnable)
             {
-                IsActive = true;
+                IsVisible = true;
             }
+
+            if (IsVisible)
+            {
+                Debug.Assert(rigRoot != null);
+
+                if (!rigRoot.gameObject.activeInHierarchy)
+                {
+                    rigRoot.gameObject.SetActive(true);
+                    ResetBoundingBoxBounds();
+                    ResetHandleVisibility();
+                    UpdateBounds();
+                    UpdateRigTransform();
+                }
+            }
+
+            pendingRigReset = false;
         }
 
         private void Update()
         {
-            if (currentInputSource == null)
+            if (!isVisible) { return; }
+
+            if (pendingRigReset)
             {
-                UpdateBounds();
+                CreateRig();
+                pendingRigReset = false;
+                return;
             }
-            else
+
+            UpdateBounds();
+
+            if (currentInputSource != null)
             {
-                UpdateBounds();
                 TransformRig();
             }
 
             UpdateRigTransform();
+        }
+
+        private void OnDisable()
+        {
+            if (rigRoot != null)
+            {
+                rigRoot.gameObject.SetActive(false);
+            }
+
+            if (cachedTargetCollider != null)
+            {
+                cachedTargetCollider.enabled = false;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            DestroyRig();
         }
 
         #endregion Monobehaviour Methods
@@ -442,7 +659,7 @@ namespace XRTK.SDK.UX
             SetMaterials();
             InstantiateRig();
 
-            SetBoundingBoxCollider();
+            ResetBoundingBoxBounds();
 
             UpdateBounds();
             CreateLinks();
@@ -451,53 +668,71 @@ namespace XRTK.SDK.UX
             UpdateRigTransform();
             Flatten();
             ResetHandleVisibility();
-            rigRoot.gameObject.SetActive(false);
         }
 
         private void DestroyRig()
         {
             if (boxColliderToUse == null)
             {
-                Destroy(cachedTargetCollider);
+                if (cachedTargetCollider != null)
+                {
+                    cachedTargetCollider.size -= wireframePadding;
+                    Destroy(cachedTargetCollider);
+                }
             }
             else
             {
                 boxColliderToUse.size -= wireframePadding;
             }
 
-            if (balls != null)
-            {
-                for (var i = 0; i < balls.Count; i++)
-                {
-                    Destroy(balls[i]);
-                }
-
-                balls.Clear();
-            }
-
             if (links != null)
             {
                 for (int i = 0; i < links.Count; i++)
                 {
-                    Destroy(links[i]);
+                    var linkTransform = links[i].Item1;
+
+                    if (linkTransform != null)
+                    {
+                        Destroy(linkTransform.gameObject);
+                    }
                 }
 
                 links.Clear();
             }
 
-            if (corners != null)
+            if (scaleHandles != null)
             {
-                for (var i = 0; i < corners.Count; i++)
+                for (var i = 0; i < scaleHandles.Count; i++)
                 {
-                    Destroy(corners[i]);
+                    var scaleHandle = scaleHandles[i].Item1;
+
+                    if (scaleHandle != null)
+                    {
+                        Destroy(scaleHandle.gameObject);
+                    }
                 }
 
-                corners.Clear();
+                scaleHandles.Clear();
+            }
+
+            if (rotationHandles != null)
+            {
+                for (var i = 0; i < rotationHandles.Count; i++)
+                {
+                    var rotationHandle = rotationHandles[i].Item1;
+
+                    if (rotationHandle != null)
+                    {
+                        Destroy(rotationHandle.gameObject);
+                    }
+                }
+
+                rotationHandles.Clear();
             }
 
             if (rigRoot != null)
             {
-                Destroy(rigRoot);
+                Destroy(rigRoot.gameObject);
             }
         }
 
@@ -598,23 +833,23 @@ namespace XRTK.SDK.UX
             var ratio = newMag / startMag;
             var newScale = ClampScale(initialScale * ratio, out _);
 
-            //scale from object center
-            transform.localScale = newScale;
+            // scale from object center
+            transform.ScaleAround(rigCentroid, newScale);
         }
 
         private Vector3 GetRotationAxis(GameObject handle)
         {
-            for (int i = 0; i < balls.Count; ++i)
+            for (int i = 0; i < rotationHandles.Count; ++i)
             {
-                if (handle == balls[i].gameObject)
+                if (handle == rotationHandles[i].Item1.gameObject)
                 {
                     switch (edgeAxes[i])
                     {
-                        case CardinalAxisType.X:
+                        case CardinalAxis.X:
                             return rigRoot.transform.up;
-                        case CardinalAxisType.Y:
+                        case CardinalAxis.Y:
                             return rigRoot.transform.forward;
-                        case CardinalAxisType.Z:
+                        case CardinalAxis.Z:
                             return rigRoot.transform.right;
                     }
                 }
@@ -625,20 +860,20 @@ namespace XRTK.SDK.UX
 
         private void CreateLinks()
         {
-            edgeAxes[0] = CardinalAxisType.Z;
-            edgeAxes[2] = CardinalAxisType.Z;
-            edgeAxes[4] = CardinalAxisType.Z;
-            edgeAxes[6] = CardinalAxisType.Z;
+            edgeAxes[0] = CardinalAxis.Z;
+            edgeAxes[2] = CardinalAxis.Z;
+            edgeAxes[4] = CardinalAxis.Z;
+            edgeAxes[6] = CardinalAxis.Z;
 
-            edgeAxes[1] = CardinalAxisType.X;
-            edgeAxes[3] = CardinalAxisType.X;
-            edgeAxes[5] = CardinalAxisType.X;
-            edgeAxes[7] = CardinalAxisType.X;
+            edgeAxes[1] = CardinalAxis.X;
+            edgeAxes[3] = CardinalAxis.X;
+            edgeAxes[5] = CardinalAxis.X;
+            edgeAxes[7] = CardinalAxis.X;
 
-            edgeAxes[08] = CardinalAxisType.Y;
-            edgeAxes[09] = CardinalAxisType.Y;
-            edgeAxes[10] = CardinalAxisType.Y;
-            edgeAxes[11] = CardinalAxisType.Y;
+            edgeAxes[08] = CardinalAxis.Y;
+            edgeAxes[09] = CardinalAxis.Y;
+            edgeAxes[10] = CardinalAxis.Y;
+            edgeAxes[11] = CardinalAxis.Y;
 
             for (int i = 0; i < edgeCenters.Length; ++i)
             {
@@ -652,15 +887,15 @@ namespace XRTK.SDK.UX
 
                 switch (edgeAxes[i])
                 {
-                    case CardinalAxisType.X:
+                    case CardinalAxis.X:
                         link.transform.localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
                         link.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
                         break;
-                    case CardinalAxisType.Y:
+                    case CardinalAxis.Y:
                         link.transform.localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
                         link.transform.Rotate(new Vector3(90.0f, 0.0f, 0.0f));
                         break;
-                    case CardinalAxisType.Z:
+                    case CardinalAxis.Z:
                         link.transform.localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
                         link.transform.Rotate(new Vector3(0.0f, 0.0f, 90.0f));
                         break;
@@ -672,76 +907,74 @@ namespace XRTK.SDK.UX
                 var linkRenderer = link.GetComponent<Renderer>();
                 linkRenderer.shadowCastingMode = ShadowCastingMode.Off;
                 linkRenderer.receiveShadows = false;
-                linkRenderers.Add(linkRenderer);
+
+                var linkCollider = link.GetComponent<Collider>();
+                Destroy(linkCollider);
 
                 if (wireframeMaterial != null)
                 {
                     linkRenderer.material = wireframeMaterial;
                 }
 
-                links.Add(link.transform);
+                links.Add(new Tuple<Transform, Renderer>(link.transform, linkRenderer));
             }
         }
 
         private void CreateScaleHandles()
         {
-            var scale = new Vector3(cornerRadius, cornerRadius, cornerRadius);
+            var scale = new Vector3(scaleHandleRadius, scaleHandleRadius, scaleHandleRadius);
 
             for (int i = 0; i < boundsCorners.Length; ++i)
             {
-                var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.name = $"ScaleHandle_{i}";
-                cube.transform.localScale = scale;
-                cube.transform.position = boundsCorners[i];
-                cube.transform.parent = rigRoot.transform;
+                var scaleHandle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                scaleHandle.name = $"ScaleHandle_{i}";
+                scaleHandle.transform.localScale = scale;
+                scaleHandle.transform.position = boundsCorners[i];
+                scaleHandle.transform.parent = rigRoot.transform;
 
-                var cubeRenderer = cube.GetComponent<Renderer>();
-                cubeRenderer.shadowCastingMode = ShadowCastingMode.Off;
-                cubeRenderer.receiveShadows = false;
-                cornerRenderers.Add(cubeRenderer);
-                cornerColliders.Add(cube.GetComponent<Collider>());
-                corners.Add(cube.transform);
+                var scaleHandleRenderer = scaleHandle.GetComponent<Renderer>();
+                scaleHandleRenderer.shadowCastingMode = ShadowCastingMode.Off;
+                scaleHandleRenderer.receiveShadows = false;
 
                 if (handleMaterial != null)
                 {
-                    cubeRenderer.material = handleMaterial;
+                    scaleHandleRenderer.material = handleMaterial;
                 }
+
+                scaleHandles.Add(new Tuple<Transform, Renderer, Collider>(scaleHandle.transform, scaleHandleRenderer, scaleHandle.GetComponent<Collider>()));
             }
         }
 
         private void CreateRotationHandles()
         {
-            var radius = new Vector3(ballRadius, ballRadius, ballRadius);
+            var radius = new Vector3(rotationHandleRadius, rotationHandleRadius, rotationHandleRadius);
 
             for (int i = 0; i < edgeCenters.Length; ++i)
             {
-                var ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                ball.name = $"RotationHandle_{edgeAxes[i]}_{i}";
-                ball.transform.localScale = radius;
-                ball.transform.position = edgeCenters[i];
-                ball.transform.parent = rigRoot.transform;
+                var rotationHandle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                rotationHandle.name = $"RotationHandle_{edgeAxes[i]}_{i}";
+                rotationHandle.transform.localScale = radius;
+                rotationHandle.transform.position = edgeCenters[i];
+                rotationHandle.transform.parent = rigRoot.transform;
 
-                var ballRenderer = ball.GetComponent<Renderer>();
-                ballRenderer.shadowCastingMode = ShadowCastingMode.Off;
-                ballRenderer.receiveShadows = false;
-                ballRenderers.Add(ballRenderer);
-                ballColliders.Add(ball.GetComponent<Collider>());
-                balls.Add(ball.transform);
+                var rotationHandleRenderer = rotationHandle.GetComponent<Renderer>();
+                rotationHandleRenderer.shadowCastingMode = ShadowCastingMode.Off;
+                rotationHandleRenderer.receiveShadows = false;
 
                 if (handleMaterial != null)
                 {
-                    ballRenderer.material = handleMaterial;
+                    rotationHandleRenderer.material = handleMaterial;
                 }
 
-                if (showRotationHandlesPerAxis == 0 ||
-                    showRotationHandlesPerAxis != (CardinalAxisType)(-1) && (showRotationHandlesPerAxis ^ edgeAxes[i]) != 0)
-                {
-                    ball.SetActive(false);
-                }
+                rotationHandles.Add(new Tuple<Transform, Renderer, Collider, CardinalAxis>(rotationHandle.transform, rotationHandleRenderer, rotationHandle.GetComponent<Collider>(), edgeAxes[i]));
             }
         }
 
-        private void SetBoundingBoxCollider()
+        /// <summary>
+        /// Resets the bounds of the bounding box based on the <see cref="boxColliderToUse"/> if provided,
+        /// otherwise calculate it based on the colliders on each child object.
+        /// </summary>
+        public void ResetBoundingBoxBounds()
         {
             // Collider.bounds is world space bounding volume.
             // Mesh.bounds is local space bounding volume
@@ -751,17 +984,22 @@ namespace XRTK.SDK.UX
             {
                 cachedTargetCollider = boxColliderToUse;
                 cachedTargetCollider.transform.hasChanged = true;
+                cachedTargetCollider.size += wireframePadding;
             }
             else
             {
+                if (cachedTargetCollider != null)
+                {
+                    cachedTargetCollider.size -= wireframePadding;
+                    Destroy(cachedTargetCollider);
+                }
 
                 var bounds = transform.GetColliderBounds();
-                cachedTargetCollider = gameObject.EnsureComponent<BoxCollider>();
-                cachedTargetCollider.center = bounds.center - transform.position;
-                cachedTargetCollider.size = bounds.size;
-            }
 
-            cachedTargetCollider.size += wireframePadding;
+                cachedTargetCollider = gameObject.AddComponent<BoxCollider>();
+                cachedTargetCollider.center = transform.InverseTransformPoint(bounds.center);
+                cachedTargetCollider.size = (bounds.size / transform.localScale.x) + wireframePadding;
+            }
         }
 
         private void SetMaterials()
@@ -809,39 +1047,30 @@ namespace XRTK.SDK.UX
             var rig = rigRootObject.AddComponent<BoundingBoxRig>();
             rig.BoundingBoxParent = this;
 
-            if (!showRig)
+            if (!showRigDebug)
             {
                 rigRootObject.hideFlags = hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             }
 
             rigRoot = rigRootObject.transform;
-
-            corners = new List<Transform>();
-            cornerColliders = new List<Collider>();
-            cornerRenderers = new List<Renderer>();
-            balls = new List<Transform>();
-            ballRenderers = new List<Renderer>();
-            ballColliders = new List<Collider>();
-            links = new List<Transform>();
-            linkRenderers = new List<Renderer>();
         }
 
         private void CalculateEdgeCenters()
         {
             if (boundsCorners != null && edgeCenters != null)
             {
-                edgeCenters[0] = (boundsCorners[0] + boundsCorners[1]) * 0.5f;
-                edgeCenters[1] = (boundsCorners[0] + boundsCorners[2]) * 0.5f;
-                edgeCenters[2] = (boundsCorners[3] + boundsCorners[2]) * 0.5f;
-                edgeCenters[3] = (boundsCorners[3] + boundsCorners[1]) * 0.5f;
+                edgeCenters[00] = (boundsCorners[0] + boundsCorners[1]) * 0.5f;
+                edgeCenters[01] = (boundsCorners[0] + boundsCorners[2]) * 0.5f;
+                edgeCenters[02] = (boundsCorners[3] + boundsCorners[2]) * 0.5f;
+                edgeCenters[03] = (boundsCorners[3] + boundsCorners[1]) * 0.5f;
 
-                edgeCenters[4] = (boundsCorners[4] + boundsCorners[5]) * 0.5f;
-                edgeCenters[5] = (boundsCorners[4] + boundsCorners[6]) * 0.5f;
-                edgeCenters[6] = (boundsCorners[7] + boundsCorners[6]) * 0.5f;
-                edgeCenters[7] = (boundsCorners[7] + boundsCorners[5]) * 0.5f;
+                edgeCenters[04] = (boundsCorners[4] + boundsCorners[5]) * 0.5f;
+                edgeCenters[05] = (boundsCorners[4] + boundsCorners[6]) * 0.5f;
+                edgeCenters[06] = (boundsCorners[7] + boundsCorners[6]) * 0.5f;
+                edgeCenters[07] = (boundsCorners[7] + boundsCorners[5]) * 0.5f;
 
-                edgeCenters[8] = (boundsCorners[0] + boundsCorners[4]) * 0.5f;
-                edgeCenters[9] = (boundsCorners[1] + boundsCorners[5]) * 0.5f;
+                edgeCenters[08] = (boundsCorners[0] + boundsCorners[4]) * 0.5f;
+                edgeCenters[09] = (boundsCorners[1] + boundsCorners[5]) * 0.5f;
                 edgeCenters[10] = (boundsCorners[2] + boundsCorners[6]) * 0.5f;
                 edgeCenters[11] = (boundsCorners[3] + boundsCorners[7]) * 0.5f;
             }
@@ -850,7 +1079,7 @@ namespace XRTK.SDK.UX
         private Vector3 ClampScale(Vector3 scale, out bool clamped)
         {
             var finalScale = scale;
-            var maximumScale = initialScale * scaleMaximum;
+            var maximumScale = initialScale * manipulationHandler.ScaleConstraints.y;
             clamped = false;
 
             if (scale.x > maximumScale.x || scale.y > maximumScale.y || scale.z > maximumScale.z)
@@ -859,7 +1088,7 @@ namespace XRTK.SDK.UX
                 clamped = true;
             }
 
-            var minimumScale = initialScale * scaleMinimum;
+            var minimumScale = initialScale * manipulationHandler.ScaleConstraints.x;
 
             if (finalScale.x < minimumScale.x || finalScale.y < minimumScale.y || finalScale.z < minimumScale.z)
             {
@@ -880,29 +1109,34 @@ namespace XRTK.SDK.UX
 
         private void ResetHandleVisibility()
         {
-            bool isVisible;
+            bool isHandlesVisible;
 
-            //set balls visibility
-            if (balls != null)
+            if (rotationHandles != null)
             {
-                isVisible = (!displayHandles && showRotateHandles);
+                isHandlesVisible = displayHandles && ShowRotateHandles;
 
-                for (int i = 0; i < ballRenderers.Count; ++i)
+                for (int i = 0; i < rotationHandles.Count; ++i)
                 {
-                    ballRenderers[i].material = handleMaterial;
-                    ballRenderers[i].enabled = isVisible;
+                    (Transform handleTransform, Renderer handleRenderer, Collider _, CardinalAxis axis) = rotationHandles[i];
+
+                    var IsDisabled = (showRotationHandlesPerAxis == 0 ||
+                                     showRotationHandlesPerAxis != (CardinalAxis)(-1) &&
+                                     (showRotationHandlesPerAxis & axis) == 0);
+
+                    handleRenderer.material = handleMaterial;
+                    handleTransform.gameObject.SetRenderingActive(isHandlesVisible && !IsDisabled);
                 }
             }
 
-            //set corner visibility
-            if (corners != null)
+            if (scaleHandles != null)
             {
-                isVisible = (!displayHandles && showScaleHandles);
+                isHandlesVisible = displayHandles && showScaleHandles;
 
-                for (int i = 0; i < cornerRenderers.Count; ++i)
+                for (int i = 0; i < scaleHandles.Count; ++i)
                 {
-                    cornerRenderers[i].material = handleMaterial;
-                    cornerRenderers[i].enabled = isVisible;
+                    var scaleHandleRenderer = scaleHandles[i].Item2;
+                    scaleHandleRenderer.material = handleMaterial;
+                    scaleHandleRenderer.gameObject.SetRenderingActive(isHandlesVisible);
                 }
             }
 
@@ -911,21 +1145,21 @@ namespace XRTK.SDK.UX
 
         private void ShowOneHandle(GameObject handle)
         {
-            //turn off all balls
-            if (balls != null)
+            //turn off all rotation handles
+            if (rotationHandles != null)
             {
-                for (int i = 0; i < ballRenderers.Count; ++i)
+                for (int i = 0; i < rotationHandles.Count; ++i)
                 {
-                    ballRenderers[i].enabled = false;
+                    rotationHandles[i].Item2.enabled = false;
                 }
             }
 
-            //turn off all corners
-            if (corners != null)
+            //turn off all scale handles
+            if (scaleHandles != null)
             {
-                for (int i = 0; i < cornerRenderers.Count; ++i)
+                for (int i = 0; i < scaleHandles.Count; ++i)
                 {
-                    cornerRenderers[i].enabled = false;
+                    scaleHandles[i].Item2.enabled = false;
                 }
             }
 
@@ -940,7 +1174,7 @@ namespace XRTK.SDK.UX
 
         private void UpdateBounds()
         {
-            if (cachedTargetCollider == null) { return; }
+            Debug.Assert(cachedTargetCollider != null);
 
             // Store current rotation then zero out the rotation so that the bounds
             // are computed when the object is in its 'axis aligned orientation'.
@@ -955,19 +1189,19 @@ namespace XRTK.SDK.UX
 
             if (boundsExtents != Vector3.zero)
             {
-                if (flattenAxis == FlattenModeType.FlattenAuto)
+                if (flattenAxis == FlattenMode.FlattenAuto)
                 {
                     var min = Mathf.Min(boundsExtents.x, Mathf.Min(boundsExtents.y, boundsExtents.z));
                     flattenAxis = min.Equals(boundsExtents.x)
-                            ? FlattenModeType.FlattenX
+                            ? FlattenMode.FlattenX
                             : (min.Equals(boundsExtents.y)
-                                    ? FlattenModeType.FlattenY
-                                    : FlattenModeType.FlattenZ);
+                                    ? FlattenMode.FlattenY
+                                    : FlattenMode.FlattenZ);
                 }
 
-                boundsExtents.x = flattenAxis == FlattenModeType.FlattenX ? 0.0f : boundsExtents.x;
-                boundsExtents.y = flattenAxis == FlattenModeType.FlattenY ? 0.0f : boundsExtents.y;
-                boundsExtents.z = flattenAxis == FlattenModeType.FlattenZ ? 0.0f : boundsExtents.z;
+                boundsExtents.x = flattenAxis == FlattenMode.FlattenX ? 0.0f : boundsExtents.x;
+                boundsExtents.y = flattenAxis == FlattenMode.FlattenY ? 0.0f : boundsExtents.y;
+                boundsExtents.z = flattenAxis == FlattenMode.FlattenZ ? 0.0f : boundsExtents.z;
                 currentBoundsExtents = boundsExtents;
 
                 GetCornerPositionsFromBounds(new Bounds(Vector3.zero, boundsExtents * 2.0f), ref boundsCorners);
@@ -977,33 +1211,34 @@ namespace XRTK.SDK.UX
 
         private void UpdateRigTransform()
         {
-            if (rigRoot == null) { return; }
+            Debug.Assert(rigRoot != null);
+            Debug.Assert(cachedTargetCollider != null);
 
             rigRoot.rotation = Quaternion.identity;
             rigRoot.position = Vector3.zero;
 
-            for (int i = 0; i < corners.Count; ++i)
+            for (int i = 0; i < scaleHandles.Count; ++i)
             {
-                corners[i].position = boundsCorners[i];
+                scaleHandles[i].Item1.position = boundsCorners[i];
             }
 
             var linkDimensions = GetLinkDimensions();
 
             for (int i = 0; i < edgeCenters.Length; ++i)
             {
-                balls[i].position = edgeCenters[i];
-                links[i].position = edgeCenters[i];
+                rotationHandles[i].Item1.position = edgeCenters[i];
+                links[i].Item1.position = edgeCenters[i];
 
                 switch (edgeAxes[i])
                 {
-                    case CardinalAxisType.X:
-                        links[i].localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
+                    case CardinalAxis.X:
+                        links[i].Item1.localScale = new Vector3(linkRadius, linkDimensions.y, linkRadius);
                         break;
-                    case CardinalAxisType.Y:
-                        links[i].localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
+                    case CardinalAxis.Y:
+                        links[i].Item1.localScale = new Vector3(linkRadius, linkDimensions.z, linkRadius);
                         break;
-                    case CardinalAxisType.Z:
-                        links[i].localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
+                    case CardinalAxis.Z:
+                        links[i].Item1.localScale = new Vector3(linkRadius, linkDimensions.x, linkRadius);
                         break;
                 }
             }
@@ -1015,17 +1250,17 @@ namespace XRTK.SDK.UX
 
         private HandleType GetHandleType(GameObject handle)
         {
-            for (int i = 0; i < balls.Count; ++i)
+            for (int i = 0; i < rotationHandles.Count; ++i)
             {
-                if (handle == balls[i].gameObject)
+                if (handle == rotationHandles[i].Item1.gameObject)
                 {
                     return HandleType.Rotation;
                 }
             }
 
-            for (int i = 0; i < corners.Count; ++i)
+            for (int i = 0; i < scaleHandles.Count; ++i)
             {
-                if (handle == corners[i].gameObject)
+                if (handle == scaleHandles[i].Item1.gameObject)
                 {
                     return HandleType.Scale;
                 }
@@ -1040,25 +1275,29 @@ namespace XRTK.SDK.UX
             float closestDistance = float.MaxValue;
             Collider closestCollider = null;
 
-            for (int i = 0; i < cornerColliders.Count; ++i)
+            for (int i = 0; i < scaleHandles.Count; ++i)
             {
-                if (cornerRenderers[i].enabled &&
-                    cornerColliders[i].bounds.IntersectRay(ray, out currentDistance) &&
+                (Transform _, Renderer handleRenderer, Collider handleCollider) = scaleHandles[i];
+
+                if (handleRenderer.enabled &&
+                    handleCollider.bounds.IntersectRay(ray, out currentDistance) &&
                     currentDistance < closestDistance)
                 {
                     closestDistance = currentDistance;
-                    closestCollider = cornerColliders[i];
+                    closestCollider = handleCollider;
                 }
             }
 
-            for (int i = 0; i < ballColliders.Count; ++i)
+            for (int i = 0; i < rotationHandles.Count; ++i)
             {
-                if (ballRenderers[i].enabled &&
-                    ballColliders[i].bounds.IntersectRay(ray, out currentDistance) &&
+                (Transform _, Renderer handleRenderer, Collider handleCollider, CardinalAxis _) = rotationHandles[i];
+
+                if (handleRenderer.enabled &&
+                    handleCollider.bounds.IntersectRay(ray, out currentDistance) &&
                     currentDistance < closestDistance)
                 {
                     closestDistance = currentDistance;
-                    closestCollider = ballColliders[i];
+                    closestCollider = handleCollider;
                 }
             }
 
@@ -1082,13 +1321,13 @@ namespace XRTK.SDK.UX
         {
             switch (flattenAxis)
             {
-                case FlattenModeType.FlattenX:
+                case FlattenMode.FlattenX:
                     flattenedHandles = new[] { 0, 4, 2, 6 };
                     break;
-                case FlattenModeType.FlattenY:
+                case FlattenMode.FlattenY:
                     flattenedHandles = new[] { 1, 3, 5, 7 };
                     break;
-                case FlattenModeType.FlattenZ:
+                case FlattenMode.FlattenZ:
                     flattenedHandles = new[] { 9, 10, 8, 11 };
                     break;
             }
@@ -1097,7 +1336,7 @@ namespace XRTK.SDK.UX
             {
                 for (int i = 0; i < flattenedHandles.Length; ++i)
                 {
-                    linkRenderers[flattenedHandles[i]].enabled = false;
+                    links[flattenedHandles[i]].Item2.gameObject.SetRenderingActive(false);
                 }
             }
         }
@@ -1108,7 +1347,7 @@ namespace XRTK.SDK.UX
             {
                 for (int i = 0; i < flattenedHandles.Length; ++i)
                 {
-                    ballRenderers[flattenedHandles[i]].enabled = false;
+                    rotationHandles[flattenedHandles[i]].Item1.gameObject.SetRenderingActive(false);
                 }
             }
         }
