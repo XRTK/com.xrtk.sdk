@@ -342,6 +342,7 @@ namespace XRTK.SDK.Input.Handlers
         private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
         private float prevPointerExtent;
+        private SpatialMeshDisplayOptions prevSpatialMeshDisplay;
 
         #region Monobehaviour Implementation
 
@@ -706,7 +707,12 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
-            MixedRealityToolkit.SpatialAwarenessSystem?.SetMeshVisibility(spatialMeshVisibility);
+
+            if (MixedRealityToolkit.SpatialAwarenessSystem != null)
+            {
+                prevSpatialMeshDisplay = MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility;
+                MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = spatialMeshVisibility;
+            }
 
             var pointerPosition = primaryPointer.Result.Details.Point;
 
@@ -747,7 +753,10 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!IsBeingHeld) { return; }
 
-            MixedRealityToolkit.SpatialAwarenessSystem?.SetMeshVisibility(SpatialMeshDisplayOptions.None);
+            if (MixedRealityToolkit.SpatialAwarenessSystem != null)
+            {
+                MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = prevSpatialMeshDisplay;
+            }
 
             primaryPointer.PointerExtent = prevPointerExtent;
             primaryPointer = null;
