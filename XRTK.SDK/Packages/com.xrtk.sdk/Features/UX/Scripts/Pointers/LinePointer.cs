@@ -116,13 +116,13 @@ namespace XRTK.SDK.UX.Pointers
             // Set our first and last points
             lineBase.FirstPoint = pointerPosition;
 
-            if (IsFocusLocked && Result != null)
+            if (!IsFocusLocked || Result == null)
             {
-                lineBase.LastPoint = pointerPosition + ((Result.Details.Point - pointerPosition).normalized * PointerExtent);
+                lineBase.LastPoint = pointerPosition + pointerRotation * Vector3.forward * PointerExtent;
             }
             else
             {
-                lineBase.LastPoint = pointerPosition + pointerRotation * Vector3.forward * PointerExtent;
+                lineBase.LastPoint = Result.Details.Point;
             }
 
             // Make sure our array will hold
@@ -159,22 +159,22 @@ namespace XRTK.SDK.UX.Pointers
             lineBase.enabled = true;
             BaseCursor?.SetVisibility(true);
 
-            // The distance the ray travels through the world before it hits something. Measured in world-units (as opposed to normalized distance).
+            // The distance the ray travels through the world before it hits something.
+            // Measured in world-units (as opposed to normalized distance).
             float clearWorldLength;
+
             // Used to ensure the line doesn't extend beyond the cursor
-            float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0;
+            float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0f;
 
             // If we hit something
             if (Result?.CurrentPointerTarget != null)
             {
                 clearWorldLength = Result.Details.RayDistance;
-
                 lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
             }
             else
             {
                 clearWorldLength = PointerExtent;
-
                 lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
             }
 
