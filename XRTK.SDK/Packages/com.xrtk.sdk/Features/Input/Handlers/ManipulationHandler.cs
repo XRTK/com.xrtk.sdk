@@ -331,17 +331,12 @@ namespace XRTK.SDK.Input.Handlers
         public bool IsRotationPossible { get; private set; } = false;
 
         private Vector3 prevScale = Vector3.one;
-
         private Vector3 prevPosition = Vector3.zero;
         private Quaternion prevRotation = Quaternion.identity;
 
-        private Vector3 grabbedPosition = Vector3.zero;
-
         private BoundingBox boundingBox;
 
-        private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
-        private float prevPointerExtent;
         private SpatialMeshDisplayOptions prevSpatialMeshDisplay;
 
         #region Monobehaviour Implementation
@@ -358,14 +353,6 @@ namespace XRTK.SDK.Input.Handlers
 
         protected virtual void Update()
         {
-            if (IsBeingHeld)
-            {
-                if (!IsRotating && !IsScalingPossible)
-                {
-                    manipulationTarget.position = grabbedPosition + primaryPointer.Result.Details.Point;
-                }
-            }
-
             if (IsPressed && IsNudgePossible && primaryPointer != null)
             {
                 primaryPointer.PointerExtent = updatedExtent;
@@ -467,7 +454,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            var pointerPosition = primaryPointer.Result.Details.Point;
+            var pointerOffset = primaryPointer.Result.Offset;
 
             // Filter our actions
             if (eventData.MixedRealityInputAction != nudgeAction ||
@@ -498,14 +485,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (IsRotating)
                 {
-                    manipulationTarget.position = grabbedPosition + pointerPosition;
-                    manipulationTarget.RotateAround(pointerPosition, Vector3.up, -rotationAngle);
-
-                    if (prevPosition != Vector3.zero)
-                    {
-                        grabbedPosition = manipulationTarget.position - pointerPosition;
-                    }
-
+                    manipulationTarget.RotateAround(pointerOffset, Vector3.up, -rotationAngle);
                     eventData.Use();
                 }
             }
@@ -551,7 +531,7 @@ namespace XRTK.SDK.Input.Handlers
             {
                 Debug.Assert(primaryPointer != null);
                 var newExtent = primaryPointer.PointerExtent;
-                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
+                var currentRaycastDistance = primaryPointer.Result.RayDistance;
 
                 // Reset the cursor extent to the nearest value in case we're hitting something close
                 // and the user wants to adjust. That way it doesn't take forever to see the change.
@@ -609,14 +589,7 @@ namespace XRTK.SDK.Input.Handlers
                     }
                 }
 
-                manipulationTarget.position = grabbedPosition + pointerPosition;
-                manipulationTarget.ScaleAround(pointerPosition, newScale);
-
-                if (prevPosition != Vector3.zero)
-                {
-                    grabbedPosition = manipulationTarget.position - pointerPosition;
-                }
-
+                manipulationTarget.ScaleAround(pointerOffset, newScale);
                 eventData.Use();
             }
         }
@@ -714,31 +687,17 @@ namespace XRTK.SDK.Input.Handlers
                 MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = spatialMeshVisibility;
             }
 
-            var pointerPosition = primaryPointer.Result.Details.Point;
-
             prevPosition = manipulationTarget.position;
-
-            if (prevPosition != Vector3.zero)
-            {
-                grabbedPosition = prevPosition - pointerPosition;
-
-                // update the pointer extent to prevent the object from popping to the end of the pointer
-                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
-                prevPointerExtent = primaryPointer.PointerExtent;
-                primaryPointer.PointerExtent = currentRaycastDistance;
-            }
-
             prevScale = manipulationTarget.localScale;
             prevRotation = manipulationTarget.rotation;
-
-            prevPhysicsLayer = manipulationTarget.gameObject.layer;
-            manipulationTarget.SetLayerRecursively(IgnoreRaycastLayer);
 
             if (boundingBox != null)
             {
                 boundingBoxPrevPhysicsLayer = boundingBox.gameObject.layer;
                 boundingBox.transform.SetLayerRecursively(IgnoreRaycastLayer);
             }
+
+            primaryPointer.SyncPointerTargetPosition = true;
 
             eventData.Use();
         }
@@ -758,10 +717,6 @@ namespace XRTK.SDK.Input.Handlers
                 MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = prevSpatialMeshDisplay;
             }
 
-            primaryPointer.PointerExtent = prevPointerExtent;
-            primaryPointer = null;
-            primaryInputSource = null;
-
             if (isCanceled)
             {
                 manipulationTarget.position = prevPosition;
@@ -769,15 +724,17 @@ namespace XRTK.SDK.Input.Handlers
                 manipulationTarget.rotation = prevRotation;
             }
 
-            IsBeingHeld = false;
             MixedRealityToolkit.InputSystem.PopModalInputHandler();
-
-            manipulationTarget.SetLayerRecursively(prevPhysicsLayer);
 
             if (boundingBox != null)
             {
                 boundingBox.transform.SetLayerRecursively(boundingBoxPrevPhysicsLayer);
             }
+
+            primaryPointer.SyncPointerTargetPosition = false;
+            primaryPointer = null;
+            primaryInputSource = null;
+            IsBeingHeld = false;
         }
     }
 }

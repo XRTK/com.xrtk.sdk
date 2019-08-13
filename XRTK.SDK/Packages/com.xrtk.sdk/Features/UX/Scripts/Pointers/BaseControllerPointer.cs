@@ -116,7 +116,6 @@ namespace XRTK.SDK.UX.Pointers
 
                 if (BaseCursor != null)
                 {
-                    BaseCursor.DefaultCursorDistance = PointerExtent;
                     BaseCursor.Pointer = this;
                     BaseCursor.SetVisibilityOnSourceDetected = setCursorVisibilityOnSourceDetected;
                     BaseCursor.SetVisibility(!disableCursorOnStart);
@@ -257,19 +256,6 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        /// <inheritdoc />
-        public bool IsFocusLocked { get; set; }
-
-        [SerializeField]
-        private bool isTargetPositionLockedOnFocusLock;
-
-        /// <inheritdoc />
-        public bool IsTargetPositionLockedOnFocusLock
-        {
-            get => isTargetPositionLockedOnFocusLock;
-            set => isTargetPositionLockedOnFocusLock = value;
-        }
-
         [SerializeField]
         private bool overrideGlobalPointerExtent = false;
 
@@ -320,10 +306,29 @@ namespace XRTK.SDK.UX.Pointers
         public LayerMask[] PrioritizedLayerMasksOverride { get; set; } = null;
 
         /// <inheritdoc />
-        public IMixedRealityFocusHandler FocusTarget { get; set; }
+        public IMixedRealityFocusHandler FocusHandler { get; set; }
 
         /// <inheritdoc />
-        public IPointerResult Result { get; set; }
+        public IMixedRealityInputHandler InputHandler { get; set; }
+
+        /// <inheritdoc />
+        public IPointerResult Result
+        {
+            get
+            {
+                Debug.Assert(result != null);
+                return result;
+            }
+            set => result = value;
+        }
+
+        private IPointerResult result;
+
+        /// <inheritdoc />
+        public bool IsFocusLocked { get; set; }
+
+        /// <inheritdoc />
+        public bool SyncPointerTargetPosition { get; set; }
 
         /// <inheritdoc />
         public IBaseRayStabilizer RayStabilizer { get; set; } = new GenericStabilizer();

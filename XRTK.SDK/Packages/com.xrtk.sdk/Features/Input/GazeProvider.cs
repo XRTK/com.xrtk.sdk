@@ -182,8 +182,8 @@ namespace XRTK.SDK.Input
             /// <inheritdoc />
             public override void OnPreRaycast()
             {
-                Vector3 newGazeOrigin = gazeTransform.position;
-                Vector3 newGazeNormal = gazeTransform.forward;
+                var newGazeOrigin = gazeTransform.position;
+                var newGazeNormal = gazeTransform.forward;
 
                 // Update gaze info from stabilizer
                 if (stabilizer != null)
@@ -194,7 +194,7 @@ namespace XRTK.SDK.Input
                     newGazeNormal = transformParent.TransformDirection(stabilizer.StableRay.direction);
                 }
 
-                Vector3 endPoint = newGazeOrigin + (newGazeNormal * pointerExtent);
+                var endPoint = newGazeOrigin + (newGazeNormal * pointerExtent);
                 Rays[0].UpdateRayStep(ref newGazeOrigin, ref endPoint);
 
                 gazeProvider.HitPosition = Rays[0].Origin + (gazeProvider.lastHitDistance * Rays[0].Direction);
@@ -202,14 +202,14 @@ namespace XRTK.SDK.Input
 
             public override void OnPostRaycast()
             {
-                gazeProvider.HitInfo = Result.Details.LastRaycastHit;
-                gazeProvider.GazeTarget = Result.Details.Object;
+                gazeProvider.HitInfo = Result.LastRaycastHit;
+                gazeProvider.GazeTarget = Result.CurrentPointerTarget;
 
-                if (Result.Details.Object != null)
+                if (Result.CurrentPointerTarget != null)
                 {
-                    gazeProvider.lastHitDistance = (Result.Details.Point - Rays[0].Origin).magnitude;
+                    gazeProvider.lastHitDistance = (Result.EndPoint - Rays[0].Origin).magnitude;
                     gazeProvider.HitPosition = Rays[0].Origin + (gazeProvider.lastHitDistance * Rays[0].Direction);
-                    gazeProvider.HitNormal = Result.Details.Normal;
+                    gazeProvider.HitNormal = Result.Normal;
                 }
             }
 

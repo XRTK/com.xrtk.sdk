@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using XRTK.Definitions.InputSystem;
-using XRTK.EventDatum.Input;
-using XRTK.Interfaces.InputSystem.Handlers;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using XRTK.Definitions.InputSystem;
+using XRTK.EventDatum.Input;
+using XRTK.Interfaces.InputSystem.Handlers;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -46,10 +46,11 @@ namespace XRTK.SDK.Input.Handlers
             // Convert the struct array into a dictionary, with the keywords and the methods as the values.
             // This helps easily link the keyword recognized to the UnityEvent to be invoked.
             int keywordCount = keywords.Length;
+
             for (int index = 0; index < keywordCount; index++)
             {
-                KeywordAndResponse keywordAndResponse = keywords[index];
-                string keyword = keywordAndResponse.Keyword.ToLower();
+                var keywordAndResponse = keywords[index];
+                var keyword = keywordAndResponse.Keyword.ToLower();
 
                 if (responses.ContainsKey(keyword))
                 {
@@ -69,7 +70,7 @@ namespace XRTK.SDK.Input.Handlers
         void IMixedRealitySpeechHandler.OnSpeechKeywordRecognized(SpeechEventData eventData)
         {
             // Check to make sure the recognized keyword exists in the methods dictionary, then invoke the corresponding method.
-            if (enabled && responses.TryGetValue(eventData.RecognizedText.ToLower(), out UnityEvent keywordResponse))
+            if (enabled && responses.TryGetValue(eventData.RecognizedText.ToLower(), out var keywordResponse))
             {
                 keywordResponse.Invoke();
                 eventData.Use();

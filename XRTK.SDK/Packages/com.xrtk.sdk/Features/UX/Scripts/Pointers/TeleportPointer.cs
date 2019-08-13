@@ -137,12 +137,12 @@ namespace XRTK.SDK.UX.Pointers
                 Rays = new RayStep[LineCastResolution];
             }
 
-            float stepSize = 1f / Rays.Length;
-            Vector3 lastPoint = LineBase.GetUnClampedPoint(0f);
+            var stepSize = 1f / Rays.Length;
+            var lastPoint = LineBase.GetUnClampedPoint(0f);
 
             for (int i = 0; i < Rays.Length; i++)
             {
-                Vector3 currentPoint = LineBase.GetUnClampedPoint(stepSize * (i + 1));
+                var currentPoint = LineBase.GetUnClampedPoint(stepSize * (i + 1));
                 Rays[i].UpdateRayStep(ref lastPoint, ref currentPoint);
                 lastPoint = currentPoint;
             }
@@ -173,7 +173,7 @@ namespace XRTK.SDK.UX.Pointers
                         {
                             // If it's NOT a hotspot, check if the hit normal is too steep 
                             // (Hotspots override dot requirements)
-                            TeleportSurfaceResult = Vector3.Dot(Result.Details.LastRaycastHit.normal, Vector3.up) > upDirectionThreshold
+                            TeleportSurfaceResult = Vector3.Dot(Result.LastRaycastHit.normal, Vector3.up) > upDirectionThreshold
                                 ? TeleportSurfaceResult.Valid
                                 : TeleportSurfaceResult.Invalid;
                         }
@@ -194,7 +194,7 @@ namespace XRTK.SDK.UX.Pointers
                         {
                             if (MixedRealityRaycaster.DebugEnabled)
                             {
-                                Color debugColor = TeleportSurfaceResult != TeleportSurfaceResult.None
+                                var debugColor = TeleportSurfaceResult != TeleportSurfaceResult.None
                                     ? Color.yellow
                                     : Color.cyan;
 
@@ -202,7 +202,7 @@ namespace XRTK.SDK.UX.Pointers
                             }
 
                             // Only add the distance between the start point and the hit
-                            clearWorldLength += Vector3.Distance(Result.StartPoint, Result.Details.Point);
+                            clearWorldLength += Vector3.Distance(Result.StartPoint, Result.EndPoint);
                         }
                         else if (i < Result.RayStepIndex)
                         {

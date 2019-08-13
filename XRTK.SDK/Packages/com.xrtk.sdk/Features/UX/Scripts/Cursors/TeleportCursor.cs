@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
+using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Teleport;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.TeleportSystem;
+using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
 using XRTK.Utilities;
-using System;
-using UnityEngine;
-using XRTK.SDK.UX.Pointers;
 
 namespace XRTK.SDK.UX.Cursors
 {
@@ -88,7 +88,7 @@ namespace XRTK.SDK.UX.Cursors
                 return;
             }
 
-            if (!MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out FocusDetails focusDetails))
+            if (!MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out var focusDetails))
             {
                 if (MixedRealityToolkit.InputSystem.FocusProvider.IsPointerRegistered(Pointer))
                 {
@@ -99,14 +99,13 @@ namespace XRTK.SDK.UX.Cursors
                     Debug.LogError($"{pointer.GetType().Name} has not been registered!");
                     Destroy(gameObject);
                 }
+
                 return;
             }
 
-            if (pointer.Result == null) { return; }
+            transform.position = focusDetails.EndPoint;
 
-            transform.position = pointer.Result.Details.Point;
-
-            Vector3 forward = CameraCache.Main.transform.forward;
+            var forward = CameraCache.Main.transform.forward;
             forward.y = 0f;
 
             // Smooth out rotation just a tad to prevent jarring transitions
