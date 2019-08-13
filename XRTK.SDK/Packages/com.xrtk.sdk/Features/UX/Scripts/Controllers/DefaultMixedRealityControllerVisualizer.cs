@@ -44,12 +44,12 @@ namespace XRTK.SDK.UX.Controllers
 
                 if (handControllerVisualizationProfile.EnableHandJointVisualization)
                 {
-                    GameObjectProxy.AddComponent<BaseHandControllerJointVisualizer>();
+                    GameObjectProxy.AddComponent<DefaultHandControllerJointVisualizer>();
                 }
 
                 if (handControllerVisualizationProfile.EnableHandMeshVisualization)
                 {
-                    GameObjectProxy.AddComponent<BaseHandControllerMeshVisualizer>();
+                    GameObjectProxy.AddComponent<DefaultHandControllerMeshVisualizer>();
                 }
             }
         }
