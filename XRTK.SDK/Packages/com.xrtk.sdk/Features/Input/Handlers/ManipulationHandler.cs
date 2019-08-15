@@ -337,13 +337,14 @@ namespace XRTK.SDK.Input.Handlers
         public bool IsRotationPossible { get; private set; } = false;
 
         private Vector3 prevScale = Vector3.one;
-
         private Vector3 prevPosition = Vector3.zero;
         private Quaternion prevRotation = Quaternion.identity;
 
         private Vector3 grabbedPosition = Vector3.zero;
 
         private BoundingBox boundingBox;
+
+        private float prevPointerExtent;
 
         private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
@@ -715,14 +716,14 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(spatialMeshVisibility);
 
+            prevPointerExtent = primaryPointer.PointerExtent;
             var pointerPosition = primaryPointer.Result.Details.Point;
-
-            prevPosition = manipulationTarget.position;
 
             if (prevPosition != Vector3.zero)
             {
                 grabbedPosition = prevPosition - pointerPosition;
 
+                prevPosition = manipulationTarget.position;
                 // update the pointer extent to prevent the object from popping to the end of the pointer
                 var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
                 primaryPointer.PointerExtent = currentRaycastDistance;
@@ -755,6 +756,7 @@ namespace XRTK.SDK.Input.Handlers
 
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.None);
 
+            primaryPointer.PointerExtent = prevPointerExtent;
             primaryPointer = null;
             primaryInputSource = null;
 
