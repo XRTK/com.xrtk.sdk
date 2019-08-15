@@ -71,3 +71,9 @@ MonoBehaviour:
     priority: 1
     runtimePlatform: 33
     profile: {fileID: 0}
+  - dataProviderType:
+      reference: XRTK.Providers.Controllers.Hands.HandControllerDataProvider, XRTK
+    dataProviderName: Hand Controller Data Provider
+    priority: 5
+    runtimePlatform: -1
+    profile: {fileID: 11400000, guid: 42d66f060a3b0b9439e3960a86360066, type: 2}
