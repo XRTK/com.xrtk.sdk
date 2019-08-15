@@ -360,27 +360,32 @@ namespace XRTK.SDK.Input.Handlers
 
         protected virtual void Update()
         {
-            if (!IsBeingHeld) { return; }
+            if (!IsBeingHeld || primaryPointer == null) { return; }
 
-            if (!IsRotating && !IsScalingPossible)
+            var pointerPosition = primaryPointer.Result.Details.Point;
+
+            if (!IsPressed)
             {
-                manipulationTarget.position = grabbedPosition + primaryPointer.Result.Details.Point;
-            }
-
-            if (IsPressed && IsNudgePossible && primaryPointer != null)
-            {
-                primaryPointer.PointerExtent = updatedExtent;
-            }
-
-            if (IsPressed && IsScalingPossible && primaryPointer != null)
-            {
-                var position = primaryPointer.Result.Details.Point;
-                manipulationTarget.position = grabbedPosition + position;
-                manipulationTarget.ScaleAround(position, updatedScale);
-
-                if (prevPosition != Vector3.zero)
+                if (!IsRotating && !IsScalingPossible)
                 {
-                    grabbedPosition = manipulationTarget.position - position;
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                }
+            }
+            else
+            {
+                if (IsNudgePossible)
+                {
+                    primaryPointer.PointerExtent = updatedExtent;
+                }
+                else if (IsScalingPossible)
+                {
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    manipulationTarget.ScaleAround(pointerPosition, updatedScale);
+
+                    if (prevPosition != Vector3.zero)
+                    {
+                        grabbedPosition = manipulationTarget.position - pointerPosition;
+                    }
                 }
             }
         }
@@ -713,14 +718,15 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(spatialMeshVisibility);
 
-            prevPointerExtent = primaryPointer.PointerExtent;
             var pointerPosition = primaryPointer.Result.Details.Point;
+
+            prevPosition = manipulationTarget.position;
 
             if (prevPosition != Vector3.zero)
             {
                 grabbedPosition = prevPosition - pointerPosition;
 
-                prevPosition = manipulationTarget.position;
+                prevPointerExtent = primaryPointer.PointerExtent;
                 // update the pointer extent to prevent the object from popping to the end of the pointer
                 var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
                 primaryPointer.PointerExtent = currentRaycastDistance;
