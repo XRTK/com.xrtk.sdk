@@ -122,7 +122,7 @@ namespace XRTK.SDK.UX.Pointers
             }
             else
             {
-                lineBase.LastPoint = Result.Details.Point;
+                lineBase.LastPoint = Result.EndPoint;
             }
 
             // Make sure our array will hold
@@ -169,7 +169,7 @@ namespace XRTK.SDK.UX.Pointers
             // If we hit something
             if (Result?.CurrentPointerTarget != null)
             {
-                clearWorldLength = Result.Details.RayDistance;
+                clearWorldLength = Result.RayDistance;
                 lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
             }
             else

@@ -360,7 +360,7 @@ namespace XRTK.SDK.Input.Handlers
             {
                 if (!IsRotating && !IsScalingPossible)
                 {
-                    manipulationTarget.position = grabbedPosition + primaryPointer.Result.Details.Point;
+                    manipulationTarget.position = grabbedPosition + primaryPointer.Result.EndPoint;
                 }
             }
 
@@ -462,7 +462,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            var pointerPosition = primaryPointer.Result.Details.Point;
+            var pointerPosition = primaryPointer.Result.EndPoint;
 
             // Filter our actions
             if (eventData.MixedRealityInputAction != nudgeAction ||
@@ -546,7 +546,7 @@ namespace XRTK.SDK.Input.Handlers
             {
                 Debug.Assert(primaryPointer != null);
                 var newExtent = primaryPointer.PointerExtent;
-                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
+                var currentRaycastDistance = primaryPointer.Result.RayDistance;
 
                 // Reset the cursor extent to the nearest value in case we're hitting something close
                 // and the user wants to adjust. That way it doesn't take forever to see the change.
@@ -704,7 +704,7 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(spatialMeshVisibility);
 
-            var pointerPosition = primaryPointer.Result.Details.Point;
+            var pointerPosition = primaryPointer.Result.EndPoint;
 
             prevPosition = manipulationTarget.position;
 
@@ -713,7 +713,7 @@ namespace XRTK.SDK.Input.Handlers
                 grabbedPosition = prevPosition - pointerPosition;
 
                 // update the pointer extent to prevent the object from popping to the end of the pointer
-                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
+                var currentRaycastDistance = primaryPointer.Result.RayDistance;
                 primaryPointer.PointerExtent = currentRaycastDistance;
             }
 
