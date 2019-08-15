@@ -277,6 +277,8 @@ namespace XRTK.SDK.Input.Handlers
 
         #endregion Manipulation Options
 
+        #region Properties
+
         /// <summary>
         /// The current status of the hold.
         /// </summary>
@@ -284,29 +286,6 @@ namespace XRTK.SDK.Input.Handlers
         /// Used to determine if the <see cref="GameObject"/> is currently being manipulated by the user.
         /// </remarks>
         public bool IsBeingHeld { get; private set; } = false;
-
-        /// <summary>
-        /// The updated extent of the pointer.
-        /// </summary>
-        private float updatedExtent;
-
-        /// <summary>The updated scale of the model based on controller input.</summary>
-        private Vector3 updatedScale;
-
-        /// <summary>
-        /// The first input source to start the manipulation phase of this object.
-        /// </summary>
-        private IMixedRealityInputSource primaryInputSource = null;
-
-        /// <summary>
-        /// The first pointer to start the manipulation phase of this object.
-        /// </summary>
-        private IMixedRealityPointer primaryPointer = null;
-
-        /// <summary>
-        /// The last rotation reading used to calculate if the rotation action is active.
-        /// </summary>
-        private Vector2 lastPositionReading = Vector2.zero;
 
         /// <summary>
         /// Is the <see cref="primaryInputSource"/> currently pressed?
@@ -333,18 +312,28 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public bool IsRotationPossible { get; private set; } = false;
 
-        private Vector3 prevScale = Vector3.one;
-        private Vector3 prevPosition = Vector3.zero;
-        private Quaternion prevRotation = Quaternion.identity;
-
-        private Vector3 grabbedPosition = Vector3.zero;
+        #endregion Properties
 
         private BoundingBox boundingBox;
 
-        private float prevPointerExtent;
+        private IMixedRealityPointer primaryPointer;
+
+        private IMixedRealityInputSource primaryInputSource;
 
         private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
+
+        private float updatedExtent;
+        private float prevPointerExtent;
+
+        private Vector2 lastPositionReading;
+
+        private Vector3 prevScale;
+        private Vector3 prevPosition;
+        private Vector3 updatedScale;
+        private Vector3 grabbedPosition;
+
+        private Quaternion prevRotation;
 
         #region Monobehaviour Implementation
 
@@ -620,27 +609,6 @@ namespace XRTK.SDK.Input.Handlers
             }
         }
 
-        /// <summary>
-        /// Calculates the extent of the nudge.
-        /// </summary>
-        /// <param name="eventData">The event data.</param>
-        /// <param name="prevExtent">The previous extent distance of the pointer and raycast.</param>
-        /// <returns>The new pointer extent.</returns>
-        protected virtual float CalculateNudgeDistance(InputEventData<Vector2> eventData, float prevExtent)
-        {
-            return prevExtent + nudgeAmount * (eventData.InputData.y < 0f ? -1 : 1);
-        }
-
-        protected virtual Vector3 CalculateScaleAmount(InputEventData<Vector2> eventData, Vector3 prevScale)
-        {
-            if (eventData.InputData.x < 0f)
-            {
-                return prevScale *= scaleAmount;
-            }
-            // else
-            return prevScale /= scaleAmount;
-        }
-
         #endregion IMixedRealityInputHandler Implementation
 
         #region IMixedRealityPointerHandler Implementation
@@ -779,6 +747,28 @@ namespace XRTK.SDK.Input.Handlers
             {
                 boundingBox.transform.SetLayerRecursively(boundingBoxPrevPhysicsLayer);
             }
+        }
+
+        /// <summary>
+        /// Calculates the extent of the nudge using input event data.
+        /// </summary>
+        /// <param name="eventData">The event data.</param>
+        /// <param name="prevExtent">The previous extent distance of the pointer and raycast.</param>
+        /// <returns>The new pointer extent.</returns>
+        protected virtual float CalculateNudgeDistance(InputEventData<Vector2> eventData, float prevExtent)
+        {
+            return prevExtent + nudgeAmount * (eventData.InputData.y < 0f ? -1 : 1);
+        }
+
+        /// <summary>
+        /// Calculates the scale amount using the input event data.
+        /// </summary>
+        /// <param name="eventData">The event data.</param>
+        /// <param name="scale">The previous scale</param>
+        /// <returns>The new scale value.</returns>
+        protected virtual Vector3 CalculateScaleAmount(InputEventData<Vector2> eventData, Vector3 scale)
+        {
+            return eventData.InputData.x < 0f ? scale * scaleAmount : scale / scaleAmount;
         }
     }
 }
