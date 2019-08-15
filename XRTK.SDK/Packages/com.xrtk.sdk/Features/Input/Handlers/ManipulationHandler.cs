@@ -290,6 +290,9 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         private float updatedExtent;
 
+        /// <summary>The updated scale of the model based on controller input.</summary>
+        private Vector3 updatedScale;
+
         /// <summary>
         /// The first input source to start the manipulation phase of this object.
         /// </summary>
@@ -331,13 +334,14 @@ namespace XRTK.SDK.Input.Handlers
         public bool IsRotationPossible { get; private set; } = false;
 
         private Vector3 prevScale = Vector3.one;
-
         private Vector3 prevPosition = Vector3.zero;
         private Quaternion prevRotation = Quaternion.identity;
 
         private Vector3 grabbedPosition = Vector3.zero;
 
         private BoundingBox boundingBox;
+
+        private float prevPointerExtent;
 
         private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
@@ -356,17 +360,33 @@ namespace XRTK.SDK.Input.Handlers
 
         protected virtual void Update()
         {
-            if (IsBeingHeld)
+            if (!IsBeingHeld || primaryPointer == null) { return; }
+
+            var pointerPosition = primaryPointer.Result.Details.Point;
+
+            if (!IsPressed)
             {
                 if (!IsRotating && !IsScalingPossible)
                 {
-                    manipulationTarget.position = grabbedPosition + primaryPointer.Result.EndPoint;
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
                 }
             }
-
-            if (IsPressed && IsNudgePossible && primaryPointer != null)
+            else
             {
-                primaryPointer.PointerExtent = updatedExtent;
+                if (IsNudgePossible)
+                {
+                    primaryPointer.PointerExtent = updatedExtent;
+                }
+                else if (IsScalingPossible)
+                {
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    manipulationTarget.ScaleAround(pointerPosition, updatedScale);
+
+                    if (prevPosition != Vector3.zero)
+                    {
+                        grabbedPosition = manipulationTarget.position - pointerPosition;
+                    }
+                }
             }
         }
 
@@ -582,35 +602,19 @@ namespace XRTK.SDK.Input.Handlers
             {
                 var newScale = manipulationTarget.localScale;
                 var currentScale = newScale;
+                newScale = CalculateScaleAmount(eventData, newScale);
 
-                if (eventData.InputData.x < 0f)
+                // We can check any axis, they should all be the same as we do uniform scales.
+                if (eventData.InputData.x < 0f && newScale.x <= scaleConstraints.x)
                 {
-                    newScale *= scaleAmount;
-
-                    // We can check any axis, they should all be the same as we do uniform scales.
-                    if (newScale.x <= scaleConstraints.x)
-                    {
-                        newScale = currentScale;
-                    }
+                    newScale = currentScale;
                 }
-                else
+                else if (newScale.y >= scaleConstraints.y)
                 {
-                    newScale /= scaleAmount;
-
-                    // We can check any axis, they should all be the same as we do uniform scales.
-                    if (newScale.y >= scaleConstraints.y)
-                    {
-                        newScale = currentScale;
-                    }
+                    newScale = currentScale;
                 }
 
-                manipulationTarget.position = grabbedPosition + pointerPosition;
-                manipulationTarget.ScaleAround(pointerPosition, newScale);
-
-                if (prevPosition != Vector3.zero)
-                {
-                    grabbedPosition = manipulationTarget.position - pointerPosition;
-                }
+                updatedScale = newScale;
 
                 eventData.Use();
             }
@@ -625,6 +629,16 @@ namespace XRTK.SDK.Input.Handlers
         protected virtual float CalculateNudgeDistance(InputEventData<Vector2> eventData, float prevExtent)
         {
             return prevExtent + nudgeAmount * (eventData.InputData.y < 0f ? -1 : 1);
+        }
+
+        protected virtual Vector3 CalculateScaleAmount(InputEventData<Vector2> eventData, Vector3 prevScale)
+        {
+            if (eventData.InputData.x < 0f)
+            {
+                return prevScale *= scaleAmount;
+            }
+            // else
+            return prevScale /= scaleAmount;
         }
 
         #endregion IMixedRealityInputHandler Implementation
@@ -712,6 +726,7 @@ namespace XRTK.SDK.Input.Handlers
             {
                 grabbedPosition = prevPosition - pointerPosition;
 
+                prevPointerExtent = primaryPointer.PointerExtent;
                 // update the pointer extent to prevent the object from popping to the end of the pointer
                 var currentRaycastDistance = primaryPointer.Result.RayDistance;
                 primaryPointer.PointerExtent = currentRaycastDistance;
@@ -744,6 +759,7 @@ namespace XRTK.SDK.Input.Handlers
 
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.None);
 
+            primaryPointer.PointerExtent = prevPointerExtent;
             primaryPointer = null;
             primaryInputSource = null;
 
