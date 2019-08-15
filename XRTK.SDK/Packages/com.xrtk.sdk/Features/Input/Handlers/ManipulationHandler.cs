@@ -385,6 +385,9 @@ namespace XRTK.SDK.Input.Handlers
 
             if (IsBeingHeld)
             {
+                // We don't pass IsCancelled here because 
+                // it's the intended behaviour to end the hold
+                // if the component is disabled.
                 EndHold();
             }
         }
