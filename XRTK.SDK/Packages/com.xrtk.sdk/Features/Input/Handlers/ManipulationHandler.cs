@@ -362,7 +362,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!IsBeingHeld || primaryPointer == null) { return; }
 
-            var pointerPosition = primaryPointer.Result.Details.Point;
+            var pointerPosition = primaryPointer.Result.EndPoint;
 
             if (!IsPressed)
             {
