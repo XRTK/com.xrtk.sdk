@@ -293,9 +293,6 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>The updated scale of the model based on controller input.</summary>
         private Vector3 updatedScale;
 
-        /// <summary>The updated pointer position</summary>
-        private Vector3 updatedPointerPosition;
-
         /// <summary>
         /// The first input source to start the manipulation phase of this object.
         /// </summary>
@@ -363,12 +360,11 @@ namespace XRTK.SDK.Input.Handlers
 
         protected virtual void Update()
         {
-            if (IsBeingHeld)
+            if (!IsBeingHeld) { return; }
+
+            if (!IsRotating && !IsScalingPossible)
             {
-                if (!IsRotating && !IsScalingPossible)
-                {
-                    manipulationTarget.position = grabbedPosition + primaryPointer.Result.Details.Point;
-                }
+                manipulationTarget.position = grabbedPosition + primaryPointer.Result.Details.Point;
             }
 
             if (IsPressed && IsNudgePossible && primaryPointer != null)
@@ -376,13 +372,15 @@ namespace XRTK.SDK.Input.Handlers
                 primaryPointer.PointerExtent = updatedExtent;
             }
 
-            if (IsPressed && IsScalingPossible)
+            if (IsPressed && IsScalingPossible && primaryPointer != null)
             {
-                manipulationTarget.position = grabbedPosition + updatedPointerPosition;
-                manipulationTarget.ScaleAround(updatedPointerPosition, updatedScale);
+                var position = primaryPointer.Result.Details.Point;
+                manipulationTarget.position = grabbedPosition + position;
+                manipulationTarget.ScaleAround(position, updatedScale);
+
                 if (prevPosition != Vector3.zero)
                 {
-                    grabbedPosition = manipulationTarget.position - updatedPointerPosition;
+                    grabbedPosition = manipulationTarget.position - position;
                 }
             }
         }
@@ -611,7 +609,6 @@ namespace XRTK.SDK.Input.Handlers
                     newScale = currentScale;
                 }
 
-                updatedPointerPosition = pointerPosition;
                 updatedScale = newScale;
 
                 eventData.Use();
