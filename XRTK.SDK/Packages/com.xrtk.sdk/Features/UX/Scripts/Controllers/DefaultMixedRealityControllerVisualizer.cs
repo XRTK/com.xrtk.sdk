@@ -7,13 +7,15 @@ using XRTK.Interfaces.Providers.Controllers;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Providers.Controllers.Hands;
 using XRTK.Services;
+using XRTK.Definitions.Controllers;
+using XRTK.SDK.UX.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Controllers
 {
     /// <summary>
     /// The Mixed Reality Visualization component is primarily responsible for synchronizing the user's current input with controller models.
     /// </summary>
-    /// <seealso cref="Definitions.Controllers.MixedRealityControllerVisualizationProfile"/>
+    /// <seealso cref="MixedRealityControllerVisualizationProfile"/>
     public class DefaultMixedRealityControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
         /// <inheritdoc />
