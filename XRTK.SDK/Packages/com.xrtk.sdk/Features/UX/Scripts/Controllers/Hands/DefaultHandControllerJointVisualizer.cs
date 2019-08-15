@@ -7,7 +7,7 @@ using XRTK.Definitions.Controllers;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
-using XRTK.Interfaces.Providers.InputSystem.Simulation;
+using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
@@ -19,7 +19,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
     public class DefaultHandControllerJointVisualizer : MonoBehaviour, IMixedRealityHandJointHandler
     {
         private DefaultMixedRealityControllerVisualizer controllerVisualizer;
-        private IHandTrackingSimulationDataProvider dataProvider;
+        private IMixedRealityHandControllerDataProvider dataProvider;
         private Dictionary<TrackedHandJoint, Transform> joints;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             controllerVisualizer = GetComponent<DefaultMixedRealityControllerVisualizer>();
             joints = new Dictionary<TrackedHandJoint, Transform>();
-            dataProvider = MixedRealityToolkit.GetService<IHandTrackingSimulationDataProvider>();
+            dataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
             dataProvider.Register(gameObject);
         }
 

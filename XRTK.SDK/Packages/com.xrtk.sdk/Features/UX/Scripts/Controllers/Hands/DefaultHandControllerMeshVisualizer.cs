@@ -5,7 +5,7 @@ using UnityEngine;
 using XRTK.Definitions.Controllers;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
-using XRTK.Interfaces.Providers.InputSystem.Simulation;
+using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Providers.Controllers.Hands;
 using XRTK.Services;
 
@@ -18,7 +18,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
     public class DefaultHandControllerMeshVisualizer : MonoBehaviour, IMixedRealityHandMeshHandler
     {
         private DefaultMixedRealityControllerVisualizer controllerVisualizer;
-        private IHandTrackingSimulationDataProvider dataProvider;
+        private IMixedRealityHandControllerDataProvider dataProvider;
 
         /// <summary>
         /// The currently active hand visualization profile.
@@ -33,7 +33,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private void Start()
         {
             controllerVisualizer = GetComponent<DefaultMixedRealityControllerVisualizer>();
-            dataProvider = MixedRealityToolkit.GetService<IHandTrackingSimulationDataProvider>();
+            dataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
             dataProvider.Register(gameObject);
         }
 
