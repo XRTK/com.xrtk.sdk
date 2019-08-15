@@ -116,13 +116,13 @@ namespace XRTK.SDK.UX.Pointers
             // Set our first and last points
             lineBase.FirstPoint = pointerPosition;
 
-            if (!IsFocusLocked || Result == null)
+            if (IsFocusLocked)
             {
-                lineBase.LastPoint = pointerPosition + pointerRotation * Vector3.forward * PointerExtent;
+                lineBase.LastPoint = Result.EndPoint;
             }
             else
             {
-                lineBase.LastPoint = Result.EndPoint;
+                lineBase.LastPoint = pointerPosition + pointerRotation * Vector3.forward * PointerExtent;
             }
 
             // Make sure our array will hold
@@ -167,7 +167,7 @@ namespace XRTK.SDK.UX.Pointers
             float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0f;
 
             // If we hit something
-            if (Result?.CurrentPointerTarget != null)
+            if (Result.CurrentPointerTarget != null)
             {
                 clearWorldLength = Result.RayDistance;
                 lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
