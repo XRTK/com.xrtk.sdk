@@ -731,8 +731,6 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.None);
 
             primaryPointer.PointerExtent = prevPointerExtent;
-            primaryPointer = null;
-            primaryInputSource = null;
 
             if (isCanceled)
             {
@@ -741,7 +739,6 @@ namespace XRTK.SDK.Input.Handlers
                 manipulationTarget.rotation = prevRotation;
             }
 
-            IsBeingHeld = false;
             MixedRealityToolkit.InputSystem.PopModalInputHandler();
 
             manipulationTarget.SetLayerRecursively(prevPhysicsLayer);
@@ -750,6 +747,10 @@ namespace XRTK.SDK.Input.Handlers
             {
                 boundingBox.transform.SetLayerRecursively(boundingBoxPrevPhysicsLayer);
             }
+
+            primaryPointer = null;
+            primaryInputSource = null;
+            IsBeingHeld = false;
         }
 
         /// <summary>
