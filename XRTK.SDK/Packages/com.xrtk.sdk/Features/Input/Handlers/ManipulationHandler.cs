@@ -345,7 +345,6 @@ namespace XRTK.SDK.Input.Handlers
 
         private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
-        private float prevPointerExtent;
         private SpatialMeshDisplayOptions prevSpatialMeshDisplay;
 
         #region Monobehaviour Implementation
@@ -739,7 +738,6 @@ namespace XRTK.SDK.Input.Handlers
                 prevPointerExtent = primaryPointer.PointerExtent;
                 // update the pointer extent to prevent the object from popping to the end of the pointer
                 var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
-                prevPointerExtent = primaryPointer.PointerExtent;
                 primaryPointer.PointerExtent = currentRaycastDistance;
             }
 
