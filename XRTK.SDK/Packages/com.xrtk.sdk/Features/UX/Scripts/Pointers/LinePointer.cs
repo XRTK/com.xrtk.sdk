@@ -196,7 +196,7 @@ namespace XRTK.SDK.UX.Pointers
 
             // If focus is locked, we're sticking to the target
             // So don't clamp the world length
-            if (IsFocusLocked)
+            if (IsFocusLocked && Result.CurrentPointerTarget != null)
             {
                 float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);
                 LineBase.LineEndClamp = 1 - cursorOffsetLocalLength;
