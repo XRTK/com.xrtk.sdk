@@ -416,7 +416,7 @@ namespace XRTK.SDK.UX.Cursors
             // Use the lerp times to blend the position to the target position
             var cachedTransform = transform;
 
-            if (Pointer.IsFocusLocked && Pointer.SyncPointerTargetPosition && focusDetails.CurrentPointerTarget != null)
+            if (Pointer.IsFocusLocked && focusDetails.CurrentPointerTarget != null)
             {
                 cachedTransform.position = focusDetails.EndPoint;
             }

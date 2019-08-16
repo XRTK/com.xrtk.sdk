@@ -81,9 +81,9 @@ namespace XRTK.SDK.UX
                     pointer.TryGetPointerPosition(out BoundingBoxParent.initialGrabPoint);
                     BoundingBoxParent.ShowOneHandle(BoundingBoxParent.grabbedHandle);
                     BoundingBoxParent.initialGazePoint = Vector3.zero;
-                    cachedTargetPrevLayer = BoundingBoxParent.cachedTargetCollider.gameObject.layer;
-                    BoundingBoxParent.cachedTargetCollider.transform.SetLayerRecursively(IgnoreRaycastLayer);
-                    BoundingBoxParent.cachedTargetCollider.enabled = false;
+                    cachedTargetPrevLayer = BoundingBoxParent.BoundingBoxCollider.gameObject.layer;
+                    BoundingBoxParent.BoundingBoxCollider.transform.SetLayerRecursively(IgnoreRaycastLayer);
+                    BoundingBoxParent.BoundingBoxCollider.enabled = false;
                     BoundingBoxParent.transform.SetCollidersActive(false);
                     transform.SetCollidersActive(false);
                     eventData.Use();
@@ -102,7 +102,7 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.grabbedHandle = null;
                     BoundingBoxParent.ResetHandleVisibility();
                     MixedRealityToolkit.InputSystem.PopModalInputHandler();
-                    BoundingBoxParent.cachedTargetCollider.transform.SetLayerRecursively(cachedTargetPrevLayer);
+                    BoundingBoxParent.BoundingBoxCollider.transform.SetLayerRecursively(cachedTargetPrevLayer);
                     BoundingBoxParent.transform.SetCollidersActive(true);
                     transform.SetCollidersActive(true);
                     eventData.Use();
@@ -529,7 +529,7 @@ namespace XRTK.SDK.UX
                     }
 
                     rigRoot.gameObject.SetActive(value);
-                    cachedTargetCollider.enabled = value;
+                    BoundingBoxCollider.enabled = value;
 
                     if (value)
                     {
@@ -547,7 +547,8 @@ namespace XRTK.SDK.UX
         private ManipulationHandler manipulationHandler;
 
         private Transform rigRoot;
-        private BoxCollider cachedTargetCollider;
+
+        public BoxCollider BoundingBoxCollider { get; private set; }
 
         private HandleMoveType handleMoveType = HandleMoveType.Point;
 
@@ -640,9 +641,9 @@ namespace XRTK.SDK.UX
                 rigRoot.gameObject.SetActive(false);
             }
 
-            if (cachedTargetCollider != null)
+            if (BoundingBoxCollider != null)
             {
-                cachedTargetCollider.enabled = false;
+                BoundingBoxCollider.enabled = false;
             }
         }
 
@@ -674,10 +675,10 @@ namespace XRTK.SDK.UX
         {
             if (boxColliderToUse == null)
             {
-                if (cachedTargetCollider != null)
+                if (BoundingBoxCollider != null)
                 {
-                    cachedTargetCollider.size -= wireframePadding;
-                    Destroy(cachedTargetCollider);
+                    BoundingBoxCollider.size -= wireframePadding;
+                    Destroy(BoundingBoxCollider);
                 }
             }
             else
@@ -982,23 +983,35 @@ namespace XRTK.SDK.UX
 
             if (boxColliderToUse != null)
             {
-                cachedTargetCollider = boxColliderToUse;
-                cachedTargetCollider.transform.hasChanged = true;
-                cachedTargetCollider.size += wireframePadding;
+                BoundingBoxCollider = boxColliderToUse;
+                BoundingBoxCollider.transform.hasChanged = true;
+                BoundingBoxCollider.size += wireframePadding;
             }
             else
             {
-                if (cachedTargetCollider != null)
+                if (BoundingBoxCollider != null)
                 {
-                    cachedTargetCollider.size -= wireframePadding;
-                    Destroy(cachedTargetCollider);
+                    BoundingBoxCollider.size -= wireframePadding;
+                    Destroy(BoundingBoxCollider);
                 }
 
-                var bounds = transform.GetColliderBounds();
+                // Store current rotation then zero out the rotation so that the bounds
+                // are computed when the object is in its 'axis aligned orientation'.
+                var currentRotation = transform.rotation;
+                transform.rotation = Quaternion.identity;
+                Physics.SyncTransforms(); // Update collider bounds
 
-                cachedTargetCollider = gameObject.AddComponent<BoxCollider>();
-                cachedTargetCollider.center = transform.InverseTransformPoint(bounds.center);
-                cachedTargetCollider.size = (bounds.size / transform.localScale.x) + wireframePadding;
+                var bounds = transform.GetColliderBounds(false);
+
+                BoundingBoxCollider = gameObject.AddComponent<BoxCollider>();
+
+                BoundingBoxCollider.center = transform.InverseTransformPoint(bounds.center);
+                BoundingBoxCollider.size = (bounds.size / transform.localScale.x) + wireframePadding;
+
+                // After bounds are computed, restore rotation...
+                // ReSharper disable once Unity.InefficientPropertyAccess
+                transform.rotation = currentRotation;
+                Physics.SyncTransforms();
             }
         }
 
@@ -1174,14 +1187,14 @@ namespace XRTK.SDK.UX
 
         private void UpdateBounds()
         {
-            Debug.Assert(cachedTargetCollider != null);
+            Debug.Assert(BoundingBoxCollider != null);
 
             // Store current rotation then zero out the rotation so that the bounds
             // are computed when the object is in its 'axis aligned orientation'.
             var currentRotation = transform.rotation;
             transform.rotation = Quaternion.identity;
             Physics.SyncTransforms(); // Update collider bounds
-            var boundsExtents = cachedTargetCollider.bounds.extents;
+            var boundsExtents = BoundingBoxCollider.bounds.extents;
             // After bounds are computed, restore rotation...
             // ReSharper disable once Unity.InefficientPropertyAccess
             transform.rotation = currentRotation;
@@ -1212,7 +1225,7 @@ namespace XRTK.SDK.UX
         private void UpdateRigTransform()
         {
             Debug.Assert(rigRoot != null);
-            Debug.Assert(cachedTargetCollider != null);
+            Debug.Assert(BoundingBoxCollider != null);
 
             rigRoot.rotation = Quaternion.identity;
             rigRoot.position = Vector3.zero;
@@ -1244,7 +1257,7 @@ namespace XRTK.SDK.UX
             }
 
             // Move rig into position and rotation
-            rigRoot.position = transform.TransformPoint(cachedTargetCollider.center);
+            rigRoot.position = transform.TransformPoint(BoundingBoxCollider.center);
             rigRoot.rotation = transform.rotation;
         }
 

@@ -722,6 +722,8 @@ namespace XRTK.SDK.Input.Handlers
                 boundingBox.transform.SetLayerRecursively(IgnoreRaycastLayer);
             }
 
+            //primaryPointer.IsFocusLocked = true;
+
             eventData.Use();
         }
 
@@ -757,6 +759,8 @@ namespace XRTK.SDK.Input.Handlers
             {
                 boundingBox.transform.SetLayerRecursively(boundingBoxPrevPhysicsLayer);
             }
+
+            //primaryPointer.IsFocusLocked = false;
 
             primaryPointer = null;
             primaryInputSource = null;
