@@ -56,7 +56,7 @@ namespace XRTK.SDK.Input.Handlers
             // add the pointer to the list of focusers.
             if (eventData.NewFocusedObject == gameObject)
             {
-                eventData.Pointer.FocusTarget = this;
+                eventData.Pointer.FocusHandler = this;
                 activePointers.Add(eventData.Pointer);
             }
             // If we're the old focused target object,
@@ -69,7 +69,7 @@ namespace XRTK.SDK.Input.Handlers
                 // clear the FocusTarget field from the Pointer.
                 if (eventData.NewFocusedObject == null)
                 {
-                    eventData.Pointer.FocusTarget = null;
+                    eventData.Pointer.FocusHandler = null;
                 }
             }
         }

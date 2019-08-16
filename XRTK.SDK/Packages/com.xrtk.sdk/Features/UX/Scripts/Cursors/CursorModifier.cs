@@ -128,10 +128,10 @@ namespace XRTK.SDK.UX.Cursors
                 return Vector3.zero;
             }
 
-            if (MixedRealityToolkit.InputSystem != null && MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(cursor.Pointer, out FocusDetails focusDetails))
+            if (MixedRealityToolkit.InputSystem != null && MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(cursor.Pointer, out var focusDetails))
             {
                 // Else, consider the modifiers on the cursor modifier, but don't snap
-                return focusDetails.Point + HostTransform.TransformVector(CursorPositionOffset);
+                return focusDetails.EndPoint + HostTransform.TransformVector(CursorPositionOffset);
             }
 
             return Vector3.zero;

@@ -401,9 +401,9 @@ namespace XRTK.SDK.UX.Cursors
                     // If no modifier is on the target, just use the hit result to set cursor position
                     // Get the look forward by using distance between pointer origin and target position
                     // (This may not be strictly accurate for extremely wobbly pointers, but it should produce usable results)
-                    var distanceToTarget = Vector3.Distance(Pointer.Rays[0].Origin, focusDetails.Point);
+                    var distanceToTarget = Vector3.Distance(Pointer.Rays[0].Origin, focusDetails.EndPoint);
                     lookForward = -RayStep.GetDirectionByDistance(Pointer.Rays, distanceToTarget);
-                    targetPosition = focusDetails.Point + (lookForward * surfaceCursorDistance);
+                    targetPosition = focusDetails.EndPoint + (lookForward * surfaceCursorDistance);
                     var lookRotation = Vector3.Slerp(focusDetails.Normal, lookForward, lookRotationBlend);
                     targetRotation = Quaternion.LookRotation(lookRotation == Vector3.zero ? lookForward : lookRotation, Vector3.up);
                 }
@@ -416,9 +416,9 @@ namespace XRTK.SDK.UX.Cursors
             // Use the lerp times to blend the position to the target position
             var cachedTransform = transform;
 
-            if (Pointer.IsFocusLocked && Pointer.IsTargetPositionLockedOnFocusLock && focusDetails.Object != null)
+            if (Pointer.IsFocusLocked && Pointer.SyncPointerTargetPosition && focusDetails.CurrentPointerTarget != null)
             {
-                cachedTransform.position = focusDetails.Point;
+                cachedTransform.position = focusDetails.EndPoint;
             }
             else
             {
