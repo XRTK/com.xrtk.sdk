@@ -277,6 +277,8 @@ namespace XRTK.SDK.Input.Handlers
 
         #endregion Manipulation Options
 
+        #region Properties
+
         /// <summary>
         /// The current status of the hold.
         /// </summary>
@@ -284,26 +286,6 @@ namespace XRTK.SDK.Input.Handlers
         /// Used to determine if the <see cref="GameObject"/> is currently being manipulated by the user.
         /// </remarks>
         public bool IsBeingHeld { get; private set; } = false;
-
-        /// <summary>
-        /// The updated extent of the pointer.
-        /// </summary>
-        private float updatedExtent;
-
-        /// <summary>
-        /// The first input source to start the manipulation phase of this object.
-        /// </summary>
-        private IMixedRealityInputSource primaryInputSource = null;
-
-        /// <summary>
-        /// The first pointer to start the manipulation phase of this object.
-        /// </summary>
-        private IMixedRealityPointer primaryPointer = null;
-
-        /// <summary>
-        /// The last rotation reading used to calculate if the rotation action is active.
-        /// </summary>
-        private Vector2 lastPositionReading = Vector2.zero;
 
         /// <summary>
         /// Is the <see cref="primaryInputSource"/> currently pressed?
@@ -330,17 +312,29 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public bool IsRotationPossible { get; private set; } = false;
 
-        private Vector3 prevScale = Vector3.one;
-
-        private Vector3 prevPosition = Vector3.zero;
-        private Quaternion prevRotation = Quaternion.identity;
-
-        private Vector3 grabbedPosition = Vector3.zero;
+        #endregion Properties
 
         private BoundingBox boundingBox;
 
+        private IMixedRealityPointer primaryPointer;
+
+        private IMixedRealityInputSource primaryInputSource;
+
         private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
+        private SpatialMeshDisplayOptions prevSpatialMeshDisplay;
+
+        private float updatedExtent;
+        private float prevPointerExtent;
+
+        private Vector2 lastPositionReading;
+
+        private Vector3 prevScale;
+        private Vector3 prevPosition;
+        private Vector3 updatedScale;
+        private Vector3 grabbedPosition;
+
+        private Quaternion prevRotation;
 
         #region Monobehaviour Implementation
 
@@ -356,17 +350,34 @@ namespace XRTK.SDK.Input.Handlers
 
         protected virtual void Update()
         {
-            if (IsBeingHeld)
+            if (!IsBeingHeld || primaryPointer == null) { return; }
+
+            var pointerPosition = primaryPointer.Result.EndPoint;
+
+            if (!IsPressed)
             {
                 if (!IsRotating && !IsScalingPossible)
                 {
-                    manipulationTarget.position = grabbedPosition + primaryPointer.Result.Details.Point;
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
                 }
             }
-
-            if (IsPressed && IsNudgePossible && primaryPointer != null)
+            else
             {
-                primaryPointer.PointerExtent = updatedExtent;
+                if (IsNudgePossible)
+                {
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    primaryPointer.PointerExtent = updatedExtent;
+                }
+                else if (IsScalingPossible)
+                {
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    manipulationTarget.ScaleAround(pointerPosition, updatedScale);
+
+                    if (prevPosition != Vector3.zero)
+                    {
+                        grabbedPosition = manipulationTarget.position - pointerPosition;
+                    }
+                }
             }
         }
 
@@ -376,6 +387,9 @@ namespace XRTK.SDK.Input.Handlers
 
             if (IsBeingHeld)
             {
+                // We don't pass IsCancelled here because 
+                // it's the intended behaviour to end the hold
+                // if the component is disabled.
                 EndHold();
             }
         }
@@ -462,7 +476,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            var pointerPosition = primaryPointer.Result.Details.Point;
+            var pointerPosition = primaryPointer.Result.EndPoint;
 
             // Filter our actions
             if (eventData.MixedRealityInputAction != nudgeAction ||
@@ -546,7 +560,7 @@ namespace XRTK.SDK.Input.Handlers
             {
                 Debug.Assert(primaryPointer != null);
                 var newExtent = primaryPointer.PointerExtent;
-                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
+                var currentRaycastDistance = primaryPointer.Result.RayDistance;
 
                 // Reset the cursor extent to the nearest value in case we're hitting something close
                 // and the user wants to adjust. That way it doesn't take forever to see the change.
@@ -582,49 +596,22 @@ namespace XRTK.SDK.Input.Handlers
             {
                 var newScale = manipulationTarget.localScale;
                 var currentScale = newScale;
+                newScale = CalculateScaleAmount(eventData, newScale);
 
-                if (eventData.InputData.x < 0f)
+                // We can check any axis, they should all be the same as we do uniform scales.
+                if (eventData.InputData.x < 0f && newScale.x <= scaleConstraints.x)
                 {
-                    newScale *= scaleAmount;
-
-                    // We can check any axis, they should all be the same as we do uniform scales.
-                    if (newScale.x <= scaleConstraints.x)
-                    {
-                        newScale = currentScale;
-                    }
+                    newScale = currentScale;
                 }
-                else
+                else if (newScale.y >= scaleConstraints.y)
                 {
-                    newScale /= scaleAmount;
-
-                    // We can check any axis, they should all be the same as we do uniform scales.
-                    if (newScale.y >= scaleConstraints.y)
-                    {
-                        newScale = currentScale;
-                    }
+                    newScale = currentScale;
                 }
 
-                manipulationTarget.position = grabbedPosition + pointerPosition;
-                manipulationTarget.ScaleAround(pointerPosition, newScale);
-
-                if (prevPosition != Vector3.zero)
-                {
-                    grabbedPosition = manipulationTarget.position - pointerPosition;
-                }
+                updatedScale = newScale;
 
                 eventData.Use();
             }
-        }
-
-        /// <summary>
-        /// Calculates the extent of the nudge.
-        /// </summary>
-        /// <param name="eventData">The event data.</param>
-        /// <param name="prevExtent">The previous extent distance of the pointer and raycast.</param>
-        /// <returns>The new pointer extent.</returns>
-        protected virtual float CalculateNudgeDistance(InputEventData<Vector2> eventData, float prevExtent)
-        {
-            return prevExtent + nudgeAmount * (eventData.InputData.y < 0f ? -1 : 1);
         }
 
         #endregion IMixedRealityInputHandler Implementation
@@ -702,9 +689,14 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
-            MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(spatialMeshVisibility);
 
-            var pointerPosition = primaryPointer.Result.Details.Point;
+            if (MixedRealityToolkit.SpatialAwarenessSystem != null)
+            {
+                prevSpatialMeshDisplay = MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility;
+                MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = spatialMeshVisibility;
+            }
+
+            var pointerPosition = primaryPointer.Result.EndPoint;
 
             prevPosition = manipulationTarget.position;
 
@@ -712,8 +704,9 @@ namespace XRTK.SDK.Input.Handlers
             {
                 grabbedPosition = prevPosition - pointerPosition;
 
+                prevPointerExtent = primaryPointer.PointerExtent;
                 // update the pointer extent to prevent the object from popping to the end of the pointer
-                var currentRaycastDistance = primaryPointer.Result.Details.RayDistance;
+                var currentRaycastDistance = primaryPointer.Result.RayDistance;
                 primaryPointer.PointerExtent = currentRaycastDistance;
             }
 
@@ -742,10 +735,12 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!IsBeingHeld) { return; }
 
-            MixedRealityToolkit.SpatialAwarenessSystem.SetMeshVisibility(SpatialMeshDisplayOptions.None);
+            if (MixedRealityToolkit.SpatialAwarenessSystem != null)
+            {
+                MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = prevSpatialMeshDisplay;
+            }
 
-            primaryPointer = null;
-            primaryInputSource = null;
+            primaryPointer.PointerExtent = prevPointerExtent;
 
             if (isCanceled)
             {
@@ -754,7 +749,6 @@ namespace XRTK.SDK.Input.Handlers
                 manipulationTarget.rotation = prevRotation;
             }
 
-            IsBeingHeld = false;
             MixedRealityToolkit.InputSystem.PopModalInputHandler();
 
             manipulationTarget.SetLayerRecursively(prevPhysicsLayer);
@@ -763,6 +757,32 @@ namespace XRTK.SDK.Input.Handlers
             {
                 boundingBox.transform.SetLayerRecursively(boundingBoxPrevPhysicsLayer);
             }
+
+            primaryPointer = null;
+            primaryInputSource = null;
+            IsBeingHeld = false;
+        }
+
+        /// <summary>
+        /// Calculates the extent of the nudge using input event data.
+        /// </summary>
+        /// <param name="eventData">The event data.</param>
+        /// <param name="prevExtent">The previous extent distance of the pointer and raycast.</param>
+        /// <returns>The new pointer extent.</returns>
+        protected virtual float CalculateNudgeDistance(InputEventData<Vector2> eventData, float prevExtent)
+        {
+            return prevExtent + nudgeAmount * (eventData.InputData.y < 0f ? -1 : 1);
+        }
+
+        /// <summary>
+        /// Calculates the scale amount using the input event data.
+        /// </summary>
+        /// <param name="eventData">The event data.</param>
+        /// <param name="scale">The previous scale</param>
+        /// <returns>The new scale value.</returns>
+        protected virtual Vector3 CalculateScaleAmount(InputEventData<Vector2> eventData, Vector3 scale)
+        {
+            return eventData.InputData.x < 0f ? scale * scaleAmount : scale / scaleAmount;
         }
     }
 }

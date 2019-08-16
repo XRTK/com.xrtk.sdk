@@ -66,7 +66,9 @@ namespace XRTK.SDK.UX.Pointers
         {
             position = Vector3.zero;
             if (fingerId < 0) { return false; }
-            position = Result?.Details.Point ?? CameraCache.Main.ScreenPointToRay(UnityEngine.Input.GetTouch(FingerId).position).GetPoint(PointerExtent);
+            position = Result.CurrentPointerTarget != null
+                ? Result.EndPoint
+                : CameraCache.Main.ScreenPointToRay(UnityEngine.Input.GetTouch(FingerId).position).GetPoint(PointerExtent);
             return true;
         }
 
