@@ -365,6 +365,7 @@ namespace XRTK.SDK.Input.Handlers
             {
                 if (IsNudgePossible)
                 {
+                    manipulationTarget.position = grabbedPosition + pointerPosition;
                     primaryPointer.PointerExtent = updatedExtent;
                 }
                 else if (IsScalingPossible)
