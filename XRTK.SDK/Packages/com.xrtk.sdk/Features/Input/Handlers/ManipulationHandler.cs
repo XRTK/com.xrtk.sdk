@@ -1,6 +1,7 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System.Linq;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.SpatialAwarenessSystem;
@@ -116,6 +117,19 @@ namespace XRTK.SDK.Input.Handlers
         {
             get => cancelAction;
             set => cancelAction = value;
+        }
+
+        [SerializeField]
+        [Tooltip("The action to use to sync the target pose when a hold event is triggered.")]
+        private MixedRealityInputAction poseAction = MixedRealityInputAction.None;
+
+        /// <summary>
+        /// The action to use to sync the target pose when a hold event is triggered.
+        /// </summary>
+        public MixedRealityInputAction PoseAction
+        {
+            get => poseAction;
+            set => poseAction = value;
         }
 
         #endregion Input Actions
@@ -332,7 +346,7 @@ namespace XRTK.SDK.Input.Handlers
         private Vector3 prevScale;
         private Vector3 prevPosition;
         private Vector3 updatedScale;
-        private Vector3 grabbedPosition;
+        private Vector3 offsetPosition;
 
         private Quaternion prevRotation;
 
@@ -358,26 +372,38 @@ namespace XRTK.SDK.Input.Handlers
             {
                 if (!IsRotating && !IsScalingPossible)
                 {
-                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    manipulationTarget.position = offsetPosition + pointerPosition;
                 }
             }
             else
             {
                 if (IsNudgePossible)
                 {
-                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    manipulationTarget.position = offsetPosition + pointerPosition;
                     primaryPointer.PointerExtent = updatedExtent;
                 }
                 else if (IsScalingPossible)
                 {
-                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    manipulationTarget.position = offsetPosition + pointerPosition;
                     manipulationTarget.ScaleAround(pointerPosition, updatedScale);
 
                     if (prevPosition != Vector3.zero)
                     {
-                        grabbedPosition = manipulationTarget.position - pointerPosition;
+                        offsetPosition = manipulationTarget.position - pointerPosition;
                     }
                 }
+            }
+
+            var observer = MixedRealityToolkit.SpatialAwarenessSystem?.DetectedSpatialObservers.FirstOrDefault();
+
+            if (observer == null) { return; }
+
+            var distanceToGround = float.MaxValue;
+
+            if (Physics.Raycast(manipulationTarget.position, -Vector3.up, out var hit) &&
+                hit.transform.gameObject.layer == observer.PhysicsLayer)
+            {
+                distanceToGround = hit.distance;
             }
         }
 
@@ -507,12 +533,12 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (IsRotating)
                 {
-                    manipulationTarget.position = grabbedPosition + pointerPosition;
+                    manipulationTarget.position = offsetPosition + pointerPosition;
                     manipulationTarget.RotateAround(pointerPosition, Vector3.up, -rotationAngle);
 
                     if (prevPosition != Vector3.zero)
                     {
-                        grabbedPosition = manipulationTarget.position - pointerPosition;
+                        offsetPosition = manipulationTarget.position - pointerPosition;
                     }
 
                     eventData.Use();
@@ -696,13 +722,11 @@ namespace XRTK.SDK.Input.Handlers
                 MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = spatialMeshVisibility;
             }
 
-            var pointerPosition = primaryPointer.Result.EndPoint;
-
             prevPosition = manipulationTarget.position;
 
             if (prevPosition != Vector3.zero)
             {
-                grabbedPosition = prevPosition - pointerPosition;
+                offsetPosition = prevPosition - primaryPointer.Result.EndPoint;
 
                 prevPointerExtent = primaryPointer.PointerExtent;
                 // update the pointer extent to prevent the object from popping to the end of the pointer
@@ -722,7 +746,10 @@ namespace XRTK.SDK.Input.Handlers
                 boundingBox.transform.SetLayerRecursively(IgnoreRaycastLayer);
             }
 
-            //primaryPointer.IsFocusLocked = true;
+            transform.SetCollidersActive(false);
+
+            primaryPointer.SyncPointerTargetPosition = true;
+            primaryPointer.IsFocusLocked = true;
 
             eventData.Use();
         }
@@ -742,7 +769,10 @@ namespace XRTK.SDK.Input.Handlers
                 MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = prevSpatialMeshDisplay;
             }
 
-            primaryPointer.PointerExtent = prevPointerExtent;
+            if (prevPosition != Vector3.zero)
+            {
+                primaryPointer.PointerExtent = prevPointerExtent;
+            }
 
             if (isCanceled)
             {
@@ -760,7 +790,10 @@ namespace XRTK.SDK.Input.Handlers
                 boundingBox.transform.SetLayerRecursively(boundingBoxPrevPhysicsLayer);
             }
 
-            //primaryPointer.IsFocusLocked = false;
+            transform.SetCollidersActive(true);
+
+            primaryPointer.SyncPointerTargetPosition = false;
+            primaryPointer.IsFocusLocked = false;
 
             primaryPointer = null;
             primaryInputSource = null;

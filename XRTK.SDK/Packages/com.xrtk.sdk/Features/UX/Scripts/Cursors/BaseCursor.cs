@@ -138,17 +138,6 @@ namespace XRTK.SDK.UX.Cursors
         private IMixedRealityPointer pointer;
 
         /// <inheritdoc />
-        public float DefaultCursorDistance
-        {
-            get => defaultCursorDistance;
-            set => defaultCursorDistance = value;
-        }
-
-        [SerializeField]
-        [Tooltip("The maximum distance the cursor can be with nothing hit")]
-        private float defaultCursorDistance = 2.0f;
-
-        /// <inheritdoc />
         public virtual Vector3 Position => transform.position;
 
         /// <inheritdoc />
@@ -383,8 +372,8 @@ namespace XRTK.SDK.UX.Cursors
             if (newTargetedObject == null)
             {
                 TargetedObject = null;
-                targetPosition = RayStep.GetPointByDistance(Pointer.Rays, defaultCursorDistance);
-                lookForward = -RayStep.GetDirectionByDistance(Pointer.Rays, defaultCursorDistance);
+                targetPosition = focusDetails.EndPoint;
+                lookForward = -RayStep.GetDirectionByDistance(Pointer.Rays, focusDetails.RayDistance);
                 targetRotation = lookForward.magnitude > 0f ? Quaternion.LookRotation(lookForward, Vector3.up) : transform.rotation;
             }
             else
@@ -418,7 +407,9 @@ namespace XRTK.SDK.UX.Cursors
 
             if (Pointer.IsFocusLocked && focusDetails.CurrentPointerTarget != null)
             {
-                cachedTransform.position = focusDetails.EndPoint;
+                cachedTransform.position = Pointer.SyncPointerTargetPosition
+                    ? focusDetails.Offset
+                    : focusDetails.EndPoint;
             }
             else
             {

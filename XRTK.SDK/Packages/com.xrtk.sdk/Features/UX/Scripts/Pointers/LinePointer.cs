@@ -57,6 +57,8 @@ namespace XRTK.SDK.UX.Pointers
             set => lineRenderers = value;
         }
 
+        private Vector3 syncedPosition;
+
         private void CheckInitialization()
         {
             if (lineBase == null)
@@ -118,7 +120,16 @@ namespace XRTK.SDK.UX.Pointers
 
             if (IsFocusLocked && Result.CurrentPointerTarget != null)
             {
-                lineBase.LastPoint = Result.EndPoint;
+                if (SyncPointerTargetPosition)
+                {
+                    // Now raycast out like nothing happened so we can get an updated pointer position.
+                    lineBase.LastPoint = pointerPosition + pointerRotation * (Vector3.forward * PointerExtent);
+                }
+                else
+                {
+                    // Set the line to the locked position.
+                    lineBase.LastPoint = Result.EndPoint;
+                }
             }
             else
             {
@@ -198,6 +209,11 @@ namespace XRTK.SDK.UX.Pointers
             // So don't clamp the world length
             if (IsFocusLocked && Result.CurrentPointerTarget != null)
             {
+                if (SyncPointerTargetPosition)
+                {
+                    LineBase.LastPoint = Result.Offset;
+                }
+
                 float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);
                 LineBase.LineEndClamp = 1 - cursorOffsetLocalLength;
             }

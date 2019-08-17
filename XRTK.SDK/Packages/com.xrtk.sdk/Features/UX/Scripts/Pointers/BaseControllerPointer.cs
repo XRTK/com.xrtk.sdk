@@ -116,7 +116,6 @@ namespace XRTK.SDK.UX.Pointers
 
                 if (BaseCursor != null)
                 {
-                    BaseCursor.DefaultCursorDistance = PointerExtent;
                     BaseCursor.Pointer = this;
                     BaseCursor.SetVisibilityOnSourceDetected = setCursorVisibilityOnSourceDetected;
                     BaseCursor.SetVisibility(!disableCursorOnStart);
@@ -260,8 +259,14 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public bool IsFocusLocked { get; set; }
 
-        ///// <inheritdoc />
-        //public bool SyncPointerTargetPosition { get; set; }
+        /// <inheritdoc />
+        public bool SyncPointerTargetPosition
+        {
+            get => IsFocusLocked && syncPointerTargetPosition;
+            set => syncPointerTargetPosition = value;
+        }
+
+        private bool syncPointerTargetPosition = false;
 
         [SerializeField]
         private bool overrideGlobalPointerExtent = false;
