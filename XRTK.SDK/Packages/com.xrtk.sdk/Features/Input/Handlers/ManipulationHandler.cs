@@ -338,6 +338,7 @@ namespace XRTK.SDK.Input.Handlers
         private int boundingBoxPrevPhysicsLayer;
         private SpatialMeshDisplayOptions prevSpatialMeshDisplay;
 
+        private float updatedAngle;
         private float updatedExtent;
         private float prevPointerExtent;
 
@@ -362,29 +363,36 @@ namespace XRTK.SDK.Input.Handlers
             boundingBox = GetComponent<BoundingBox>();
         }
 
-        protected virtual void Update()
+        protected virtual void LateUpdate()
         {
             if (!IsBeingHeld || primaryPointer == null) { return; }
 
-            var pointerPosition = primaryPointer.Result.EndPoint;
+            var pointerPosition = primaryPointer.Result.Offset;
 
-            if (!IsPressed)
+            if (pointerPosition == Vector3.zero)
             {
-                if (!IsRotating && !IsScalingPossible)
-                {
-                    manipulationTarget.position = offsetPosition + pointerPosition;
-                }
+                pointerPosition = primaryPointer.Result.EndPoint;
             }
-            else
+
+            manipulationTarget.position = offsetPosition + pointerPosition;
+
+            if (IsPressed)
             {
-                if (IsNudgePossible)
+                if (IsRotating)
                 {
-                    manipulationTarget.position = offsetPosition + pointerPosition;
+                    manipulationTarget.RotateAround(pointerPosition, Vector3.up, -updatedAngle);
+
+                    if (prevPosition != Vector3.zero)
+                    {
+                        offsetPosition = manipulationTarget.position - pointerPosition;
+                    }
+                }
+                else if (IsNudgePossible)
+                {
                     primaryPointer.PointerExtent = updatedExtent;
                 }
                 else if (IsScalingPossible)
                 {
-                    manipulationTarget.position = offsetPosition + pointerPosition;
                     manipulationTarget.ScaleAround(pointerPosition, updatedScale);
 
                     if (prevPosition != Vector3.zero)
@@ -502,8 +510,6 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            var pointerPosition = primaryPointer.Result.EndPoint;
-
             // Filter our actions
             if (eventData.MixedRealityInputAction != nudgeAction ||
                 eventData.MixedRealityInputAction != scaleAction ||
@@ -524,23 +530,11 @@ namespace XRTK.SDK.Input.Handlers
                 IsRotationPossible &&
                 !lastPositionReading.x.Equals(0f) && !lastPositionReading.y.Equals(0f))
             {
-                var rotationAngle = Vector2.SignedAngle(lastPositionReading, eventData.InputData);
+                updatedAngle = CalculateRotationAngle(eventData, lastPositionReading);
 
-                if (Mathf.Abs(rotationAngle) > rotationAngleActivation)
+                if (Mathf.Abs(updatedAngle) > rotationAngleActivation)
                 {
                     IsRotating = true;
-                }
-
-                if (IsRotating)
-                {
-                    manipulationTarget.position = offsetPosition + pointerPosition;
-                    manipulationTarget.RotateAround(pointerPosition, Vector3.up, -rotationAngle);
-
-                    if (prevPosition != Vector3.zero)
-                    {
-                        offsetPosition = manipulationTarget.position - pointerPosition;
-                    }
-
                     eventData.Use();
                 }
             }
@@ -724,12 +718,12 @@ namespace XRTK.SDK.Input.Handlers
 
             prevPosition = manipulationTarget.position;
 
+            // update the pointer extent to prevent the object from popping to the end of the pointer
             if (prevPosition != Vector3.zero)
             {
                 offsetPosition = prevPosition - primaryPointer.Result.EndPoint;
 
                 prevPointerExtent = primaryPointer.PointerExtent;
-                // update the pointer extent to prevent the object from popping to the end of the pointer
                 var currentRaycastDistance = primaryPointer.Result.RayDistance;
                 primaryPointer.PointerExtent = currentRaycastDistance;
             }
@@ -820,6 +814,17 @@ namespace XRTK.SDK.Input.Handlers
         protected virtual Vector3 CalculateScaleAmount(InputEventData<Vector2> eventData, Vector3 scale)
         {
             return eventData.InputData.x < 0f ? scale * scaleAmount : scale / scaleAmount;
+        }
+
+        /// <summary>
+        /// Calculates the rotation angle using the input event data and the previous reading.
+        /// </summary>
+        /// <param name="eventData">The current input event.</param>
+        /// <param name="previousReading">The input reading from the last event.</param>
+        /// <returns>The new rotation angle.</returns>
+        protected virtual float CalculateRotationAngle(InputEventData<Vector2> eventData, Vector2 previousReading)
+        {
+            return Vector2.SignedAngle(previousReading, eventData.InputData);
         }
     }
 }
