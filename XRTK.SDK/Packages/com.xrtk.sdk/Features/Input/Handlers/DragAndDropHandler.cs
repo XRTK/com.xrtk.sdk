@@ -125,8 +125,8 @@ namespace XRTK.SDK.Input.Handlers
             currentInputSource = eventData.InputSource;
             currentPointer = eventData.Pointer;
 
-            Vector3 initialDraggingPosition = MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(currentPointer, out FocusDetails focusDetails)
-                    ? focusDetails.Point
+            Vector3 initialDraggingPosition = MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(currentPointer, out var focusDetails)
+                    ? focusDetails.EndPoint
                     : hostTransform.position;
 
             StartDragging(initialDraggingPosition);
