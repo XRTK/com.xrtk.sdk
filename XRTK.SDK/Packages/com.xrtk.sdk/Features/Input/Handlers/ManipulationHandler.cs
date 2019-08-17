@@ -231,7 +231,7 @@ namespace XRTK.SDK.Input.Handlers
         [SerializeField]
         [Range(2.8125f, 45f)]
         [Tooltip("The amount a user has to scroll in a circular motion to activate the rotation action.")]
-        private float rotationAngleActivation = 11.25f;
+        private float rotationAngleActivation = 2.8125f;
 
         /// <summary>
         /// The amount a user has to scroll in a circular motion to activate the rotation action.
@@ -309,7 +309,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// Is there currently a manipulation processing a rotation?
         /// </summary>
-        public bool IsRotating { get; private set; } = false;
+        public bool IsRotating => !updatedAngle.Equals(0f);
 
         /// <summary>
         /// Is scaling possible?
@@ -362,56 +362,14 @@ namespace XRTK.SDK.Input.Handlers
 
             boundingBox = GetComponent<BoundingBox>();
         }
-
         protected virtual void LateUpdate()
         {
-            if (!IsBeingHeld || primaryPointer == null) { return; }
-
-            var pointerPosition = primaryPointer.Result.Offset;
-
-            if (pointerPosition == Vector3.zero)
+            // only process the transform data if we don't have
+            // a bounding box component attached, otherwise the
+            // bounding box will call this method for us.
+            if (boundingBox == null)
             {
-                pointerPosition = primaryPointer.Result.EndPoint;
-            }
-
-            manipulationTarget.position = offsetPosition + pointerPosition;
-
-            if (IsPressed)
-            {
-                if (IsRotating)
-                {
-                    manipulationTarget.RotateAround(pointerPosition, Vector3.up, -updatedAngle);
-
-                    if (prevPosition != Vector3.zero)
-                    {
-                        offsetPosition = manipulationTarget.position - pointerPosition;
-                    }
-                }
-                else if (IsNudgePossible)
-                {
-                    primaryPointer.PointerExtent = updatedExtent;
-                }
-                else if (IsScalingPossible)
-                {
-                    manipulationTarget.ScaleAround(pointerPosition, updatedScale);
-
-                    if (prevPosition != Vector3.zero)
-                    {
-                        offsetPosition = manipulationTarget.position - pointerPosition;
-                    }
-                }
-            }
-
-            var observer = MixedRealityToolkit.SpatialAwarenessSystem?.DetectedSpatialObservers.FirstOrDefault();
-
-            if (observer == null) { return; }
-
-            var distanceToGround = float.MaxValue;
-
-            if (Physics.Raycast(manipulationTarget.position, -Vector3.up, out var hit) &&
-                hit.transform.gameObject.layer == observer.PhysicsLayer)
-            {
-                distanceToGround = hit.distance;
+                ProcessTransformData();
             }
         }
 
@@ -469,7 +427,6 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.MixedRealityInputAction == touchpadPressAction &&
                 eventData.InputData <= 0.00001f)
             {
-                IsRotating = false;
                 IsNudgePossible = false;
                 IsScalingPossible = false;
                 lastPositionReading.x = 0f;
@@ -530,11 +487,11 @@ namespace XRTK.SDK.Input.Handlers
                 IsRotationPossible &&
                 !lastPositionReading.x.Equals(0f) && !lastPositionReading.y.Equals(0f))
             {
-                updatedAngle = CalculateRotationAngle(eventData, lastPositionReading);
+                var angle = updatedAngle + CalculateRotationAngle(eventData, lastPositionReading);
 
-                if (Mathf.Abs(updatedAngle) > rotationAngleActivation)
+                if (Mathf.Abs(angle) > rotationAngleActivation)
                 {
-                    IsRotating = true;
+                    updatedAngle = angle;
                     eventData.Use();
                 }
             }
@@ -826,5 +783,59 @@ namespace XRTK.SDK.Input.Handlers
         {
             return Vector2.SignedAngle(previousReading, eventData.InputData);
         }
+
+        /// <summary>
+        /// Process the manipulation handler's pending transform updates.
+        /// </summary>
+        /// <remarks>
+        /// This is called from the <see cref="BoundingBox"/>'s LateUpdate to properly sync the transforms to prevent
+        /// jerky or stuttering effects when moving the objects. This can happen because of the non-deterministic way
+        /// unity calls it's game loop events on scene objects.
+        /// </remarks>
+        public virtual void ProcessTransformData()
+        {
+            if (!IsBeingHeld || primaryPointer == null) { return; }
+
+            var pointerPosition = primaryPointer.Result.EndPoint;
+
+            manipulationTarget.position = offsetPosition + pointerPosition;
+
+            if (IsRotating)
+            {
+                manipulationTarget.RotateAround(pointerPosition, Vector3.up, -updatedAngle);
+                updatedAngle = 0f;
+
+                if (prevPosition != Vector3.zero)
+                {
+                    offsetPosition = manipulationTarget.position - pointerPosition;
+                }
+            }
+            else if (IsNudgePossible)
+            {
+                primaryPointer.PointerExtent = updatedExtent;
+            }
+            else if (IsScalingPossible)
+            {
+                manipulationTarget.ScaleAround(pointerPosition, updatedScale);
+
+                if (prevPosition != Vector3.zero)
+                {
+                    offsetPosition = manipulationTarget.position - pointerPosition;
+                }
+            }
+
+            var observer = MixedRealityToolkit.SpatialAwarenessSystem?.DetectedSpatialObservers.FirstOrDefault();
+
+            if (observer == null) { return; }
+
+            var distanceToGround = float.MaxValue;
+
+            if (Physics.Raycast(manipulationTarget.position, -Vector3.up, out var hit) &&
+                hit.transform.gameObject.layer == observer.PhysicsLayer)
+            {
+                distanceToGround = hit.distance;
+            }
+        }
+
     }
 }

@@ -613,8 +613,12 @@ namespace XRTK.SDK.UX
             pendingRigReset = false;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
+            // update the manipulation handler's new transform position 
+            // first to prevent jerky or stuttering animations between frames.
+            manipulationHandler.ProcessTransformData();
+
             if (!isVisible) { return; }
 
             if (pendingRigReset)
