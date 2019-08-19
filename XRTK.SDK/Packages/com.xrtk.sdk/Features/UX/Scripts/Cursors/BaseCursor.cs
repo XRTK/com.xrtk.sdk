@@ -407,13 +407,13 @@ namespace XRTK.SDK.UX.Cursors
 
             if (Pointer.IsFocusLocked && focusDetails.CurrentPointerTarget != null)
             {
-                if (Pointer.SyncPointerTargetPosition)
+                if (Pointer.SyncedTarget == null)
                 {
-                    cachedTransform.position = focusDetails.Offset;
+                    cachedTransform.position = focusDetails.EndPoint;
                 }
                 else
                 {
-                    cachedTransform.position = focusDetails.EndPoint;
+                    cachedTransform.position = focusDetails.GrabPoint;
                 }
             }
             else

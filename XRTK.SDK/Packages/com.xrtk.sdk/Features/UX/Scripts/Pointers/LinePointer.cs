@@ -120,7 +120,7 @@ namespace XRTK.SDK.UX.Pointers
 
             if (IsFocusLocked && Result.CurrentPointerTarget != null)
             {
-                if (SyncPointerTargetPosition)
+                if (SyncedTarget != null)
                 {
                     // Now raycast out like nothing happened so we can get an updated pointer position.
                     lineBase.LastPoint = pointerPosition + pointerRotation * (Vector3.forward * PointerExtent);
@@ -209,9 +209,16 @@ namespace XRTK.SDK.UX.Pointers
             // So don't clamp the world length
             if (IsFocusLocked && Result.CurrentPointerTarget != null)
             {
-                if (SyncPointerTargetPosition)
+                if (SyncedTarget != null)
                 {
-                    LineBase.LastPoint = Result.Offset;
+                    if (Result.Offset == Vector3.zero)
+                    {
+                        LineBase.LastPoint = Result.EndPoint;
+                    }
+                    else
+                    {
+                        LineBase.LastPoint = Result.GrabPoint;
+                    }
                 }
 
                 float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);

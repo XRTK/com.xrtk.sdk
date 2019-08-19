@@ -260,13 +260,17 @@ namespace XRTK.SDK.UX.Pointers
         public bool IsFocusLocked { get; set; }
 
         /// <inheritdoc />
-        public bool SyncPointerTargetPosition
+        public GameObject SyncedTarget
         {
-            get => IsFocusLocked && syncPointerTargetPosition;
-            set => syncPointerTargetPosition = value;
+            get => syncedTarget = IsFocusLocked ? syncedTarget : null;
+            set
+            {
+                IsFocusLocked = value != null;
+                syncedTarget = value;
+            }
         }
 
-        private bool syncPointerTargetPosition = false;
+        private GameObject syncedTarget = null;
 
         [SerializeField]
         private bool overrideGlobalPointerExtent = false;

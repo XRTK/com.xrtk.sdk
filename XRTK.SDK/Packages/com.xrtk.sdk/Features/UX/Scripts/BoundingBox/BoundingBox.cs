@@ -1008,7 +1008,6 @@ namespace XRTK.SDK.UX
                 var bounds = transform.GetColliderBounds(false);
 
                 BoundingBoxCollider = gameObject.AddComponent<BoxCollider>();
-
                 BoundingBoxCollider.center = transform.InverseTransformPoint(bounds.center);
                 BoundingBoxCollider.size = (bounds.size / transform.localScale.x) + wireframePadding;
 

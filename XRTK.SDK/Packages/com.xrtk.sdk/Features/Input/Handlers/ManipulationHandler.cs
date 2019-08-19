@@ -1,7 +1,6 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System.Linq;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.SpatialAwarenessSystem;
@@ -11,6 +10,7 @@ using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.SDK.UX;
 using XRTK.Services;
+using XRTK.Utilities;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -329,12 +329,31 @@ namespace XRTK.SDK.Input.Handlers
         #endregion Properties
 
         private BoundingBox boundingBox;
+        private BoxCollider boxCollider;
+
+        public BoxCollider BoxCollider
+        {
+            get
+            {
+                if (boundingBox != null)
+                {
+                    return boundingBox.BoundingBoxCollider;
+                }
+
+                if (boxCollider == null)
+                {
+                    boxCollider = gameObject.EnsureComponent<BoxCollider>();
+                    transform.GetColliderBounds();
+                }
+
+                return boxCollider;
+            }
+        }
 
         private IMixedRealityPointer primaryPointer;
 
         private IMixedRealityInputSource primaryInputSource;
 
-        private int prevPhysicsLayer;
         private int boundingBoxPrevPhysicsLayer;
         private SpatialMeshDisplayOptions prevSpatialMeshDisplay;
 
@@ -351,6 +370,8 @@ namespace XRTK.SDK.Input.Handlers
 
         private Quaternion prevRotation;
 
+        private Rigidbody body;
+
         #region Monobehaviour Implementation
 
         protected virtual void Awake()
@@ -361,7 +382,82 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             boundingBox = GetComponent<BoundingBox>();
+
+            body = gameObject.EnsureComponent<Rigidbody>();
+            body.useGravity = false;
+            body.isKinematic = true;
+            body.interpolation = RigidbodyInterpolation.Interpolate;
+            body.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            body.constraints = RigidbodyConstraints.FreezeAll;
         }
+
+        private void Update()
+        {
+            for (var keyCode = KeyCode.Alpha0; keyCode < KeyCode.Tilde; keyCode++)
+            {
+                if (UnityEngine.Input.GetKey(keyCode))
+                {
+                    const float nudgeFactor = 0.5f;
+                    float prevExtent;
+                    float newExtent;
+
+                    const float scaleFactor = 0.1f;
+                    Vector3 newScale;
+
+                    switch (keyCode)
+                    {
+                        case KeyCode.W:
+                            IsNudgePossible = true;
+                            prevExtent = GetCurrentExtent(primaryPointer);
+                            newExtent = CalculateNudgeDistance(nudgeFactor, prevExtent);
+                            updatedExtent = ClampExtent(nudgeFactor, newExtent, prevExtent);
+                            break;
+                        case KeyCode.A:
+                            IsScalingPossible = true;
+                            newScale = CalculateScaleAmount(scaleFactor, manipulationTarget.localScale);
+                            updatedScale = ClampScale(scaleFactor, newScale);
+                            break;
+                        case KeyCode.S:
+                            IsNudgePossible = true;
+                            prevExtent = GetCurrentExtent(primaryPointer);
+                            newExtent = CalculateNudgeDistance(-nudgeFactor, prevExtent);
+                            updatedExtent = ClampExtent(-nudgeFactor, newExtent, prevExtent);
+                            break;
+                        case KeyCode.D:
+                            IsScalingPossible = true;
+                            newScale = CalculateScaleAmount(-scaleFactor, manipulationTarget.localScale);
+                            updatedScale = ClampScale(-scaleFactor, newScale);
+                            break;
+                        case KeyCode.Q:
+                            updatedAngle += 2.8125f;
+                            break;
+                        case KeyCode.E:
+                            updatedAngle -= 2.8125f;
+                            break;
+                    }
+                }
+
+                if (UnityEngine.Input.GetKeyUp(keyCode))
+                {
+                    switch (keyCode)
+                    {
+                        case KeyCode.W:
+                            IsNudgePossible = false;
+                            break;
+                        case KeyCode.A:
+                            IsScalingPossible = false;
+                            break;
+                        case KeyCode.S:
+                            IsNudgePossible = false;
+                            break;
+                        case KeyCode.D:
+                            IsScalingPossible = false;
+                            break;
+                    }
+                }
+            }
+        }
+
         protected virtual void LateUpdate()
         {
             // only process the transform data if we don't have
@@ -384,6 +480,21 @@ namespace XRTK.SDK.Input.Handlers
                 // if the component is disabled.
                 EndHold();
             }
+        }
+
+        protected virtual void OnCollisionEnter(Collision other)
+        {
+            //Debug.LogWarning($"OnCollisionEnter {name} -> {other.gameObject.name}");
+        }
+
+        protected virtual void OnCollisionStay(Collision other)
+        {
+            //Debug.LogWarning($"OnCollisionStay {name} -> {other.gameObject.name}");
+        }
+
+        protected virtual void OnCollisionExit(Collision other)
+        {
+            //Debug.LogWarning($"OnCollisionExit {name} -> {other.gameObject.name}");
         }
 
         #endregion Monobehaviour Implementation
@@ -424,14 +535,16 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (eventData.MixedRealityInputAction == touchpadPressAction &&
-                eventData.InputData <= 0.00001f)
+            if (eventData.MixedRealityInputAction == touchpadPressAction)
             {
-                IsNudgePossible = false;
-                IsScalingPossible = false;
-                lastPositionReading.x = 0f;
-                lastPositionReading.y = 0f;
-                eventData.Use();
+                if (eventData.InputData <= 0.00001f)
+                {
+                    IsNudgePossible = false;
+                    IsScalingPossible = false;
+                    lastPositionReading.x = 0f;
+                    lastPositionReading.y = 0f;
+                    eventData.Use();
+                }
             }
 
             if (IsRotating) { return; }
@@ -487,7 +600,7 @@ namespace XRTK.SDK.Input.Handlers
                 IsRotationPossible &&
                 !lastPositionReading.x.Equals(0f) && !lastPositionReading.y.Equals(0f))
             {
-                var angle = updatedAngle + CalculateRotationAngle(eventData, lastPositionReading);
+                var angle = updatedAngle + CalculateRotationAngle(eventData.InputData, lastPositionReading);
 
                 if (Mathf.Abs(angle) > rotationAngleActivation)
                 {
@@ -536,57 +649,19 @@ namespace XRTK.SDK.Input.Handlers
             if (IsNudgePossible)
             {
                 Debug.Assert(primaryPointer != null);
-                var newExtent = primaryPointer.PointerExtent;
-                var currentRaycastDistance = primaryPointer.Result.RayDistance;
 
-                // Reset the cursor extent to the nearest value in case we're hitting something close
-                // and the user wants to adjust. That way it doesn't take forever to see the change.
-                if (currentRaycastDistance < newExtent)
-                {
-                    newExtent = currentRaycastDistance;
-                }
-
-                var prevExtent = newExtent;
-                newExtent = CalculateNudgeDistance(eventData, prevExtent);
-
-                // check constraints
-                if (eventData.InputData.y < 0f)
-                {
-                    if (newExtent <= nudgeConstraints.x)
-                    {
-                        newExtent = prevExtent;
-                    }
-                }
-                else
-                {
-                    if (newExtent >= nudgeConstraints.y)
-                    {
-                        newExtent = prevExtent;
-                    }
-                }
-
-                updatedExtent = newExtent;
+                var nudgeFactor = eventData.InputData.y;
+                var prevExtent = GetCurrentExtent(primaryPointer);
+                var newExtent = CalculateNudgeDistance(nudgeFactor, prevExtent);
+                updatedExtent = ClampExtent(nudgeFactor, newExtent, prevExtent);
                 eventData.Use();
             }
 
             if (IsScalingPossible)
             {
-                var newScale = manipulationTarget.localScale;
-                var currentScale = newScale;
-                newScale = CalculateScaleAmount(eventData, newScale);
-
-                // We can check any axis, they should all be the same as we do uniform scales.
-                if (eventData.InputData.x < 0f && newScale.x <= scaleConstraints.x)
-                {
-                    newScale = currentScale;
-                }
-                else if (newScale.y >= scaleConstraints.y)
-                {
-                    newScale = currentScale;
-                }
-
-                updatedScale = newScale;
-
+                var scaleFactor = eventData.InputData.x;
+                var newScale = CalculateScaleAmount(scaleFactor, manipulationTarget.localScale);
+                updatedScale = ClampScale(scaleFactor, newScale);
                 eventData.Use();
             }
         }
@@ -675,11 +750,15 @@ namespace XRTK.SDK.Input.Handlers
 
             prevPosition = manipulationTarget.position;
 
-            // update the pointer extent to prevent the object from popping to the end of the pointer
-            if (prevPosition != Vector3.zero)
+            if (prevPosition == Vector3.zero)
+            {
+                manipulationTarget.position = primaryPointer.Result.EndPoint;
+            }
+            else
             {
                 offsetPosition = prevPosition - primaryPointer.Result.EndPoint;
 
+                // update the pointer extent to prevent the object from popping to the end of the pointer
                 prevPointerExtent = primaryPointer.PointerExtent;
                 var currentRaycastDistance = primaryPointer.Result.RayDistance;
                 primaryPointer.PointerExtent = currentRaycastDistance;
@@ -688,9 +767,6 @@ namespace XRTK.SDK.Input.Handlers
             prevScale = manipulationTarget.localScale;
             prevRotation = manipulationTarget.rotation;
 
-            prevPhysicsLayer = manipulationTarget.gameObject.layer;
-            manipulationTarget.SetLayerRecursively(IgnoreRaycastLayer);
-
             if (boundingBox != null)
             {
                 boundingBoxPrevPhysicsLayer = boundingBox.gameObject.layer;
@@ -698,9 +774,9 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             transform.SetCollidersActive(false);
+            body.isKinematic = false;
 
-            primaryPointer.SyncPointerTargetPosition = true;
-            primaryPointer.IsFocusLocked = true;
+            primaryPointer.SyncedTarget = gameObject;
 
             eventData.Use();
         }
@@ -734,54 +810,105 @@ namespace XRTK.SDK.Input.Handlers
 
             MixedRealityToolkit.InputSystem.PopModalInputHandler();
 
-            manipulationTarget.SetLayerRecursively(prevPhysicsLayer);
-
             if (boundingBox != null)
             {
                 boundingBox.transform.SetLayerRecursively(boundingBoxPrevPhysicsLayer);
             }
 
             transform.SetCollidersActive(true);
+            body.isKinematic = true;
 
-            primaryPointer.SyncPointerTargetPosition = false;
             primaryPointer.IsFocusLocked = false;
-
             primaryPointer = null;
             primaryInputSource = null;
+
+            offsetPosition = Vector3.zero;
+
             IsBeingHeld = false;
         }
 
         /// <summary>
         /// Calculates the extent of the nudge using input event data.
         /// </summary>
-        /// <param name="eventData">The event data.</param>
+        /// <param name="nudgeFactor">The nudge factor.</param>
         /// <param name="prevExtent">The previous extent distance of the pointer and raycast.</param>
         /// <returns>The new pointer extent.</returns>
-        protected virtual float CalculateNudgeDistance(InputEventData<Vector2> eventData, float prevExtent)
+        protected virtual float CalculateNudgeDistance(float nudgeFactor, float prevExtent)
         {
-            return prevExtent + nudgeAmount * (eventData.InputData.y < 0f ? -1 : 1);
+            return prevExtent + nudgeAmount * (nudgeFactor < 0f ? -1 : 1);
+        }
+
+        private static float GetCurrentExtent(IMixedRealityPointer pointer)
+        {
+            var extent = pointer.PointerExtent;
+            var currentRaycastDistance = pointer.Result.RayDistance;
+
+            // Reset the cursor extent to the nearest value in case we're hitting something close
+            // and the user wants to adjust. That way it doesn't take forever to see the change.
+            if (currentRaycastDistance < extent)
+            {
+                extent = currentRaycastDistance;
+            }
+
+            return extent;
+        }
+
+        private float ClampExtent(float nudgeFactor, float newExtent, float prevExtent)
+        {
+            if (nudgeFactor < 0f)
+            {
+                if (newExtent <= nudgeConstraints.x)
+                {
+                    newExtent = prevExtent;
+                }
+            }
+            else
+            {
+                if (newExtent >= nudgeConstraints.y)
+                {
+                    newExtent = prevExtent;
+                }
+            }
+
+            return newExtent;
         }
 
         /// <summary>
         /// Calculates the scale amount using the input event data.
         /// </summary>
-        /// <param name="eventData">The event data.</param>
+        /// <param name="scaleFactor">The scale factor.</param>
         /// <param name="scale">The previous scale</param>
         /// <returns>The new scale value.</returns>
-        protected virtual Vector3 CalculateScaleAmount(InputEventData<Vector2> eventData, Vector3 scale)
+        protected virtual Vector3 CalculateScaleAmount(float scaleFactor, Vector3 scale)
         {
-            return eventData.InputData.x < 0f ? scale * scaleAmount : scale / scaleAmount;
+            return scaleFactor < 0f ? scale * scaleAmount : scale / scaleAmount;
+        }
+
+        private Vector3 ClampScale(float scaleFactor, Vector3 scale)
+        {
+            // We can check any axis, they should all be the same
+            // as we currently do uniform scales only.
+            if (scaleFactor < 0f && scale.x <= scaleConstraints.x)
+            {
+                scale = manipulationTarget.localScale;
+            }
+            else if (scale.y >= scaleConstraints.y)
+            {
+                scale = manipulationTarget.localScale;
+            }
+
+            return scale;
         }
 
         /// <summary>
         /// Calculates the rotation angle using the input event data and the previous reading.
         /// </summary>
-        /// <param name="eventData">The current input event.</param>
+        /// <param name="currentReading">The current input reading.</param>
         /// <param name="previousReading">The input reading from the last event.</param>
         /// <returns>The new rotation angle.</returns>
-        protected virtual float CalculateRotationAngle(InputEventData<Vector2> eventData, Vector2 previousReading)
+        protected virtual float CalculateRotationAngle(Vector2 currentReading, Vector2 previousReading)
         {
-            return Vector2.SignedAngle(previousReading, eventData.InputData);
+            return Vector2.SignedAngle(previousReading, currentReading);
         }
 
         /// <summary>
@@ -796,9 +923,38 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!IsBeingHeld || primaryPointer == null) { return; }
 
-            var pointerPosition = primaryPointer.Result.EndPoint;
+            if (!BoxCollider.enabled)
+            {
+                BoxCollider.enabled = true;
+            }
 
-            manipulationTarget.position = offsetPosition + pointerPosition;
+            var pointerPosition = primaryPointer.Result.EndPoint;
+            var pointerOffsetPosition = primaryPointer.Result.Offset;
+
+            if (pointerOffsetPosition == Vector3.zero) { return; }
+
+            Debug.DrawLine(offsetPosition, pointerOffsetPosition, Color.magenta);
+            DebugUtilities.DrawPoint(offsetPosition, Color.white);
+
+            var targetPosition = offsetPosition + pointerPosition;
+
+            var direction = targetPosition - manipulationTarget.position;
+            var distance = direction.magnitude;
+            var canMove = !body.SweepTest(direction, out var hitInfo) || hitInfo.distance > distance;
+
+            if (canMove)
+            {
+                if (!IsRotating && !IsNudgePossible && !IsScalingPossible)
+                {
+                    targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.fixedDeltaTime * 10f);
+                }
+
+                manipulationTarget.position = targetPosition;
+            }
+            else
+            {
+                return;
+            }
 
             if (IsRotating)
             {
@@ -823,19 +979,6 @@ namespace XRTK.SDK.Input.Handlers
                     offsetPosition = manipulationTarget.position - pointerPosition;
                 }
             }
-
-            var observer = MixedRealityToolkit.SpatialAwarenessSystem?.DetectedSpatialObservers.FirstOrDefault();
-
-            if (observer == null) { return; }
-
-            var distanceToGround = float.MaxValue;
-
-            if (Physics.Raycast(manipulationTarget.position, -Vector3.up, out var hit) &&
-                hit.transform.gameObject.layer == observer.PhysicsLayer)
-            {
-                distanceToGround = hit.distance;
-            }
         }
-
     }
 }
