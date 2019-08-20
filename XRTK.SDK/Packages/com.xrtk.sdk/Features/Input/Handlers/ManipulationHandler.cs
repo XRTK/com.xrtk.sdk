@@ -119,19 +119,6 @@ namespace XRTK.SDK.Input.Handlers
             set => cancelAction = value;
         }
 
-        [SerializeField]
-        [Tooltip("The action to use to sync the target pose when a hold event is triggered.")]
-        private MixedRealityInputAction poseAction = MixedRealityInputAction.None;
-
-        /// <summary>
-        /// The action to use to sync the target pose when a hold event is triggered.
-        /// </summary>
-        public MixedRealityInputAction PoseAction
-        {
-            get => poseAction;
-            set => poseAction = value;
-        }
-
         #endregion Input Actions
 
         #region Manipulation Options
@@ -166,6 +153,46 @@ namespace XRTK.SDK.Input.Handlers
         {
             get => useHold;
             set => useHold = value;
+        }
+
+        [SerializeField]
+        [Tooltip("Smooths the motion of the object to the goal position.")]
+        private bool smoothMotion = true;
+
+        /// <summary>
+        /// Smooths the motion of the object to the goal position.
+        /// </summary>
+        public bool SmoothMotion
+        {
+            get => smoothMotion;
+            set => smoothMotion = value;
+        }
+
+        [SerializeField]
+        private float smoothingFactor = 10f;
+
+        public float SmoothingFactor
+        {
+            get => smoothingFactor;
+            set => smoothingFactor = value;
+        }
+
+        [SerializeField]
+        private bool snapToValidSurfaces = true;
+
+        public bool SnapToValidSurfaces
+        {
+            get => snapToValidSurfaces;
+            set => snapToValidSurfaces = value;
+        }
+
+        [SerializeField]
+        private float snapDistance = 0.0762f;
+
+        public float SnapDistance
+        {
+            get => snapDistance;
+            set => snapDistance = value;
         }
 
         #region Scale Options
@@ -326,9 +353,11 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public bool IsRotationPossible { get; private set; } = false;
 
-        #endregion Properties
+        /// <summary>
+        /// Is the <see cref="GameObject"/> currently snapped to a surface?
+        /// </summary>
+        public bool IsSnappedToSurface { get; private set; } = false;
 
-        private BoundingBox boundingBox;
         private BoxCollider boxCollider;
 
         public BoxCollider BoxCollider
@@ -350,7 +379,14 @@ namespace XRTK.SDK.Input.Handlers
             }
         }
 
-        private IMixedRealityPointer primaryPointer;
+        /// <summary>
+        /// The captured primary pointer for the current active hold.
+        /// </summary>
+        public IMixedRealityPointer PrimaryPointer { get; private set; }
+
+        #endregion Properties
+
+        private BoundingBox boundingBox;
 
         private IMixedRealityInputSource primaryInputSource;
 
@@ -371,6 +407,10 @@ namespace XRTK.SDK.Input.Handlers
         private Quaternion prevRotation;
 
         private Rigidbody body;
+
+        private float snappedVerticalPosition;
+
+        private Transform snapTarget;
 
         #region Monobehaviour Implementation
 
@@ -408,7 +448,7 @@ namespace XRTK.SDK.Input.Handlers
                     {
                         case KeyCode.W:
                             IsNudgePossible = true;
-                            prevExtent = GetCurrentExtent(primaryPointer);
+                            prevExtent = GetCurrentExtent(PrimaryPointer);
                             newExtent = CalculateNudgeDistance(nudgeFactor, prevExtent);
                             updatedExtent = ClampExtent(nudgeFactor, newExtent, prevExtent);
                             break;
@@ -419,7 +459,7 @@ namespace XRTK.SDK.Input.Handlers
                             break;
                         case KeyCode.S:
                             IsNudgePossible = true;
-                            prevExtent = GetCurrentExtent(primaryPointer);
+                            prevExtent = GetCurrentExtent(PrimaryPointer);
                             newExtent = CalculateNudgeDistance(-nudgeFactor, prevExtent);
                             updatedExtent = ClampExtent(-nudgeFactor, newExtent, prevExtent);
                             break;
@@ -574,7 +614,7 @@ namespace XRTK.SDK.Input.Handlers
 
             if (!IsBeingHeld ||
                 primaryInputSource == null ||
-                primaryPointer == null ||
+                PrimaryPointer == null ||
                 eventData.InputSource.SourceId != primaryInputSource.SourceId)
             {
                 return;
@@ -648,10 +688,10 @@ namespace XRTK.SDK.Input.Handlers
 
             if (IsNudgePossible)
             {
-                Debug.Assert(primaryPointer != null);
+                Debug.Assert(PrimaryPointer != null);
 
                 var nudgeFactor = eventData.InputData.y;
-                var prevExtent = GetCurrentExtent(primaryPointer);
+                var prevExtent = GetCurrentExtent(PrimaryPointer);
                 var newExtent = CalculateNudgeDistance(nudgeFactor, prevExtent);
                 updatedExtent = ClampExtent(nudgeFactor, newExtent, prevExtent);
                 eventData.Use();
@@ -735,9 +775,9 @@ namespace XRTK.SDK.Input.Handlers
                 primaryInputSource = eventData.InputSource;
             }
 
-            if (primaryPointer == null)
+            if (PrimaryPointer == null)
             {
-                primaryPointer = eventData.Pointer;
+                PrimaryPointer = eventData.Pointer;
             }
 
             MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
@@ -752,16 +792,16 @@ namespace XRTK.SDK.Input.Handlers
 
             if (prevPosition == Vector3.zero)
             {
-                manipulationTarget.position = primaryPointer.Result.EndPoint;
+                manipulationTarget.position = PrimaryPointer.Result.EndPoint;
             }
             else
             {
-                offsetPosition = prevPosition - primaryPointer.Result.EndPoint;
+                offsetPosition = prevPosition - PrimaryPointer.Result.EndPoint;
 
                 // update the pointer extent to prevent the object from popping to the end of the pointer
-                prevPointerExtent = primaryPointer.PointerExtent;
-                var currentRaycastDistance = primaryPointer.Result.RayDistance;
-                primaryPointer.PointerExtent = currentRaycastDistance;
+                prevPointerExtent = PrimaryPointer.PointerExtent;
+                var currentRaycastDistance = PrimaryPointer.Result.RayDistance;
+                PrimaryPointer.PointerExtent = currentRaycastDistance;
             }
 
             prevScale = manipulationTarget.localScale;
@@ -776,7 +816,7 @@ namespace XRTK.SDK.Input.Handlers
             transform.SetCollidersActive(false);
             body.isKinematic = false;
 
-            primaryPointer.SyncedTarget = gameObject;
+            PrimaryPointer.SyncedTarget = gameObject;
 
             eventData.Use();
         }
@@ -798,7 +838,7 @@ namespace XRTK.SDK.Input.Handlers
 
             if (prevPosition != Vector3.zero)
             {
-                primaryPointer.PointerExtent = prevPointerExtent;
+                PrimaryPointer.PointerExtent = prevPointerExtent;
             }
 
             if (isCanceled)
@@ -818,8 +858,8 @@ namespace XRTK.SDK.Input.Handlers
             transform.SetCollidersActive(true);
             body.isKinematic = true;
 
-            primaryPointer.IsFocusLocked = false;
-            primaryPointer = null;
+            PrimaryPointer.IsFocusLocked = false;
+            PrimaryPointer = null;
             primaryInputSource = null;
 
             offsetPosition = Vector3.zero;
@@ -912,6 +952,20 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         /// <summary>
+        /// Do stuff when snap occurs.
+        /// </summary>
+        protected virtual void OnSnap()
+        {
+        }
+
+        /// <summary>
+        /// Do stuff when snap stops.
+        /// </summary>
+        protected virtual void OnUnsnap()
+        {
+        }
+
+        /// <summary>
         /// Process the manipulation handler's pending transform updates.
         /// </summary>
         /// <remarks>
@@ -921,32 +975,92 @@ namespace XRTK.SDK.Input.Handlers
         /// </remarks>
         public virtual void ProcessTransformData()
         {
-            if (!IsBeingHeld || primaryPointer == null) { return; }
+            if (!IsBeingHeld || PrimaryPointer == null) { return; }
 
             if (!BoxCollider.enabled)
             {
                 BoxCollider.enabled = true;
             }
 
-            var pointerPosition = primaryPointer.Result.EndPoint;
-            var pointerOffsetPosition = primaryPointer.Result.Offset;
+            var pointerPosition = PrimaryPointer.Result.EndPoint;
+            var pointerOffsetPosition = PrimaryPointer.Result.Offset;
+            var pointerDirection = PrimaryPointer.Result.Direction;
 
+            if (pointerDirection.Equals(Vector3.zero)) { return; }
             if (pointerOffsetPosition == Vector3.zero) { return; }
 
             Debug.DrawLine(offsetPosition, pointerOffsetPosition, Color.magenta);
             DebugUtilities.DrawPoint(offsetPosition, Color.white);
 
             var targetPosition = offsetPosition + pointerPosition;
-
             var direction = targetPosition - manipulationTarget.position;
             var distance = direction.magnitude;
-            var canMove = !body.SweepTest(direction, out var hitInfo) || hitInfo.distance > distance;
+
+            var sweepPass = !body.SweepTest(pointerDirection, out var hitInfo);
+            var canMove = IsSnappedToSurface || sweepPass || hitInfo.distance >= distance;
+            var objectHeight = manipulationTarget.TransformPoint(BoxCollider.size / 2);
+
+            if (IsSnappedToSurface)
+            {
+                var lastHit = PrimaryPointer.Result.LastHitObject == null
+                    ? hitInfo.transform
+                    : PrimaryPointer.Result.LastHitObject.transform;
+
+                var hitNew = canMove && sweepPass && lastHit != snapTarget && pointerPosition.y < manipulationTarget.position.y;
+                canMove = true;
+
+                if (hitNew &&
+                    hitInfo.transform == null &&
+                    Physics.Raycast(PrimaryPointer.Rays[PrimaryPointer.Result.RayStepIndex], out var sweepHit))
+                {
+                    BoxCollider.bounds.Contains(sweepHit.point);
+                    hitNew = false;
+                }
+
+                var pointerMovedAway = pointerDirection.y > 0f && pointerPosition.y > objectHeight.y;
+
+                if (pointerMovedAway || hitNew)
+                {
+                    snapTarget = null;
+                    IsSnappedToSurface = false;
+                    OnUnsnap();
+                }
+                else
+                {
+                    canMove = false;
+                }
+            }
+
+            if (snapToValidSurfaces &&
+                canMove &&
+                hitInfo.normal.IsValidVector() &&
+                hitInfo.normal.IsNormalVertical() &&
+                !IsSnappedToSurface && hitInfo.distance <= snapDistance)
+            {
+                snapTarget = PrimaryPointer.Result.LastHitObject != null
+                    ? PrimaryPointer.Result.LastHitObject.transform == manipulationTarget
+                        ? hitInfo.transform
+                        : PrimaryPointer.Result.LastHitObject.transform
+                    : hitInfo.transform;
+
+                targetPosition.y = hitInfo.point.y + (objectHeight - manipulationTarget.position).y;
+                snappedVerticalPosition = targetPosition.y;
+                manipulationTarget.position = targetPosition;
+                IsSnappedToSurface = true;
+
+                OnSnap();
+            }
 
             if (canMove)
             {
-                if (!IsRotating && !IsNudgePossible && !IsScalingPossible)
+                if (IsSnappedToSurface)
                 {
-                    targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.fixedDeltaTime * 10f);
+                    targetPosition.y = snappedVerticalPosition;
+                }
+
+                if (smoothMotion && !IsRotating && !IsNudgePossible && !IsScalingPossible)
+                {
+                    targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.deltaTime * smoothingFactor);
                 }
 
                 manipulationTarget.position = targetPosition;
@@ -968,7 +1082,7 @@ namespace XRTK.SDK.Input.Handlers
             }
             else if (IsNudgePossible)
             {
-                primaryPointer.PointerExtent = updatedExtent;
+                PrimaryPointer.PointerExtent = updatedExtent;
             }
             else if (IsScalingPossible)
             {
