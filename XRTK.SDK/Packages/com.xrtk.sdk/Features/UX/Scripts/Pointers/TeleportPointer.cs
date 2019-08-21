@@ -173,7 +173,7 @@ namespace XRTK.SDK.UX.Pointers
                         {
                             // If it's NOT a hotspot, check if the hit normal is too steep 
                             // (Hotspots override dot requirements)
-                            TeleportSurfaceResult = Vector3.Dot(Result.Details.LastRaycastHit.normal, Vector3.up) > upDirectionThreshold
+                            TeleportSurfaceResult = Vector3.Dot(Result.LastRaycastHit.normal, Vector3.up) > upDirectionThreshold
                                 ? TeleportSurfaceResult.Valid
                                 : TeleportSurfaceResult.Invalid;
                         }
@@ -202,7 +202,7 @@ namespace XRTK.SDK.UX.Pointers
                             }
 
                             // Only add the distance between the start point and the hit
-                            clearWorldLength += Vector3.Distance(Result.StartPoint, Result.Details.Point);
+                            clearWorldLength += Vector3.Distance(Result.StartPoint, Result.EndPoint);
                         }
                         else if (i < Result.RayStepIndex)
                         {
