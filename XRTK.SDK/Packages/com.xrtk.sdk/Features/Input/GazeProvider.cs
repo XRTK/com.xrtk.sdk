@@ -201,14 +201,14 @@ namespace XRTK.SDK.Input
 
             public override void OnPostRaycast()
             {
-                gazeProvider.HitInfo = Result.Details.LastRaycastHit;
-                gazeProvider.GazeTarget = Result.Details.Object;
+                gazeProvider.HitInfo = Result.LastRaycastHit;
+                gazeProvider.GazeTarget = Result.CurrentPointerTarget;
 
-                if (Result.Details.Object != null)
+                if (Result.CurrentPointerTarget != null)
                 {
-                    gazeProvider.lastHitDistance = (Result.Details.Point - Rays[0].Origin).magnitude;
+                    gazeProvider.lastHitDistance = (Result.EndPoint - Rays[0].Origin).magnitude;
                     gazeProvider.HitPosition = Rays[0].Origin + (gazeProvider.lastHitDistance * Rays[0].Direction);
-                    gazeProvider.HitNormal = Result.Details.Normal;
+                    gazeProvider.HitNormal = Result.Normal;
                 }
             }
 
