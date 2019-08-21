@@ -86,6 +86,7 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.BoundingBoxCollider.enabled = false;
                     BoundingBoxParent.transform.SetCollidersActive(false);
                     transform.SetCollidersActive(false);
+                    BoundingBoxParent.BoundingBoxCollider.enabled = true;
                     eventData.Use();
                 }
             }
@@ -572,6 +573,8 @@ namespace XRTK.SDK.UX
         private HandleType currentHandleType;
 
         private Vector3[] boundsCorners = new Vector3[8];
+
+        public Vector3[] BoundsCorners => boundsCorners;
 
         private static readonly int numCorners = 8;
         private static readonly int Color = Shader.PropertyToID("_Color");
