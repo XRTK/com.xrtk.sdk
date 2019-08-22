@@ -576,7 +576,6 @@ namespace XRTK.SDK.UX
 
         public Vector3[] BoundsCorners => boundsCorners;
 
-        private static readonly int numCorners = 8;
         private static readonly int Color = Shader.PropertyToID("_Color");
         private static readonly int InnerGlow = Shader.PropertyToID("_InnerGlow");
         private static readonly int InnerGlowColor = Shader.PropertyToID("_InnerGlowColor");
@@ -608,7 +607,7 @@ namespace XRTK.SDK.UX
                     rigRoot.gameObject.SetActive(true);
                     ResetBoundingBoxBounds();
                     ResetHandleVisibility();
-                    UpdateBounds();
+                    UpdateBounds(true);
                     UpdateRigTransform();
                 }
             }
@@ -630,6 +629,8 @@ namespace XRTK.SDK.UX
                 pendingRigReset = false;
                 return;
             }
+
+            if (!manipulationHandler.IsBeingHeld) { return; }
 
             UpdateBounds();
 
@@ -669,7 +670,7 @@ namespace XRTK.SDK.UX
 
             ResetBoundingBoxBounds();
 
-            UpdateBounds();
+            UpdateBounds(true);
             CreateLinks();
             CreateScaleHandles();
             CreateRotationHandles();
@@ -985,8 +986,8 @@ namespace XRTK.SDK.UX
         public void ResetBoundingBoxBounds()
         {
             // Collider.bounds is world space bounding volume.
-            // Mesh.bounds is local space bounding volume
-            // Renderer.bounds is the same as mesh.bounds but in world space coords
+            // Mesh.bounds is local space bounding volume.
+            // Renderer.bounds is the same as mesh.bounds but in world space coords.
 
             if (boxColliderToUse != null)
             {
@@ -1011,6 +1012,7 @@ namespace XRTK.SDK.UX
                 var bounds = transform.GetColliderBounds(false);
 
                 BoundingBoxCollider = gameObject.AddComponent<BoxCollider>();
+
                 BoundingBoxCollider.center = transform.InverseTransformPoint(bounds.center);
                 BoundingBoxCollider.size = (bounds.size / transform.localScale.x) + wireframePadding;
 
@@ -1191,8 +1193,10 @@ namespace XRTK.SDK.UX
             }
         }
 
-        private void UpdateBounds()
+        private void UpdateBounds(bool forceUpdate = false)
         {
+            if (!transform.hasChanged && !forceUpdate) { return; }
+
             Debug.Assert(BoundingBoxCollider != null);
 
             // Store current rotation then zero out the rotation so that the bounds
@@ -1223,7 +1227,8 @@ namespace XRTK.SDK.UX
                 boundsExtents.z = flattenAxis == FlattenMode.FlattenZ ? 0.0f : boundsExtents.z;
                 currentBoundsExtents = boundsExtents;
 
-                GetCornerPositionsFromBounds(new Bounds(Vector3.zero, boundsExtents * 2.0f), ref boundsCorners);
+                new Bounds(Vector3.zero, boundsExtents * 2f).GetCornerPositionsLocalSpace(ref boundsCorners);
+
                 CalculateEdgeCenters();
             }
         }
@@ -1368,26 +1373,6 @@ namespace XRTK.SDK.UX
                 {
                     rotationHandles[flattenedHandles[i]].Item1.gameObject.SetRenderingActive(false);
                 }
-            }
-        }
-
-        private static void GetCornerPositionsFromBounds(Bounds bounds, ref Vector3[] positions)
-        {
-            if (positions == null || positions.Length != numCorners)
-            {
-                positions = new Vector3[numCorners];
-            }
-
-            // Permutate all axes using minCorner and maxCorner.
-            var minCorner = bounds.center - bounds.extents;
-            var maxCorner = bounds.center + bounds.extents;
-
-            for (int cornerIndex = 0; cornerIndex < numCorners; cornerIndex++)
-            {
-                positions[cornerIndex] = new Vector3(
-                    (cornerIndex & (1 << 0)) == 0 ? minCorner[0] : maxCorner[0],
-                    (cornerIndex & (1 << 1)) == 0 ? minCorner[1] : maxCorner[1],
-                    (cornerIndex & (1 << 2)) == 0 ? minCorner[2] : maxCorner[2]);
             }
         }
 
