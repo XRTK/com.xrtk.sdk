@@ -198,6 +198,16 @@ namespace XRTK.SDK.Input.Handlers
             set => snapDistance = value;
         }
 
+        [SerializeField]
+        [Tooltip("The distance that will make the object unsnap from the surface.")]
+        private float unsnapTolerance = 1f;
+
+        public float UnsnapDistance
+        {
+            get => unsnapTolerance;
+            set => unsnapTolerance = value;
+        }
+
         #region Scale Options
 
         [SerializeField]
@@ -998,7 +1008,7 @@ namespace XRTK.SDK.Input.Handlers
             var currentPosition = manipulationTarget.position;
             var targetPosition = offsetPosition + pointerPosition;
 
-            var sweepPassed = !body.SweepTest(pointerDirection, out var hitInfo);
+            var sweepPassed = !body.SweepTest(pointerDirection, out var sweepHitInfo);
             var targetDirection = targetPosition - currentPosition;
             var targetDistance = targetDirection.magnitude;
             var lastHitObject = PrimaryPointer.Result.LastHitObject;
@@ -1010,24 +1020,28 @@ namespace XRTK.SDK.Input.Handlers
             if (IsSnappedToSurface)
             {
                 var lastHit = lastHitObject == null
-                    ? hitInfo.transform
+                    ? sweepHitInfo.transform
                     : lastHitObject.transform;
 
-                var hitNew = sweepPassed && (lastHit != snapTarget || lastHit == null) && pointerPosition.y < currentPosition.y;
+                var hitNew = sweepPassed && (lastHit != snapTarget || lastHit == null);
 
                 if (hitNew &&
-                    hitInfo.transform == null &&
-                    Physics.Raycast(PrimaryPointer.Rays[PrimaryPointer.Result.RayStepIndex], out var sweepHit))
+                    sweepHitInfo.transform == null &&
+                    Physics.Raycast(PrimaryPointer.Rays[PrimaryPointer.Result.RayStepIndex], out var hitInfo))
                 {
-                    BoxCollider.bounds.Contains(sweepHit.point);
+                    BoxCollider.bounds.Contains(hitInfo.point);
                     hitNew = false;
                 }
 
-                var heightWorldSpace = manipulationTarget.TransformPoint(BoxCollider.size * 0.75f);
-                DebugUtilities.DrawPoint(heightWorldSpace, Color.magenta);
-                var pointerMovedAway = pointerDirection.y > 0f && pointerPosition.y > heightWorldSpace.y;
+                if (hitNew &&
+                    lastHit.gameObject.layer == 31 &&
+                    lastHit.gameObject.layer == snapTarget.gameObject.layer)
+                {
+                    snapTarget = lastHit;
+                    hitNew = false;
+                }
 
-                if (pointerMovedAway || hitNew)
+                if (targetDistance > unsnapTolerance || hitNew)
                 {
                     snapTarget = null;
                     IsSnappedToSurface = false;
@@ -1040,8 +1054,8 @@ namespace XRTK.SDK.Input.Handlers
 
             if (!sweepPassed)
             {
-                var isValidMove = hitInfo.distance > targetDistance;
-                var isValidSnap = hitInfo.distance <= snapDistance;
+                var isValidMove = sweepHitInfo.distance > targetDistance;
+                var isValidSnap = sweepHitInfo.distance <= snapDistance;
 
                 Color color;
 
@@ -1061,8 +1075,8 @@ namespace XRTK.SDK.Input.Handlers
                     color = Color.red;
                 }
 
-                DebugUtilities.DrawPoint(hitInfo.point, color);
-                Debug.DrawLine(hitInfo.point, currentPosition, color);
+                DebugUtilities.DrawPoint(sweepHitInfo.point, color);
+                Debug.DrawLine(sweepHitInfo.point, currentPosition, color);
                 Debug.DrawLine(pointerPosition, targetPosition, Color.magenta);
 
                 if (!isValidMove && !IsSnappedToSurface)
@@ -1076,18 +1090,18 @@ namespace XRTK.SDK.Input.Handlers
                 if (snapToValidSurfaces &&
                     !IsSnappedToSurface &&
                     isValidSnap &&
-                    hitInfo.normal.IsValidVector() &&
-                    hitInfo.normal.IsNormalVertical())
+                    sweepHitInfo.normal.IsValidVector() &&
+                    sweepHitInfo.normal.IsNormalVertical())
                 {
                     snapTarget = lastHitObject != null
                         ? lastHitObject.transform == manipulationTarget
-                            ? hitInfo.transform
+                            ? sweepHitInfo.transform
                             : lastHitObject.transform
-                        : hitInfo.transform;
+                        : sweepHitInfo.transform;
 
                     Debug.Assert(snapTarget != null);
 
-                    snappedVerticalPosition = hitInfo.point.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.001f;
+                    snappedVerticalPosition = sweepHitInfo.point.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.001f;
                     IsSnappedToSurface = true;
                     justSnapped = true;
                     OnSnap();

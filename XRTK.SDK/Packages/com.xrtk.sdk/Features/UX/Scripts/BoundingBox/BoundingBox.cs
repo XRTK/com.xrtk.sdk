@@ -630,12 +630,9 @@ namespace XRTK.SDK.UX
                 return;
             }
 
-            if (!manipulationHandler.IsBeingHeld) { return; }
-
-            UpdateBounds();
-
             if (currentInputSource != null)
             {
+                UpdateBounds();
                 TransformRig();
             }
 
@@ -1193,7 +1190,13 @@ namespace XRTK.SDK.UX
             }
         }
 
-        private void UpdateBounds(bool forceUpdate = false)
+        /// <summary>
+        /// Updates the bounding box bounds.
+        /// </summary>
+        /// <param name="forceUpdate">
+        /// Optional flag to force the bounds update even if the transform flag hasn't changed.
+        /// </param>
+        public void UpdateBounds(bool forceUpdate = false)
         {
             if (!transform.hasChanged && !forceUpdate) { return; }
 
