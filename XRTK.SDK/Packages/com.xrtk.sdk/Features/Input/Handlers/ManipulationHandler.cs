@@ -1,6 +1,7 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
@@ -400,6 +401,20 @@ namespace XRTK.SDK.Input.Handlers
         protected LayerMask[] LayerMasks => PrimaryPointer?.PrioritizedLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.FocusLayerMasks;
 
         #endregion Properties
+
+        #region Events
+
+        /// <summary>
+        /// Invoked when a hold has begun.
+        /// </summary>
+        public event Action OnHoldBegin;
+
+        /// <summary>
+        /// Invoked when a hold has ended.
+        /// </summary>
+        public event Action OnHoldEnd;
+
+        #endregion Events
 
         private BoundingBox boundingBox;
         private IMixedRealityInputSource primaryInputSource;
@@ -840,6 +855,8 @@ namespace XRTK.SDK.Input.Handlers
             body.isKinematic = false;
 
             eventData.Use();
+
+            OnHoldBegin?.Invoke();
         }
 
         /// <summary>
@@ -886,6 +903,8 @@ namespace XRTK.SDK.Input.Handlers
             offsetPosition = Vector3.zero;
 
             IsBeingHeld = false;
+
+            OnHoldEnd?.Invoke();
         }
 
         /// <summary>
@@ -1034,7 +1053,7 @@ namespace XRTK.SDK.Input.Handlers
                 }
 
                 if (hitNew &&
-                    lastHit.gameObject.layer == 31 &&
+                    lastHit.gameObject.layer == 31 && // TODO provide options to configure this using the layerMasks
                     lastHit.gameObject.layer == snapTarget.gameObject.layer)
                 {
                     snapTarget = lastHit;

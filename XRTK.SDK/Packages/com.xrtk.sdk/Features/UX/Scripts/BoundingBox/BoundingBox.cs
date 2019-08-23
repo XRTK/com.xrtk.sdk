@@ -542,6 +542,8 @@ namespace XRTK.SDK.UX
             }
         }
 
+        private bool isManipulationEnabled;
+
         private IMixedRealityPointer currentPointer;
         private IMixedRealityInputSource currentInputSource;
 
@@ -593,6 +595,18 @@ namespace XRTK.SDK.UX
         {
             manipulationHandler = gameObject.EnsureComponent<ManipulationHandler>();
 
+            manipulationHandler.OnHoldBegin += () => isManipulationEnabled = true;
+
+            void OnManipulationHandlerOnOnHoldEnd()
+            {
+                isManipulationEnabled = false;
+                UpdateBounds(true);
+                TransformRig();
+                UpdateRigTransform();
+            }
+
+            manipulationHandler.OnHoldEnd += OnManipulationHandlerOnOnHoldEnd;
+
             if (activateOnEnable)
             {
                 IsVisible = true;
@@ -630,9 +644,12 @@ namespace XRTK.SDK.UX
                 return;
             }
 
+            if (!isManipulationEnabled) { return; }
+
+            UpdateBounds();
+
             if (currentInputSource != null)
             {
-                UpdateBounds();
                 TransformRig();
             }
 
