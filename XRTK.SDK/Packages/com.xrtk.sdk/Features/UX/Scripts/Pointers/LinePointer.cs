@@ -211,7 +211,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 if (SyncedTarget != null)
                 {
-                    if (Result.Offset == Vector3.zero)
+                    if (Result.GrabPoint == Vector3.zero)
                     {
                         LineBase.LastPoint = Result.EndPoint;
                     }
