@@ -1053,6 +1053,7 @@ namespace XRTK.SDK.Input.Handlers
                 }
 
                 if (hitNew &&
+                    lastHit.gameObject != null &&
                     lastHit.gameObject.layer == 31 && // TODO provide options to configure this using the layerMasks
                     lastHit.gameObject.layer == snapTarget.gameObject.layer)
                 {
