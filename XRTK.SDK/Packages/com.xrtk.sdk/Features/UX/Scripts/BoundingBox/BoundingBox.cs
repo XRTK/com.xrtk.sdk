@@ -69,6 +69,8 @@ namespace XRTK.SDK.UX
 
                     MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
 
+                    // TODO update this with new IPointerResult data.
+
                     BoundingBoxParent.currentInputSource = eventData.InputSource;
                     BoundingBoxParent.currentPointer = pointer;
                     BoundingBoxParent.grabbedHandle = grabbedCollider.gameObject;
@@ -97,6 +99,8 @@ namespace XRTK.SDK.UX
                 if (BoundingBoxParent.currentInputSource != null &&
                     eventData.InputSource.SourceId == BoundingBoxParent.currentInputSource.SourceId)
                 {
+                    // TODO update this with new IPointerResult data.
+
                     BoundingBoxParent.currentInputSource = null;
                     BoundingBoxParent.currentHandleType = HandleType.None;
                     BoundingBoxParent.currentPointer = null;
@@ -632,7 +636,7 @@ namespace XRTK.SDK.UX
         private void LateUpdate()
         {
             // update the manipulation handler's new transform position 
-            // first to prevent jerky or stuttering animations between frames.
+            // first to prevent drifting, jerky, or stuttering animations between frames.
             manipulationHandler.ProcessTransformData();
 
             if (!isVisible) { return; }

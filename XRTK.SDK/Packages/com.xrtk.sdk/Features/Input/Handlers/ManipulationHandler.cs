@@ -28,8 +28,6 @@ namespace XRTK.SDK.Input.Handlers
         IMixedRealityInputHandler<float>,
         IMixedRealityInputHandler<Vector2>
     {
-        private const int IgnoreRaycastLayer = 2;
-
         #region Input Actions
 
         [Header("Input Actions")]
@@ -370,7 +368,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// Is the <see cref="GameObject"/> currently snapped to a surface?
         /// </summary>
-        public virtual bool IsSnappedToSurface { get; private set; } = false;
+        public virtual bool IsSnappedToSurface => isSnappedToSurface;
+
+        private bool isSnappedToSurface;
 
         private BoxCollider boxCollider;
 
@@ -419,7 +419,6 @@ namespace XRTK.SDK.Input.Handlers
         private BoundingBox boundingBox;
         private IMixedRealityInputSource primaryInputSource;
 
-        private int prevPhysicsLayer;
         private SpatialMeshDisplayOptions prevSpatialMeshDisplay;
 
         private float updatedAngle;
@@ -813,7 +812,7 @@ namespace XRTK.SDK.Input.Handlers
                 PrimaryPointer = eventData.Pointer;
             }
 
-            MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
+            MixedRealityToolkit.InputSystem?.PushModalInputHandler(gameObject);
 
             if (MixedRealityToolkit.SpatialAwarenessSystem != null)
             {
@@ -839,12 +838,6 @@ namespace XRTK.SDK.Input.Handlers
             prevRotation = manipulationTarget.rotation;
 
             PrimaryPointer.SyncedTarget = gameObject;
-
-            if (boundingBox == null)
-            {
-                prevPhysicsLayer = gameObject.layer;
-                transform.SetLayerRecursively(IgnoreRaycastLayer);
-            }
 
             transform.SetCollidersActive(false);
             BoxCollider.enabled = true;
@@ -883,12 +876,7 @@ namespace XRTK.SDK.Input.Handlers
                 manipulationTarget.rotation = prevRotation;
             }
 
-            MixedRealityToolkit.InputSystem.PopModalInputHandler();
-
-            if (boundingBox == null)
-            {
-                transform.SetLayerRecursively(prevPhysicsLayer);
-            }
+            MixedRealityToolkit.InputSystem?.PopModalInputHandler();
 
             transform.SetCollidersActive(true);
             body.isKinematic = true;
@@ -1009,13 +997,20 @@ namespace XRTK.SDK.Input.Handlers
         /// </remarks>
         public virtual void ProcessTransformData()
         {
-            if (!IsBeingHeld || PrimaryPointer == null || PrimaryPointer.Result.LastHitObject == gameObject) { return; }
+            if (!IsBeingHeld ||
+                PrimaryPointer == null ||
+                PrimaryPointer.Result.LastHitObject == gameObject)
+            {
+                return;
+            }
 
             var pointerPosition = PrimaryPointer.Result.EndPoint;
             var pointerGrabPoint = PrimaryPointer.Result.GrabPoint;
             var pointerDirection = PrimaryPointer.Result.Direction;
 
             if (pointerDirection.Equals(Vector3.zero)) { return; }
+
+            //Debug.Assert(pointerGrabPoint != Vector3.zero);
 
             var currentPosition = manipulationTarget.position;
             var targetPosition = (pointerPosition + currentPosition) - pointerGrabPoint;
@@ -1028,79 +1023,55 @@ namespace XRTK.SDK.Input.Handlers
             var scale = manipulationTarget.localScale;
             var scaledSize = BoxCollider.size * scale.y;
             var scaledCenter = BoxCollider.center * scale.y;
+            var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
+            var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
+
+            float CalculateVerticalPosition(RaycastHit hit)
+            {
+                return hit.point.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
+            }
 
             if (IsSnappedToSurface)
             {
                 var lastHit = lastHitObject == null
                     ? sweepHitInfo.transform
                     : lastHitObject.transform;
-
-                var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null);
-
-                if (hitNew &&
-                    sweepHitInfo.transform == null &&
-                    Physics.Raycast(PrimaryPointer.Rays[PrimaryPointer.Result.RayStepIndex], out var hitInfo))
-                {
-                    BoxCollider.bounds.Contains(hitInfo.point);
-                    hitNew = false;
-                }
-
-                if (hitNew &&
-                    lastHit.gameObject != null &&
-                    lastHit.gameObject.layer == 31 && // TODO provide options to configure this using the layerMasks
-                    lastHit.gameObject.layer == snapTarget.gameObject.layer)
-                {
-                    snapTarget = lastHit;
-                    hitNew = false;
-                }
+                //var isSameHeight = hitDown && CalculateVerticalPosition(maxHitDown).Equals(snappedVerticalPosition);
+                var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null) &&/* !isSameHeight && */!hitDown;
 
                 if (targetDistance > unsnapTolerance || hitNew)
                 {
+                    isSnappedToSurface = false;
+                }
+
+                // Check any overrides
+                if (!IsSnappedToSurface)
+                {
                     snapTarget = null;
-                    IsSnappedToSurface = false;
                     OnUnsnap();
+                }
+                else if (hitDown)
+                {
+                    // If we're still snapped to the surface then place the vertical
+                    // position at the highest hit point to "follow" the surface.
+                    snappedVerticalPosition = CalculateVerticalPosition(maxHitDown);
                 }
             }
 
             var justSnapped = false;
+            var isValidSnap = !sweepFailed && sweepHitInfo.distance <= snapDistance;
 
             if (!sweepFailed)
             {
-                var isValidMove = sweepHitInfo.distance > targetDistance;
-                var isValidSnap = sweepHitInfo.distance <= snapDistance;
-
-                Color color;
-
-                if (isValidMove)
-                {
-                    if (isValidSnap)
-                    {
-                        color = Color.green;
-                    }
-                    else
-                    {
-                        color = Color.yellow;
-                    }
-                }
-                else
-                {
-                    color = Color.red;
-                }
-
-                DebugUtilities.DrawPoint(sweepHitInfo.point, color);
-                Debug.DrawLine(sweepHitInfo.point, currentPosition, color);
-                Debug.DrawLine(pointerPosition, targetPosition, Color.magenta);
-
-                var rayStep = new RayStep(pointerPosition, targetPosition);
-
-                if (!isValidMove &&
-                    !IsSnappedToSurface &&
-                    !rayStep.Length.Equals(0f) &&
-                    !MixedRealityRaycaster.RaycastSimplePhysicsStep(rayStep, LayerMasks, out _))
+                if (!isValidMove)
                 {
                     targetPosition = currentPosition;
                     isValidSnap = false;
                 }
+
+                var color = isValidMove ? isValidSnap ? Color.green : Color.yellow : Color.red;
+                DebugUtilities.DrawPoint(sweepHitInfo.point, color);
+                Debug.DrawLine(sweepHitInfo.point, currentPosition, color);
 
                 if (snapToValidSurfaces &&
                     !IsSnappedToSurface &&
@@ -1115,9 +1086,8 @@ namespace XRTK.SDK.Input.Handlers
                         : sweepHitInfo.transform;
 
                     Debug.Assert(snapTarget != null);
-
-                    snappedVerticalPosition = sweepHitInfo.point.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.001f;
-                    IsSnappedToSurface = true;
+                    snappedVerticalPosition = CalculateVerticalPosition(sweepHitInfo);
+                    isSnappedToSurface = true;
                     justSnapped = true;
                     OnSnap();
                 }
@@ -1132,9 +1102,6 @@ namespace XRTK.SDK.Input.Handlers
             {
                 targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.deltaTime * smoothingFactor);
             }
-
-            DebugUtilities.DrawPoint(targetPosition, Color.blue);
-            Debug.DrawLine(targetPosition, manipulationTarget.position, Color.blue);
 
             manipulationTarget.position = targetPosition;
 
@@ -1151,6 +1118,76 @@ namespace XRTK.SDK.Input.Handlers
             {
                 manipulationTarget.ScaleAround(pointerGrabPoint, updatedScale);
             }
+        }
+
+        /// <summary>
+        /// Raycast from the bounds corners in the specified direction.
+        /// </summary>
+        /// <param name="distance">The distance to perform the raycast.</param>
+        /// <param name="direction">The direction to perform the raycast.</param>
+        /// <param name="hitAllCorners">Did the raycast hit for all of the valid corners in the direction of the raycast?</param>
+        /// <param name="minHitDistance">The closest hit.</param>
+        /// <param name="maxHitDistance">The furthest hit.</param>
+        /// <returns>True, if any of the raycasts hit.</returns>
+        protected bool TryGetRaycastBoundsCorners(float distance, Vector3 direction, out bool hitAllCorners, out RaycastHit minHitDistance, out RaycastHit maxHitDistance)
+        {
+            minHitDistance = default;
+            maxHitDistance = default;
+            hitAllCorners = true;
+
+            Vector3[] boundsCorners = null;
+            BoxCollider.GetCornerPositionsWorldSpace(transform, ref boundsCorners);
+
+            var hitAny = false;
+            var scaledCenter = transform.TransformPoint(BoxCollider.center);
+
+            for (int i = 0; i < boundsCorners.Length; i++)
+            {
+                var cornerPosition = boundsCorners[i];
+                var directionFromCenter = scaledCenter - cornerPosition;
+
+                // Raycast out in all directions.
+                if (direction == Vector3.zero)
+                {
+                    direction = directionFromCenter;
+                }
+
+                var dot = Vector3.Dot(transform.TransformDirection(direction), directionFromCenter);
+
+                if (dot >= 0f) { continue; }
+
+                var rayStep = new RayStep(new Ray(cornerPosition, direction), distance);
+
+                if (MixedRealityRaycaster.RaycastSimplePhysicsStep(rayStep, LayerMasks, out var hitInfo))
+                {
+                    hitAny = true;
+
+                    if (hitInfo.distance < minHitDistance.distance)
+                    {
+                        minHitDistance = hitInfo;
+                    }
+
+                    if (hitInfo.distance > maxHitDistance.distance)
+                    {
+                        maxHitDistance = hitInfo;
+                    }
+
+                    if (hitInfo.distance > distance)
+                    {
+                        hitAllCorners = false;
+                    }
+
+                    DebugUtilities.DrawPoint(hitInfo.point, Color.yellow);
+                    Debug.DrawLine(hitInfo.point, cornerPosition, Color.yellow);
+                }
+                else
+                {
+                    hitAllCorners = false;
+                    Debug.DrawLine(scaledCenter, cornerPosition, Color.red);
+                }
+            }
+
+            return hitAny;
         }
     }
 }
