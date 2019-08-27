@@ -796,7 +796,8 @@ namespace XRTK.SDK.Input.Handlers
         /// Begin a new hold on the manipulation target.
         /// </summary>
         /// <param name="eventData"></param>
-        public virtual void BeginHold(MixedRealityPointerEventData eventData)
+        /// <param name="grabOffset"></param>
+        public virtual void BeginHold(MixedRealityPointerEventData eventData, Vector3? grabOffset = null)
         {
             if (IsBeingHeld) { return; }
 
@@ -837,7 +838,9 @@ namespace XRTK.SDK.Input.Handlers
             prevScale = manipulationTarget.localScale;
             prevRotation = manipulationTarget.rotation;
 
+            PrimaryPointer.IsFocusLocked = true;
             PrimaryPointer.SyncedTarget = gameObject;
+            PrimaryPointer.OverrideGrabPoint = grabOffset;
 
             transform.SetCollidersActive(false);
             BoxCollider.enabled = true;
@@ -881,6 +884,8 @@ namespace XRTK.SDK.Input.Handlers
             transform.SetCollidersActive(true);
             body.isKinematic = true;
 
+            PrimaryPointer.SyncedTarget = null;
+            PrimaryPointer.OverrideGrabPoint = null;
             PrimaryPointer.IsFocusLocked = false;
             PrimaryPointer = null;
             primaryInputSource = null;
@@ -1003,6 +1008,9 @@ namespace XRTK.SDK.Input.Handlers
             {
                 return;
             }
+
+            Debug.Assert(PrimaryPointer.IsFocusLocked);
+            Debug.Assert(PrimaryPointer.SyncedTarget != null);
 
             var pointerPosition = PrimaryPointer.Result.EndPoint;
             var pointerGrabPoint = PrimaryPointer.Result.GrabPoint;
