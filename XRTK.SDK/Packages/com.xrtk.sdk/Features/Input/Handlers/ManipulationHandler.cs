@@ -1013,7 +1013,17 @@ namespace XRTK.SDK.Input.Handlers
             //Debug.Assert(pointerGrabPoint != Vector3.zero);
 
             var currentPosition = manipulationTarget.position;
-            var targetPosition = (pointerPosition + currentPosition) - pointerGrabPoint;
+
+            Vector3 targetPosition;
+
+            if (pointerGrabPoint == Vector3.zero)
+            {
+                targetPosition = pointerPosition;
+            }
+            else
+            {
+                targetPosition = (pointerPosition + currentPosition) - pointerGrabPoint;
+            }
 
             var sweepFailed = !body.SweepTest(pointerDirection, out var sweepHitInfo);
             var targetDirection = targetPosition - currentPosition;
@@ -1105,9 +1115,12 @@ namespace XRTK.SDK.Input.Handlers
 
             manipulationTarget.position = targetPosition;
 
+            var pivot = pointerGrabPoint == Vector3.zero ? pointerPosition : pointerGrabPoint;
+
             if (IsRotating)
             {
-                manipulationTarget.RotateAround(pointerGrabPoint, Vector3.up, -updatedAngle);
+
+                manipulationTarget.RotateAround(pivot, Vector3.up, -updatedAngle);
                 updatedAngle = 0f;
             }
             else if (IsNudgePossible)
@@ -1116,7 +1129,7 @@ namespace XRTK.SDK.Input.Handlers
             }
             else if (IsScalingPossible)
             {
-                manipulationTarget.ScaleAround(pointerGrabPoint, updatedScale);
+                manipulationTarget.ScaleAround(pivot, updatedScale);
             }
         }
 

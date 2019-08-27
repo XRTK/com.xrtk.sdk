@@ -272,6 +272,9 @@ namespace XRTK.SDK.UX.Pointers
 
         private GameObject syncedTarget = null;
 
+        /// <inheritdoc />
+        public Vector3? OverrideGrabPoint { get; set; } = null;
+
         [SerializeField]
         private bool overrideGlobalPointerExtent = false;
 
