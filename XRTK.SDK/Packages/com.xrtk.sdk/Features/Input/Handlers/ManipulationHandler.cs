@@ -417,6 +417,8 @@ namespace XRTK.SDK.Input.Handlers
         #endregion Events
 
         private BoundingBox boundingBox;
+        public BoundingBox BoundingBox => boundingBox;
+
         private IMixedRealityInputSource primaryInputSource;
 
         private SpatialMeshDisplayOptions prevSpatialMeshDisplay;

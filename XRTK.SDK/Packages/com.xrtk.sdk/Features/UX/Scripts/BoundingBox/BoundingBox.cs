@@ -1257,10 +1257,12 @@ namespace XRTK.SDK.UX
             }
         }
 
-        private void UpdateRigTransform()
+        /// <summary>
+        /// Updates the rig transform position.
+        /// </summary>
+        public void UpdateRigTransform()
         {
-            Debug.Assert(rigRoot != null);
-            Debug.Assert(BoundingBoxCollider != null);
+            if (rigRoot == null || BoundingBoxCollider == null) { return; }
 
             rigRoot.rotation = Quaternion.identity;
             rigRoot.position = Vector3.zero;
