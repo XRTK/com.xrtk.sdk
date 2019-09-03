@@ -412,7 +412,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// Invoked when a hold has ended.
         /// </summary>
-        public event Action OnHoldEnd;
+        public event Action<bool> OnHoldEnd;
 
         #endregion Events
 
@@ -578,6 +578,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputDown(InputEventData eventData)
         {
+            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+
             if (!eventData.used &&
                 IsBeingHeld &&
                 eventData.MixedRealityInputAction == cancelAction)
@@ -590,6 +592,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputUp(InputEventData eventData)
         {
+            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+
             if (!eventData.used &&
                 IsBeingHeld &&
                 eventData.MixedRealityInputAction == cancelAction)
@@ -602,6 +606,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<float> eventData)
         {
+            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+
             if (!IsBeingHeld ||
                 primaryInputSource == null ||
                 eventData.InputSource.SourceId != primaryInputSource.SourceId)
@@ -643,6 +649,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<Vector2> eventData)
         {
+            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+
             // reset this in case we are rotating only.
             IsScalingPossible = false;
 
@@ -747,6 +755,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnPointerDown(MixedRealityPointerEventData eventData)
         {
+            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+
             if (eventData.MixedRealityInputAction == selectAction)
             {
                 if (!useHold)
@@ -761,6 +771,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnPointerUp(MixedRealityPointerEventData eventData)
         {
+            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+
             if (eventData.used ||
                 eventData.MixedRealityInputAction != selectAction)
             {
@@ -893,7 +905,7 @@ namespace XRTK.SDK.Input.Handlers
             primaryInputSource = null;
             IsBeingHeld = false;
 
-            OnHoldEnd?.Invoke();
+            OnHoldEnd?.Invoke(isCanceled);
         }
 
         /// <summary>

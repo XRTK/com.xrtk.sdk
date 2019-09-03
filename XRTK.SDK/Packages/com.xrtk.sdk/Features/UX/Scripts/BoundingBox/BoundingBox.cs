@@ -601,7 +601,7 @@ namespace XRTK.SDK.UX
 
             manipulationHandler.OnHoldBegin += () => isManipulationEnabled = true;
 
-            void OnManipulationHandlerOnOnHoldEnd()
+            void OnManipulationHandlerOnOnHoldEnd(bool wasCancelled)
             {
                 isManipulationEnabled = false;
                 UpdateBounds(true);
