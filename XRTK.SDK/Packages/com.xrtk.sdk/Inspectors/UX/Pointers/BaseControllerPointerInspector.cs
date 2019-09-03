@@ -15,8 +15,10 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty setCursorVisibilityOnSourceDetected;
         private SerializedProperty raycastOrigin;
         private SerializedProperty pointerExtent;
-        private SerializedProperty activeHoldAction;
-        private SerializedProperty pointerAction;
+        private SerializedProperty selectActions;
+        private SerializedProperty selectThreshold;
+        private SerializedProperty holdActions;
+        private SerializedProperty holdThreshold;
         private SerializedProperty pointerOrientation;
         private SerializedProperty requiresHoldAction;
         private SerializedProperty enablePointerOnStart;
@@ -35,8 +37,10 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             setCursorVisibilityOnSourceDetected = serializedObject.FindProperty("setCursorVisibilityOnSourceDetected");
             raycastOrigin = serializedObject.FindProperty("raycastOrigin");
             pointerExtent = serializedObject.FindProperty("defaultPointerExtent");
-            activeHoldAction = serializedObject.FindProperty("activeHoldAction");
-            pointerAction = serializedObject.FindProperty("pointerAction");
+            selectActions = serializedObject.FindProperty("selectActions");
+            selectThreshold = serializedObject.FindProperty("selectThreshold");
+            holdActions = serializedObject.FindProperty("holdActions");
+            holdThreshold = serializedObject.FindProperty("holdThreshold");
             pointerOrientation = serializedObject.FindProperty("pointerOrientation");
             requiresHoldAction = serializedObject.FindProperty("requiresHoldAction");
             enablePointerOnStart = serializedObject.FindProperty("enablePointerOnStart");
@@ -66,7 +70,8 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 EditorGUILayout.PropertyField(raycastOrigin);
                 EditorGUILayout.PropertyField(pointerExtent);
                 EditorGUILayout.PropertyField(pointerOrientation);
-                EditorGUILayout.PropertyField(pointerAction);
+                EditorGUILayout.PropertyField(selectActions, true);
+                EditorGUILayout.PropertyField(selectThreshold);
 
                 if (DrawBasePointerActions)
                 {
@@ -74,7 +79,8 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
 
                     if (requiresHoldAction.boolValue)
                     {
-                        EditorGUILayout.PropertyField(activeHoldAction);
+                        EditorGUILayout.PropertyField(holdActions, true);
+                        EditorGUILayout.PropertyField(holdThreshold);
                     }
                 }
 

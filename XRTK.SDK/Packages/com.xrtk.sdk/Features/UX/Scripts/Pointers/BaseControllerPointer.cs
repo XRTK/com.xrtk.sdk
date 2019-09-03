@@ -47,12 +47,23 @@ namespace XRTK.SDK.UX.Pointers
         private Transform raycastOrigin = null;
 
         [SerializeField]
-        [Tooltip("The hold action that will enable the raise the input event for this pointer.")]
-        private MixedRealityInputAction activeHoldAction = MixedRealityInputAction.None;
+        [Tooltip("The hold actions that will enable the raise the input event for this pointer.")]
+        private MixedRealityInputAction[] holdActions = { MixedRealityInputAction.None };
 
         [SerializeField]
-        [Tooltip("The action that will enable the raise the input event for this pointer.")]
-        private MixedRealityInputAction pointerAction = MixedRealityInputAction.None;
+        [Range(0.01f, 1f)]
+        [Tooltip("The threshold before raising a single axis hold action.")]
+        private float holdThreshold = 0.25f;
+
+        [SerializeField]
+        [FormerlySerializedAs("pointerActions")]
+        [Tooltip("The actions that will enable the raise the input event for this pointer.")]
+        private MixedRealityInputAction[] selectActions = { MixedRealityInputAction.None };
+
+        [SerializeField]
+        [Range(0.01f, 1f)]
+        [Tooltip("The threshold before raising a single axis select action.")]
+        private float selectThreshold = 0.25f;
 
         [SerializeField]
         [Tooltip("Does the interaction require hold?")]
@@ -65,7 +76,11 @@ namespace XRTK.SDK.UX.Pointers
         /// <summary>
         /// True if select is pressed right now
         /// </summary>
-        protected bool IsSelectPressed = false;
+        protected bool IsSelectPressed { get; private set; } = false;
+
+        private MixedRealityInputAction activeSelectAction = MixedRealityInputAction.None;
+
+        private MixedRealityInputAction activeHoldAction = MixedRealityInputAction.None;
 
         /// <summary>
         /// True if select has been pressed once since this component was enabled
@@ -439,11 +454,13 @@ namespace XRTK.SDK.UX.Pointers
                 if (requiresHoldAction)
                 {
                     IsHoldPressed = false;
+                    activeHoldAction = MixedRealityInputAction.None;
                 }
 
                 if (IsSelectPressed)
                 {
-                    MixedRealityToolkit.InputSystem.RaisePointerUp(this, pointerAction);
+                    MixedRealityToolkit.InputSystem.RaisePointerUp(this, activeSelectAction);
+                    activeSelectAction = MixedRealityInputAction.None;
                 }
 
                 IsSelectPressed = false;
@@ -459,19 +476,19 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.OnInputUp(eventData);
 
-            if (eventData.SourceId == InputSourceParent.SourceId)
-            {
-                if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
-                {
-                    IsHoldPressed = false;
-                }
+            if (eventData.SourceId != InputSourceParent.SourceId) { return; }
 
-                if (eventData.MixedRealityInputAction == pointerAction)
-                {
-                    IsSelectPressed = false;
-                    MixedRealityToolkit.InputSystem.RaisePointerClicked(this, pointerAction, 0);
-                    MixedRealityToolkit.InputSystem.RaisePointerUp(this, pointerAction);
-                }
+            if (requiresHoldAction &&
+                IsHoldPressed &&
+                eventData.MixedRealityInputAction == activeHoldAction)
+            {
+                ProcessHoldEnd();
+            }
+
+            if (IsSelectPressed &&
+                eventData.MixedRealityInputAction == activeSelectAction)
+            {
+                ProcessSelectEnd();
             }
         }
 
@@ -480,20 +497,121 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.OnInputDown(eventData);
 
-            if (eventData.SourceId == InputSourceParent.SourceId)
-            {
-                if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
-                {
-                    IsHoldPressed = true;
-                }
+            if (eventData.SourceId != InputSourceParent.SourceId) { return; }
 
-                if (eventData.MixedRealityInputAction == pointerAction)
+            if (requiresHoldAction &&
+                !IsHoldPressed)
+            {
+                for (int i = 0; i < holdActions?.Length; i++)
                 {
-                    IsSelectPressed = true;
-                    HasSelectPressedOnce = true;
-                    MixedRealityToolkit.InputSystem.RaisePointerDown(this, pointerAction);
+                    var action = holdActions[i];
+
+                    if (eventData.MixedRealityInputAction == action)
+                    {
+                        ProcessHoldStart(action);
+                        break;
+                    }
                 }
             }
+
+            if (!IsSelectPressed)
+            {
+                for (int i = 0; i < selectActions?.Length; i++)
+                {
+                    var action = selectActions[i];
+
+                    if (eventData.MixedRealityInputAction == action)
+                    {
+                        ProcessSelectStart(action);
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public override void OnInputChanged(InputEventData<float> eventData)
+        {
+            base.OnInputChanged(eventData);
+
+            if (eventData.SourceId != InputSourceParent.SourceId) { return; }
+
+            if (requiresHoldAction)
+            {
+                bool isHoldPressed = eventData.InputData >= holdThreshold;
+
+                for (int i = 0; i < holdActions?.Length; i++)
+                {
+                    var action = holdActions[i];
+
+                    if (eventData.MixedRealityInputAction != action) { continue; }
+
+                    if (!IsHoldPressed && isHoldPressed)
+                    {
+                        ProcessHoldStart(action);
+                        break;
+                    }
+
+                    if (IsHoldPressed && !isHoldPressed)
+                    {
+                        ProcessHoldEnd();
+                        break;
+                    }
+                }
+            }
+
+            bool isSelectPressed = eventData.InputData >= selectThreshold;
+
+            for (int i = 0; i < selectActions?.Length; i++)
+            {
+                var action = selectActions[i];
+
+                if (eventData.MixedRealityInputAction != action) { continue; }
+
+                if (!IsSelectPressed && isSelectPressed)
+                {
+                    ProcessSelectStart(action);
+                    break;
+                }
+
+                if (IsSelectPressed && !isSelectPressed)
+                {
+                    ProcessSelectEnd();
+                    break;
+                }
+            }
+        }
+
+        protected virtual void ProcessHoldStart(MixedRealityInputAction action)
+        {
+            Debug.Assert(!IsHoldPressed);
+            activeHoldAction = action;
+            IsHoldPressed = true;
+        }
+
+        protected virtual void ProcessHoldEnd()
+        {
+            Debug.Assert(IsHoldPressed);
+            IsHoldPressed = false;
+            activeHoldAction = MixedRealityInputAction.None;
+        }
+
+        protected virtual void ProcessSelectStart(MixedRealityInputAction action)
+        {
+            Debug.Assert(!IsSelectPressed);
+            activeSelectAction = action;
+            IsSelectPressed = true;
+            HasSelectPressedOnce = true;
+            MixedRealityToolkit.InputSystem.RaisePointerDown(this, action);
+        }
+
+        protected virtual void ProcessSelectEnd()
+        {
+            Debug.Assert(IsSelectPressed);
+            IsSelectPressed = false;
+            MixedRealityToolkit.InputSystem.RaisePointerClicked(this, activeSelectAction, 0);
+            MixedRealityToolkit.InputSystem.RaisePointerUp(this, activeSelectAction);
+            activeSelectAction = MixedRealityInputAction.None;
         }
 
         #endregion  IMixedRealityInputHandler Implementation

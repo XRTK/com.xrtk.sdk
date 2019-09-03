@@ -55,14 +55,16 @@ MonoBehaviour:
   disableCursorOnStart: 0
   setCursorVisibilityOnSourceDetected: 0
   raycastOrigin: {fileID: 0}
-  activeHoldAction:
-    id: 0
+  holdActions:
+  - id: 0
     description: None
     axisConstraint: 0
-  pointerAction:
-    id: 1
+  holdThreshold: 0
+  selectActions:
+  - id: 1
     description: Select
     axisConstraint: 2
+  selectThreshold: 0.25
   requiresHoldAction: 0
   enablePointerOnStart: 1
   overrideGlobalPointerExtent: 0
