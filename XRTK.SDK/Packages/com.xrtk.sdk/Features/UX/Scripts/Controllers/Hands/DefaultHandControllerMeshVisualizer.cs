@@ -34,12 +34,12 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             controllerVisualizer = GetComponent<DefaultMixedRealityControllerVisualizer>();
             dataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
-            dataProvider.Register(gameObject);
+            dataProvider.Register(this);
         }
 
         private void OnDestroy()
         {
-            dataProvider.Unregister(gameObject);
+            dataProvider.Unregister(this);
             ClearMesh();
         }
 
