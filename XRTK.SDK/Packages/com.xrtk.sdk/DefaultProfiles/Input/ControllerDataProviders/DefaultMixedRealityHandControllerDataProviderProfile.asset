@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
+  handControllerType:
+    reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
   registeredControllerDataProviders:
   - dataProviderType:
       reference: XRTK.Providers.Controllers.Hands.LeapMotionHandControllerDataProvider,

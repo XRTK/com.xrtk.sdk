@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ff490729fb2a2b4da8da5154ed07183, type: 3}
-  m_Name: DefaultMixedRealityHandControllerMappingProfile
+  m_Name: DefaultGenericHandControllerMappingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
+  isCustomProfile: 0
   hasSetupDefaults: 1
   controllerMappings:
-  - description: Articulated
+  - description: Generic
     controllerType:
-      reference: XRTK.Services.InputSystem.Simulation.SimulatedArticulatedHand, XRTK
+      reference: XRTK.Services.InputSystem.Simulation.DefaultHandController, XRTK
     handedness: 1
     useCustomInteractionMappings: 0
     interactions:
@@ -91,9 +91,9 @@ MonoBehaviour:
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
-  - description: Articulated
+  - description: Generic
     controllerType:
-      reference: XRTK.Services.InputSystem.Simulation.SimulatedArticulatedHand, XRTK
+      reference: XRTK.Services.InputSystem.Simulation.DefaultHandController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
     interactions:
