@@ -160,7 +160,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 346
+      keyCode: 338
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 347
+      keyCode: 339
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
