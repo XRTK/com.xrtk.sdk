@@ -108,8 +108,8 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 334
-      axisCodeX: 
+      keyCode: 0
+      axisCodeX: AXIS_11
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -348,8 +348,8 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 335
-      axisCodeX: 
+      keyCode: 0
+      axisCodeX: AXIS_12
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
