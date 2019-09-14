@@ -27,7 +27,7 @@ namespace XRTK.SDK.Input.Handlers
 
         protected override void OnEnable()
         {
-            if (!isFocusRequired)
+            if (!IsFocusRequired)
             {
                 base.OnEnable();
             }
@@ -35,7 +35,7 @@ namespace XRTK.SDK.Input.Handlers
 
         protected override void Start()
         {
-            if (!isFocusRequired)
+            if (!IsFocusRequired)
             {
                 base.Start();
             }
@@ -43,7 +43,7 @@ namespace XRTK.SDK.Input.Handlers
 
         protected override void OnDisable()
         {
-            if (!isFocusRequired)
+            if (!IsFocusRequired)
             {
                 base.OnDisable();
             }

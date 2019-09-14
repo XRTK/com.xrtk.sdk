@@ -260,6 +260,9 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public bool IsFocusLocked { get; set; }
 
+        /// <inheritdoc />
+        public bool SyncPointerTargetPosition { get; set; }
+
         [SerializeField]
         private bool overrideGlobalPointerExtent = false;
 
@@ -310,7 +313,10 @@ namespace XRTK.SDK.UX.Pointers
         public LayerMask[] PrioritizedLayerMasksOverride { get; set; } = null;
 
         /// <inheritdoc />
-        public IMixedRealityFocusHandler FocusTarget { get; set; }
+        public IMixedRealityFocusHandler FocusHandler { get; set; }
+
+        /// <inheritdoc />
+        public IMixedRealityInputHandler InputHandler { get; set; }
 
         /// <inheritdoc />
         public IPointerResult Result { get; set; }
@@ -337,9 +343,6 @@ namespace XRTK.SDK.UX.Pointers
                         ? Mathf.Clamp(value, -360f, 0f)
                         : Mathf.Clamp(value, 0f, 360f);
         }
-
-        /// <inheritdoc />
-        public bool IsTargetPositionLockedOnFocusLock { get; set; }
 
         /// <inheritdoc />
         public virtual void OnPreRaycast() { }

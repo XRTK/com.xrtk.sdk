@@ -116,9 +116,9 @@ namespace XRTK.SDK.UX.Pointers
             // Set our first and last points
             lineBase.FirstPoint = pointerPosition;
 
-            if (IsFocusLocked && Result != null)
+            if (IsFocusLocked)
             {
-                lineBase.LastPoint = pointerPosition + ((Result.Details.Point - pointerPosition).normalized * PointerExtent);
+                lineBase.LastPoint = Result.EndPoint;
             }
             else
             {
@@ -159,22 +159,22 @@ namespace XRTK.SDK.UX.Pointers
             lineBase.enabled = true;
             BaseCursor?.SetVisibility(true);
 
-            // The distance the ray travels through the world before it hits something. Measured in world-units (as opposed to normalized distance).
+            // The distance the ray travels through the world before it hits something.
+            // Measured in world-units (as opposed to normalized distance).
             float clearWorldLength;
+
             // Used to ensure the line doesn't extend beyond the cursor
-            float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0;
+            float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0f;
 
             // If we hit something
-            if (Result?.CurrentPointerTarget != null)
+            if (Result.CurrentPointerTarget != null)
             {
-                clearWorldLength = Result.Details.RayDistance;
-
+                clearWorldLength = Result.RayDistance;
                 lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
             }
             else
             {
                 clearWorldLength = PointerExtent;
-
                 lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
             }
 
@@ -196,7 +196,7 @@ namespace XRTK.SDK.UX.Pointers
 
             // If focus is locked, we're sticking to the target
             // So don't clamp the world length
-            if (IsFocusLocked && IsTargetPositionLockedOnFocusLock)
+            if (IsFocusLocked && SyncPointerTargetPosition)
             {
                 float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);
                 LineBase.LineEndClamp = 1 - cursorOffsetLocalLength;
