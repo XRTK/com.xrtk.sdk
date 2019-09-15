@@ -38,7 +38,7 @@ namespace XRTK.SDK.UX.Controllers
         {
             base.Start();
 
-            if (typeof(BaseHandController).IsAssignableFrom(Controller.GetType()))
+            if (typeof(DefaultHandController).IsAssignableFrom(Controller.GetType()))
             {
                 MixedRealityHandControllerVisualizationProfile handControllerVisualizationProfile = MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.ControllerVisualizationProfile.HandVisualizationProfile;
 

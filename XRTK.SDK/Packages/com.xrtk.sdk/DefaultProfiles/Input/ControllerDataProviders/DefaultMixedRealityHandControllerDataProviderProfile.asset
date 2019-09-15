@@ -12,34 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f8771a79d745f44895151fcb656119, type: 3}
   m_Name: DefaultMixedRealityHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isCustomProfile: 1
   handControllerType:
     reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
   registeredControllerDataProviders:
-  - dataProviderType:
-      reference: XRTK.Providers.Controllers.Hands.LeapMotionHandControllerDataProvider,
-        XRTK
-    dataProviderName: Leap Motion Hand Controller Data Provider
-    priority: 5
-    runtimePlatform: 27
-    profile: {fileID: 0}
-  - dataProviderType:
-      reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
-    dataProviderName: Lumin Hand Controller Data Provider
-    priority: 5
-    runtimePlatform: 16
-    profile: {fileID: 0}
-  - dataProviderType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
-        XRTK.WindowsMixedReality
-    dataProviderName: Windows Mixed Reality Hand Controller Data Provider
-    priority: 5
-    runtimePlatform: 8
-    profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.Hands.EditorSimulatedHandControllerDataProvider,
         XRTK
     dataProviderName: Unity Editor Simulated Hand Controller Data Provider
     priority: 5
-    runtimePlatform: 3
+    runtimePlatform: -1
     profile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56, type: 2}

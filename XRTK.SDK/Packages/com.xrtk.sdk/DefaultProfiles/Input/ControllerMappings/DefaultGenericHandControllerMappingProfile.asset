@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff490729fb2a2b4da8da5154ed07183, type: 3}
   m_Name: DefaultGenericHandControllerMappingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isCustomProfile: 1
   hasSetupDefaults: 1
   controllerMappings:
   - description: Generic
     controllerType:
-      reference: XRTK.Services.InputSystem.Simulation.DefaultHandController, XRTK
+      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
     handedness: 1
     useCustomInteractionMappings: 0
     interactions:
@@ -93,7 +93,7 @@ MonoBehaviour:
       invertYAxis: 0
   - description: Generic
     controllerType:
-      reference: XRTK.Services.InputSystem.Simulation.DefaultHandController, XRTK
+      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
     interactions:
