@@ -56,8 +56,8 @@ MonoBehaviour:
         id: 1
         description: Select
         axisConstraint: 2
-      keyCode: 345
-      axisCodeX: 
+      keyCode: 0
+      axisCodeX: AXIS_10
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -69,8 +69,8 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
-      axisCodeX: AXIS_10
+      keyCode: 345
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
