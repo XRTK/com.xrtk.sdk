@@ -18,7 +18,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
     dataProviderName: Mouse Controller Data Provider
     priority: 5
-    runtimePlatform: 191
+    runtimePlatform: 31
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
