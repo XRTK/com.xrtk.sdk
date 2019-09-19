@@ -173,6 +173,9 @@ namespace XRTK.SDK.Input.Handlers
         [SerializeField]
         private float smoothingFactor = 10f;
 
+        /// <summary>
+        /// When using <see cref="SmoothMotion"/>, this value helps tweak movement sensitivity to the goal position.
+        /// </summary>
         public float SmoothingFactor
         {
             get => smoothingFactor;
@@ -180,8 +183,12 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         [SerializeField]
+        [Tooltip("Should the GameObject snap to valid surfaces?")]
         private bool snapToValidSurfaces = true;
 
+        /// <summary>
+        /// Should the <see cref="GameObject"/> snap to valid surfaces?
+        /// </summary>
         public bool SnapToValidSurfaces
         {
             get => snapToValidSurfaces;
@@ -192,6 +199,9 @@ namespace XRTK.SDK.Input.Handlers
         [Tooltip("This distance that will make the object snap to the surface.")]
         private float snapDistance = 0.0762f;
 
+        /// <summary>
+        /// This distance that will make the object snap to the surface.
+        /// </summary>
         public float SnapDistance
         {
             get => snapDistance;
@@ -202,6 +212,9 @@ namespace XRTK.SDK.Input.Handlers
         [Tooltip("The distance that will make the object unsnap from the surface.")]
         private float unsnapTolerance = 1f;
 
+        /// <summary>
+        /// The distance that will make the object unsnap from the surface.
+        /// </summary>
         public float UnsnapDistance
         {
             get => unsnapTolerance;
@@ -369,19 +382,20 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// Is the <see cref="GameObject"/> currently snapped to a surface?
         /// </summary>
-        public virtual bool IsSnappedToSurface => isSnappedToSurface;
-
-        private bool isSnappedToSurface;
+        public virtual bool IsSnappedToSurface { get; private set; } = false;
 
         private BoxCollider boxCollider;
 
+        /// <summary>
+        /// The <see cref="BoxCollider"/> associated with this <see cref="GameObject"/>.
+        /// </summary>
         public BoxCollider BoxCollider
         {
             get
             {
-                if (boundingBox != null)
+                if (BoundingBox != null)
                 {
-                    return boundingBox.BoundingBoxCollider;
+                    return BoundingBox.BoundingBoxCollider;
                 }
 
                 if (boxCollider == null)
@@ -399,6 +413,14 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public IMixedRealityPointer PrimaryPointer { get; private set; }
 
+        /// <summary>
+        /// The <see cref="BoundingBox"/> associated to this <see cref="GameObject"/>.
+        /// </summary>
+        public BoundingBox BoundingBox { get; private set; }
+
+        /// <summary>
+        /// The current valid layer mask for any associated pointers when interacting with this object.
+        /// </summary>
         protected LayerMask[] LayerMasks => PrimaryPointer?.PrioritizedLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.FocusLayerMasks;
 
         #endregion Properties
@@ -416,9 +438,6 @@ namespace XRTK.SDK.Input.Handlers
         public event Action<bool> OnHoldEnd;
 
         #endregion Events
-
-        private BoundingBox boundingBox;
-        public BoundingBox BoundingBox => boundingBox;
 
         private IMixedRealityInputSource primaryInputSource;
 
@@ -463,74 +482,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             base.Start();
 
-            boundingBox = GetComponent<BoundingBox>();
-        }
-
-        private void Update()
-        {
-            for (var keyCode = KeyCode.Alpha0; keyCode < KeyCode.Tilde; keyCode++)
-            {
-                if (UnityEngine.Input.GetKey(keyCode))
-                {
-                    const float nudgeFactor = 0.5f;
-                    float prevExtent;
-                    float newExtent;
-
-                    const float scaleFactor = 0.1f;
-                    Vector3 newScale;
-
-                    switch (keyCode)
-                    {
-                        case KeyCode.W:
-                            IsNudgePossible = true;
-                            prevExtent = GetCurrentExtent(PrimaryPointer);
-                            newExtent = CalculateNudgeDistance(nudgeFactor, prevExtent);
-                            updatedExtent = ClampExtent(nudgeFactor, newExtent, prevExtent);
-                            break;
-                        case KeyCode.A:
-                            IsScalingPossible = true;
-                            newScale = CalculateScaleAmount(scaleFactor, manipulationTarget.localScale);
-                            updatedScale = ClampScale(scaleFactor, newScale);
-                            break;
-                        case KeyCode.S:
-                            IsNudgePossible = true;
-                            prevExtent = GetCurrentExtent(PrimaryPointer);
-                            newExtent = CalculateNudgeDistance(-nudgeFactor, prevExtent);
-                            updatedExtent = ClampExtent(-nudgeFactor, newExtent, prevExtent);
-                            break;
-                        case KeyCode.D:
-                            IsScalingPossible = true;
-                            newScale = CalculateScaleAmount(-scaleFactor, manipulationTarget.localScale);
-                            updatedScale = ClampScale(-scaleFactor, newScale);
-                            break;
-                        case KeyCode.Q:
-                            updatedAngle += 2.8125f;
-                            break;
-                        case KeyCode.E:
-                            updatedAngle -= 2.8125f;
-                            break;
-                    }
-                }
-
-                if (UnityEngine.Input.GetKeyUp(keyCode))
-                {
-                    switch (keyCode)
-                    {
-                        case KeyCode.W:
-                            IsNudgePossible = false;
-                            break;
-                        case KeyCode.A:
-                            IsScalingPossible = false;
-                            break;
-                        case KeyCode.S:
-                            IsNudgePossible = false;
-                            break;
-                        case KeyCode.D:
-                            IsScalingPossible = false;
-                            break;
-                    }
-                }
-            }
+            BoundingBox = GetComponent<BoundingBox>();
         }
 
         protected virtual void LateUpdate()
@@ -538,7 +490,7 @@ namespace XRTK.SDK.Input.Handlers
             // only process the transform data if we don't have
             // a bounding box component attached, otherwise the
             // bounding box will call this method for us.
-            if (boundingBox == null)
+            if (BoundingBox == null)
             {
                 ProcessTransformData();
             }
@@ -555,21 +507,6 @@ namespace XRTK.SDK.Input.Handlers
                 // if the component is disabled.
                 EndHold();
             }
-        }
-
-        protected virtual void OnCollisionEnter(Collision other)
-        {
-            //Debug.LogWarning($"OnCollisionEnter {name} -> {other.gameObject.name}");
-        }
-
-        protected virtual void OnCollisionStay(Collision other)
-        {
-            //Debug.LogWarning($"OnCollisionStay {name} -> {other.gameObject.name}");
-        }
-
-        protected virtual void OnCollisionExit(Collision other)
-        {
-            //Debug.LogWarning($"OnCollisionExit {name} -> {other.gameObject.name}");
         }
 
         #endregion Monobehaviour Implementation
@@ -996,22 +933,18 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// Do stuff when snap occurs.
         /// </summary>
-        protected virtual void OnSnap()
-        {
-        }
+        protected virtual void OnSnap() { }
 
         /// <summary>
         /// Do stuff when snap stops.
         /// </summary>
-        protected virtual void OnUnsnap()
-        {
-        }
+        protected virtual void OnUnsnap() { }
 
         /// <summary>
         /// Process the manipulation handler's pending transform updates.
         /// </summary>
         /// <remarks>
-        /// This is called from the <see cref="boundingBox"/>'s LateUpdate to properly sync the transforms to prevent
+        /// This is called from the <see cref="BoundingBox"/>'s LateUpdate to properly sync the transforms to prevent
         /// jerky or stuttering effects when moving the objects. This can happen because of the non-deterministic way
         /// unity calls it's game loop events on scene objects.
         /// </remarks>
@@ -1032,8 +965,6 @@ namespace XRTK.SDK.Input.Handlers
             var pointerDirection = PrimaryPointer.Result.Direction;
 
             if (pointerDirection.Equals(Vector3.zero)) { return; }
-
-            //Debug.Assert(pointerGrabPoint != Vector3.zero);
 
             var currentPosition = manipulationTarget.position;
 
@@ -1069,12 +1000,11 @@ namespace XRTK.SDK.Input.Handlers
                 var lastHit = lastHitObject == null
                     ? sweepHitInfo.transform
                     : lastHitObject.transform;
-                //var isSameHeight = hitDown && CalculateVerticalPosition(maxHitDown).Equals(snappedVerticalPosition);
-                var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null) &&/* !isSameHeight && */!hitDown;
+                var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null) && !hitDown;
 
                 if (targetDistance > unsnapTolerance || hitNew)
                 {
-                    isSnappedToSurface = false;
+                    IsSnappedToSurface = false;
                 }
 
                 // Check any overrides
@@ -1120,7 +1050,7 @@ namespace XRTK.SDK.Input.Handlers
 
                     Debug.Assert(snapTarget != null);
                     snappedVerticalPosition = CalculateVerticalPosition(sweepHitInfo);
-                    isSnappedToSurface = true;
+                    IsSnappedToSurface = true;
                     justSnapped = true;
                     OnSnap();
                 }
@@ -1142,7 +1072,6 @@ namespace XRTK.SDK.Input.Handlers
 
             if (IsRotating)
             {
-
                 manipulationTarget.RotateAround(pivot, Vector3.up, -updatedAngle);
                 updatedAngle = 0f;
             }
