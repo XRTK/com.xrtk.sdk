@@ -17,7 +17,7 @@ MonoBehaviour:
   controllerMappings:
   - description: Windows Mixed Reality HoloLens Hand Input
     controllerType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityOpenVRController,
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityController,
         XRTK.WindowsMixedReality
     handedness: 0
     useCustomInteractionMappings: 0
@@ -31,6 +31,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -44,6 +45,7 @@ MonoBehaviour:
         description: Grip Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -57,6 +59,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -70,6 +73,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -83,6 +87,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -96,6 +101,7 @@ MonoBehaviour:
         description: Select
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -109,6 +115,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -122,6 +129,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -135,6 +143,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -148,6 +157,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -161,6 +171,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -174,6 +185,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -194,6 +206,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -207,6 +220,7 @@ MonoBehaviour:
         description: Grip Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -220,6 +234,7 @@ MonoBehaviour:
         description: Grip Press
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -233,6 +248,7 @@ MonoBehaviour:
         description: Trigger
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -246,6 +262,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -259,6 +276,7 @@ MonoBehaviour:
         description: Select
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -268,10 +286,11 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 5
+        description: Teleport Direction
+        axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -285,6 +304,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -298,6 +318,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -311,6 +332,7 @@ MonoBehaviour:
         description: Menu
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -324,6 +346,7 @@ MonoBehaviour:
         description: Teleport Direction
         axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -337,6 +360,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -357,6 +381,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -370,6 +395,7 @@ MonoBehaviour:
         description: Grip Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -383,6 +409,7 @@ MonoBehaviour:
         description: Grip Press
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -396,6 +423,7 @@ MonoBehaviour:
         description: Trigger
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -409,6 +437,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -422,6 +451,7 @@ MonoBehaviour:
         description: Select
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -431,10 +461,11 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 5
+        description: Teleport Direction
+        axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -448,6 +479,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -461,6 +493,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -474,6 +507,7 @@ MonoBehaviour:
         description: Menu
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -487,6 +521,7 @@ MonoBehaviour:
         description: Teleport Direction
         axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -500,6 +535,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -520,6 +556,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -533,19 +570,21 @@ MonoBehaviour:
         description: Grip Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 2
       description: Grip Press
-      axisType: 3
+      axisType: 2
       inputType: 13
       inputAction:
         id: 7
         description: Grip Press
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_11
       axisCodeY: 
       invertXAxis: 0
@@ -559,6 +598,7 @@ MonoBehaviour:
         description: Trigger
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_9
       axisCodeY: 
       invertXAxis: 0
@@ -571,21 +611,23 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 344
-      axisCodeX: 
+      keyCode: 0
+      inputName: 
+      axisCodeX: AXIS_9
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 5
       description: Trigger Touch
-      axisType: 3
+      axisType: 2
       inputType: 11
       inputAction:
         id: 1
         description: Select
         axisConstraint: 2
-      keyCode: 0
-      axisCodeX: AXIS_9
+      keyCode: 344
+      inputName: 
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -594,10 +636,11 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 5
+        description: Teleport Direction
+        axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_17
       axisCodeY: AXIS_18
       invertXAxis: 0
@@ -611,6 +654,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 346
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -624,6 +668,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 338
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -637,6 +682,7 @@ MonoBehaviour:
         description: Menu
         axisConstraint: 2
       keyCode: 330
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -650,6 +696,7 @@ MonoBehaviour:
         description: Teleport Direction
         axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_1
       axisCodeY: AXIS_2
       invertXAxis: 0
@@ -663,6 +710,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 338
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -683,6 +731,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -696,19 +745,21 @@ MonoBehaviour:
         description: Grip Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 2
       description: Grip Press
-      axisType: 3
+      axisType: 2
       inputType: 7
       inputAction:
         id: 7
         description: Grip Press
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_12
       axisCodeY: 
       invertXAxis: 0
@@ -722,6 +773,7 @@ MonoBehaviour:
         description: Trigger
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_10
       axisCodeY: 
       invertXAxis: 0
@@ -734,21 +786,23 @@ MonoBehaviour:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 345
-      axisCodeX: 
+      keyCode: 0
+      inputName: 
+      axisCodeX: AXIS_10
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 5
       description: Trigger Touch
-      axisType: 3
+      axisType: 2
       inputType: 11
       inputAction:
         id: 1
         description: Select
         axisConstraint: 2
-      keyCode: 0
-      axisCodeX: AXIS_10
+      keyCode: 345
+      inputName: 
+      axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
@@ -757,10 +811,11 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 5
+        description: Teleport Direction
+        axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_19
       axisCodeY: AXIS_20
       invertXAxis: 0
@@ -774,6 +829,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 347
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -787,6 +843,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 339
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -800,6 +857,7 @@ MonoBehaviour:
         description: Menu
         axisConstraint: 2
       keyCode: 332
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -813,6 +871,7 @@ MonoBehaviour:
         description: Teleport Direction
         axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_4
       axisCodeY: AXIS_5
       invertXAxis: 0
@@ -826,6 +885,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 339
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0

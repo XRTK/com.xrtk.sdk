@@ -18,58 +18,57 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
     dataProviderName: Mouse Controller Data Provider
     priority: 5
-    runtimePlatform: 95
+    runtimePlatform: 31
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
     dataProviderName: Touch Screen Controller Data Provider
     priority: 5
-    runtimePlatform: 15
+    runtimePlatform: 223
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
         XRTK
     dataProviderName: Unity Joystick Controller Data Provider
     priority: 5
-    runtimePlatform: 15
+    runtimePlatform: 222
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
     dataProviderName: Open VR Controller Data Provider
     priority: 2
-    runtimePlatform: 15
+    runtimePlatform: 223
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityDataProvider,
         XRTK.WindowsMixedReality
     dataProviderName: Windows Mixed Reality Controller Data Provider
     priority: 5
-    runtimePlatform: 8
+    runtimePlatform: 17
     profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
   - dataProviderType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsSpeechDataProvider, XRTK.WindowsMixedReality
+      reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
     dataProviderName: Windows Speech Data Provider
     priority: 5
-    runtimePlatform: 9
+    runtimePlatform: 19
     profile: {fileID: 0}
   - dataProviderType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsDictationDataProvider,
-        XRTK.WindowsMixedReality
+      reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
     dataProviderName: Windows Dictation Data Provider
     priority: 5
-    runtimePlatform: 9
+    runtimePlatform: 19
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
     dataProviderName: Lumin Controller Data Provider
     priority: 5
-    runtimePlatform: 16
+    runtimePlatform: 33
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     dataProviderName: Oculus Controller Data Provider
     priority: 1
-    runtimePlatform: 33
+    runtimePlatform: 67
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.Hands.HandControllerDataProvider, XRTK
