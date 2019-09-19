@@ -69,18 +69,15 @@ namespace XRTK.SDK.UX
 
                     MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
 
-                    // TODO update this with new IPointerResult data.
-
                     BoundingBoxParent.currentInputSource = eventData.InputSource;
                     BoundingBoxParent.currentPointer = pointer;
                     BoundingBoxParent.grabbedHandle = grabbedCollider.gameObject;
                     BoundingBoxParent.currentHandleType = BoundingBoxParent.GetHandleType(BoundingBoxParent.grabbedHandle);
                     BoundingBoxParent.currentRotationAxis = BoundingBoxParent.GetRotationAxis(BoundingBoxParent.grabbedHandle);
-                    BoundingBoxParent.currentPointer.TryGetPointingRay(out _);
                     BoundingBoxParent.initialGrabMag = distance;
                     BoundingBoxParent.initialGrabbedPosition = BoundingBoxParent.grabbedHandle.transform.position;
                     BoundingBoxParent.initialScale = transform.localScale;
-                    pointer.TryGetPointerPosition(out BoundingBoxParent.initialGrabPoint);
+                    BoundingBoxParent.initialGrabPoint = pointer.Result.GrabPoint;
                     BoundingBoxParent.ShowOneHandle(BoundingBoxParent.grabbedHandle);
                     BoundingBoxParent.initialGazePoint = Vector3.zero;
                     cachedTargetPrevLayer = BoundingBoxParent.BoundingBoxCollider.gameObject.layer;
@@ -99,10 +96,8 @@ namespace XRTK.SDK.UX
                 if (BoundingBoxParent.currentInputSource != null &&
                     eventData.InputSource.SourceId == BoundingBoxParent.currentInputSource.SourceId)
                 {
-                    // TODO update this with new IPointerResult data.
-
-                    BoundingBoxParent.currentInputSource = null;
                     BoundingBoxParent.currentHandleType = HandleType.None;
+                    BoundingBoxParent.currentInputSource = null;
                     BoundingBoxParent.currentPointer = null;
                     BoundingBoxParent.grabbedHandle = null;
                     BoundingBoxParent.ResetHandleVisibility();
@@ -555,6 +550,9 @@ namespace XRTK.SDK.UX
 
         private Transform rigRoot;
 
+        /// <summary>
+        /// The <see cref="BoundingBox"/> collider reference.
+        /// </summary>
         public BoxCollider BoundingBoxCollider { get; private set; }
 
         private HandleMoveType handleMoveType = HandleMoveType.Point;
@@ -580,6 +578,9 @@ namespace XRTK.SDK.UX
 
         private Vector3[] boundsCorners = new Vector3[8];
 
+        /// <summary>
+        /// The current bounds corner positions.
+        /// </summary>
         public Vector3[] BoundsCorners => boundsCorners;
 
         private static readonly int Color = Shader.PropertyToID("_Color");
@@ -1158,12 +1159,12 @@ namespace XRTK.SDK.UX
                 {
                     (Transform handleTransform, Renderer handleRenderer, Collider _, CardinalAxis axis) = rotationHandles[i];
 
-                    var IsDisabled = (showRotationHandlesPerAxis == 0 ||
+                    var isDisabled = (showRotationHandlesPerAxis == 0 ||
                                      showRotationHandlesPerAxis != (CardinalAxis)(-1) &&
                                      (showRotationHandlesPerAxis & axis) == 0);
 
                     handleRenderer.material = handleMaterial;
-                    handleTransform.gameObject.SetRenderingActive(isHandlesVisible && !IsDisabled);
+                    handleTransform.gameObject.SetRenderingActive(isHandlesVisible && !isDisabled);
                 }
             }
 
