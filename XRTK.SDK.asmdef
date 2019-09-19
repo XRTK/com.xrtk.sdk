@@ -1,9 +1,9 @@
 {
     "name": "XRTK.SDK",
     "references": [
-        "XRTK",
-        "Unity.ugui"
+        "XRTK"
     ],
+    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
