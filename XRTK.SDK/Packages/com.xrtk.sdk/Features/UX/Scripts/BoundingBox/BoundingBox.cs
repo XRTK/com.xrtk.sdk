@@ -28,8 +28,7 @@ namespace XRTK.SDK.UX
         /// </summary>
         private class BoundingBoxRig : BaseInputHandler,
             IMixedRealitySourceStateHandler,
-            IMixedRealityPointerHandler,
-            IMixedRealityInputHandler<MixedRealityPose>
+            IMixedRealityPointerHandler
         {
             private const int IgnoreRaycastLayer = 2;
 
@@ -79,13 +78,13 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.initialScale = transform.localScale;
                     BoundingBoxParent.initialGrabPoint = pointer.Result.GrabPoint;
                     BoundingBoxParent.ShowOneHandle(BoundingBoxParent.grabbedHandle);
-                    BoundingBoxParent.initialGazePoint = Vector3.zero;
                     cachedTargetPrevLayer = BoundingBoxParent.BoundingBoxCollider.gameObject.layer;
                     BoundingBoxParent.BoundingBoxCollider.transform.SetLayerRecursively(IgnoreRaycastLayer);
                     BoundingBoxParent.BoundingBoxCollider.enabled = false;
                     BoundingBoxParent.transform.SetCollidersActive(false);
                     transform.SetCollidersActive(false);
                     BoundingBoxParent.BoundingBoxCollider.enabled = true;
+                    BoundingBoxParent.isManipulationEnabled = true;
                     eventData.Use();
                 }
             }
@@ -96,6 +95,7 @@ namespace XRTK.SDK.UX
                 if (BoundingBoxParent.currentInputSource != null &&
                     eventData.InputSource.SourceId == BoundingBoxParent.currentInputSource.SourceId)
                 {
+                    BoundingBoxParent.isManipulationEnabled = false;
                     BoundingBoxParent.currentHandleType = HandleType.None;
                     BoundingBoxParent.currentInputSource = null;
                     BoundingBoxParent.currentPointer = null;
@@ -111,28 +111,6 @@ namespace XRTK.SDK.UX
 
             /// <inheritdoc />
             void IMixedRealityPointerHandler.OnPointerClicked(MixedRealityPointerEventData eventData) { }
-
-            /// <inheritdoc />
-            void IMixedRealityInputHandler<MixedRealityPose>.OnInputChanged(InputEventData<MixedRealityPose> eventData)
-            {
-                if (BoundingBoxParent.currentInputSource != null &&
-                    eventData.InputSource.SourceId == BoundingBoxParent.currentInputSource.SourceId)
-                {
-                    var point = eventData.InputData.Position;
-                    BoundingBoxParent.usingPose = true;
-
-                    if (BoundingBoxParent.initialGazePoint == Vector3.zero)
-                    {
-                        BoundingBoxParent.initialGazePoint = point;
-                    }
-
-                    BoundingBoxParent.currentPosePosition = BoundingBoxParent.initialGrabbedPosition + (point - BoundingBoxParent.initialGazePoint);
-                }
-                else
-                {
-                    BoundingBoxParent.usingPose = false;
-                }
-            }
 
             /// <inheritdoc />
             void IMixedRealitySourceStateHandler.OnSourceDetected(SourceStateEventData eventData) { }
@@ -565,14 +543,10 @@ namespace XRTK.SDK.UX
         private Vector3 currentRotationAxis;
         private Vector3 currentBoundsExtents;
         private Vector3 initialGrabbedPosition;
-        private Vector3 initialGazePoint = Vector3.zero;
-        private Vector3 currentPosePosition = Vector3.zero;
 
         private int[] flattenedHandles;
 
         private GameObject grabbedHandle;
-
-        private bool usingPose = false;
 
         private HandleType currentHandleType;
 
@@ -604,10 +578,10 @@ namespace XRTK.SDK.UX
 
             void OnManipulationHandlerOnOnHoldEnd(bool wasCancelled)
             {
-                isManipulationEnabled = false;
                 UpdateBounds(true);
                 TransformRig();
                 UpdateRigTransform();
+                isManipulationEnabled = false;
             }
 
             manipulationHandler.OnHoldEnd += OnManipulationHandlerOnOnHoldEnd;
@@ -766,24 +740,15 @@ namespace XRTK.SDK.UX
 
         private void TransformRig()
         {
-            if (usingPose)
+            switch (handleMoveType)
             {
-                TransformHandleWithPoint();
-            }
-            else
-            {
-                switch (handleMoveType)
-                {
-                    case HandleMoveType.Ray:
-                        TransformHandleWithRay();
-                        break;
-                    case HandleMoveType.Point:
-                        TransformHandleWithPoint();
-                        break;
-                    default:
-                        Debug.LogWarning($"Unexpected handle move type {handleMoveType}");
-                        break;
-                }
+                case HandleMoveType.Ray:
+                    TransformHandleWithRay();
+                    break;
+                default:
+                case HandleMoveType.Point:
+                    TransformHandleWithPoint();
+                    break;
             }
         }
 
@@ -813,30 +778,31 @@ namespace XRTK.SDK.UX
         {
             if (currentHandleType != HandleType.None)
             {
-                Vector3 newGrabbedPosition;
+                var pointerPosition = currentPointer.Result.EndPoint;
+                var pointerGrabPoint = currentPointer.Result.GrabPoint;
+                var pointerDirection = currentPointer.Result.Direction;
 
-                if (usingPose == false)
+                if (pointerDirection.Equals(Vector3.zero)) { return; }
+
+                var currentPosition = grabbedHandle.transform.position;
+
+                Vector3 targetPosition;
+
+                if (pointerGrabPoint == Vector3.zero)
                 {
-                    currentPointer.TryGetPointerPosition(out var newRemotePoint);
-                    newGrabbedPosition = initialGrabbedPosition + (newRemotePoint - initialGrabPoint);
+                    targetPosition = pointerPosition;
                 }
                 else
                 {
-                    if (initialGazePoint == Vector3.zero)
-                    {
-                        return;
-                    }
-
-                    newGrabbedPosition = currentPosePosition;
+                    targetPosition = (pointerPosition + currentPosition) - pointerGrabPoint;
                 }
-
                 switch (currentHandleType)
                 {
                     case HandleType.Rotation:
-                        RotateByHandle(newGrabbedPosition);
+                        RotateByHandle(targetPosition);
                         break;
                     case HandleType.Scale:
-                        ScaleByHandle(newGrabbedPosition);
+                        ScaleByHandle(targetPosition);
                         break;
                 }
             }
@@ -1220,9 +1186,7 @@ namespace XRTK.SDK.UX
         /// </param>
         public void UpdateBounds(bool forceUpdate = false)
         {
-            if (!transform.hasChanged && !forceUpdate) { return; }
-
-            Debug.Assert(BoundingBoxCollider != null);
+            if (!transform.hasChanged && !forceUpdate || BoundingBoxCollider == null) { return; }
 
             // Store current rotation then zero out the rotation so that the bounds
             // are computed when the object is in its 'axis aligned orientation'.

@@ -384,27 +384,28 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public virtual bool IsSnappedToSurface { get; private set; } = false;
 
-        private BoxCollider boxCollider;
+        private Collider thisCollider;
 
         /// <summary>
-        /// The <see cref="BoxCollider"/> associated with this <see cref="GameObject"/>.
+        /// The <see cref="Collider"/> associated with this <see cref="GameObject"/>.
         /// </summary>
-        public BoxCollider BoxCollider
+        public Collider Collider
         {
             get
             {
-                if (BoundingBox != null)
+                if (BoundingBox != null &&
+                    BoundingBox.BoundingBoxCollider != null)
                 {
                     return BoundingBox.BoundingBoxCollider;
                 }
 
-                if (boxCollider == null)
+                if (thisCollider == null)
                 {
-                    boxCollider = gameObject.EnsureComponent<BoxCollider>();
+                    thisCollider = gameObject.EnsureComponent<BoxCollider>();
                     transform.GetColliderBounds();
                 }
 
-                return boxCollider;
+                return thisCollider;
             }
         }
 
@@ -795,7 +796,7 @@ namespace XRTK.SDK.Input.Handlers
             PrimaryPointer.OverrideGrabPoint = grabOffset;
 
             transform.SetCollidersActive(false);
-            BoxCollider.enabled = true;
+            Collider.enabled = true;
 
             body.isKinematic = false;
 
@@ -985,8 +986,9 @@ namespace XRTK.SDK.Input.Handlers
             var lastHitObject = PrimaryPointer.Result.LastHitObject;
 
             var scale = manipulationTarget.localScale;
-            var scaledSize = BoxCollider.size * scale.y;
-            var scaledCenter = BoxCollider.center * scale.y;
+            var bounds = Collider.bounds;
+            var scaledSize = bounds.size * scale.y;
+            var scaledCenter = bounds.center * scale.y;
             var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
             var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
 
@@ -1101,10 +1103,10 @@ namespace XRTK.SDK.Input.Handlers
             hitAllCorners = true;
 
             Vector3[] boundsCorners = null;
-            BoxCollider.GetCornerPositionsWorldSpace(transform, ref boundsCorners);
+            Collider.GetCornerPositionsWorldSpace(transform, ref boundsCorners);
 
             var hitAny = false;
-            var scaledCenter = transform.TransformPoint(BoxCollider.center);
+            var scaledCenter = transform.TransformPoint(Collider.bounds.center);
 
             for (int i = 0; i < boundsCorners.Length; i++)
             {
