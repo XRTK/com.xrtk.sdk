@@ -384,12 +384,12 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public virtual bool IsSnappedToSurface { get; private set; } = false;
 
-        private Collider thisCollider;
+        private BoxCollider thisCollider;
 
         /// <summary>
-        /// The <see cref="Collider"/> associated with this <see cref="GameObject"/>.
+        /// The <see cref="BoxCollider"/> associated with this <see cref="GameObject"/>.
         /// </summary>
-        public Collider Collider
+        public BoxCollider Collider
         {
             get
             {
