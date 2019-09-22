@@ -138,17 +138,6 @@ namespace XRTK.SDK.UX.Cursors
         private IMixedRealityPointer pointer;
 
         /// <inheritdoc />
-        public float DefaultCursorDistance
-        {
-            get => defaultCursorDistance;
-            set => defaultCursorDistance = value;
-        }
-
-        [SerializeField]
-        [Tooltip("The maximum distance the cursor can be with nothing hit")]
-        private float defaultCursorDistance = 2.0f;
-
-        /// <inheritdoc />
         public virtual Vector3 Position => transform.position;
 
         /// <inheritdoc />
@@ -383,8 +372,8 @@ namespace XRTK.SDK.UX.Cursors
             if (newTargetedObject == null)
             {
                 TargetedObject = null;
-                targetPosition = RayStep.GetPointByDistance(Pointer.Rays, defaultCursorDistance);
-                lookForward = -RayStep.GetDirectionByDistance(Pointer.Rays, defaultCursorDistance);
+                targetPosition = focusDetails.EndPoint;
+                lookForward = -RayStep.GetDirectionByDistance(Pointer.Rays, focusDetails.RayDistance);
                 targetRotation = lookForward.magnitude > 0f ? Quaternion.LookRotation(lookForward, Vector3.up) : transform.rotation;
             }
             else
@@ -416,9 +405,16 @@ namespace XRTK.SDK.UX.Cursors
             // Use the lerp times to blend the position to the target position
             var cachedTransform = transform;
 
-            if (Pointer.IsFocusLocked && Pointer.SyncPointerTargetPosition && focusDetails.CurrentPointerTarget != null)
+            if (Pointer.IsFocusLocked && focusDetails.CurrentPointerTarget != null)
             {
-                cachedTransform.position = focusDetails.EndPoint;
+                if (Pointer.SyncedTarget == null)
+                {
+                    cachedTransform.position = focusDetails.EndPoint;
+                }
+                else
+                {
+                    cachedTransform.position = focusDetails.GrabPoint;
+                }
             }
             else
             {
