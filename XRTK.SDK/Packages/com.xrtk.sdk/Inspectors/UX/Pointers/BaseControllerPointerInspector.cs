@@ -22,7 +22,6 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty pointerOrientation;
         private SerializedProperty requiresHoldAction;
         private SerializedProperty enablePointerOnStart;
-        private SerializedProperty isTargetPositionLockedOnFocusLock;
 
         private bool basePointerFoldout = true;
 
@@ -44,7 +43,6 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             pointerOrientation = serializedObject.FindProperty("pointerOrientation");
             requiresHoldAction = serializedObject.FindProperty("requiresHoldAction");
             enablePointerOnStart = serializedObject.FindProperty("enablePointerOnStart");
-            isTargetPositionLockedOnFocusLock = serializedObject.FindProperty("isTargetPositionLockedOnFocusLock");
 
             DrawHandednessProperty = false;
         }
@@ -66,7 +64,6 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 EditorGUILayout.PropertyField(disableCursorOnStart);
                 EditorGUILayout.PropertyField(setCursorVisibilityOnSourceDetected);
                 EditorGUILayout.PropertyField(enablePointerOnStart);
-                EditorGUILayout.PropertyField(isTargetPositionLockedOnFocusLock);
                 EditorGUILayout.PropertyField(raycastOrigin);
                 EditorGUILayout.PropertyField(pointerExtent);
                 EditorGUILayout.PropertyField(pointerOrientation);
