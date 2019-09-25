@@ -1124,9 +1124,6 @@ namespace XRTK.SDK.Input.Handlers
 
                 var rayStep = new RayStep(new Ray(cornerPosition, direction), distance);
 
-                Debug.DrawRay(manipulationTarget.TransformDirection(direction), directionFromCenter, Color.cyan);
-                DebugUtilities.DrawPoint(scaledCenter, Color.magenta);
-
                 if (MixedRealityRaycaster.RaycastSimplePhysicsStep(rayStep, LayerMasks, out var hitInfo))
                 {
                     hitAny = true;
