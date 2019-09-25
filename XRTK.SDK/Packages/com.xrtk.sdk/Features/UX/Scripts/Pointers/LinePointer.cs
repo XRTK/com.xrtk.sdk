@@ -57,6 +57,8 @@ namespace XRTK.SDK.UX.Pointers
             set => lineRenderers = value;
         }
 
+        private Vector3 syncedPosition;
+
         private void CheckInitialization()
         {
             if (lineBase == null)
@@ -116,13 +118,22 @@ namespace XRTK.SDK.UX.Pointers
             // Set our first and last points
             lineBase.FirstPoint = pointerPosition;
 
-            if (IsFocusLocked)
+            if (IsFocusLocked && Result.CurrentPointerTarget != null)
             {
-                lineBase.LastPoint = Result.EndPoint;
+                if (SyncedTarget != null)
+                {
+                    // Now raycast out like nothing happened so we can get an updated pointer position.
+                    lineBase.LastPoint = pointerPosition + pointerRotation * (Vector3.forward * PointerExtent);
+                }
+                else
+                {
+                    // Set the line to the locked position.
+                    lineBase.LastPoint = Result.EndPoint;
+                }
             }
             else
             {
-                lineBase.LastPoint = pointerPosition + pointerRotation * Vector3.forward * PointerExtent;
+                lineBase.LastPoint = pointerPosition + pointerRotation * (Vector3.forward * PointerExtent);
             }
 
             // Make sure our array will hold
@@ -196,8 +207,20 @@ namespace XRTK.SDK.UX.Pointers
 
             // If focus is locked, we're sticking to the target
             // So don't clamp the world length
-            if (IsFocusLocked && SyncPointerTargetPosition)
+            if (IsFocusLocked && Result.CurrentPointerTarget != null)
             {
+                if (SyncedTarget != null)
+                {
+                    if (Result.GrabPoint == Vector3.zero)
+                    {
+                        LineBase.LastPoint = Result.EndPoint;
+                    }
+                    else
+                    {
+                        LineBase.LastPoint = Result.GrabPoint;
+                    }
+                }
+
                 float cursorOffsetLocalLength = LineBase.GetNormalizedLengthFromWorldLength(cursorOffsetWorldLength);
                 LineBase.LineEndClamp = 1 - cursorOffsetLocalLength;
             }

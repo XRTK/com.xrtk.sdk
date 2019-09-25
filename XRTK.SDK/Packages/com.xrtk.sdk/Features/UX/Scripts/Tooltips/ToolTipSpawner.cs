@@ -5,7 +5,6 @@ using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Utilities.Async;
-using XRTK.Utilities.Async.AwaitYieldInstructions;
 using System.Threading.Tasks;
 using UnityEngine;
 using XRTK.SDK.Input.Handlers;
