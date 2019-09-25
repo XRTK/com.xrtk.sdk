@@ -986,9 +986,8 @@ namespace XRTK.SDK.Input.Handlers
             var lastHitObject = PrimaryPointer.Result.LastHitObject;
 
             var scale = manipulationTarget.localScale;
-            var bounds = Collider.bounds;
-            var scaledSize = bounds.size * scale.y;
-            var scaledCenter = bounds.center * scale.y;
+            var scaledSize = Collider.size * scale.y;
+            var scaledCenter = Collider.center * scale.y;
             var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
             var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
 
@@ -1103,10 +1102,10 @@ namespace XRTK.SDK.Input.Handlers
             hitAllCorners = true;
 
             Vector3[] boundsCorners = null;
-            Collider.GetCornerPositionsWorldSpace(transform, ref boundsCorners);
+            Collider.GetCornerPositionsWorldSpace(manipulationTarget, ref boundsCorners);
 
             var hitAny = false;
-            var scaledCenter = transform.TransformPoint(Collider.bounds.center);
+            var scaledCenter = manipulationTarget.TransformPoint(Collider.center);
 
             for (int i = 0; i < boundsCorners.Length; i++)
             {
@@ -1119,11 +1118,14 @@ namespace XRTK.SDK.Input.Handlers
                     direction = directionFromCenter;
                 }
 
-                var dot = Vector3.Dot(transform.TransformDirection(direction), directionFromCenter);
+                var dot = Vector3.Dot(manipulationTarget.TransformDirection(direction), directionFromCenter);
 
                 if (dot >= 0f) { continue; }
 
                 var rayStep = new RayStep(new Ray(cornerPosition, direction), distance);
+
+                Debug.DrawRay(manipulationTarget.TransformDirection(direction), directionFromCenter, Color.cyan);
+                DebugUtilities.DrawPoint(scaledCenter, Color.magenta);
 
                 if (MixedRealityRaycaster.RaycastSimplePhysicsStep(rayStep, LayerMasks, out var hitInfo))
                 {
