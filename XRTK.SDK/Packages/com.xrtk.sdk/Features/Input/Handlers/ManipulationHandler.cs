@@ -772,7 +772,7 @@ namespace XRTK.SDK.Input.Handlers
                 PrimaryPointer = eventData.Pointer;
             }
 
-            primaryPointer.Controller?.SendHapticFeedback(grabHapticFeedback, 10f);
+            PrimaryPointer.Controller?.SendHapticFeedback(grabHapticFeedback, 10f);
             MixedRealityToolkit.InputSystem?.PushModalInputHandler(gameObject);
 
             if (MixedRealityToolkit.SpatialAwarenessSystem != null)
@@ -827,7 +827,7 @@ namespace XRTK.SDK.Input.Handlers
                 MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = prevSpatialMeshDisplay;
             }
 
-            primaryPointer?.Controller?.SendHapticFeedback(releaseHapticFeedback, 10f);
+            PrimaryPointer?.Controller?.SendHapticFeedback(releaseHapticFeedback, 10f);
 
             if (prevPosition != Vector3.zero)
             {
