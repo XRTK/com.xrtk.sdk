@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityInputActionsProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: a176466fbf4e44a087639abca7e5ba47, type: 2}
   inputActions:
   - id: 1
     description: Select
@@ -57,3 +56,5 @@ MonoBehaviour:
   - id: 14
     description: Rotation Direction
     axisConstraint: 4
+  inputActionProfiles:
+  - {fileID: 11400000, guid: ff0ce1c240ac8d342962c9c28f93d52c, type: 2}
