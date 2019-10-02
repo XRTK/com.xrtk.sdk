@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 054f653be9eb6f94b9894ca3c7be1ae6, type: 3}
-  m_Name: DefaultEditorSimulatedHandControllerDataProviderProfile
+  m_Name: DefaultUnityEditorHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isCustomProfile: 1
+  handControllerType:
+    reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
   simulateHandTracking: 1
   toggleLeftHandKey: 116
   toggleRightHandKey: 121
