@@ -11,7 +11,7 @@ using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
-    public abstract class BaseHandControllerMeshVisualizer : MonoBehaviour, IMixedRealityHandMeshHandler
+    public abstract class BaseHandControllerVisualizer : MonoBehaviour, IMixedRealityHandDataHandler
     {
         private IMixedRealityHandControllerDataProvider dataProvider;
 
@@ -20,17 +20,24 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// </summary>
         protected MixedRealityHandControllerVisualizationProfile Profile => MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.ControllerVisualizationProfile.HandVisualizationProfile;
 
+        /// <summary>
+        /// Executes when the visualizer is enabled for the first time.
+        /// </summary>
         protected virtual void Start()
         {
             dataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
             dataProvider.Register(this);
         }
 
+        /// <summary>
+        /// Executes when the visuailzer is destroyed.
+        /// </summary>
         protected virtual void OnDestroy()
         {
             dataProvider.Unregister(this);
         }
 
-        public abstract void OnMeshUpdated(InputEventData<HandMeshData> eventData);
+        /// <inheritdoc />
+        public virtual void OnHandDataUpdated(InputEventData<HandData> eventData) { }
     }
 }

@@ -11,7 +11,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
     /// Default hand controller visualizer for hand meshes.
     /// </summary>
     [RequireComponent(typeof(DefaultMixedRealityControllerVisualizer))]
-    public class DefaultHandControllerMeshVisualizer : BaseHandControllerMeshVisualizer
+    public class DefaultHandControllerMeshVisualizer : BaseHandControllerVisualizer
     {
         private DefaultMixedRealityControllerVisualizer controllerVisualizer;
         private MeshFilter meshFilter;
@@ -28,16 +28,22 @@ namespace XRTK.SDK.UX.Controllers.Hands
             base.OnDestroy();
         }
 
-        public override void OnMeshUpdated(InputEventData<HandMeshData> eventData)
+        public override void OnHandDataUpdated(InputEventData<HandData> eventData)
         {
             if (eventData.Handedness != controllerVisualizer.Controller?.ControllerHandedness)
             {
                 return;
             }
 
-            if (Profile == null || !Profile.EnableHandMeshVisualization)
+            if (Profile == null || !Profile.EnableHandMeshVisualization || eventData.InputData.Mesh == null)
             {
                 ClearMesh();
+                return;
+            }
+
+            HandMeshData handMeshData = eventData.InputData.Mesh;
+            if (handMeshData.Empty)
+            {
                 return;
             }
 
@@ -50,17 +56,17 @@ namespace XRTK.SDK.UX.Controllers.Hands
             {
                 Mesh mesh = meshFilter.mesh;
 
-                mesh.vertices = eventData.InputData.Vertices;
-                mesh.normals = eventData.InputData.Normals;
-                mesh.triangles = eventData.InputData.Triangles;
+                mesh.vertices = handMeshData.Vertices;
+                mesh.normals = handMeshData.Normals;
+                mesh.triangles = handMeshData.Triangles;
 
-                if (eventData.InputData.Uvs != null && eventData.InputData.Uvs.Length > 0)
+                if (handMeshData.Uvs != null && handMeshData.Uvs.Length > 0)
                 {
-                    mesh.uv = eventData.InputData.Uvs;
+                    mesh.uv = handMeshData.Uvs;
                 }
 
-                meshFilter.transform.position = eventData.InputData.Position;
-                meshFilter.transform.rotation = eventData.InputData.Rotation;
+                meshFilter.transform.position = handMeshData.Position;
+                meshFilter.transform.rotation = handMeshData.Rotation;
             }
         }
 

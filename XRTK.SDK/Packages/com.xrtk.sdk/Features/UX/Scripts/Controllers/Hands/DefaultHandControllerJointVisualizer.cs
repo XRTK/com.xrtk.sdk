@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
+using XRTK.Providers.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
@@ -12,7 +13,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
     /// Default hand controller visualizer for hand joints.
     /// </summary>
     [RequireComponent(typeof(DefaultMixedRealityControllerVisualizer))]
-    public class DefaultHandControllerJointVisualizer : BaseHandControllerJointVisualizer
+    public class DefaultHandControllerJointVisualizer : BaseHandControllerVisualizer
     {
         private DefaultMixedRealityControllerVisualizer controllerVisualizer;
         private Dictionary<TrackedHandJoint, Transform> jointTransforms;
@@ -36,7 +37,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             base.OnDestroy();
         }
 
-        public override void OnJointUpdated(InputEventData<IDictionary<TrackedHandJoint, MixedRealityPose>> eventData)
+        public override void OnHandDataUpdated(InputEventData<HandData> eventData)
         {
             if (eventData.Handedness != controllerVisualizer.Controller?.ControllerHandedness)
             {
@@ -49,16 +50,17 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
             else
             {
-                foreach (TrackedHandJoint handJoint in eventData.InputData.Keys)
+                Dictionary<TrackedHandJoint, MixedRealityPose> jointPoses = HandUtils.ToJointPoseDictionary(eventData.InputData.Joints);
+                foreach (TrackedHandJoint handJoint in jointPoses.Keys)
                 {
                     if (jointTransforms.TryGetValue(handJoint, out Transform jointTransform))
                     {
-                        jointTransform.position = eventData.InputData[handJoint].Position;
-                        jointTransform.rotation = eventData.InputData[handJoint].Rotation;
+                        jointTransform.position = jointPoses[handJoint].Position;
+                        jointTransform.rotation = jointPoses[handJoint].Rotation;
                     }
                     else
                     {
-                        CreateJoint(handJoint, eventData);
+                        CreateJoint(handJoint, jointPoses);
                     }
                 }
             }
@@ -74,7 +76,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             jointTransforms.Clear();
         }
 
-        private void CreateJoint(TrackedHandJoint handJoint, InputEventData<IDictionary<TrackedHandJoint, MixedRealityPose>> eventData)
+        private void CreateJoint(TrackedHandJoint handJoint, Dictionary<TrackedHandJoint, MixedRealityPose> jointPoses)
         {
             GameObject prefab = Profile.JointPrefab;
             if (handJoint == TrackedHandJoint.Palm)
@@ -97,8 +99,8 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
 
             jointObject.name = handJoint.ToString() + " Proxy Transform";
-            jointObject.transform.position = eventData.InputData[handJoint].Position;
-            jointObject.transform.rotation = eventData.InputData[handJoint].Rotation;
+            jointObject.transform.position = jointPoses[handJoint].Position;
+            jointObject.transform.rotation = jointPoses[handJoint].Rotation;
             jointObject.transform.parent = transform;
 
             jointTransforms.Add(handJoint, jointObject.transform);
