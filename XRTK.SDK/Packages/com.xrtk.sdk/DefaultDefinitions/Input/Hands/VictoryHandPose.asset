@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e575260027d17dc41a06f78eb50d0132, type: 3}
-  m_Name: PokeHandGesture
+  m_Name: VictoryHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Poke
-  gestureDescription: Index finger stretched out.
+  gestureName: Victory
+  gestureDescription: Victory sign.
   isDefault: 0
-  keyCode: 53
-  data: {fileID: 4900000, guid: 22b97ff789b664c4f9b9ee223c29eee7, type: 3}
+  keyCode: 55
+  data: {fileID: 4900000, guid: 21f98e595bbf7294c96c87c187f41196, type: 3}

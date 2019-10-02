@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e575260027d17dc41a06f78eb50d0132, type: 3}
-  m_Name: PinchSteadyWristHandGesture
+  m_Name: GrabHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Pinch Steady Wrist
-  gestureDescription: Index finger and Thumb touching, wrist does not move.
+  gestureName: Grab
+  gestureDescription: Grab with whole hand, fist shape.
   isDefault: 0
-  keyCode: 52
-  data: {fileID: 4900000, guid: 6bcf1fd0588649141811cbcb8135da00, type: 3}
+  keyCode: 50
+  data: {fileID: 4900000, guid: 26804200b794ba145a05c73b28c1134d, type: 3}
