@@ -91,7 +91,7 @@ MonoBehaviour:
     runtimePlatform: 16
     profile: {fileID: 11400000, guid: 42d66f060a3b0b9439e3960a86360066, type: 2}
   - dataProviderType:
-      reference: XRTK.Providers.Controllers.Hands.UnityEditorHandControllerDataProvider,
+      reference: XRTK.Providers.Controllers.Hands.UnityEditor.UnityEditorHandControllerDataProvider,
         XRTK
     dataProviderName: Unity Editor Hand Controller Data Provider
     priority: 5

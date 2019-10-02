@@ -2,12 +2,8 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
-using XRTK.Definitions.Controllers;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.InputSystem.Handlers;
-using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Providers.Controllers.Hands;
-using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
@@ -15,56 +11,44 @@ namespace XRTK.SDK.UX.Controllers.Hands
     /// Default hand controller visualizer for hand meshes.
     /// </summary>
     [RequireComponent(typeof(DefaultMixedRealityControllerVisualizer))]
-    public class DefaultHandControllerMeshVisualizer : MonoBehaviour, IMixedRealityHandMeshHandler
+    public class DefaultHandControllerMeshVisualizer : BaseHandControllerMeshVisualizer
     {
         private DefaultMixedRealityControllerVisualizer controllerVisualizer;
-        private IMixedRealityHandControllerDataProvider dataProvider;
+        private MeshFilter meshFilter;
 
-        /// <summary>
-        /// The currently active hand visualization profile.
-        /// </summary>
-        private MixedRealityHandControllerVisualizationProfile profile => MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.ControllerVisualizationProfile.HandVisualizationProfile;
-
-        /// <summary>
-        /// Provides access to the hand mesh used for visualization.
-        /// </summary>
-        public MeshFilter Mesh { get; private set; }
-
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             controllerVisualizer = GetComponent<DefaultMixedRealityControllerVisualizer>();
-            dataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
-            dataProvider.Register(this);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-            dataProvider.Unregister(this);
             ClearMesh();
+            base.OnDestroy();
         }
 
-        public void OnMeshUpdated(InputEventData<HandMeshUpdatedEventData> eventData)
+        public override void OnMeshUpdated(InputEventData<HandMeshData> eventData)
         {
             if (eventData.Handedness != controllerVisualizer.Controller?.ControllerHandedness)
             {
                 return;
             }
 
-            MixedRealityHandControllerVisualizationProfile handControllerVisualizationProfile = profile;
-            if (handControllerVisualizationProfile == null || !handControllerVisualizationProfile.EnableHandMeshVisualization)
+            if (Profile == null || !Profile.EnableHandMeshVisualization)
             {
                 ClearMesh();
                 return;
             }
 
-            if (Mesh == null && profile?.HandMeshPrefab != null)
+            if (meshFilter == null && Profile?.HandMeshPrefab != null)
             {
                 CreateMesh();
             }
 
-            if (Mesh != null)
+            if (meshFilter != null)
             {
-                Mesh mesh = Mesh.mesh;
+                Mesh mesh = meshFilter.mesh;
 
                 mesh.vertices = eventData.InputData.Vertices;
                 mesh.normals = eventData.InputData.Normals;
@@ -75,22 +59,22 @@ namespace XRTK.SDK.UX.Controllers.Hands
                     mesh.uv = eventData.InputData.Uvs;
                 }
 
-                Mesh.transform.position = eventData.InputData.Position;
-                Mesh.transform.rotation = eventData.InputData.Rotation;
+                meshFilter.transform.position = eventData.InputData.Position;
+                meshFilter.transform.rotation = eventData.InputData.Rotation;
             }
         }
 
         private void ClearMesh()
         {
-            if (Mesh != null)
+            if (meshFilter != null)
             {
-                Destroy(Mesh.gameObject);
+                Destroy(meshFilter.gameObject);
             }
         }
 
         private void CreateMesh()
         {
-            Mesh = Instantiate(profile.HandMeshPrefab).GetComponent<MeshFilter>();
+            meshFilter = Instantiate(Profile.HandMeshPrefab).GetComponent<MeshFilter>();
         }
     }
 }
