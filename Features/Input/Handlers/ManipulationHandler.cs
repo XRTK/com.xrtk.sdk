@@ -158,6 +158,22 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         [SerializeField]
+        [Tooltip("When the user grabs the object we used the position the pointer is at to perform all manipulations.\n\nWhen false this will only perform manipulations at the object's origin or by the provided offset in BeginHold")]
+        private bool useGrabOffset = true;
+
+        /// <summary>
+        /// When the user grabs the object we used the position the pointer is at to perform all manipulations.
+        /// </summary>
+        /// <remarks>
+        /// When false this will only perform manipulations at the object's origin or by the provided offset in <see cref="BeginHold"/>
+        /// </remarks>
+        public bool UseGrabOffset
+        {
+            get => useGrabOffset;
+            set => useGrabOffset = value;
+        }
+
+        [SerializeField]
         [Tooltip("Smooths the motion of the object to the goal position.")]
         private bool smoothMotion = true;
 
@@ -793,6 +809,15 @@ namespace XRTK.SDK.Input.Handlers
 
             PrimaryPointer.IsFocusLocked = true;
             PrimaryPointer.SyncedTarget = gameObject;
+
+            // If the grab offset is not provided
+            // and grab offset has been disabled
+            // grab the object at the local origin
+            if (!useGrabOffset && grabOffset == null)
+            {
+                grabOffset = Vector3.zero;
+            }
+
             PrimaryPointer.OverrideGrabPoint = grabOffset;
 
             transform.SetCollidersActive(false);
