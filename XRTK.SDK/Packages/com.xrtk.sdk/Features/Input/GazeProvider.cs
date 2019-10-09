@@ -336,7 +336,7 @@ namespace XRTK.SDK.Input
                 if (eventData.InputSource.Pointers[i].PointerId == GazePointer.PointerId)
                 {
                     MixedRealityToolkit.InputSystem.RaisePointerUp(gazePointer, eventData.MixedRealityInputAction);
-                    MixedRealityToolkit.InputSystem.RaisePointerClicked(gazePointer, eventData.MixedRealityInputAction, 0);
+                    MixedRealityToolkit.InputSystem.RaisePointerClicked(gazePointer, eventData.MixedRealityInputAction);
                     return;
                 }
             }
