@@ -158,6 +158,22 @@ namespace XRTK.SDK.Input.Handlers
         }
 
         [SerializeField]
+        [Tooltip("When the user grabs the object we used the position the pointer is at to perform all manipulations.\n\nWhen false this will only perform manipulations at the object's origin or by the provided offset in BeginHold")]
+        private bool useGrabOffset = true;
+
+        /// <summary>
+        /// When the user grabs the object we used the position the pointer is at to perform all manipulations.
+        /// </summary>
+        /// <remarks>
+        /// When false this will only perform manipulations at the object's origin or by the provided offset in <see cref="BeginHold"/>
+        /// </remarks>
+        public bool UseGrabOffset
+        {
+            get => useGrabOffset;
+            set => useGrabOffset = value;
+        }
+
+        [SerializeField]
         [Tooltip("Smooths the motion of the object to the goal position.")]
         private bool smoothMotion = true;
 
@@ -793,6 +809,15 @@ namespace XRTK.SDK.Input.Handlers
 
             PrimaryPointer.IsFocusLocked = true;
             PrimaryPointer.SyncedTarget = gameObject;
+
+            // If the grab offset is not provided
+            // and grab offset has been disabled
+            // grab the object at the local origin
+            if (!useGrabOffset && grabOffset == null)
+            {
+                grabOffset = Vector3.zero;
+            }
+
             PrimaryPointer.OverrideGrabPoint = grabOffset;
 
             transform.SetCollidersActive(false);
@@ -986,9 +1011,8 @@ namespace XRTK.SDK.Input.Handlers
             var lastHitObject = PrimaryPointer.Result.LastHitObject;
 
             var scale = manipulationTarget.localScale;
-            var bounds = Collider.bounds;
-            var scaledSize = bounds.size * scale.y;
-            var scaledCenter = bounds.center * scale.y;
+            var scaledSize = Collider.size * scale.y;
+            var scaledCenter = Collider.center * scale.y;
             var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
             var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
 
@@ -1103,10 +1127,10 @@ namespace XRTK.SDK.Input.Handlers
             hitAllCorners = true;
 
             Vector3[] boundsCorners = null;
-            Collider.GetCornerPositionsWorldSpace(transform, ref boundsCorners);
+            Collider.GetCornerPositionsWorldSpace(manipulationTarget, ref boundsCorners);
 
             var hitAny = false;
-            var scaledCenter = transform.TransformPoint(Collider.bounds.center);
+            var scaledCenter = manipulationTarget.TransformPoint(Collider.center);
 
             for (int i = 0; i < boundsCorners.Length; i++)
             {
@@ -1119,7 +1143,7 @@ namespace XRTK.SDK.Input.Handlers
                     direction = directionFromCenter;
                 }
 
-                var dot = Vector3.Dot(transform.TransformDirection(direction), directionFromCenter);
+                var dot = Vector3.Dot(manipulationTarget.TransformDirection(direction), directionFromCenter);
 
                 if (dot >= 0f) { continue; }
 
