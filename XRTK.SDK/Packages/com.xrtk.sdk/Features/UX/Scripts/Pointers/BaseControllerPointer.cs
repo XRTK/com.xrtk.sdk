@@ -481,7 +481,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (eventData.MixedRealityInputAction == pointerAction)
                 {
                     IsSelectPressed = false;
-                    MixedRealityToolkit.InputSystem.RaisePointerClicked(this, pointerAction, 0);
+                    MixedRealityToolkit.InputSystem.RaisePointerClicked(this, pointerAction);
                     MixedRealityToolkit.InputSystem.RaisePointerUp(this, pointerAction);
                 }
             }
