@@ -15,7 +15,7 @@ MonoBehaviour:
   isCustomProfile: 1
   handControllerType:
     reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
-  simulateHandTracking: 1
+  isSimulateHandTrackingEnabled: 1
   toggleLeftHandKey: 116
   toggleRightHandKey: 121
   handHideTimeout: 0.2
