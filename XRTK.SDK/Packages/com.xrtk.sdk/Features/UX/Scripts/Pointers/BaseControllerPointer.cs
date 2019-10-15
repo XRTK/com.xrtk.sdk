@@ -153,7 +153,7 @@ namespace XRTK.SDK.UX.Pointers
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"{e.ToString}");
+                    Debug.LogError($"{e.ToString()}");
                     return;
                 }
 
