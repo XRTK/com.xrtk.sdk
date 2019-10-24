@@ -1052,7 +1052,11 @@ namespace XRTK.SDK.Input.Handlers
             {
                 if (!isValidMove)
                 {
-                    targetPosition = currentPosition;
+                    if (IsSnappedToSurface)
+                    {
+                        targetPosition = currentPosition;
+                    }
+
                     isValidSnap = false;
                 }
 
