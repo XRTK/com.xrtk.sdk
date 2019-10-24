@@ -147,7 +147,15 @@ namespace XRTK.SDK.UX.Pointers
 
             if (lateRegisterTeleport && MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
             {
-                await new WaitUntil(() => MixedRealityToolkit.TeleportSystem != null);
+                try
+                {
+                    await MixedRealityToolkit.TeleportSystem.WaitUntil(system => system != null);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"{e.ToString()}");
+                    return;
+                }
 
                 // We've been destroyed during the await.
                 if (this == null) { return; }
@@ -156,12 +164,13 @@ namespace XRTK.SDK.UX.Pointers
                 MixedRealityToolkit.TeleportSystem.Register(gameObject);
             }
 
-            await WaitUntilInputSystemValid;
+            if (await ValidateInputSystemAsync())
+            {
+                // We've been destroyed during the await.
+                if (this == null) { return; }
 
-            // We've been destroyed during the await.
-            if (this == null) { return; }
-
-            SetCursor();
+                SetCursor();
+            }
         }
 
         protected override void OnDisable()
