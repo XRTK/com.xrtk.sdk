@@ -828,7 +828,6 @@ namespace XRTK.SDK.Input.Handlers
 
             transform.SetCollidersActive(false);
             Collider.enabled = true;
-
             body.isKinematic = false;
 
             eventData.Use();
@@ -866,6 +865,7 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.InputSystem?.PopModalInputHandler();
 
             transform.SetCollidersActive(true);
+
             body.isKinematic = true;
 
             PrimaryPointer.SyncedTarget = null;
@@ -1025,7 +1025,7 @@ namespace XRTK.SDK.Input.Handlers
 
             float CalculateVerticalPosition(RaycastHit hit)
             {
-                return hit.point.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
+                return hit.point.y + (scaledSize.y * 0.5f - (scaledCenter.y - manipulationTarget.transform.localPosition.y)) + 0.01f;
             }
 
             if (IsSnappedToSurface)
@@ -1141,7 +1141,8 @@ namespace XRTK.SDK.Input.Handlers
             Collider.GetCornerPositionsWorldSpace(manipulationTarget, ref boundsCorners);
 
             var hitAny = false;
-            var scaledCenter = manipulationTarget.TransformPoint(Collider.bounds.center);
+            var scaledCenter = Collider.bounds.center;
+            DebugUtilities.DrawPoint(scaledCenter, Color.cyan, 0.1f);
 
             for (int i = 0; i < boundsCorners.Length; i++)
             {
