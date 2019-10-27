@@ -131,6 +131,22 @@ namespace XRTK.SDK.Input.Handlers
         [Tooltip("The object to manipulate using this handler. Automatically uses this transform if none is set.")]
         private Transform manipulationTarget;
 
+        public Transform ManipulationTarget
+        {
+            get => manipulationTarget;
+            set
+            {
+                if (IsBeingHeld)
+                {
+                    Debug.LogWarning("Cannot set manipulation target while being held!");
+                }
+                else
+                {
+                    manipulationTarget = value;
+                }
+            }
+        }
+
         [SerializeField]
         [Tooltip("The spatial mesh visibility while manipulating an object.")]
         private SpatialMeshDisplayOptions spatialMeshVisibility = SpatialMeshDisplayOptions.Visible;
