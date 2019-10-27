@@ -1023,7 +1023,8 @@ namespace XRTK.SDK.Input.Handlers
 
             float CalculateVerticalPosition(RaycastHit hit)
             {
-                return hit.point.y + (scaledSize.y * 0.5f - (scaledCenter.y - manipulationTarget.transform.localPosition.y)) + 0.01f;
+                var hitPoint = manipulationTarget.TransformPoint(hit.point);
+                return hitPoint.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
             }
 
             if (IsSnappedToSurface)
