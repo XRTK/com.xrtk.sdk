@@ -131,6 +131,22 @@ namespace XRTK.SDK.Input.Handlers
         [Tooltip("The object to manipulate using this handler. Automatically uses this transform if none is set.")]
         private Transform manipulationTarget;
 
+        public Transform ManipulationTarget
+        {
+            get => manipulationTarget;
+            set
+            {
+                if (IsBeingHeld)
+                {
+                    Debug.LogWarning("Cannot set manipulation target while being held!");
+                }
+                else
+                {
+                    manipulationTarget = value;
+                }
+            }
+        }
+
         [SerializeField]
         [Tooltip("The spatial mesh visibility while manipulating an object.")]
         private SpatialMeshDisplayOptions spatialMeshVisibility = SpatialMeshDisplayOptions.Visible;
@@ -400,12 +416,12 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public virtual bool IsSnappedToSurface { get; private set; } = false;
 
-        private BoxCollider thisCollider;
+        private Collider thisCollider;
 
         /// <summary>
-        /// The <see cref="BoxCollider"/> associated with this <see cref="GameObject"/>.
+        /// The <see cref="Collider"/> associated with this <see cref="GameObject"/>.
         /// </summary>
-        public BoxCollider Collider
+        public Collider Collider
         {
             get
             {
@@ -417,9 +433,15 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (thisCollider == null)
                 {
-                    thisCollider = gameObject.EnsureComponent<BoxCollider>();
-                    transform.GetColliderBounds();
+                    thisCollider = gameObject.GetComponent<Collider>();
                 }
+
+                if (thisCollider == null)
+                {
+                    thisCollider = gameObject.EnsureComponent<BoxCollider>();
+                }
+
+                transform.GetColliderBounds();
 
                 return thisCollider;
             }
@@ -822,7 +844,6 @@ namespace XRTK.SDK.Input.Handlers
 
             transform.SetCollidersActive(false);
             Collider.enabled = true;
-
             body.isKinematic = false;
 
             eventData.Use();
@@ -860,6 +881,7 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.InputSystem?.PopModalInputHandler();
 
             transform.SetCollidersActive(true);
+
             body.isKinematic = true;
 
             PrimaryPointer.SyncedTarget = null;
@@ -1011,14 +1033,16 @@ namespace XRTK.SDK.Input.Handlers
             var lastHitObject = PrimaryPointer.Result.LastHitObject;
 
             var scale = manipulationTarget.localScale;
-            var scaledSize = Collider.size * scale.y;
-            var scaledCenter = Collider.center * scale.y;
+            var bounds = Collider.bounds;
+            var scaledSize = bounds.size * scale.y;
+            var scaledCenter = bounds.center * scale.y;
             var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
             var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
 
             float CalculateVerticalPosition(RaycastHit hit)
             {
-                return hit.point.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
+                var hitPoint = manipulationTarget.TransformPoint(hit.point);
+                return hitPoint.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
             }
 
             if (IsSnappedToSurface)
@@ -1054,7 +1078,11 @@ namespace XRTK.SDK.Input.Handlers
             {
                 if (!isValidMove)
                 {
-                    targetPosition = currentPosition;
+                    if (IsSnappedToSurface)
+                    {
+                        targetPosition = currentPosition;
+                    }
+
                     isValidSnap = false;
                 }
 
@@ -1130,7 +1158,8 @@ namespace XRTK.SDK.Input.Handlers
             Collider.GetCornerPositionsWorldSpace(manipulationTarget, ref boundsCorners);
 
             var hitAny = false;
-            var scaledCenter = manipulationTarget.TransformPoint(Collider.center);
+            var scaledCenter = Collider.bounds.center;
+            DebugUtilities.DrawPoint(scaledCenter, Color.cyan, 0.1f);
 
             for (int i = 0; i < boundsCorners.Length; i++)
             {
