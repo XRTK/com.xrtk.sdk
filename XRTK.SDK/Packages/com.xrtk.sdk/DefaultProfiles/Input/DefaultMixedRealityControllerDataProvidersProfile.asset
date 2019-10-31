@@ -45,7 +45,7 @@ MonoBehaviour:
     dataProviderName: Windows Mixed Reality Controller Data Provider
     priority: 5
     runtimePlatform: 17
-    profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
+    profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
     dataProviderName: Windows Speech Data Provider
@@ -71,25 +71,25 @@ MonoBehaviour:
     runtimePlatform: 67
     profile: {fileID: 0}
   - dataProviderType:
-      reference: XRTK.Providers.Controllers.Hands.LeapMotionHandControllerDataProvider,
+      reference: XRTK.Providers.Controllers.Hands.LeapMotion.LeapMotionHandControllerDataProvider,
         XRTK
     dataProviderName: Leap Motion Hand Controller Data Provider
     priority: 5
     runtimePlatform: 2
-    profile: {fileID: 11400000, guid: 42d66f060a3b0b9439e3960a86360066, type: 2}
+    profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
     dataProviderName: Lumin Hand Controller Data Provider
     priority: 5
     runtimePlatform: 32
-    profile: {fileID: 11400000, guid: 42d66f060a3b0b9439e3960a86360066, type: 2}
+    profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
         XRTK.WindowsMixedReality
     dataProviderName: Windows Mixed Reality Hand Controller Data Provider
     priority: 5
     runtimePlatform: 16
-    profile: {fileID: 11400000, guid: 42d66f060a3b0b9439e3960a86360066, type: 2}
+    profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.Hands.UnityEditor.UnityEditorHandControllerDataProvider,
         XRTK

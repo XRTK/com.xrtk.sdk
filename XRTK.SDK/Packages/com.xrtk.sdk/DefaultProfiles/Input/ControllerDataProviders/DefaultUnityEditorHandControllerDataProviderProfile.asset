@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: DefaultUnityEditorHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
-  handControllerType:
-    reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
   isSimulateHandTrackingEnabled: 1
   toggleLeftHandKey: 116
   toggleRightHandKey: 121
