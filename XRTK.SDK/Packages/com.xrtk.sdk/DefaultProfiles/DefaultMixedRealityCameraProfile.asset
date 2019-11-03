@@ -22,3 +22,6 @@ MonoBehaviour:
   cameraClearFlagsTransparentDisplay: 2
   backgroundColorTransparentDisplay: {r: 0, g: 0, b: 0, a: 0}
   transparentQualityLevel: 0
+  cameraRigType:
+    reference: XRTK.Services.CameraSystem.DefaultCameraRig, XRTK
+  defaultHeadHeight: 1.6
