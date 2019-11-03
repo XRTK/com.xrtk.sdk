@@ -24,4 +24,4 @@ MonoBehaviour:
   transparentQualityLevel: 0
   cameraRigType:
     reference: XRTK.Services.CameraSystem.DefaultCameraRig, XRTK
-  bodyAdjustmentAngle: 45
+  defaultHeadHeight: 1.6
