@@ -288,12 +288,13 @@ namespace XRTK.SDK.UX.Pointers
                         // if it's less than zero, then we don't have activation
                         if (offsetRotationAngle > 0)
                         {
+                            var cameraRig = MixedRealityToolkit.CameraSystem.CameraRig;
                             // check to make sure we're still under our activation threshold.
                             if (offsetRotationAngle < rotateActivationAngle)
                             {
                                 canMove = false;
                                 // Rotate the camera by the rotation amount.  If our angle is positive then rotate in the positive direction, otherwise in the opposite direction.
-                                MixedRealityToolkit.Instance.MixedRealityPlayspace.RotateAround(CameraCache.Main.transform.position, Vector3.up, angle >= 0.0f ? rotationAmount : -rotationAmount);
+                                cameraRig.PlayspaceTransform.RotateAround(cameraRig.CameraTransform.position, Vector3.up, angle >= 0.0f ? rotationAmount : -rotationAmount);
                             }
                             else // We may be trying to strafe backwards.
                             {
@@ -307,11 +308,11 @@ namespace XRTK.SDK.UX.Pointers
                                 if (offsetStrafeAngle > 0 && offsetStrafeAngle < backStrafeActivationAngle)
                                 {
                                     canMove = false;
-                                    var playspacePosition = MixedRealityToolkit.Instance.MixedRealityPlayspace.position;
+                                    var playspacePosition = cameraRig.PlayspaceTransform.position;
                                     var height = playspacePosition.y;
                                     var newPosition = -CameraCache.Main.transform.forward * strafeAmount + playspacePosition;
                                     newPosition.y = height;
-                                    MixedRealityToolkit.Instance.MixedRealityPlayspace.position = newPosition;
+                                    cameraRig.PlayspaceTransform.position = newPosition;
                                 }
                             }
                         }
