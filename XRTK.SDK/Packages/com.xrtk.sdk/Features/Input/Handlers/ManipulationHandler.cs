@@ -396,6 +396,11 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public bool IsRotating => !updatedAngle.Equals(0f);
 
+        /// <summary>Gets or sets a value indicating whether this instance can be moved in space.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance is translate locked; otherwise, <c>false</c>.</value>
+        public bool IsTranslateLocked { get; set; } = false;
+
         /// <summary>
         /// Is scaling possible?
         /// </summary>
@@ -1118,7 +1123,10 @@ namespace XRTK.SDK.Input.Handlers
                 targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.deltaTime * smoothingFactor);
             }
 
-            manipulationTarget.position = targetPosition;
+            if (!IsTranslateLocked)
+            {
+                manipulationTarget.position = targetPosition;
+            }
 
             var pivot = pointerGrabPoint == Vector3.zero ? pointerPosition : pointerGrabPoint;
 
