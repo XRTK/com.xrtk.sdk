@@ -289,6 +289,9 @@ namespace XRTK.SDK.UX.Pointers
                         if (offsetRotationAngle > 0)
                         {
                             var cameraRig = MixedRealityToolkit.CameraSystem.CameraRig;
+
+                            Debug.Assert(cameraRig != null, "Teleport pointer requires the camera system be enabled with a valid camera rig!");
+
                             // check to make sure we're still under our activation threshold.
                             if (offsetRotationAngle < rotateActivationAngle)
                             {
@@ -310,7 +313,7 @@ namespace XRTK.SDK.UX.Pointers
                                     canMove = false;
                                     var playspacePosition = cameraRig.PlayspaceTransform.position;
                                     var height = playspacePosition.y;
-                                    var newPosition = -CameraCache.Main.transform.forward * strafeAmount + playspacePosition;
+                                    var newPosition = -cameraRig.CameraTransform.forward * strafeAmount + playspacePosition;
                                     newPosition.y = height;
                                     cameraRig.PlayspaceTransform.position = newPosition;
                                 }
