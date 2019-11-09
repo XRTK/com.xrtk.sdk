@@ -99,12 +99,16 @@ namespace XRTK.SDK.UX.Cursors
                     Debug.LogError($"{pointer.GetType().Name} has not been registered!");
                     Destroy(gameObject);
                 }
+
                 return;
             }
 
             transform.position = focusDetails.EndPoint;
 
-            var forward = MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform.forward;
+            var cameraTransform = MixedRealityToolkit.CameraSystem != null
+                ? MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform
+                : CameraCache.Main.transform;
+            var forward = cameraTransform.forward;
             forward.y = 0f;
 
             // Smooth out rotation just a tad to prevent jarring transitions
