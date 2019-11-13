@@ -18,7 +18,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
     dataProviderName: Mouse Controller Data Provider
     priority: 5
-    runtimePlatform: 31
+    runtimePlatform: 30
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
@@ -53,7 +53,8 @@ MonoBehaviour:
     runtimePlatform: 19
     profile: {fileID: 0}
   - dataProviderType:
-      reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
+      reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider,
+        XRTK
     dataProviderName: Windows Dictation Data Provider
     priority: 5
     runtimePlatform: 19
