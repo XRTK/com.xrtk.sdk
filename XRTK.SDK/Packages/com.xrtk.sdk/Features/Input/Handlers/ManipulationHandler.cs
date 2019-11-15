@@ -1069,114 +1069,105 @@ namespace XRTK.SDK.Input.Handlers
 
             if (pointerDirection.Equals(Vector3.zero)) { return; }
 
-            var currentPosition = manipulationTarget.position;
-
-            Vector3 targetPosition;
-
-            if (pointerGrabPoint == Vector3.zero)
-            {
-                targetPosition = pointerPosition;
-            }
-            else
-            {
-                targetPosition = (pointerPosition + currentPosition) - pointerGrabPoint;
-            }
-
-            var sweepFailed = !body.SweepTest(pointerDirection, out var sweepHitInfo);
-            var targetDirection = targetPosition - currentPosition;
-            var targetDistance = targetDirection.magnitude;
-            var lastHitObject = PrimaryPointer.Result.LastHitObject;
-
-            var scale = manipulationTarget.localScale;
-            var bounds = Collider.bounds;
-            var scaledSize = bounds.size * scale.y;
-            var scaledCenter = bounds.center * scale.y;
-            var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
-            var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
-
-            float CalculateVerticalPosition(RaycastHit hit)
-            {
-                var hitPoint = manipulationTarget.TransformPoint(hit.point);
-                return hitPoint.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
-            }
-
-            if (IsSnappedToSurface)
-            {
-                var lastHit = lastHitObject == null
-                    ? sweepHitInfo.transform
-                    : lastHitObject.transform;
-                var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null) && !hitDown;
-
-                if (targetDistance > unsnapTolerance || hitNew)
-                {
-                    IsSnappedToSurface = false;
-                }
-
-                // Check any overrides
-                if (!IsSnappedToSurface)
-                {
-                    snapTarget = null;
-                    OnUnsnap();
-                }
-                else if (hitDown)
-                {
-                    // If we're still snapped to the surface then place the vertical
-                    // position at the highest hit point to "follow" the surface.
-                    snappedVerticalPosition = CalculateVerticalPosition(maxHitDown);
-                }
-            }
-
-            var justSnapped = false;
-            var isValidSnap = !sweepFailed && sweepHitInfo.distance <= snapDistance;
-
-            if (!sweepFailed)
-            {
-                if (!isValidMove)
-                {
-                    if (IsSnappedToSurface)
-                    {
-                        targetPosition = currentPosition;
-                    }
-
-                    isValidSnap = false;
-                }
-
-                var color = isValidMove ? isValidSnap ? Color.green : Color.yellow : Color.red;
-                DebugUtilities.DrawPoint(sweepHitInfo.point, color);
-                Debug.DrawLine(sweepHitInfo.point, currentPosition, color);
-
-                if (snapToValidSurfaces &&
-                    !IsSnappedToSurface &&
-                    isValidSnap &&
-                    sweepHitInfo.normal.IsValidVector() &&
-                    sweepHitInfo.normal.IsNormalVertical())
-                {
-                    snapTarget = lastHitObject != null
-                        ? lastHitObject.transform == manipulationTarget
-                            ? sweepHitInfo.transform
-                            : lastHitObject.transform
-                        : sweepHitInfo.transform;
-
-                    Debug.Assert(snapTarget != null);
-                    snappedVerticalPosition = CalculateVerticalPosition(sweepHitInfo);
-                    IsSnappedToSurface = true;
-                    justSnapped = true;
-                    OnSnap();
-                }
-            }
-
-            if (IsSnappedToSurface)
-            {
-                targetPosition.y = snappedVerticalPosition;
-            }
-
-            if (!justSnapped && smoothMotion && !IsRotating && !IsNudgePossible && !IsScalingPossible)
-            {
-                targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.deltaTime * smoothingFactor);
-            }
-
             if (!IsTranslateLocked)
             {
+                var currentPosition = manipulationTarget.position;
+                var targetPosition = pointerGrabPoint == Vector3.zero
+                    ? pointerPosition
+                    : (pointerPosition + currentPosition) - pointerGrabPoint;
+                var sweepFailed = !body.SweepTest(pointerDirection, out var sweepHitInfo);
+                var targetDirection = targetPosition - currentPosition;
+                var targetDistance = targetDirection.magnitude;
+                var lastHitObject = PrimaryPointer.Result.LastHitObject;
+
+                var scale = manipulationTarget.localScale;
+                var bounds = Collider.bounds;
+                var scaledSize = bounds.size * scale.y;
+                var scaledCenter = bounds.center * scale.y;
+                var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
+                var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
+
+                float CalculateVerticalPosition(RaycastHit hit)
+                {
+                    var hitPoint = manipulationTarget.TransformPoint(hit.point);
+                    return hitPoint.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
+                }
+
+                if (IsSnappedToSurface)
+                {
+                    var lastHit = lastHitObject == null
+                        ? sweepHitInfo.transform
+                        : lastHitObject.transform;
+                    var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null) && !hitDown;
+
+                    if (targetDistance > unsnapTolerance || hitNew)
+                    {
+                        IsSnappedToSurface = false;
+                    }
+
+                    // Check any overrides
+                    if (!IsSnappedToSurface)
+                    {
+                        snapTarget = null;
+                        OnUnsnap();
+                    }
+                    else if (hitDown)
+                    {
+                        // If we're still snapped to the surface then place the vertical
+                        // position at the highest hit point to "follow" the surface.
+                        snappedVerticalPosition = CalculateVerticalPosition(maxHitDown);
+                    }
+                }
+
+                var justSnapped = false;
+                var isValidSnap = !sweepFailed && sweepHitInfo.distance <= snapDistance;
+
+                if (!sweepFailed)
+                {
+                    if (!isValidMove)
+                    {
+                        if (IsSnappedToSurface)
+                        {
+                            targetPosition = currentPosition;
+                        }
+
+                        isValidSnap = false;
+                    }
+
+                    var color = isValidMove ? isValidSnap ? Color.green : Color.yellow : Color.red;
+                    DebugUtilities.DrawPoint(sweepHitInfo.point, color);
+                    Debug.DrawLine(sweepHitInfo.point, currentPosition, color);
+
+                    if (snapToValidSurfaces &&
+                        !IsSnappedToSurface &&
+                        isValidSnap &&
+                        sweepHitInfo.normal.IsValidVector() &&
+                        sweepHitInfo.normal.IsNormalVertical())
+                    {
+                        snapTarget = lastHitObject != null
+                            ? lastHitObject.transform == manipulationTarget
+                                ? sweepHitInfo.transform
+                                : lastHitObject.transform
+                            : sweepHitInfo.transform;
+
+                        Debug.Assert(snapTarget != null);
+                        snappedVerticalPosition = CalculateVerticalPosition(sweepHitInfo);
+                        IsSnappedToSurface = true;
+                        justSnapped = true;
+                        OnSnap();
+                    }
+                }
+
+                if (IsSnappedToSurface)
+                {
+                    targetPosition.y = snappedVerticalPosition;
+                }
+
+                if (!justSnapped && smoothMotion && !IsRotating && !IsNudgePossible && !IsScalingPossible)
+                {
+                    targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.deltaTime * smoothingFactor);
+                }
+
                 manipulationTarget.position = targetPosition;
             }
 
