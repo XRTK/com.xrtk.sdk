@@ -253,7 +253,33 @@ namespace XRTK.SDK.Input.Handlers
             set => unsnapTolerance = value;
         }
 
+        [SerializeField]
+        [Tooltip("Enables or disables translations for this handler.")]
+        private bool isTranslateLocked = false;
+
+        /// <summary>
+        /// Enables or disables translations for this handler.
+        /// </summary>
+        public bool IsTranslateLocked
+        {
+            get => isTranslateLocked;
+            set => isTranslateLocked = value;
+        }
+
         #region Scale Options
+
+        [SerializeField]
+        [Tooltip("Enables or disabled scaling for this handler.")]
+        private bool isScalingLocked = false;
+
+        /// <summary>
+        /// Enables or disabled scaling for this handler.
+        /// </summary>
+        public bool IsScalingLocked
+        {
+            get => isScalingLocked;
+            set => isScalingLocked = value;
+        }
 
         [SerializeField]
         [Tooltip("The min/max values to activate the scale action.\nNote: this is transformed into and used as absolute values.")]
@@ -298,6 +324,19 @@ namespace XRTK.SDK.Input.Handlers
         #endregion Scale Options
 
         #region Rotation Options
+
+        [SerializeField]
+        [Tooltip("Enables or disabled rotations for this handler.")]
+        private bool isRotationLocked = false;
+
+        /// <summary>
+        /// Enables or disabled rotations for this handler.
+        /// </summary>
+        public bool IsRotationLocked
+        {
+            get => isRotationLocked;
+            set => isRotationLocked = value;
+        }
 
         [SerializeField]
         [Tooltip("The min/max values to activate the rotate action.\nNote: this is transformed into and used as absolute values.")]
@@ -396,32 +435,38 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public bool IsRotating => !updatedAngle.Equals(0f);
 
-        [SerializeField]
-        [Tooltip("Locks down the ability to change the position of the GameObject.")]
-        private bool isTranslateLocked = false;
-        
-        /// <summary>Gets or sets a value indicating whether this instance can be moved in space.</summary>
-        /// <value><c>true</c> if this instance is translate locked; otherwise, <c>false</c>.</value>
-        public bool IsTranslateLocked 
-        {
-            get => isTranslateLocked;
-            set => isTranslateLocked = value;
-        }
+        private bool isScalingPossible = false;
 
         /// <summary>
         /// Is scaling possible?
         /// </summary>
-        public bool IsScalingPossible { get; private set; } = false;
+        public bool IsScalingPossible
+        {
+            get => isScalingPossible && !isScalingLocked;
+            private set => isScalingPossible = value;
+        }
+
+        private bool isNudgePossible = false;
 
         /// <summary>
         /// Is nudge possible?
         /// </summary>
-        public bool IsNudgePossible { get; private set; } = false;
+        public bool IsNudgePossible
+        {
+            get => isNudgePossible && !isTranslateLocked;
+            private set => isNudgePossible = value;
+        }
+
+        private bool isRotationPossible = false;
 
         /// <summary>
         /// Is rotation possible?
         /// </summary>
-        public bool IsRotationPossible { get; private set; } = false;
+        public bool IsRotationPossible
+        {
+            get => isRotationPossible && !isRotationLocked;
+            private set => isRotationPossible = value;
+        }
 
         /// <summary>
         /// Is the <see cref="GameObject"/> currently snapped to a surface?
