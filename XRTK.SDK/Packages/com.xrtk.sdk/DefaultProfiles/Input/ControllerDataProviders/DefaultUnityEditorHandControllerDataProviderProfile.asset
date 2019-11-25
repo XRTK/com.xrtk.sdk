@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 054f653be9eb6f94b9894ca3c7be1ae6, type: 3}
   m_Name: DefaultUnityEditorHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
+  isCustomProfile: 0
   isSimulateHandTrackingEnabled: 1
   toggleLeftHandKey: 116
   toggleRightHandKey: 121
