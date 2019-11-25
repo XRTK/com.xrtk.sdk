@@ -131,6 +131,22 @@ namespace XRTK.SDK.Input.Handlers
         [Tooltip("The object to manipulate using this handler. Automatically uses this transform if none is set.")]
         private Transform manipulationTarget;
 
+        public Transform ManipulationTarget
+        {
+            get => manipulationTarget;
+            set
+            {
+                if (IsBeingHeld)
+                {
+                    Debug.LogWarning("Cannot set manipulation target while being held!");
+                }
+                else
+                {
+                    manipulationTarget = value;
+                }
+            }
+        }
+
         [SerializeField]
         [Tooltip("The spatial mesh visibility while manipulating an object.")]
         private SpatialMeshDisplayOptions spatialMeshVisibility = SpatialMeshDisplayOptions.Visible;
@@ -155,6 +171,22 @@ namespace XRTK.SDK.Input.Handlers
         {
             get => useHold;
             set => useHold = value;
+        }
+
+        [SerializeField]
+        [Tooltip("When the user grabs the object we used the position the pointer is at to perform all manipulations.\n\nWhen false this will only perform manipulations at the object's origin or by the provided offset in BeginHold")]
+        private bool useGrabOffset = true;
+
+        /// <summary>
+        /// When the user grabs the object we used the position the pointer is at to perform all manipulations.
+        /// </summary>
+        /// <remarks>
+        /// When false this will only perform manipulations at the object's origin or by the provided offset in <see cref="BeginHold"/>
+        /// </remarks>
+        public bool UseGrabOffset
+        {
+            get => useGrabOffset;
+            set => useGrabOffset = value;
         }
 
         [SerializeField]
@@ -221,7 +253,33 @@ namespace XRTK.SDK.Input.Handlers
             set => unsnapTolerance = value;
         }
 
+        [SerializeField]
+        [Tooltip("Enables or disables translations for this handler.")]
+        private bool isTranslateLocked = false;
+
+        /// <summary>
+        /// Enables or disables translations for this handler.
+        /// </summary>
+        public bool IsTranslateLocked
+        {
+            get => isTranslateLocked;
+            set => isTranslateLocked = value;
+        }
+
         #region Scale Options
+
+        [SerializeField]
+        [Tooltip("Enables or disabled scaling for this handler.")]
+        private bool isScalingLocked = false;
+
+        /// <summary>
+        /// Enables or disabled scaling for this handler.
+        /// </summary>
+        public bool IsScalingLocked
+        {
+            get => isScalingLocked;
+            set => isScalingLocked = value;
+        }
 
         [SerializeField]
         [Tooltip("The min/max values to activate the scale action.\nNote: this is transformed into and used as absolute values.")]
@@ -266,6 +324,19 @@ namespace XRTK.SDK.Input.Handlers
         #endregion Scale Options
 
         #region Rotation Options
+
+        [SerializeField]
+        [Tooltip("Enables or disabled rotations for this handler.")]
+        private bool isRotationLocked = false;
+
+        /// <summary>
+        /// Enables or disabled rotations for this handler.
+        /// </summary>
+        public bool IsRotationLocked
+        {
+            get => isRotationLocked;
+            set => isRotationLocked = value;
+        }
 
         [SerializeField]
         [Tooltip("The min/max values to activate the rotate action.\nNote: this is transformed into and used as absolute values.")]
@@ -364,32 +435,50 @@ namespace XRTK.SDK.Input.Handlers
         /// </summary>
         public bool IsRotating => !updatedAngle.Equals(0f);
 
+        private bool isScalingPossible = false;
+
         /// <summary>
         /// Is scaling possible?
         /// </summary>
-        public bool IsScalingPossible { get; private set; } = false;
+        public bool IsScalingPossible
+        {
+            get => isScalingPossible && !isScalingLocked;
+            private set => isScalingPossible = value;
+        }
+
+        private bool isNudgePossible = false;
 
         /// <summary>
         /// Is nudge possible?
         /// </summary>
-        public bool IsNudgePossible { get; private set; } = false;
+        public bool IsNudgePossible
+        {
+            get => isNudgePossible && !isTranslateLocked;
+            private set => isNudgePossible = value;
+        }
+
+        private bool isRotationPossible = false;
 
         /// <summary>
         /// Is rotation possible?
         /// </summary>
-        public bool IsRotationPossible { get; private set; } = false;
+        public bool IsRotationPossible
+        {
+            get => isRotationPossible && !isRotationLocked;
+            private set => isRotationPossible = value;
+        }
 
         /// <summary>
         /// Is the <see cref="GameObject"/> currently snapped to a surface?
         /// </summary>
         public virtual bool IsSnappedToSurface { get; private set; } = false;
 
-        private BoxCollider thisCollider;
+        private Collider thisCollider;
 
         /// <summary>
-        /// The <see cref="BoxCollider"/> associated with this <see cref="GameObject"/>.
+        /// The <see cref="Collider"/> associated with this <see cref="GameObject"/>.
         /// </summary>
-        public BoxCollider Collider
+        public Collider Collider
         {
             get
             {
@@ -401,9 +490,15 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (thisCollider == null)
                 {
-                    thisCollider = gameObject.EnsureComponent<BoxCollider>();
-                    transform.GetColliderBounds();
+                    thisCollider = gameObject.GetComponent<Collider>();
                 }
+
+                if (thisCollider == null)
+                {
+                    thisCollider = gameObject.EnsureComponent<BoxCollider>();
+                }
+
+                transform.GetColliderBounds();
 
                 return thisCollider;
             }
@@ -503,10 +598,8 @@ namespace XRTK.SDK.Input.Handlers
 
             if (IsBeingHeld)
             {
-                // We don't pass IsCancelled here because 
-                // it's the intended behaviour to end the hold
-                // if the component is disabled.
-                EndHold();
+                // Only flag cancelled if the application is quitting.
+                EndHold(MixedRealityToolkit.IsApplicationQuitting);
             }
         }
 
@@ -793,11 +886,19 @@ namespace XRTK.SDK.Input.Handlers
 
             PrimaryPointer.IsFocusLocked = true;
             PrimaryPointer.SyncedTarget = gameObject;
+
+            // If the grab offset is not provided
+            // and grab offset has been disabled
+            // grab the object at the local origin
+            if (!useGrabOffset && grabOffset == null)
+            {
+                grabOffset = Vector3.zero;
+            }
+
             PrimaryPointer.OverrideGrabPoint = grabOffset;
 
             transform.SetCollidersActive(false);
             Collider.enabled = true;
-
             body.isKinematic = false;
 
             eventData.Use();
@@ -835,6 +936,7 @@ namespace XRTK.SDK.Input.Handlers
             MixedRealityToolkit.InputSystem?.PopModalInputHandler();
 
             transform.SetCollidersActive(true);
+
             body.isKinematic = true;
 
             PrimaryPointer.SyncedTarget = null;
@@ -967,107 +1069,107 @@ namespace XRTK.SDK.Input.Handlers
 
             if (pointerDirection.Equals(Vector3.zero)) { return; }
 
-            var currentPosition = manipulationTarget.position;
-
-            Vector3 targetPosition;
-
-            if (pointerGrabPoint == Vector3.zero)
+            if (!IsTranslateLocked)
             {
-                targetPosition = pointerPosition;
-            }
-            else
-            {
-                targetPosition = (pointerPosition + currentPosition) - pointerGrabPoint;
-            }
+                var currentPosition = manipulationTarget.position;
+                var targetPosition = pointerGrabPoint == Vector3.zero
+                    ? pointerPosition
+                    : (pointerPosition + currentPosition) - pointerGrabPoint;
+                var sweepFailed = !body.SweepTest(pointerDirection, out var sweepHitInfo);
+                var targetDirection = targetPosition - currentPosition;
+                var targetDistance = targetDirection.magnitude;
+                var lastHitObject = PrimaryPointer.Result.LastHitObject;
 
-            var sweepFailed = !body.SweepTest(pointerDirection, out var sweepHitInfo);
-            var targetDirection = targetPosition - currentPosition;
-            var targetDistance = targetDirection.magnitude;
-            var lastHitObject = PrimaryPointer.Result.LastHitObject;
+                var scale = manipulationTarget.localScale;
+                var bounds = Collider.bounds;
+                var scaledSize = bounds.size * scale.y;
+                var scaledCenter = bounds.center * scale.y;
+                var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
+                var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
 
-            var scale = manipulationTarget.localScale;
-            var scaledSize = Collider.size * scale.y;
-            var scaledCenter = Collider.center * scale.y;
-            var isValidMove = !sweepFailed && sweepHitInfo.distance > targetDistance;
-            var hitDown = TryGetRaycastBoundsCorners(snapDistance, Vector3.down, out _, out _, out var maxHitDown);
-
-            float CalculateVerticalPosition(RaycastHit hit)
-            {
-                return hit.point.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
-            }
-
-            if (IsSnappedToSurface)
-            {
-                var lastHit = lastHitObject == null
-                    ? sweepHitInfo.transform
-                    : lastHitObject.transform;
-                var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null) && !hitDown;
-
-                if (targetDistance > unsnapTolerance || hitNew)
+                float CalculateVerticalPosition(RaycastHit hit)
                 {
-                    IsSnappedToSurface = false;
+                    var hitPoint = manipulationTarget.TransformPoint(hit.point);
+                    return hitPoint.y + (scaledSize.y * 0.5f - scaledCenter.y) + 0.01f;
                 }
 
-                // Check any overrides
-                if (!IsSnappedToSurface)
+                if (IsSnappedToSurface)
                 {
-                    snapTarget = null;
-                    OnUnsnap();
+                    var lastHit = lastHitObject == null
+                        ? sweepHitInfo.transform
+                        : lastHitObject.transform;
+                    var hitNew = sweepFailed && (lastHit != snapTarget || lastHit == null) && !hitDown;
+
+                    if (targetDistance > unsnapTolerance || hitNew)
+                    {
+                        IsSnappedToSurface = false;
+                    }
+
+                    // Check any overrides
+                    if (!IsSnappedToSurface)
+                    {
+                        snapTarget = null;
+                        OnUnsnap();
+                    }
+                    else if (hitDown)
+                    {
+                        // If we're still snapped to the surface then place the vertical
+                        // position at the highest hit point to "follow" the surface.
+                        snappedVerticalPosition = CalculateVerticalPosition(maxHitDown);
+                    }
                 }
-                else if (hitDown)
+
+                var justSnapped = false;
+                var isValidSnap = !sweepFailed && sweepHitInfo.distance <= snapDistance;
+
+                if (!sweepFailed)
                 {
-                    // If we're still snapped to the surface then place the vertical
-                    // position at the highest hit point to "follow" the surface.
-                    snappedVerticalPosition = CalculateVerticalPosition(maxHitDown);
+                    if (!isValidMove)
+                    {
+                        if (IsSnappedToSurface)
+                        {
+                            targetPosition = currentPosition;
+                        }
+
+                        isValidSnap = false;
+                    }
+
+                    var color = isValidMove ? isValidSnap ? Color.green : Color.yellow : Color.red;
+                    DebugUtilities.DrawPoint(sweepHitInfo.point, color);
+                    Debug.DrawLine(sweepHitInfo.point, currentPosition, color);
+
+                    if (snapToValidSurfaces &&
+                        !IsSnappedToSurface &&
+                        isValidSnap &&
+                        sweepHitInfo.normal.IsValidVector() &&
+                        sweepHitInfo.normal.IsNormalVertical())
+                    {
+                        snapTarget = lastHitObject != null
+                            ? lastHitObject.transform == manipulationTarget
+                                ? sweepHitInfo.transform
+                                : lastHitObject.transform
+                            : sweepHitInfo.transform;
+
+                        Debug.Assert(snapTarget != null);
+                        snappedVerticalPosition = CalculateVerticalPosition(sweepHitInfo);
+                        IsSnappedToSurface = true;
+                        justSnapped = true;
+                        OnSnap();
+                    }
                 }
-            }
 
-            var justSnapped = false;
-            var isValidSnap = !sweepFailed && sweepHitInfo.distance <= snapDistance;
-
-            if (!sweepFailed)
-            {
-                if (!isValidMove)
+                if (IsSnappedToSurface)
                 {
-                    targetPosition = currentPosition;
-                    isValidSnap = false;
+                    targetPosition.y = snappedVerticalPosition;
                 }
 
-                var color = isValidMove ? isValidSnap ? Color.green : Color.yellow : Color.red;
-                DebugUtilities.DrawPoint(sweepHitInfo.point, color);
-                Debug.DrawLine(sweepHitInfo.point, currentPosition, color);
-
-                if (snapToValidSurfaces &&
-                    !IsSnappedToSurface &&
-                    isValidSnap &&
-                    sweepHitInfo.normal.IsValidVector() &&
-                    sweepHitInfo.normal.IsNormalVertical())
+                if (!justSnapped && smoothMotion && !IsRotating && !IsNudgePossible && !IsScalingPossible)
                 {
-                    snapTarget = lastHitObject != null
-                        ? lastHitObject.transform == manipulationTarget
-                            ? sweepHitInfo.transform
-                            : lastHitObject.transform
-                        : sweepHitInfo.transform;
-
-                    Debug.Assert(snapTarget != null);
-                    snappedVerticalPosition = CalculateVerticalPosition(sweepHitInfo);
-                    IsSnappedToSurface = true;
-                    justSnapped = true;
-                    OnSnap();
+                    targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.deltaTime * smoothingFactor);
                 }
-            }
 
-            if (IsSnappedToSurface)
-            {
-                targetPosition.y = snappedVerticalPosition;
+                manipulationTarget.position = targetPosition;
             }
-
-            if (!justSnapped && smoothMotion && !IsRotating && !IsNudgePossible && !IsScalingPossible)
-            {
-                targetPosition = Vector3.Lerp(manipulationTarget.position, targetPosition, Time.deltaTime * smoothingFactor);
-            }
-
-            manipulationTarget.position = targetPosition;
 
             var pivot = pointerGrabPoint == Vector3.zero ? pointerPosition : pointerGrabPoint;
 
@@ -1105,7 +1207,8 @@ namespace XRTK.SDK.Input.Handlers
             Collider.GetCornerPositionsWorldSpace(manipulationTarget, ref boundsCorners);
 
             var hitAny = false;
-            var scaledCenter = manipulationTarget.TransformPoint(Collider.center);
+            var scaledCenter = Collider.bounds.center;
+            DebugUtilities.DrawPoint(scaledCenter, Color.cyan, 0.1f);
 
             for (int i = 0; i < boundsCorners.Length; i++)
             {

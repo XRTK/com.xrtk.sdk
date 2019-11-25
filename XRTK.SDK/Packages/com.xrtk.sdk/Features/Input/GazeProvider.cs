@@ -10,7 +10,6 @@ using XRTK.Services;
 using XRTK.Services.InputSystem.Pointers;
 using XRTK.Services.InputSystem.Sources;
 using XRTK.Utilities;
-using XRTK.Utilities.Async;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.Input
@@ -258,14 +257,17 @@ namespace XRTK.SDK.Input
         {
             base.Start();
 
-            await WaitUntilInputSystemValid;
-
-            GazePointer.BaseCursor?.SetVisibility(true);
-
-            if (delayInitialization)
+            if (await ValidateInputSystemAsync())
             {
-                delayInitialization = false;
-                RaiseSourceDetected();
+                if (this == null) { return; }
+
+                GazePointer.BaseCursor?.SetVisibility(true);
+
+                if (delayInitialization)
+                {
+                    delayInitialization = false;
+                    RaiseSourceDetected();
+                }
             }
         }
 
@@ -334,7 +336,7 @@ namespace XRTK.SDK.Input
                 if (eventData.InputSource.Pointers[i].PointerId == GazePointer.PointerId)
                 {
                     MixedRealityToolkit.InputSystem.RaisePointerUp(gazePointer, eventData.MixedRealityInputAction);
-                    MixedRealityToolkit.InputSystem.RaisePointerClicked(gazePointer, eventData.MixedRealityInputAction, 0);
+                    MixedRealityToolkit.InputSystem.RaisePointerClicked(gazePointer, eventData.MixedRealityInputAction);
                     return;
                 }
             }
@@ -373,7 +375,7 @@ namespace XRTK.SDK.Input
                 MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.PointerProfile != null &&
                 MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.PointerProfile.GazeCursorPrefab != null)
             {
-                var cursor = Instantiate(MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.PointerProfile.GazeCursorPrefab, MixedRealityToolkit.Instance.MixedRealityPlayspace);
+                var cursor = Instantiate(MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.PointerProfile.GazeCursorPrefab, MixedRealityToolkit.CameraSystem?.CameraRig.PlayspaceTransform);
                 SetGazeCursor(cursor);
             }
 
@@ -382,9 +384,12 @@ namespace XRTK.SDK.Input
 
         private async void RaiseSourceDetected()
         {
-            await WaitUntilInputSystemValid;
-            MixedRealityToolkit.InputSystem.RaiseSourceDetected(GazeInputSource);
-            GazePointer.BaseCursor?.SetVisibility(true);
+            if (await ValidateInputSystemAsync())
+            {
+                if (this == null) { return; }
+                MixedRealityToolkit.InputSystem.RaiseSourceDetected(GazeInputSource);
+                GazePointer.BaseCursor?.SetVisibility(true);
+            }
         }
 
         /// <summary>
