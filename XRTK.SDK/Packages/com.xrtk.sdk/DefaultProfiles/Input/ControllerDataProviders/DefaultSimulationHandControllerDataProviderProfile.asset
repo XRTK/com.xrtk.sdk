@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 054f653be9eb6f94b9894ca3c7be1ae6, type: 3}
-  m_Name: DefaultUnityEditorHandControllerDataProviderProfile
+  m_Name: DefaultSimulationHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
   isSimulateHandTrackingEnabled: 1
   toggleLeftHandKey: 116
   toggleRightHandKey: 121
   handHideTimeout: 0.2
-  leftHandManipulationKey: 304
-  rightHandManipulationKey: 32
+  leftHandTrackedKey: 304
+  rightHandTrackedKey: 32
   poseDefinitions:
   - {fileID: 11400000, guid: 287ec39181134fc4eaee0a3a5e47ab9f, type: 2}
   - {fileID: 11400000, guid: d3d67de686d952849b6771a111518e0d, type: 2}
