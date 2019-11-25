@@ -71,25 +71,11 @@ MonoBehaviour:
     runtimePlatform: 67
     profile: {fileID: 0}
   - dataProviderType:
-      reference: XRTK.Providers.Controllers.Hands.LeapMotion.LeapMotionHandControllerDataProvider,
-        XRTK
-    dataProviderName: Leap Motion Hand Controller Data Provider
-    priority: 5
-    runtimePlatform: 2
-    profile: {fileID: 0}
-  - dataProviderType:
       reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
     dataProviderName: Lumin Hand Controller Data Provider
     priority: 5
     runtimePlatform: 32
     profile: {fileID: 11400000, guid: d52b8c4dafa18cc4aabdf64618267645, type: 2}
-  - dataProviderType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
-        XRTK.WindowsMixedReality
-    dataProviderName: Windows Mixed Reality Hand Controller Data Provider
-    priority: 5
-    runtimePlatform: 16
-    profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Providers.Controllers.Hands.UnityEditor.UnityEditorHandControllerDataProvider,
         XRTK
