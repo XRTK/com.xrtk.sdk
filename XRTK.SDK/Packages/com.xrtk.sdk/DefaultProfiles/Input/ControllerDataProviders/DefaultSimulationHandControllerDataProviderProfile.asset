@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCustomProfile: 0
   isSimulateHandTrackingEnabled: 1
+  simulatedUpdateFrequency: 0
   toggleLeftHandKey: 116
   toggleRightHandKey: 121
   handHideTimeout: 0.2
