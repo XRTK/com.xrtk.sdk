@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultSimulationHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  isSimulateHandTrackingEnabled: 1
+  handTrackingEnabled: 1
   simulatedUpdateFrequency: 0
   toggleLeftHandKey: 116
   toggleRightHandKey: 121
@@ -29,9 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1251200226ad995498472e45aaf12178, type: 2}
   - {fileID: 11400000, guid: 5e6bcc3863bdc634d82a8a59598a070b, type: 2}
   - {fileID: 11400000, guid: 2f6c29c72cd30c74f9717c932bd87a4a, type: 2}
-  handGestureAnimationSpeed: 8
-  holdStartDuration: 0.5
-  manipulationStartThreshold: 0.03
+  handPoseAnimationSpeed: 8
   defaultHandDistance: 0.5
   handDepthMultiplier: 0.1
   handJitterAmount: 0

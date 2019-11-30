@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d628c3f3d8034aa7a4c414bf96227e1a, type: 3}
   m_Name: DefaultMixedRealityControllerDataProvidersProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
+  isCustomProfile: 0
   registeredControllerDataProviders:
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
