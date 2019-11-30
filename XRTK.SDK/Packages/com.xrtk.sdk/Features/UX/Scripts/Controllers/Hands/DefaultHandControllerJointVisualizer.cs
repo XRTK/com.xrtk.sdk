@@ -58,7 +58,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                         jointTransform.position = jointPoses[handJoint].Position;
                         jointTransform.rotation = jointPoses[handJoint].Rotation;
                     }
-                    else
+                    else if (handJoint != TrackedHandJoint.None)
                     {
                         CreateJoint(handJoint, jointPoses);
                     }
