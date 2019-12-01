@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FlatHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Flat
-  gestureDescription: Flat hand with fingers spread out.
+  id: flat
+  description: Flat hand with fingers spread out.
   isDefault: 0
   keyCode: 49
   data: {fileID: 4900000, guid: e7d04f951437f78409ca4c7a29bf4f4d, type: 3}

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: OpenHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Open
-  gestureDescription: Relaxed hand pose.
+  id: open
+  description: Relaxed hand pose.
   isDefault: 1
   keyCode: 0
   data: {fileID: 4900000, guid: 09df9528e8b9f6549a5f0989692b84ed, type: 3}

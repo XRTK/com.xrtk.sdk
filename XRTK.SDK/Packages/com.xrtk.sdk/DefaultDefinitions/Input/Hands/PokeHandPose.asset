@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PokeHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Poke
-  gestureDescription: Index finger stretched out.
+  id: poke
+  description: Index finger stretched out.
   isDefault: 0
   keyCode: 324
   data: {fileID: 4900000, guid: 22b97ff789b664c4f9b9ee223c29eee7, type: 3}

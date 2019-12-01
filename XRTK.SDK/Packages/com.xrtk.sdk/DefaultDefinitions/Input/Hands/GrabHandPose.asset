@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GrabHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Grab
-  gestureDescription: Grab with whole hand, fist shape.
+  id: grab
+  description: Grab with whole hand, fist shape.
   isDefault: 0
   keyCode: 50
   data: {fileID: 4900000, guid: 26804200b794ba145a05c73b28c1134d, type: 3}

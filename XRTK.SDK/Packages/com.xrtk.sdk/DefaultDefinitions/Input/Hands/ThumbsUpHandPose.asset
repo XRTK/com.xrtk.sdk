@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ThumbsUpHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Thumbs Up
-  gestureDescription: OK sign.
+  id: ok
+  description: OK sign.
   isDefault: 0
   keyCode: 52
   data: {fileID: 4900000, guid: 71175c7404cbaee408470b929ff3ae1f, type: 3}

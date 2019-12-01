@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: VictoryHandPose
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  gestureName: Victory
-  gestureDescription: Victory sign.
+  id: victory
+  description: Victory sign.
   isDefault: 0
   keyCode: 53
   data: {fileID: 4900000, guid: 21f98e595bbf7294c96c87c187f41196, type: 3}
