@@ -8,7 +8,6 @@ using XRTK.SDK.Input.Handlers;
 using XRTK.Providers.Controllers.Hands;
 using XRTK.Services;
 using XRTK.Definitions.Controllers;
-using XRTK.SDK.UX.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Controllers
 {
