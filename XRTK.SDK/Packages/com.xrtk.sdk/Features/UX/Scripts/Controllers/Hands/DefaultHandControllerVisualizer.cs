@@ -25,6 +25,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// </summary>
         public IReadOnlyDictionary<TrackedHandJoint, Transform> JointTransforms => jointTransforms;
 
+        /// <inheritdoc />
         protected override void OnDisable()
         {
             base.OnDisable();
