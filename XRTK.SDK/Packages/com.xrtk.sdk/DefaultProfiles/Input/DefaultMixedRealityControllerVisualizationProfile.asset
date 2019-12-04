@@ -64,3 +64,37 @@ MonoBehaviour:
       id: 3
       description: Grip Pose
       axisConstraint: 7
+  - description: Default Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
+    handedness: 1
+    useDefaultModel: 0
+    overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Default Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
+    handedness: 2
+    useDefaultModel: 0
+    overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
