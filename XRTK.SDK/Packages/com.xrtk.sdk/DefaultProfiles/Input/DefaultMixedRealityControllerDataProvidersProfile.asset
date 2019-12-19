@@ -70,3 +70,16 @@ MonoBehaviour:
     priority: 1
     runtimePlatform: 67
     profile: {fileID: 0}
+  - dataProviderType:
+      reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
+    dataProviderName: Lumin Hand Controller Data Provider
+    priority: 5
+    runtimePlatform: 32
+    profile: {fileID: 11400000, guid: d52b8c4dafa18cc4aabdf64618267645, type: 2}
+  - dataProviderType:
+      reference: XRTK.Providers.Controllers.Hands.Simulation.SimulationHandControllerDataProvider,
+        XRTK
+    dataProviderName: Simulation Hand Controller Data Provider
+    priority: 5
+    runtimePlatform: 1
+    profile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56, type: 2}
