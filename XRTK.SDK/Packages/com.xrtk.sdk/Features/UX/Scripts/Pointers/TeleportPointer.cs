@@ -8,7 +8,6 @@ using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
 using XRTK.Services;
-using XRTK.Utilities;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
