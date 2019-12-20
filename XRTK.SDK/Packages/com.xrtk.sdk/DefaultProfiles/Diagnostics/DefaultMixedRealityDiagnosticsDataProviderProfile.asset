@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0a103f0e536184cb9ab6a1164db97e, type: 3}
+  m_Name: DefaultMixedRealityDiagnosticsDataProviderProfile
+  m_EditorClassIdentifier: 
+  isCustomProfile: 1
+  windowAnchor: 7
+  windowOffset: {x: 0.1, y: 0.1}
+  windowScale: 1
+  windowFollowSpeed: 5
+  windowBackgroundColor: {r: 0.3125, g: 0.3125, b: 0.3125, a: 1}
+  showProfiler: 1
+  frameSampleRate: 0.1
+  displayedDecimalDigits: 1
+  targetFrameRateColor: {r: 0.49609375, g: 0.7265625, b: 0, a: 1}
+  missedFrameRateColor: {r: 0.9453125, g: 0.3125, b: 0.1328125, a: 1}
+  memoryUsedColor: {r: 0, g: 0.640625, b: 0.93359375, a: 1}
+  memoryPeakColor: {r: 0.99609375, g: 0.72265625, b: 0, a: 1}
+  memoryLimitColor: {r: 0.5859375, g: 0.5859375, b: 0.5859375, a: 1}
+  showConsole: 1
