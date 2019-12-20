@@ -13,11 +13,8 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityDiagnosticsDataProviderProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
-  windowAnchor: 7
-  windowOffset: {x: 0.1, y: 0.1}
-  windowScale: 1
-  windowFollowSpeed: 5
-  windowBackgroundColor: {r: 0.3125, g: 0.3125, b: 0.3125, a: 1}
+  visualizationPrefab: {fileID: 8385781228508686039, guid: b25eabbbf341dda45a2374ad01bc38cc,
+    type: 3}
   showProfiler: 1
   frameSampleRate: 0.1
   displayedDecimalDigits: 1
