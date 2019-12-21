@@ -13,12 +13,27 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityDiagnosticsSystemProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
-  enableDiagnostics: 1
+  diagnosticsWindowPrefab: {fileID: 2161880003638299081, guid: be9153b959e0d4d4aa50a4a1a6617daa,
+    type: 3}
   registeredDiagnosticsDataProviders:
   - dataProviderType:
-      reference: XRTK.Services.DiagnosticsSystem.MixedRealityDiagnosticsDataProvider,
+      reference: XRTK.Services.DiagnosticsSystem.MixedRealityMemoryDiagnosticsDataProvider,
         XRTK
-    dataProviderName: Default Diagnostics Data Provider
+    dataProviderName: Memory Diagnostics Data Provider
+    priority: 5
+    runtimePlatform: -1
+    profile: {fileID: 0}
+  - dataProviderType:
+      reference: XRTK.Services.DiagnosticsSystem.MixedRealityConsoleDiagnosticsDataProvider,
+        XRTK
+    dataProviderName: Console Diagnostics Data Provider
+    priority: 5
+    runtimePlatform: -1
+    profile: {fileID: 0}
+  - dataProviderType:
+      reference: XRTK.Services.DiagnosticsSystem.MixedRealityFrameDiagnosticsDataProvider,
+        XRTK
+    dataProviderName: Frame Diagnostics Data Provider
     priority: 5
     runtimePlatform: -1
     profile: {fileID: 11400000, guid: 78f0c104cdd80e94c92dbab3709fd973, type: 2}
