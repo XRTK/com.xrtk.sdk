@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d628c3f3d8034aa7a4c414bf96227e1a, type: 3}
   m_Name: DefaultMixedRealityControllerDataProvidersProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isCustomProfile: 1
   registeredControllerDataProviders:
   - dataProviderType:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
@@ -83,3 +83,9 @@ MonoBehaviour:
     priority: 5
     runtimePlatform: 1
     profile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56, type: 2}
+  - dataProviderType:
+      reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
+    dataProviderName: Oculus Hand Controller Data Provider
+    priority: 5
+    runtimePlatform: 64
+    profile: {fileID: 0}
