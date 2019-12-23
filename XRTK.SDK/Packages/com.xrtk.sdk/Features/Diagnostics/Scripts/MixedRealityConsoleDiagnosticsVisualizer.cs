@@ -1,15 +1,12 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using XRTK.Interfaces;
-using XRTK.Interfaces.DiagnosticsSystem;
+using XRTK.EventDatum.DiagnosticsSystem;
 using XRTK.Interfaces.DiagnosticsSystem.Handlers;
-using XRTK.Services;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
@@ -24,48 +21,19 @@ namespace XRTK.SDK.DiagnosticsSystem
 
         [SerializeField]
         [Tooltip("Text component used to render log text.")]
-        private TextMeshProUGUI logText;
+        private TextMeshProUGUI logText = null;
 
         [SerializeField]
         [Tooltip("The scroll view displaying log text.")]
-        private ScrollRect logScrollView;
-
-        /// <summary>
-        /// Handler was enabled.
-        /// </summary>
-        protected virtual void OnEnable()
-        {
-            List<IMixedRealityService> services = MixedRealityToolkit.GetActiveServices<IMixedRealityDiagnosticsDataProvider>();
-            for (int i = 0; i < services.Count; i++)
-            {
-                if (services[i] is IMixedRealityGenericDiagnosticsDataProvider<IMixedRealityConsoleDiagnosticsHandler> service)
-                {
-                    service.Register(this);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handler was disabled.
-        /// </summary>
-        protected virtual void OnDisable()
-        {
-            List<IMixedRealityService> services = MixedRealityToolkit.GetActiveServices<IMixedRealityDiagnosticsDataProvider>();
-            for (int i = 0; i < services.Count; i++)
-            {
-                if (services[i] is IMixedRealityGenericDiagnosticsDataProvider<IMixedRealityConsoleDiagnosticsHandler> service)
-                {
-                    service.Unregister(this);
-                }
-            }
-        }
+        private ScrollRect logScrollView = null;
 
         /// <inheritdoc />
-        public void OnLogReceived(string message, LogType type)
+        public void OnLogReceived(ConsoleEventData eventData)
         {
             // If we reached the max entries count we'll just keep
             // the previous entry and the new one.
             string keptLog = logText.text;
+
             if (entries == maxEntries)
             {
                 keptLog = keptLog.Substring(lastEntryIndex);
@@ -73,8 +41,8 @@ namespace XRTK.SDK.DiagnosticsSystem
             }
 
             lastEntryIndex = keptLog.Length;
-            StringBuilder log = new StringBuilder(keptLog);
-            log.AppendLine(message);
+            var log = new StringBuilder(keptLog);
+            log.AppendLine(eventData.Message);
             logText.text = log.ToString();
 
             // Scroll to bottom.

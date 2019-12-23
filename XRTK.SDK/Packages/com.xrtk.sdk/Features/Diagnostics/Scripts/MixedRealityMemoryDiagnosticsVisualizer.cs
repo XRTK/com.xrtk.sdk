@@ -1,14 +1,11 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using XRTK.Interfaces;
-using XRTK.Interfaces.DiagnosticsSystem;
+using XRTK.EventDatum.DiagnosticsSystem;
 using XRTK.Interfaces.DiagnosticsSystem.Handlers;
-using XRTK.Services;
 using XRTK.Services.DiagnosticsSystem;
 
 namespace XRTK.SDK.DiagnosticsSystem
@@ -19,6 +16,7 @@ namespace XRTK.SDK.DiagnosticsSystem
         private static readonly string peakMemoryPrefix = "Peak: ";
         private static readonly string limitMemoryPrefix = "Limit: ";
         private static readonly int maxStringLength = 32;
+
         private readonly char[] stringBuffer = new char[maxStringLength];
 
         [Range(0, 3)]
@@ -28,23 +26,27 @@ namespace XRTK.SDK.DiagnosticsSystem
 
         [SerializeField]
         [Tooltip("The text component used to display the memory usage info.")]
-        private TextMeshProUGUI memoryUsedText;
+        private TextMeshProUGUI memoryUsedText = null;
 
         [SerializeField]
         [Tooltip("The text component used to display the memory peak info.")]
-        private TextMeshProUGUI memoryPeakText;
+        private TextMeshProUGUI memoryPeakText = null;
 
         [SerializeField]
         [Tooltip("The text component used to display the memory limit info.")]
-        private TextMeshProUGUI memoryLimitText;
+        private TextMeshProUGUI memoryLimitText = null;
 
         [SerializeField]
-        [Tooltip("Slider visuailzing peak memory.")]
-        private Slider peakMemorySlider;
+        [Tooltip("Slider visualizing peak memory.")]
+        private Slider peakMemorySlider = null;
 
         [SerializeField]
-        [Tooltip("Slider visuailzing used memory.")]
-        private Slider usedMemorySlider;
+        [Tooltip("Slider visualizing used memory.")]
+        private Slider usedMemorySlider = null;
+
+        private ulong lastMemoryUsage;
+        private ulong lastMemoryLimit;
+        private ulong lastMemoryPeak;
 
         private void Awake()
         {
@@ -54,70 +56,54 @@ namespace XRTK.SDK.DiagnosticsSystem
             usedMemorySlider.wholeNumbers = true;
         }
 
-        /// <summary>
-        /// Handler was enabled.
-        /// </summary>
-        protected virtual void OnEnable()
-        {
-            List<IMixedRealityService> services = MixedRealityToolkit.GetActiveServices<IMixedRealityDiagnosticsDataProvider>();
-            for (int i = 0; i < services.Count; i++)
-            {
-                if (services[i] is IMixedRealityGenericDiagnosticsDataProvider<IMixedRealityMemoryDiagnosticsHandler> service)
-                {
-                    service.Register(this);
-                }
-            }
-        }
+        #region IMixedRealityMemoryDiagnosticsHandler Implementation
 
-        /// <summary>
-        /// Handler was disabled.
-        /// </summary>
-        protected virtual void OnDisable()
+        /// <inheritdoc />
+        public void OnMemoryUsageChanged(MemoryEventData eventData)
         {
-            List<IMixedRealityService> services = MixedRealityToolkit.GetActiveServices<IMixedRealityDiagnosticsDataProvider>();
-            for (int i = 0; i < services.Count; i++)
+            ulong currentMemoryUsage = eventData.CurrentMemoryUsage;
+
+            if (WillDisplayedMemoryDiffer(lastMemoryUsage, currentMemoryUsage, displayedDecimalDigits))
             {
-                if (services[i] is IMixedRealityGenericDiagnosticsDataProvider<IMixedRealityMemoryDiagnosticsHandler> service)
-                {
-                    service.Unregister(this);
-                }
+                memoryUsedText.text = MemoryToString(usedMemoryPrefix, currentMemoryUsage);
+                usedMemorySlider.value = DiagnosticsUtils.ConvertBytesToMegabytes(currentMemoryUsage);
+                lastMemoryUsage = currentMemoryUsage;
             }
         }
 
         /// <inheritdoc />
-        public void OnMemoryUsageChanged(ulong oldMemoryUsage, ulong newMemoryUsage)
+        public void OnMemoryLimitChanged(MemoryEventData eventData)
         {
-            if (WillDisplayedMemoryDiffer(oldMemoryUsage, newMemoryUsage, displayedDecimalDigits))
-            {
-                memoryUsedText.text = MemoryToString(stringBuffer, displayedDecimalDigits, usedMemoryPrefix, newMemoryUsage);
-                usedMemorySlider.value = DiagnosticsUtils.ConvertBytesToMegabytes(newMemoryUsage);
-            }
-        }
+            ulong currentMemoryLimit = eventData.CurrentMemoryLimit;
 
-        /// <inheritdoc />
-        public void OnMemoryLimitChanged(ulong oldMemoryLimit, ulong newMemoryLimit)
-        {
-            if (WillDisplayedMemoryDiffer(oldMemoryLimit, newMemoryLimit, displayedDecimalDigits))
+            if (WillDisplayedMemoryDiffer(lastMemoryLimit, currentMemoryLimit, displayedDecimalDigits))
             {
-                memoryLimitText.text = MemoryToString(stringBuffer, displayedDecimalDigits, limitMemoryPrefix, newMemoryLimit);
-                peakMemorySlider.maxValue = DiagnosticsUtils.ConvertBytesToMegabytes(newMemoryLimit);
+                memoryLimitText.text = MemoryToString(limitMemoryPrefix, currentMemoryLimit);
+                peakMemorySlider.maxValue = DiagnosticsUtils.ConvertBytesToMegabytes(currentMemoryLimit);
                 usedMemorySlider.maxValue = peakMemorySlider.maxValue;
+                lastMemoryLimit = currentMemoryLimit;
             }
         }
 
         /// <inheritdoc />
-        public void OnMemoryPeakChanged(ulong oldMemoryPeak, ulong newMemoryPeak)
+        public void OnMemoryPeakChanged(MemoryEventData eventData)
         {
-            if (WillDisplayedMemoryDiffer(oldMemoryPeak, newMemoryPeak, displayedDecimalDigits))
+            ulong currentMemoryPeak = eventData.MemoryPeak;
+
+            if (WillDisplayedMemoryDiffer(lastMemoryPeak, currentMemoryPeak, displayedDecimalDigits))
             {
-                memoryPeakText.text = MemoryToString(stringBuffer, displayedDecimalDigits, peakMemoryPrefix, newMemoryPeak);
-                peakMemorySlider.value = DiagnosticsUtils.ConvertBytesToMegabytes(newMemoryPeak);
+                memoryPeakText.text = MemoryToString(peakMemoryPrefix, currentMemoryPeak);
+                peakMemorySlider.value = DiagnosticsUtils.ConvertBytesToMegabytes(currentMemoryPeak);
+                lastMemoryPeak = currentMemoryPeak;
             }
         }
 
-        private string MemoryToString(char[] stringBuffer, int displayedDecimalDigits, string prefixString, ulong memory)
+        #endregion IMixedRealityMemoryDiagnosticsHandler Implementation
+
+        private string MemoryToString(string prefixString, ulong memory)
         {
-            // Using a custom number to string method to avoid the overhead, and allocations, of built in string.Format/StringBuilder methods.
+            // Using a custom number to string method to avoid the overhead,
+            // and allocations, of built in string.Format/StringBuilder methods.
             // We can also make some assumptions since the domain of the input number (memoryUsage) is known.
             var memoryUsageMb = DiagnosticsUtils.ConvertBytesToMegabytes(memory);
             int memoryUsageIntegerDigits = (int)memoryUsageMb;

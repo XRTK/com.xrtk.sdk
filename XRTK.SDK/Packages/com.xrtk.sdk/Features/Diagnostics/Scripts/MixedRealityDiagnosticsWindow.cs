@@ -8,19 +8,34 @@ using XRTK.Services;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
+    [RequireComponent(typeof(SolverHandler))]
     public class MixedRealityDiagnosticsWindow : MonoBehaviour
     {
-        private SolverHandler solverHandler;
+        [SerializeField]
+        private SolverHandler solverHandler = null;
 
         [SerializeField]
         [Tooltip("The text component used to display the application build version and identifier.")]
-        private TextMeshProUGUI applicationSignatureText;
+        private TextMeshProUGUI applicationSignatureText = null;
+
+        private void OnValidate()
+        {
+            if (solverHandler == null)
+            {
+                solverHandler = GetComponent<SolverHandler>();
+            }
+        }
 
         /// <summary>
         /// The diagnostics window was enabled.
         /// </summary>
         protected virtual void OnEnable()
         {
+            if (solverHandler == null)
+            {
+                solverHandler = GetComponent<SolverHandler>();
+            }
+
             applicationSignatureText.text = MixedRealityToolkit.DiagnosticsSystem.ApplicationSignature;
         }
 
@@ -30,15 +45,7 @@ namespace XRTK.SDK.DiagnosticsSystem
         /// <param name="isPinned"></param>
         public void Toggle_PinWindow(bool isPinned)
         {
-            if (this.solverHandler == null && MixedRealityToolkit.DiagnosticsSystem.DiagnosticsWindow.TryGetComponent(out SolverHandler solverHandler))
-            {
-                this.solverHandler = solverHandler;
-            }
-
-            if (this.solverHandler != null)
-            {
-                this.solverHandler.enabled = !isPinned;
-            }
+            solverHandler.enabled = !isPinned;
         }
     }
 }
