@@ -28,23 +28,23 @@ namespace XRTK.SDK.DiagnosticsSystem
 
         [SerializeField]
         [Tooltip("The text component used to display the memory usage info.")]
-        private TextMeshProUGUI memoryUsedText;
+        private TextMeshProUGUI memoryUsedText = null;
 
         [SerializeField]
         [Tooltip("The text component used to display the memory peak info.")]
-        private TextMeshProUGUI memoryPeakText;
+        private TextMeshProUGUI memoryPeakText = null;
 
         [SerializeField]
         [Tooltip("The text component used to display the memory limit info.")]
-        private TextMeshProUGUI memoryLimitText;
+        private TextMeshProUGUI memoryLimitText = null;
 
         [SerializeField]
         [Tooltip("Slider visuailzing peak memory.")]
-        private Slider peakMemorySlider;
+        private Slider peakMemorySlider = null;
 
         [SerializeField]
         [Tooltip("Slider visuailzing used memory.")]
-        private Slider usedMemorySlider;
+        private Slider usedMemorySlider = null;
 
         private void Awake()
         {

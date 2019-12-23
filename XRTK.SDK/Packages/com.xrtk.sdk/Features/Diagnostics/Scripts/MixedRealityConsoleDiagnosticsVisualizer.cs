@@ -24,11 +24,11 @@ namespace XRTK.SDK.DiagnosticsSystem
 
         [SerializeField]
         [Tooltip("Text component used to render log text.")]
-        private TextMeshProUGUI logText;
+        private TextMeshProUGUI logText = null;
 
         [SerializeField]
         [Tooltip("The scroll view displaying log text.")]
-        private ScrollRect logScrollView;
+        private ScrollRect logScrollView = null;
 
         /// <summary>
         /// Handler was enabled.

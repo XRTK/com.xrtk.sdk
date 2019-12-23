@@ -23,11 +23,11 @@ namespace XRTK.SDK.DiagnosticsSystem
 
         [SerializeField]
         [Tooltip("The text component used to display the CPU FPS information.")]
-        private TextMeshProUGUI cpuFrameRateText;
+        private TextMeshProUGUI cpuFrameRateText = null;
 
         [SerializeField]
         [Tooltip("The text component used to display the GPU FPS information.")]
-        private TextMeshProUGUI gpuFrameRateText;
+        private TextMeshProUGUI gpuFrameRateText = null;
 
         [SerializeField]
         [Tooltip("Image components used to visualize missed frames.")]

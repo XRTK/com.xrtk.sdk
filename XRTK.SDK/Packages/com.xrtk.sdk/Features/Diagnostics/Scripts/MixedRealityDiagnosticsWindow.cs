@@ -14,7 +14,7 @@ namespace XRTK.SDK.DiagnosticsSystem
 
         [SerializeField]
         [Tooltip("The text component used to display the application build version and identifier.")]
-        private TextMeshProUGUI applicationSignatureText;
+        private TextMeshProUGUI applicationSignatureText = null;
 
         /// <summary>
         /// The diagnostics window was enabled.
@@ -30,14 +30,14 @@ namespace XRTK.SDK.DiagnosticsSystem
         /// <param name="isPinned"></param>
         public void Toggle_PinWindow(bool isPinned)
         {
-            if (this.solverHandler == null && MixedRealityToolkit.DiagnosticsSystem.DiagnosticsWindow.TryGetComponent(out SolverHandler solverHandler))
+            if (solverHandler == null)
             {
-                this.solverHandler = solverHandler;
+                solverHandler = MixedRealityToolkit.DiagnosticsSystem.DiagnosticsWindow.GetComponent<SolverHandler>();
             }
 
-            if (this.solverHandler != null)
+            if (solverHandler != null)
             {
-                this.solverHandler.enabled = !isPinned;
+                solverHandler.enabled = !isPinned;
             }
         }
     }
