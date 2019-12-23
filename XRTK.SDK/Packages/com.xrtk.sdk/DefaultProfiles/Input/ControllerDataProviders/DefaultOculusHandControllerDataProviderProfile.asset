@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f3e2e415703f24db18a5caa501bb3c, type: 3}
   m_Name: DefaultOculusHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
+  isCustomProfile: 0
   handTrackingEnabled: 1
+  minConfidenceRequired: 1065353216
