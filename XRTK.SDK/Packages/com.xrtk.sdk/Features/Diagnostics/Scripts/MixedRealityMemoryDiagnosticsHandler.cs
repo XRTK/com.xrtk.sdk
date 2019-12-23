@@ -10,12 +10,12 @@ using XRTK.Services.DiagnosticsSystem;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
-    public class MixedRealityMemoryDiagnosticsVisualizer : MonoBehaviour, IMixedRealityMemoryDiagnosticsHandler
+    public class MixedRealityMemoryDiagnosticsHandler : MonoBehaviour, IMixedRealityMemoryDiagnosticsHandler
     {
-        private static readonly string usedMemoryPrefix = "Used: ";
-        private static readonly string peakMemoryPrefix = "Peak: ";
-        private static readonly string limitMemoryPrefix = "Limit: ";
-        private static readonly int maxStringLength = 32;
+        private const string usedMemoryPrefix = "Used: ";
+        private const string peakMemoryPrefix = "Peak: ";
+        private const string limitMemoryPrefix = "Limit: ";
+        private const int maxStringLength = 32;
 
         private readonly char[] stringBuffer = new char[maxStringLength];
 
@@ -102,13 +102,13 @@ namespace XRTK.SDK.DiagnosticsSystem
 
         private string MemoryToString(string prefixString, ulong memory)
         {
+            var bufferIndex = 0;
             // Using a custom number to string method to avoid the overhead,
             // and allocations, of built in string.Format/StringBuilder methods.
             // We can also make some assumptions since the domain of the input number (memoryUsage) is known.
             var memoryUsageMb = DiagnosticsUtils.ConvertBytesToMegabytes(memory);
-            int memoryUsageIntegerDigits = (int)memoryUsageMb;
-            int memoryUsageFractionalDigits = (int)((memoryUsageMb - memoryUsageIntegerDigits) * Mathf.Pow(10.0f, displayedDecimalDigits));
-            int bufferIndex = 0;
+            var memoryUsageIntegerDigits = (int)memoryUsageMb;
+            var memoryUsageFractionalDigits = (int)((memoryUsageMb - memoryUsageIntegerDigits) * Mathf.Pow(10.0f, displayedDecimalDigits));
 
             for (int i = 0; i < prefixString.Length; ++i)
             {

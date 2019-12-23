@@ -11,7 +11,7 @@ using XRTK.Interfaces.DiagnosticsSystem.Handlers;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
-    public class MixedRealityFrameDiagnosticsVisualizer : MonoBehaviour, IMixedRealityFrameDiagnosticsHandler
+    public class MixedRealityFrameDiagnosticsHandler : MonoBehaviour, IMixedRealityFrameDiagnosticsHandler
     {
         [Range(0, 3)]
         [SerializeField]
@@ -60,7 +60,7 @@ namespace XRTK.SDK.DiagnosticsSystem
         public void OnMissedFramesChanged(MissedFrameEventData eventData)
         {
             var missedFrames = eventData.MissedFrames;
-            int frameIndex = missedFrames.Length - 1;
+            var frameIndex = missedFrames.Length - 1;
 
             for (int i = 0; i < missedFrameImages.Length; i++)
             {

@@ -10,7 +10,7 @@ using XRTK.Interfaces.DiagnosticsSystem.Handlers;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
-    public class MixedRealityConsoleDiagnosticsVisualizer : MonoBehaviour, IMixedRealityConsoleDiagnosticsHandler
+    public class MixedRealityConsoleDiagnosticsHandler : MonoBehaviour, IMixedRealityConsoleDiagnosticsHandler
     {
         private int entries = 0;
         private int lastEntryIndex = 0;

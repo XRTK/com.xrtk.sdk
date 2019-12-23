@@ -1127,9 +1127,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2526310608616145877}
-  - component: {fileID: 537952477673132766}
   - component: {fileID: 5630857977071535010}
   - component: {fileID: 5322810397601691382}
+  - component: {fileID: 537952477673132766}
   - component: {fileID: 5794983513916104165}
   - component: {fileID: 6581399821875318963}
   - component: {fileID: 2594137750029275674}
@@ -1155,20 +1155,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &537952477673132766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2161880003638299081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44eae2cd901f5574988cded222e7fc4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  solverHandler: {fileID: 5630857977071535010}
-  applicationSignatureText: {fileID: 605938201106966668}
 --- !u!114 &5630857977071535010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1217,6 +1203,20 @@ MonoBehaviour:
   ignoreAngleClamp: 0
   ignoreDistanceClamp: 0
   orientToReferenceDirection: 1
+--- !u!114 &537952477673132766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2161880003638299081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44eae2cd901f5574988cded222e7fc4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  solverHandler: {fileID: 5630857977071535010}
+  applicationSignatureText: {fileID: 605938201106966668}
 --- !u!114 &5794983513916104165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2674,7 +2674,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7059610919956172988}
   - component: {fileID: 3260442075108450707}
-  - component: {fileID: 7154796871567280769}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -2727,19 +2726,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &7154796871567280769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6809568920593415744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9896024ed44449c8b072d7340edc12c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 3260442075108450707}
 --- !u!1 &6895055494701750344
 GameObject:
   m_ObjectHideFlags: 0
