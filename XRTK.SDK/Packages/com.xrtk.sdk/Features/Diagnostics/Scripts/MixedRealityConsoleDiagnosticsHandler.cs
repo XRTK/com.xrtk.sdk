@@ -54,9 +54,8 @@ namespace XRTK.SDK.DiagnosticsSystem
                 set
                 {
                     if (textContent.text == value) { return; }
-                    textContent.gameObject.SetActive(false);
+
                     textContent.text = value;
-                    textContent.gameObject.SetActive(true);
                 }
             }
 
