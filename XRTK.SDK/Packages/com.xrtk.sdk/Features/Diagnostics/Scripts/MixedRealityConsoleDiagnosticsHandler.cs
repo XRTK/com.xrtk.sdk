@@ -1,18 +1,18 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XRTK.Attributes;
 using XRTK.EventDatum.DiagnosticsSystem;
 using XRTK.Interfaces.DiagnosticsSystem.Handlers;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
-    public class MixedRealityConsoleDiagnosticsHandler : MonoBehaviour, IMixedRealityConsoleDiagnosticsHandler
+    public class MixedRealityConsoleDiagnosticsHandler : MonoBehaviour,
+        IMixedRealityConsoleDiagnosticsHandler
     {
-        private int entries = 0;
         private int lastEntryIndex = 0;
 
         [SerializeField]
@@ -20,35 +20,35 @@ namespace XRTK.SDK.DiagnosticsSystem
         private int maxEntries = 10;
 
         [SerializeField]
-        [Tooltip("Text component used to render log text.")]
-        private TextMeshProUGUI logText = null;
+        [Prefab(typeof(TextMeshProUGUI))]
+        [Tooltip("The text prefab to use for the console list entries.")]
+        private GameObject logTextPrefab = null;
 
         [SerializeField]
         [Tooltip("The scroll view displaying log text.")]
         private ScrollRect logScrollView = null;
 
+        private TextMeshProUGUI[] textContainers;
+
+        private void Awake()
+        {
+            textContainers = new TextMeshProUGUI[maxEntries];
+
+            for (int i = 0; i < textContainers.Length; i++)
+            {
+                textContainers[i] = Instantiate(logTextPrefab, transform).GetComponent<TextMeshProUGUI>();
+            }
+        }
+
         /// <inheritdoc />
         public void OnLogReceived(ConsoleEventData eventData)
         {
-            // If we reached the max entries count we'll just keep
-            // the previous entry and the new one.
-            string keptLog = logText.text;
-
-            if (entries == maxEntries)
-            {
-                keptLog = keptLog.Substring(lastEntryIndex);
-                entries = 1;
-            }
-
-            lastEntryIndex = keptLog.Length;
-            var log = new StringBuilder(keptLog);
-            log.AppendLine(eventData.Message);
-            logText.text = log.ToString();
+            // TODO fancy modulo to assign the next text prefab and scroll to it's position.
 
             // Scroll to bottom.
             logScrollView.verticalNormalizedPosition = 0f;
 
-            entries++;
+            lastEntryIndex++;
         }
     }
 }

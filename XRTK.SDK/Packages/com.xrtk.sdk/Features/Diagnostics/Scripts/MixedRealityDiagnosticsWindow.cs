@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using XRTK.SDK.Utilities.Solvers;
 using XRTK.Services;
+using XRTK.Utilities.Async;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
@@ -42,10 +43,9 @@ namespace XRTK.SDK.DiagnosticsSystem
         /// <summary>
         /// Pins or unpins the diagnostics window at its current location.
         /// </summary>
-        /// <param name="isPinned"></param>
-        public void Toggle_PinWindow(bool isPinned)
+        public void Toggle_PinWindow()
         {
-            solverHandler.enabled = !isPinned;
+            solverHandler.enabled = !solverHandler.enabled;
         }
     }
 }

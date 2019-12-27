@@ -11,8 +11,15 @@ using XRTK.Interfaces.DiagnosticsSystem.Handlers;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
-    public class MixedRealityFrameDiagnosticsHandler : MonoBehaviour, IMixedRealityFrameDiagnosticsHandler
+    public class MixedRealityFrameDiagnosticsHandler : MonoBehaviour,
+        IMixedRealityFrameDiagnosticsHandler
     {
+        private const string CPU = "CPU: {0} fps ({1} ms)";
+        private const string GPU = "GPU: {0} fps ({1} ms)";
+
+        private readonly StringBuilder stringBuilder = new StringBuilder(32);
+        private readonly StringBuilder millisecondStringBuilder = new StringBuilder(16);
+
         [Range(0, 3)]
         [SerializeField]
         [Tooltip("How many decimal places to display on numeric strings.")]
@@ -30,41 +37,42 @@ namespace XRTK.SDK.DiagnosticsSystem
         [Tooltip("Image components used to visualize missed frames.")]
         private Image[] missedFrameImages = null;
 
+        private string displayDecimalFormat = null;
+
+        private string DisplayedDecimalFormat => displayDecimalFormat ?? (displayDecimalFormat = $"{{0:F{displayedDecimalDigits}}}");
+
         /// <inheritdoc />
         public void OnFrameRateChanged(FrameEventData eventData)
         {
             var framesPerSecond = eventData.FramesPerSecond;
-            var stringBuilder = new StringBuilder(32);
-            var millisecondStringBuilder = new StringBuilder(16);
-            var displayedDecimalFormat = $"{{0:F{displayedDecimalDigits}}}";
-            var milliseconds = (framesPerSecond == 0) ? 0.0f : (1.0f / framesPerSecond) * 1000.0f;
+            var milliseconds = framesPerSecond == 0 ? 0.0f : (1.0f / framesPerSecond) * 1000.0f;
 
-            millisecondStringBuilder.AppendFormat(displayedDecimalFormat, milliseconds.ToString(CultureInfo.InvariantCulture));
+            millisecondStringBuilder.AppendFormat(DisplayedDecimalFormat, milliseconds.ToString(CultureInfo.InvariantCulture));
 
             if (eventData.IsGpuReading)
             {
-                stringBuilder.AppendFormat("GPU: {0} fps ({1} ms)", framesPerSecond.ToString(), millisecondStringBuilder);
+                stringBuilder.AppendFormat(GPU, framesPerSecond.ToString(), millisecondStringBuilder);
                 gpuFrameRateText.text = stringBuilder.ToString();
-                millisecondStringBuilder.Length = 0;
-                stringBuilder.Length = 0;
             }
             else
             {
-                stringBuilder.AppendFormat("CPU: {0} fps ({1} ms)", framesPerSecond.ToString(), millisecondStringBuilder);
+                stringBuilder.AppendFormat(CPU, framesPerSecond.ToString(), millisecondStringBuilder);
                 cpuFrameRateText.text = stringBuilder.ToString();
-                stringBuilder.Length = 0;
             }
+
+            millisecondStringBuilder.Clear();
+            stringBuilder.Clear();
         }
 
         /// <inheritdoc />
-        public void OnMissedFramesChanged(MissedFrameEventData eventData)
+        public void OnFrameMissed(FrameEventData eventData)
         {
             var missedFrames = eventData.MissedFrames;
             var frameIndex = missedFrames.Length - 1;
 
-            for (int i = 0; i < missedFrameImages.Length; i++)
+            foreach (var frame in missedFrameImages)
             {
-                missedFrameImages[i].color = missedFrames[frameIndex] ? Color.red : Color.green;
+                frame.color = missedFrames[frameIndex] ? Color.red : Color.green;
                 frameIndex--;
             }
         }

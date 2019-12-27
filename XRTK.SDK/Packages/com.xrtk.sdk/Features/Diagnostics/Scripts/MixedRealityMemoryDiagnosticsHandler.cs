@@ -10,7 +10,8 @@ using XRTK.Services.DiagnosticsSystem;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
-    public class MixedRealityMemoryDiagnosticsHandler : MonoBehaviour, IMixedRealityMemoryDiagnosticsHandler
+    public class MixedRealityMemoryDiagnosticsHandler : MonoBehaviour,
+        IMixedRealityMemoryDiagnosticsHandler
     {
         private const string usedMemoryPrefix = "Used: ";
         private const string peakMemoryPrefix = "Peak: ";
