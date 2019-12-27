@@ -7,6 +7,7 @@ using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.Providers.Controllers;
 using UnityEngine;
+using XRTK.Providers.Controllers.Hands;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -92,6 +93,9 @@ namespace XRTK.SDK.Input.Handlers
             get => poseAction;
             set => poseAction = value;
         }
+
+        /// <inheritdoc />
+        public virtual void OnInputChanged(InputEventData<HandData> eventData) { }
 
         #endregion IMixedRealityControllerPoseSynchronizer Implementation
 

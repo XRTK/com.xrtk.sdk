@@ -13,7 +13,7 @@ using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
-    public abstract class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer, IMixedRealityHandDataHandler
+    public abstract class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
         private IMixedRealityHandControllerDataProvider dataProvider;
 
@@ -52,17 +52,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
         protected MixedRealityHandControllerVisualizationProfile Profile => MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.ControllerVisualizationProfile.HandVisualizationProfile;
 
         /// <summary>
-        /// Executes when the visualizer is enabled.
-        /// </summary>
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-
-            dataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
-            dataProvider.Register(this);
-        }
-
-        /// <summary>
         /// Called by the Unity runtime when gizmos should be drawn.
         /// </summary>
         private void OnDrawGizmos()
@@ -85,14 +74,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         }
 
         /// <inheritdoc />
-        protected override void OnDisable()
-        {
-            dataProvider.Unregister(this);
-            base.OnDisable();
-        }
-
-        /// <inheritdoc />
-        public virtual void OnHandDataUpdated(InputEventData<HandData> eventData)
+        public override void OnInputChanged(InputEventData<HandData> eventData)
         {
             if (eventData.Handedness != Controller.ControllerHandedness)
             {
