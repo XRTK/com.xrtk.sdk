@@ -13,8 +13,6 @@ namespace XRTK.SDK.DiagnosticsSystem
     public class MixedRealityConsoleDiagnosticsHandler : MonoBehaviour,
         IMixedRealityConsoleDiagnosticsHandler
     {
-        private int lastEntryIndex = 0;
-
         [SerializeField]
         [Tooltip("Maximum allowed entries displayed in the log console.")]
         private int maxEntries = 10;
@@ -28,6 +26,10 @@ namespace XRTK.SDK.DiagnosticsSystem
         [Tooltip("The scroll view displaying log text.")]
         private ScrollRect logScrollView = null;
 
+        [SerializeField]
+        [Tooltip("The scroll view's content root transform to spawn console text entries onto.")]
+        private Transform contentRoot = null;
+
         private TextMeshProUGUI[] textContainers;
 
         private void Awake()
@@ -36,19 +38,26 @@ namespace XRTK.SDK.DiagnosticsSystem
 
             for (int i = 0; i < textContainers.Length; i++)
             {
-                textContainers[i] = Instantiate(logTextPrefab, transform).GetComponent<TextMeshProUGUI>();
+                textContainers[i] = Instantiate(logTextPrefab, contentRoot).GetComponent<TextMeshProUGUI>();
             }
         }
 
         /// <inheritdoc />
         public void OnLogReceived(ConsoleEventData eventData)
         {
-            // TODO fancy modulo to assign the next text prefab and scroll to it's position.
+            int entryIndex;
 
-            // Scroll to bottom.
+            for (entryIndex = textContainers.Length - 1; entryIndex > 0; entryIndex--)
+            {
+                textContainers[entryIndex].text = textContainers[entryIndex - 1].text;
+            }
+
+            if (entryIndex == 0)
+            {
+                textContainers[entryIndex].text = eventData.Message;
+            }
+
             logScrollView.verticalNormalizedPosition = 0f;
-
-            lastEntryIndex++;
         }
     }
 }

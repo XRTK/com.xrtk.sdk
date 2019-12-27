@@ -1171,6 +1171,7 @@ MonoBehaviour:
   logTextPrefab: {fileID: 720216609463083442, guid: d8c00e493400052458e2ec1b257fc827,
     type: 3}
   logScrollView: {fileID: 3215335296776187425}
+  contentRoot: {fileID: 2889816609432434618}
 --- !u!114 &6581399821875318963
 MonoBehaviour:
   m_ObjectHideFlags: 0
