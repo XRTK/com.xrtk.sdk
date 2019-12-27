@@ -3,7 +3,7 @@
 
 using System;
 using UnityEngine;
-using XRTK.Definitions.Controllers;
+using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Providers.Controllers;

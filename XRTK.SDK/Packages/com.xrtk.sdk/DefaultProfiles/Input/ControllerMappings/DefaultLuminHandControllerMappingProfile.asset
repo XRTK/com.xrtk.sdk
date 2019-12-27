@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ff490729fb2a2b4da8da5154ed07183, type: 3}
-  m_Name: DefaultGenericHandControllerMappingProfile
+  m_Script: {fileID: 11500000, guid: 72184cb3d081ec843901262618a397f3, type: 3}
+  m_Name: DefaultLuminHandControllerMappingProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
   hasSetupDefaults: 1
   controllerMappings:
-  - description: Generic
+  - description: Lumin Hand Controller Left
     controllerType:
-      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
+      reference: XRTK.Lumin.Controllers.LuminHandController, XRTK.Lumin
     handedness: 1
     useCustomInteractionMappings: 0
     interactions:
@@ -91,9 +91,9 @@ MonoBehaviour:
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
-  - description: Generic
+  - description: Lumin Hand Controller Right
     controllerType:
-      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
+      reference: XRTK.Lumin.Controllers.LuminHandController, XRTK.Lumin
     handedness: 2
     useCustomInteractionMappings: 0
     interactions:

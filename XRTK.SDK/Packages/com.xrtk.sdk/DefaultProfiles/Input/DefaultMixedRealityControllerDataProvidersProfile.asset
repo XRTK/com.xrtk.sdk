@@ -89,3 +89,10 @@ MonoBehaviour:
     priority: 5
     runtimePlatform: 64
     profile: {fileID: 11400000, guid: c355385d04084cf4297f2fa09e8c72dd, type: 2}
+  - dataProviderType:
+      reference: XRTK.Providers.Controllers.Hands.LeapMotion.LeapMotionHandControllerDataProvider,
+        XRTK
+    dataProviderName: Leap Motion Controller Data Provider
+    priority: 5
+    runtimePlatform: 14
+    profile: {fileID: 0}
