@@ -3,9 +3,9 @@
 
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using XRTK.SDK.Utilities.Solvers;
 using XRTK.Services;
-using XRTK.Utilities.Async;
 
 namespace XRTK.SDK.DiagnosticsSystem
 {
@@ -19,7 +19,24 @@ namespace XRTK.SDK.DiagnosticsSystem
         [Tooltip("The text component used to display the application build version and identifier.")]
         private TextMeshProUGUI applicationSignatureText = null;
 
-        private void OnValidate()
+        [SerializeField]
+        [Tooltip("The icon reference to swap out the pin button sprite.")]
+        private Image icon = null;
+
+        [SerializeField]
+        [Tooltip("The pin sprite to use when the window is unpinned.")]
+        private Sprite pinGraphic = null;
+
+        [SerializeField]
+        [Tooltip("The unpin graphic to use when the window is pinned in place.")]
+        private Sprite unPinGraphic = null;
+
+        /// <summary>
+        /// Is the diagnostics windows pinned in space?
+        /// </summary>
+        public bool IsPinned => solverHandler.enabled;
+
+        protected virtual void OnValidate()
         {
             if (solverHandler == null)
             {
@@ -27,9 +44,6 @@ namespace XRTK.SDK.DiagnosticsSystem
             }
         }
 
-        /// <summary>
-        /// The diagnostics window was enabled.
-        /// </summary>
         protected virtual void OnEnable()
         {
             if (solverHandler == null)
@@ -45,7 +59,9 @@ namespace XRTK.SDK.DiagnosticsSystem
         /// </summary>
         public void Toggle_PinWindow()
         {
-            solverHandler.enabled = !solverHandler.enabled;
+            var newState = !solverHandler.enabled;
+            icon.sprite = newState ? pinGraphic : unPinGraphic;
+            solverHandler.enabled = newState;
         }
     }
 }

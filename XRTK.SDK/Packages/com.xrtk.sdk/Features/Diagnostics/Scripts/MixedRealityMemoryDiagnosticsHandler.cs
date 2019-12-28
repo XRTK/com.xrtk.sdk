@@ -13,12 +13,12 @@ namespace XRTK.SDK.DiagnosticsSystem
     public class MixedRealityMemoryDiagnosticsHandler : MonoBehaviour,
         IMixedRealityMemoryDiagnosticsHandler
     {
-        private const string usedMemoryPrefix = "Used: ";
-        private const string peakMemoryPrefix = "Peak: ";
-        private const string limitMemoryPrefix = "Limit: ";
-        private const int maxStringLength = 32;
+        private const string UsedMemoryPrefix = "Used: ";
+        private const string PeakMemoryPrefix = "Peak: ";
+        private const string LimitMemoryPrefix = "Limit: ";
+        private const int MaxStringLength = 32;
 
-        private readonly char[] stringBuffer = new char[maxStringLength];
+        private readonly char[] stringBuffer = new char[MaxStringLength];
 
         [Range(0, 3)]
         [SerializeField]
@@ -66,7 +66,7 @@ namespace XRTK.SDK.DiagnosticsSystem
 
             if (WillDisplayedMemoryDiffer(lastMemoryUsage, currentMemoryUsage, displayedDecimalDigits))
             {
-                memoryUsedText.text = MemoryToString(usedMemoryPrefix, currentMemoryUsage);
+                memoryUsedText.text = MemoryToString(UsedMemoryPrefix, currentMemoryUsage);
                 usedMemorySlider.value = DiagnosticsUtils.ConvertBytesToMegabytes(currentMemoryUsage);
                 lastMemoryUsage = currentMemoryUsage;
             }
@@ -79,7 +79,7 @@ namespace XRTK.SDK.DiagnosticsSystem
 
             if (WillDisplayedMemoryDiffer(lastMemoryLimit, currentMemoryLimit, displayedDecimalDigits))
             {
-                memoryLimitText.text = MemoryToString(limitMemoryPrefix, currentMemoryLimit);
+                memoryLimitText.text = MemoryToString(LimitMemoryPrefix, currentMemoryLimit);
                 peakMemorySlider.maxValue = DiagnosticsUtils.ConvertBytesToMegabytes(currentMemoryLimit);
                 usedMemorySlider.maxValue = peakMemorySlider.maxValue;
                 lastMemoryLimit = currentMemoryLimit;
@@ -93,7 +93,7 @@ namespace XRTK.SDK.DiagnosticsSystem
 
             if (WillDisplayedMemoryDiffer(lastMemoryPeak, currentMemoryPeak, displayedDecimalDigits))
             {
-                memoryPeakText.text = MemoryToString(peakMemoryPrefix, currentMemoryPeak);
+                memoryPeakText.text = MemoryToString(PeakMemoryPrefix, currentMemoryPeak);
                 peakMemorySlider.value = DiagnosticsUtils.ConvertBytesToMegabytes(currentMemoryPeak);
                 lastMemoryPeak = currentMemoryPeak;
             }
