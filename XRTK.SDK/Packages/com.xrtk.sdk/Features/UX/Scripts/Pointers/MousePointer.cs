@@ -7,13 +7,12 @@ using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Services;
-using XRTK.Utilities;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
 {
     /// <summary>
-    /// Internal Touch Pointer Implementation.
+    /// Default Mouse Pointer Implementation.
     /// </summary>
     public class MousePointer : BaseControllerPointer, IMixedRealityMousePointer
     {
@@ -83,7 +82,7 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnPreRaycast()
         {
-            transform.position = CameraCache.Main.transform.position;
+            transform.position = MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform.position;
 
             if (TryGetPointingRay(out var pointingRay))
             {
@@ -167,7 +166,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (cursorWasDisabledOnDown)
                 {
                     BaseCursor?.SetVisibility(true);
-                    transform.rotation = CameraCache.Main.transform.rotation;
+                    transform.rotation = MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform.rotation;
                 }
                 else
                 {
@@ -252,7 +251,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (isDisabled)
                 {
                     BaseCursor?.SetVisibility(true);
-                    transform.rotation = CameraCache.Main.transform.rotation;
+                    transform.rotation = MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform.rotation;
                 }
 
                 shouldUpdate = true;

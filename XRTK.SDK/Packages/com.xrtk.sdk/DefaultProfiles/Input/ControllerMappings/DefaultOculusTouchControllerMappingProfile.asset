@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: DefaultOculusTouchControllerMappingProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: f83e1d143c5a46dba5e70f497a7a996d, type: 2}
   hasSetupDefaults: 1
   controllerMappings:
   - description: Oculus Touch Controller Left
@@ -31,6 +30,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -44,6 +44,7 @@ MonoBehaviour:
         description: Trigger
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_9
       axisCodeY: 
       invertXAxis: 0
@@ -57,6 +58,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 344
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -70,6 +72,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_13
       axisCodeY: 
       invertXAxis: 0
@@ -83,6 +86,7 @@ MonoBehaviour:
         description: Select
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_9
       axisCodeY: 
       invertXAxis: 0
@@ -96,6 +100,7 @@ MonoBehaviour:
         description: Grip Press
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_11
       axisCodeY: 
       invertXAxis: 0
@@ -109,6 +114,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_11
       axisCodeY: 
       invertXAxis: 0
@@ -118,14 +124,15 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 5
+        description: Teleport Direction
+        axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_1
       axisCodeY: AXIS_2
       invertXAxis: 0
-      invertYAxis: 0
+      invertYAxis: 1
     - id: 7
       description: Button.PrimaryThumbstick Touch
       axisType: 2
@@ -135,6 +142,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 346
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -148,6 +156,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_15
       axisCodeY: 
       invertXAxis: 0
@@ -161,6 +170,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 338
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -174,6 +184,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 332
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -187,6 +198,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 333
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -200,6 +212,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 337
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -213,6 +226,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 342
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -226,6 +240,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 343
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -239,6 +254,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 348
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -252,6 +268,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_17
       axisCodeY: 
       invertXAxis: 0
@@ -267,10 +284,11 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 4
+        description: Pointer Pose
+        axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -280,10 +298,11 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 6
+        description: Trigger
+        axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_10
       axisCodeY: 
       invertXAxis: 0
@@ -297,6 +316,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 345
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -310,6 +330,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_14
       axisCodeY: 
       invertXAxis: 0
@@ -323,6 +344,7 @@ MonoBehaviour:
         description: Select
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_10
       axisCodeY: 
       invertXAxis: 0
@@ -332,10 +354,11 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 7
+        description: Grip Press
+        axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_12
       axisCodeY: 
       invertXAxis: 0
@@ -349,6 +372,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_12
       axisCodeY: 
       invertXAxis: 0
@@ -358,14 +382,15 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 5
+        description: Teleport Direction
+        axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_4
       axisCodeY: AXIS_5
       invertXAxis: 0
-      invertYAxis: 0
+      invertYAxis: 1
     - id: 7
       description: Button.SecondaryThumbstick Touch
       axisType: 2
@@ -375,6 +400,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 347
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -388,6 +414,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_16
       axisCodeY: 
       invertXAxis: 0
@@ -401,6 +428,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 339
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -414,6 +442,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 330
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -427,6 +456,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 331
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -440,6 +470,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 340
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -453,6 +484,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 341
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -466,6 +498,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 349
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -479,6 +512,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: AXIS_18
       axisCodeY: 
       invertXAxis: 0
