@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityPlatformSystemProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  platformConfigurations: []
+  platformConfigurations:
+  - platformType:
+      reference: XRTK.Services.PlatformSystem.Platforms.EditorPlatform, XRTK
+    platformName: Editor
+    priority: 0
+    configurationProfile: {fileID: 0}
