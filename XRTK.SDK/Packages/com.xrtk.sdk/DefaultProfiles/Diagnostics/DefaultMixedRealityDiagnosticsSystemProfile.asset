@@ -21,20 +21,20 @@ MonoBehaviour:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityMemoryDiagnosticsDataProvider,
         XRTK
     dataProviderName: Memory Diagnostics Data Provider
-    priority: 5
+    priority: 1
     runtimePlatform: -1
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityFrameDiagnosticsDataProvider,
         XRTK
     dataProviderName: Frame Diagnostics Data Provider
-    priority: 5
+    priority: 1
     runtimePlatform: -1
     profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityConsoleDiagnosticsDataProvider,
         XRTK
     dataProviderName: Console Diagnostics Data Provider
-    priority: 5
+    priority: 1
     runtimePlatform: -1
     profile: {fileID: 0}
