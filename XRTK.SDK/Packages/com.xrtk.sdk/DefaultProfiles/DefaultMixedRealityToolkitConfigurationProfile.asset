@@ -40,7 +40,7 @@ MonoBehaviour:
   enableNetworkingSystem: 1
   networkingSystemType:
     reference: XRTK.Services.NetworkingSystem.MixedRealityNetworkingSystem, XRTK
-  diagnosticsSystemProfile: {fileID: 11400000, guid: 9be0c5afc495463d8547a80997d46187,
+  diagnosticsSystemProfile: {fileID: 11400000, guid: 4f3217bd00647e147a746a49f672b6d8,
     type: 2}
   enableDiagnosticsSystem: 1
   diagnosticsSystemType:
