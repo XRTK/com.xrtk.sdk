@@ -17,32 +17,32 @@ MonoBehaviour:
   recognitionConfidenceLevel: 1
   speechCommands:
   - keyword: Menu
-    keyCode: 9
+    keyCode: 0
     action:
-      id: 2
-      description: Menu
-      axisConstraint: 2
+      id: 0
+      description: None
+      axisConstraint: 0
   - keyword: Toggle Diagnostics
-    keyCode: 100
+    keyCode: 0
     action:
-      id: 1
-      description: Toggle Diagnostics
+      id: 0
+      description: None
       axisConstraint: 0
   - keyword: Toggle Frame Rate
-    keyCode: 102
+    keyCode: 0
     action:
-      id: 2
-      description: Toggle Frame Rate
+      id: 0
+      description: None
       axisConstraint: 0
   - keyword: Toggle Processor
-    keyCode: 112
+    keyCode: 0
     action:
-      id: 3
-      description: Toggle Processsor
+      id: 0
+      description: None
       axisConstraint: 0
   - keyword: Toggle Memory
-    keyCode: 109
+    keyCode: 0
     action:
-      id: 4
-      description: Toggle Memory
+      id: 0
+      description: None
       axisConstraint: 0
