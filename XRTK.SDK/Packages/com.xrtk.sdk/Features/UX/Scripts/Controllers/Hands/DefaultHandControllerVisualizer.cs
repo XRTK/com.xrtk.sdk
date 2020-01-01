@@ -46,14 +46,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses = HandUtils.ToJointPoseDictionary(handData.Joints);
                 foreach (TrackedHandJoint handJoint in jointPoses.Keys)
                 {
+                    MixedRealityPose jointPose = jointPoses[handJoint];
                     if (jointTransforms.TryGetValue(handJoint, out Transform jointTransform))
                     {
-                        jointTransform.position = jointPoses[handJoint].Position;
-                        jointTransform.rotation = jointPoses[handJoint].Rotation;
+                        jointTransform.position = jointPose.Position;
+                        jointTransform.rotation = jointPose.Rotation;
                     }
-                    else if (handJoint != TrackedHandJoint.None)
+                    else if (handJoint != TrackedHandJoint.None && !jointPose.Equals(MixedRealityPose.ZeroIdentity))
                     {
-                        CreateJoint(handJoint, jointPoses);
+                        CreateJoint(handJoint, jointPose);
                     }
                 }
             }
@@ -97,7 +98,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
         }
 
-        private void CreateJoint(TrackedHandJoint handJoint, IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses)
+        private void CreateJoint(TrackedHandJoint handJoint, MixedRealityPose jointPose)
         {
             GameObject prefab = Profile.JointPrefab;
             if (handJoint == TrackedHandJoint.Palm)
@@ -120,8 +121,8 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
 
             jointObject.name = handJoint.ToString() + " Proxy Transform";
-            jointObject.transform.position = jointPoses[handJoint].Position;
-            jointObject.transform.rotation = jointPoses[handJoint].Rotation;
+            jointObject.transform.position = jointPose.Position;
+            jointObject.transform.rotation = jointPose.Rotation;
             jointObject.transform.parent = transform;
 
             jointTransforms.Add(handJoint, jointObject.transform);
