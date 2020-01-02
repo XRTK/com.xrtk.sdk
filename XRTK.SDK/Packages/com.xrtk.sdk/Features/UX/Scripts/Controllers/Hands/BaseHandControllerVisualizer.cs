@@ -3,22 +3,38 @@
 
 using System;
 using UnityEngine;
-using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Providers.Controllers.Hands;
 using XRTK.SDK.Input.Handlers;
-using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
     public abstract class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
-        private IMixedRealityHandControllerDataProvider dataProvider;
+        private IMixedRealityHandControllerDataProvider dataProvider = null;
+
+        [SerializeField]
+        [Tooltip("Renders the hand joints. Note: this could reduce performance.")]
+        private bool enableHandJointVisualization = true;
+
+        [SerializeField]
+        [Tooltip("Renders the hand mesh, if available. Note: this could reduce performance.")]
+        private bool enableHandMeshVisualization = false;
 
         [SerializeField]
         [Tooltip("Should a gizmo be drawn to represent the hand bounds.")]
         private bool drawBoundsGizmos = true;
+
+        /// <summary>
+        /// Is hand joint rendering enabled?
+        /// </summary>
+        protected bool EnableHandJointVisualization => enableHandJointVisualization;
+
+        /// <summary>
+        /// Is hand mesh rendering enabled?
+        /// </summary>
+        protected bool EnableHandMeshVisualization => enableHandMeshVisualization;
 
         /// <inheritdoc />
         public GameObject GameObjectProxy
@@ -44,11 +60,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
             get { return drawBoundsGizmos; }
             set { drawBoundsGizmos = value; }
         }
-
-        /// <summary>
-        /// The currently active hand visualization profile.
-        /// </summary>
-        protected MixedRealityHandControllerVisualizationProfile Profile => MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.ControllerVisualizationProfile.HandVisualizationProfile;
 
         /// <summary>
         /// Called by the Unity runtime when gizmos should be drawn.
