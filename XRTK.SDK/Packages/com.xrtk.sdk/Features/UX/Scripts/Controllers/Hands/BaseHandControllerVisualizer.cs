@@ -12,7 +12,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
 {
     public abstract class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
-        private IMixedRealityHandControllerDataProvider dataProvider = null;
+        //private IMixedRealityHandControllerDataProvider dataProvider = null;
 
         [SerializeField]
         [Tooltip("Renders the hand joints. Note: this could reduce performance.")]
@@ -21,10 +21,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [SerializeField]
         [Tooltip("Renders the hand mesh, if available. Note: this could reduce performance.")]
         private bool enableHandMeshVisualization = false;
-
-        [SerializeField]
-        [Tooltip("Should a gizmo be drawn to represent the hand bounds.")]
-        private bool drawBoundsGizmos = true;
 
         /// <summary>
         /// Is hand joint rendering enabled?
@@ -53,35 +49,23 @@ namespace XRTK.SDK.UX.Controllers.Hands
         }
 
         /// <summary>
-        /// Should a gizmo be drawn to represent the hand bounds.
-        /// </summary>
-        public bool DrawBoundsGizmos
-        {
-            get { return drawBoundsGizmos; }
-            set { drawBoundsGizmos = value; }
-        }
-
-        /// <summary>
         /// Called by the Unity runtime when gizmos should be drawn.
         /// </summary>
-        private void OnDrawGizmos()
-        {
-            if (drawBoundsGizmos)
-            {
-                foreach (int trackedHandBounds in Enum.GetValues(typeof(TrackedHandBounds)))
-                {
-                    foreach (var controller in dataProvider.ActiveControllers)
-                    {
-                        if (controller.ControllerHandedness == Handedness
-                            && controller is IMixedRealityHandController handController
-                            && handController.TryGetBounds((TrackedHandBounds)trackedHandBounds, out Bounds? bounds))
-                        {
-                            Gizmos.DrawWireCube(bounds.Value.center, bounds.Value.size);
-                        }
-                    }
-                }
-            }
-        }
+        //private void OnDrawGizmos()
+        //{
+        //    foreach (int trackedHandBounds in Enum.GetValues(typeof(TrackedHandBounds)))
+        //    {
+        //        foreach (var controller in dataProvider.ActiveControllers)
+        //        {
+        //            if (controller.ControllerHandedness == Handedness
+        //                && controller is IMixedRealityHandController handController
+        //                && handController.TryGetBounds((TrackedHandBounds)trackedHandBounds, out Bounds? bounds))
+        //            {
+        //                Gizmos.DrawWireCube(bounds.Value.center, bounds.Value.size);
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)
