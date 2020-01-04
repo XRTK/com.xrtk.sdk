@@ -15,6 +15,24 @@ namespace XRTK.SDK.UX.Controllers.Hands
     {
         private Dictionary<TrackedHandJoint, Transform> jointTransforms = new Dictionary<TrackedHandJoint, Transform>();
 
+        [Header("Joint Visualization Settings")]
+        [SerializeField]
+        [Tooltip("The joint prefab to use.")]
+        private GameObject jointPrefab = null;
+
+        [SerializeField]
+        [Tooltip("The joint prefab to use for palm.")]
+        private GameObject palmPrefab = null;
+
+        [SerializeField]
+        [Tooltip("The joint prefab to use for the index tip (point of interaction.")]
+        private GameObject fingertipPrefab = null;
+
+        [Header("Mesh Visualization Settings")]
+        [SerializeField]
+        [Tooltip("If this is not null and hand system supports hand meshes, use this mesh to render hand mesh.")]
+        private GameObject handMeshPrefab = null;
+
         /// <summary>
         /// The mesh filter used for visualization.
         /// </summary>
@@ -37,7 +55,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// <inheritdoc />
         protected override void UpdateHandJointVisualization(HandData handData)
         {
-            if (Profile == null || !Profile.EnableHandJointVisualization)
+            if (!EnableHandJointVisualization)
             {
                 ClearJoints();
             }
@@ -46,14 +64,11 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses = HandUtils.ToJointPoseDictionary(handData.Joints);
                 foreach (TrackedHandJoint handJoint in jointPoses.Keys)
                 {
-                    if (jointTransforms.TryGetValue(handJoint, out Transform jointTransform))
+                    if (handJoint != TrackedHandJoint.None && TryGetOrCreateJoint(handJoint, out Transform jointTransform))
                     {
-                        jointTransform.position = jointPoses[handJoint].Position;
-                        jointTransform.rotation = jointPoses[handJoint].Rotation;
-                    }
-                    else if (handJoint != TrackedHandJoint.None)
-                    {
-                        CreateJoint(handJoint, jointPoses);
+                        MixedRealityPose jointPose = jointPoses[handJoint];
+                        jointTransform.localPosition = jointPose.Position;
+                        jointTransform.localRotation = jointPose.Rotation;
                     }
                 }
             }
@@ -62,24 +77,14 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// <inheritdoc />
         protected override void UpdateHansMeshVisualization(HandData handData)
         {
-            if (Profile == null || !Profile.EnableHandMeshVisualization || handData.Mesh == null)
+            HandMeshData handMeshData = handData.Mesh;
+            if (!EnableHandMeshVisualization || handMeshData == null || handMeshData.Empty)
             {
                 ClearMesh();
                 return;
             }
 
-            HandMeshData handMeshData = handData.Mesh;
-            if (handMeshData.Empty)
-            {
-                return;
-            }
-
-            if (MeshFilter == null && Profile?.HandMeshPrefab != null)
-            {
-                CreateMeshFilter();
-            }
-
-            if (MeshFilter != null)
+            if (MeshFilter != null || CreateMeshFilter())
             {
                 Mesh mesh = MeshFilter.mesh;
 
@@ -97,36 +102,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
         }
 
-        private void CreateJoint(TrackedHandJoint handJoint, IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses)
-        {
-            GameObject prefab = Profile.JointPrefab;
-            if (handJoint == TrackedHandJoint.Palm)
-            {
-                prefab = Profile.PalmJointPrefab;
-            }
-            else if (handJoint == TrackedHandJoint.IndexTip)
-            {
-                prefab = Profile.FingerTipPrefab;
-            }
-
-            GameObject jointObject;
-            if (prefab != null)
-            {
-                jointObject = Instantiate(prefab);
-            }
-            else
-            {
-                jointObject = new GameObject();
-            }
-
-            jointObject.name = handJoint.ToString() + " Proxy Transform";
-            jointObject.transform.position = jointPoses[handJoint].Position;
-            jointObject.transform.rotation = jointPoses[handJoint].Rotation;
-            jointObject.transform.parent = transform;
-
-            jointTransforms.Add(handJoint, jointObject.transform);
-        }
-
         private void ClearJoints()
         {
             foreach (var joint in jointTransforms)
@@ -137,6 +112,38 @@ namespace XRTK.SDK.UX.Controllers.Hands
             jointTransforms.Clear();
         }
 
+        private bool TryGetOrCreateJoint(TrackedHandJoint handJoint, out Transform jointTransform)
+        {
+            if (jointTransforms.TryGetValue(handJoint, out Transform existingJointTransform))
+            {
+                jointTransform = existingJointTransform;
+                return true;
+            }
+
+            GameObject prefab = jointPrefab;
+            if (handJoint == TrackedHandJoint.Palm)
+            {
+                prefab = palmPrefab;
+            }
+            else if (handJoint == TrackedHandJoint.IndexTip)
+            {
+                prefab = fingertipPrefab;
+            }
+
+            if (prefab != null)
+            {
+                jointTransform = Instantiate(prefab).transform;
+                jointTransform.name = $"{handJoint} Proxy Transform";
+                jointTransform.parent = transform;
+                jointTransforms.Add(handJoint, jointTransform.transform);
+                return true;
+            }
+
+            Debug.LogError($"Failed to create {handJoint} game object for hand joint visualization. Prefab not assigned.");
+            jointTransform = null;
+            return false;
+        }
+
         private void ClearMesh()
         {
             if (MeshFilter != null)
@@ -145,9 +152,16 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
         }
 
-        private void CreateMeshFilter()
+        private bool CreateMeshFilter()
         {
-            MeshFilter = Instantiate(Profile.HandMeshPrefab).GetComponent<MeshFilter>();
+            if (handMeshPrefab != null)
+            {
+                MeshFilter = Instantiate(handMeshPrefab).GetComponent<MeshFilter>();
+                return true;
+            }
+
+            Debug.LogError($"Failed to create mesh filter for hand mesh visualization. No prefab assigned.");
+            return false;
         }
     }
 }

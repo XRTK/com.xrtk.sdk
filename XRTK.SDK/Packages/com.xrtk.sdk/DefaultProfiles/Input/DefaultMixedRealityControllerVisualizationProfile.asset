@@ -64,9 +64,10 @@ MonoBehaviour:
       id: 3
       description: Grip Pose
       axisConstraint: 7
-  - description: Default Hand Controller
+  - description: Simulation Hand Controller
     controllerType:
-      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
+      reference: XRTK.Providers.Controllers.Hands.Simulation.SimulationHandController,
+        XRTK
     handedness: 1
     useDefaultModel: 0
     overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
@@ -81,9 +82,150 @@ MonoBehaviour:
       id: 3
       description: Grip Pose
       axisConstraint: 7
-  - description: Default Hand Controller
+  - description: Simulation Hand Controller
     controllerType:
-      reference: XRTK.Providers.Controllers.Hands.DefaultHandController, XRTK
+      reference: XRTK.Providers.Controllers.Hands.Simulation.SimulationHandController,
+        XRTK
+    handedness: 2
+    useDefaultModel: 0
+    overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Windows Mixed Reality Hand Controller
+    controllerType:
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandController,
+        XRTK.WindowsMixedReality
+    handedness: 1
+    useDefaultModel: 0
+    overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Windows Mixed Reality Hand Controller
+    controllerType:
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandController,
+        XRTK.WindowsMixedReality
+    handedness: 2
+    useDefaultModel: 0
+    overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Leap Motion Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Hands.LeapMotion.LeapMotionHandController,
+        XRTK
+    handedness: 1
+    useDefaultModel: 0
+    overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Leap Motion Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Hands.LeapMotion.LeapMotionHandController,
+        XRTK
+    handedness: 2
+    useDefaultModel: 0
+    overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Lumin Hand Controller
+    controllerType:
+      reference: XRTK.Lumin.Controllers.LuminHandController, XRTK.Lumin
+    handedness: 1
+    useDefaultModel: 0
+    overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Lumin Hand Controller
+    controllerType:
+      reference: XRTK.Lumin.Controllers.LuminHandController, XRTK.Lumin
+    handedness: 2
+    useDefaultModel: 0
+    overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Oculus Hand Controller
+    controllerType:
+      reference: XRTK.Oculus.Controllers.OculusHandController, XRTK.Oculus
+    handedness: 1
+    useDefaultModel: 0
+    overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+    poseAction:
+      id: 4
+      description: Pointer Pose
+      axisConstraint: 7
+    alternatePoseAction:
+      id: 3
+      description: Grip Pose
+      axisConstraint: 7
+  - description: Oculus Hand Controller
+    controllerType:
+      reference: XRTK.Oculus.Controllers.OculusHandController, XRTK.Oculus
     handedness: 2
     useDefaultModel: 0
     overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,

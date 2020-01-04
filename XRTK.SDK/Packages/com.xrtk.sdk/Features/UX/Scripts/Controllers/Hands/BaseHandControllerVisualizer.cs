@@ -3,23 +3,34 @@
 
 using System;
 using UnityEngine;
-using XRTK.Definitions.Controllers;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Providers.Controllers.Hands;
 using XRTK.SDK.Input.Handlers;
-using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
-    public abstract class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer, IMixedRealityHandDataHandler
+    public abstract class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
-        private IMixedRealityHandControllerDataProvider dataProvider;
+        //private IMixedRealityHandControllerDataProvider dataProvider = null;
 
         [SerializeField]
-        [Tooltip("Should a gizmo be drawn to represent the hand bounds.")]
-        private bool drawBoundsGizmos = true;
+        [Tooltip("Renders the hand joints. Note: this could reduce performance.")]
+        private bool enableHandJointVisualization = true;
+
+        [SerializeField]
+        [Tooltip("Renders the hand mesh, if available. Note: this could reduce performance.")]
+        private bool enableHandMeshVisualization = false;
+
+        /// <summary>
+        /// Is hand joint rendering enabled?
+        /// </summary>
+        protected bool EnableHandJointVisualization => enableHandJointVisualization;
+
+        /// <summary>
+        /// Is hand mesh rendering enabled?
+        /// </summary>
+        protected bool EnableHandMeshVisualization => enableHandMeshVisualization;
 
         /// <inheritdoc />
         public GameObject GameObjectProxy
@@ -38,61 +49,26 @@ namespace XRTK.SDK.UX.Controllers.Hands
         }
 
         /// <summary>
-        /// Should a gizmo be drawn to represent the hand bounds.
-        /// </summary>
-        public bool DrawBoundsGizmos
-        {
-            get { return drawBoundsGizmos; }
-            set { drawBoundsGizmos = value; }
-        }
-
-        /// <summary>
-        /// The currently active hand visualization profile.
-        /// </summary>
-        protected MixedRealityHandControllerVisualizationProfile Profile => MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.ControllerVisualizationProfile.HandVisualizationProfile;
-
-        /// <summary>
-        /// Executes when the visualizer is enabled.
-        /// </summary>
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-
-            dataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
-            dataProvider.Register(this);
-        }
-
-        /// <summary>
         /// Called by the Unity runtime when gizmos should be drawn.
         /// </summary>
-        private void OnDrawGizmos()
-        {
-            if (drawBoundsGizmos)
-            {
-                foreach (int trackedHandBounds in Enum.GetValues(typeof(TrackedHandBounds)))
-                {
-                    foreach (var controller in dataProvider.ActiveControllers)
-                    {
-                        if (controller.ControllerHandedness == Handedness
-                            && controller is IMixedRealityHandController handController
-                            && handController.TryGetBounds((TrackedHandBounds)trackedHandBounds, out Bounds? bounds))
-                        {
-                            Gizmos.DrawWireCube(bounds.Value.center, bounds.Value.size);
-                        }
-                    }
-                }
-            }
-        }
+        //private void OnDrawGizmos()
+        //{
+        //    foreach (int trackedHandBounds in Enum.GetValues(typeof(TrackedHandBounds)))
+        //    {
+        //        foreach (var controller in dataProvider.ActiveControllers)
+        //        {
+        //            if (controller.ControllerHandedness == Handedness
+        //                && controller is IMixedRealityHandController handController
+        //                && handController.TryGetBounds((TrackedHandBounds)trackedHandBounds, out Bounds? bounds))
+        //            {
+        //                Gizmos.DrawWireCube(bounds.Value.center, bounds.Value.size);
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <inheritdoc />
-        protected override void OnDisable()
-        {
-            dataProvider.Unregister(this);
-            base.OnDisable();
-        }
-
-        /// <inheritdoc />
-        public virtual void OnHandDataUpdated(InputEventData<HandData> eventData)
+        public override void OnInputChanged(InputEventData<HandData> eventData)
         {
             if (eventData.Handedness != Controller.ControllerHandedness)
             {
