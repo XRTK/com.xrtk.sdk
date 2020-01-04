@@ -52,11 +52,11 @@ MonoBehaviour:
     axisConstraint: 0
   enableHandJointVisualization: 1
   enableHandMeshVisualization: 0
-  drawBoundsGizmos: 1
-  jointPrefab: {fileID: 1955475817299902, guid: effda710d14876d4eb459af7c4ec7bbf,
+  jointPrefab: {fileID: 1370450866519632, guid: 7644fc8494afb074f9d76648ac4da6f7,
     type: 3}
   palmPrefab: {fileID: 6797406804172968804, guid: 80997b0aa2ab2d7429bb5e7f1cddbace,
     type: 3}
   fingertipPrefab: {fileID: 7094064642998883381, guid: 617c3a8bda4889941821a47e213cdb00,
     type: 3}
-  handMeshPrefab: {fileID: 0}
+  handMeshPrefab: {fileID: 1887883006053652, guid: 81cacd47fbb47714d8b19cffb1edf4af,
+    type: 3}
