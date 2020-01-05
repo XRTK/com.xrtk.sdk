@@ -12,8 +12,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
 {
     public abstract class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
-        //private IMixedRealityHandControllerDataProvider dataProvider = null;
-
         [SerializeField]
         [Tooltip("Renders the hand joints. Note: this could reduce performance.")]
         private bool enableHandJointVisualization = true;
@@ -47,25 +45,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 }
             }
         }
-
-        /// <summary>
-        /// Called by the Unity runtime when gizmos should be drawn.
-        /// </summary>
-        //private void OnDrawGizmos()
-        //{
-        //    foreach (int trackedHandBounds in Enum.GetValues(typeof(TrackedHandBounds)))
-        //    {
-        //        foreach (var controller in dataProvider.ActiveControllers)
-        //        {
-        //            if (controller.ControllerHandedness == Handedness
-        //                && controller is IMixedRealityHandController handController
-        //                && handController.TryGetBounds((TrackedHandBounds)trackedHandBounds, out Bounds? bounds))
-        //            {
-        //                Gizmos.DrawWireCube(bounds.Value.center, bounds.Value.size);
-        //            }
-        //        }
-        //    }
-        //}
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)

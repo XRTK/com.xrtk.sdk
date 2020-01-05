@@ -10,16 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 054f653be9eb6f94b9894ca3c7be1ae6, type: 3}
-  m_Name: DefaultSimulationHandControllerDataProviderProfile
+  m_Name: DefaultSimulatedControllerDataProviderProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
-  handTrackingEnabled: 1
+  controllerSimulationEnabled: 1
+  simulatedControllerType:
+    reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
+      XRTK
   simulatedUpdateFrequency: 0
-  toggleLeftHandKey: 116
-  toggleRightHandKey: 121
-  handHideTimeout: 0.2
-  leftHandTrackedKey: 304
-  rightHandTrackedKey: 32
+  controllerHideTimeout: 0.2
+  defaultDistance: 0.5
+  depthMultiplier: 0.1
+  jitterAmount: 0
+  toggleLeftPersistentKey: 116
+  leftControllerTrackedKey: 304
+  toggleRightPersistentKey: 121
+  rightControllerTrackedKey: 32
+  yawCWKey: 101
+  yawCCWKey: 113
+  pitchCWKey: 102
+  pitchCCWKey: 114
+  rollCWKey: 120
+  rollCCWKey: 122
+  rotationSpeed: 100
   poseDefinitions:
   - {fileID: 11400000, guid: 287ec39181134fc4eaee0a3a5e47ab9f, type: 2}
   - {fileID: 11400000, guid: d3d67de686d952849b6771a111518e0d, type: 2}
@@ -30,13 +43,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5e6bcc3863bdc634d82a8a59598a070b, type: 2}
   - {fileID: 11400000, guid: 2f6c29c72cd30c74f9717c932bd87a4a, type: 2}
   handPoseAnimationSpeed: 8
-  defaultHandDistance: 0.5
-  handDepthMultiplier: 0.1
-  handJitterAmount: 0
-  yawHandCWKey: 101
-  yawHandCCWKey: 113
-  pitchHandCWKey: 102
-  pitchHandCCWKey: 114
-  rollHandCWKey: 120
-  rollHandCCWKey: 122
-  handRotationSpeed: 100

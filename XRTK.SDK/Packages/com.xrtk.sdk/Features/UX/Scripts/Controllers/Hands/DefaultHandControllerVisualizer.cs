@@ -46,10 +46,10 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// <inheritdoc />
         protected override void OnDisable()
         {
-            base.OnDisable();
-
             ClearJoints();
             ClearMesh();
+
+            base.OnDisable();
         }
 
         /// <inheritdoc />
