@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90f3e2e415703f24db18a5caa501bb3c, type: 3}
-  m_Name: DefaultOculusHandControllerDataProviderProfile
+  m_Name: DefaultOculusControllerDataProviderProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 0
+  <ParentProfile>k__BackingField: {fileID: 11400000, guid: c9455015ed6ead145b8ff0b8c148cc40,
+    type: 2}
   handTrackingEnabled: 1
   minConfidenceRequired: 1065353216
