@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.Utilities;
+using XRTK.Extensions;
 using XRTK.Providers.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Controllers.Hands
@@ -61,7 +62,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
             else
             {
-                IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses = HandUtils.ToJointPoseDictionary(handData.Joints);
+                IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses = handData.Joints.ToJointPoseDictionary();
                 foreach (TrackedHandJoint handJoint in jointPoses.Keys)
                 {
                     if (handJoint != TrackedHandJoint.None && TryGetOrCreateJoint(handJoint, out Transform jointTransform))
