@@ -23,65 +23,121 @@ MonoBehaviour:
     useCustomInteractionMappings: 0
     interactions:
     - id: 0
-      description: Spatial Pointer
-      axisType: 7
-      inputType: 3
+      description: Yaw Clockwise
+      axisType: 2
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 101
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 1
-      description: Spatial Grip
-      axisType: 7
-      inputType: 14
+      description: Yaw Counter Clockwise
+      axisType: 2
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 113
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 2
-      description: Select
+      description: Pitch Clockwise
       axisType: 2
-      inputType: 25
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 102
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 3
-      description: Grab
-      axisType: 3
-      inputType: 13
+      description: Pitch Counter Clockwise
+      axisType: 2
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 114
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 4
-      description: Index Finger Pose
-      axisType: 7
-      inputType: 33
+      description: Roll Clockwise
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 120
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 5
+      description: Roll Counter Clockwise
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 122
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 6
+      description: Move Away (Depth)
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 280
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 7
+      description: Move Closer (Depth)
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 281
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 8
+      description: Move
+      axisType: 5
+      inputType: 4
       inputAction:
         id: 0
         description: None
@@ -100,65 +156,121 @@ MonoBehaviour:
     useCustomInteractionMappings: 0
     interactions:
     - id: 0
-      description: Spatial Pointer
-      axisType: 7
-      inputType: 3
+      description: Yaw Clockwise
+      axisType: 2
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 101
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 1
-      description: Spatial Grip
-      axisType: 7
-      inputType: 14
+      description: Yaw Counter Clockwise
+      axisType: 2
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 113
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 2
-      description: Select
+      description: Pitch Clockwise
       axisType: 2
-      inputType: 25
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 102
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 3
-      description: Grab
-      axisType: 3
-      inputType: 13
+      description: Pitch Counter Clockwise
+      axisType: 2
+      inputType: 7
       inputAction:
         id: 0
         description: None
         axisConstraint: 0
-      keyCode: 0
+      keyCode: 114
       inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
     - id: 4
-      description: Index Finger Pose
-      axisType: 7
-      inputType: 33
+      description: Roll Clockwise
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 120
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 5
+      description: Roll Counter Clockwise
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 122
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 6
+      description: Move Away (Depth)
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 280
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 7
+      description: Move Closer (Depth)
+      axisType: 2
+      inputType: 7
+      inputAction:
+        id: 0
+        description: None
+        axisConstraint: 0
+      keyCode: 281
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
+    - id: 8
+      description: Move
+      axisType: 5
+      inputType: 4
       inputAction:
         id: 0
         description: None
