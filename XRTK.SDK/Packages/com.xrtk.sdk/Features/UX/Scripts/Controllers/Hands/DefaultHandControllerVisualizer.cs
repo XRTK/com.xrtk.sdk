@@ -29,6 +29,10 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [Tooltip("The joint prefab to use for the index tip (point of interaction.")]
         private GameObject fingertipPrefab = null;
 
+        [SerializeField]
+        [Tooltip("Material tint color for index fingertip.")]
+        private Color indexFingertipColor = Color.cyan;
+
         [Header("Mesh Visualization Settings")]
         [SerializeField]
         [Tooltip("If this is not null and hand system supports hand meshes, use this mesh to render hand mesh.")]
@@ -126,7 +130,8 @@ namespace XRTK.SDK.UX.Controllers.Hands
             {
                 prefab = palmPrefab;
             }
-            else if (handJoint == TrackedHandJoint.IndexTip)
+            else if (handJoint == TrackedHandJoint.IndexTip || handJoint == TrackedHandJoint.MiddleTip
+                || handJoint == TrackedHandJoint.PinkyTip || handJoint == TrackedHandJoint.RingTip || handJoint == TrackedHandJoint.ThumbTip)
             {
                 prefab = fingertipPrefab;
             }
@@ -137,6 +142,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 jointTransform.name = $"{handJoint} Proxy Transform";
                 jointTransform.parent = transform;
                 jointTransforms.Add(handJoint, jointTransform.transform);
+
+                if (handJoint == TrackedHandJoint.IndexTip)
+                {
+                    Renderer indexJointRenderer = jointTransform.GetComponent<Renderer>();
+                    Material indexMaterial = indexJointRenderer.material;
+                    indexMaterial.color = indexFingertipColor;
+                    indexJointRenderer.material = indexMaterial;
+                }
+
                 return true;
             }
 
