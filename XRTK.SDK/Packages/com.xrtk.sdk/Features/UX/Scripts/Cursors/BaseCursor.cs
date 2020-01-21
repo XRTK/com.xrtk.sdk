@@ -299,8 +299,9 @@ namespace XRTK.SDK.UX.Cursors
             OnCursorStateChange(CursorStateEnum.Contextual);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             UnregisterManagers();
         }
 
