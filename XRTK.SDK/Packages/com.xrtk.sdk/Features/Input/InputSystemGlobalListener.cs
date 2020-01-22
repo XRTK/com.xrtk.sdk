@@ -44,6 +44,11 @@ namespace XRTK.SDK.Input
             MixedRealityToolkit.InputSystem?.Unregister(gameObject);
         }
 
+        protected virtual void OnDestroy()
+        {
+            MixedRealityToolkit.InputSystem?.Unregister(gameObject);
+        }
+
         protected async Task<bool> ValidateInputSystemAsync()
         {
             try
