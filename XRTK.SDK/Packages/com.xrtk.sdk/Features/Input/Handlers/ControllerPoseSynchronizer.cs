@@ -115,7 +115,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (destroyOnSourceLost)
                 {
-                    if (Application.isEditor)
+                    if (Application.isEditor && !Application.isPlaying)
                     {
                         DestroyImmediate(gameObject);
                     }

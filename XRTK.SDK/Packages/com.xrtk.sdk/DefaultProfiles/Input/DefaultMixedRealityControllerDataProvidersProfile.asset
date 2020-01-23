@@ -40,7 +40,7 @@ MonoBehaviour:
     runtimePlatform: 31
     profile: {fileID: 0}
   - dataProviderType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityDataProvider,
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
         XRTK.WindowsMixedReality
     dataProviderName: Windows Mixed Reality Controller Data Provider
     priority: 1
