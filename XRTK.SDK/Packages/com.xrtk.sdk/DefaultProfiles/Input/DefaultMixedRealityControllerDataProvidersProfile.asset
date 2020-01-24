@@ -85,7 +85,7 @@ MonoBehaviour:
     runtimePlatform: 16
     profile: {fileID: 11400000, guid: 9f00cc1766a46454295ff1e5447e987e, type: 2}
   - dataProviderType:
-      reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
+      reference: XRTK.Oculus.Controllers.Hands.OculusHandControllerDataProvider, XRTK.Oculus
     dataProviderName: Oculus Hand Controller Data Provider
     priority: 1
     runtimePlatform: 64
