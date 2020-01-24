@@ -51,3 +51,8 @@ MonoBehaviour:
     handedness: 3
     pointerPrefab: {fileID: 1705443038328656654, guid: 6fe8fd7ffcc83e947b469d1c661ffa47,
       type: 3}
+  - controllerType:
+      reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
+    handedness: 3
+    pointerPrefab: {fileID: 1705443038328656654, guid: 6fe8fd7ffcc83e947b469d1c661ffa47,
+      type: 3}
