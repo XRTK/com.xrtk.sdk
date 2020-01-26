@@ -111,7 +111,14 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             foreach (var joint in jointTransforms)
             {
-                Destroy(joint.Value.gameObject);
+                if (Application.isEditor)
+                {
+                    DestroyImmediate(joint.Value.gameObject);
+                }
+                else
+                {
+                    Destroy(joint.Value.gameObject);
+                }
             }
 
             jointTransforms.Clear();
@@ -163,7 +170,14 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             if (MeshFilter != null)
             {
-                Destroy(MeshFilter.gameObject);
+                if (Application.isEditor)
+                {
+                    DestroyImmediate(MeshFilter.gameObject);
+                }
+                else
+                {
+                    Destroy(MeshFilter.gameObject);
+                }
             }
         }
 
