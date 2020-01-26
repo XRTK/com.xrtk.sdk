@@ -78,7 +78,7 @@ MonoBehaviour:
     runtimePlatform: 1
     profile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56, type: 2}
   - dataProviderType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
+      reference: XRTK.WindowsMixedReality.Controllers.Hands.WindowsMixedRealityHandControllerDataProvider,
         XRTK.WindowsMixedReality
     dataProviderName: Windows Mixed Reality Hand Controller Data Provider
     priority: 1
