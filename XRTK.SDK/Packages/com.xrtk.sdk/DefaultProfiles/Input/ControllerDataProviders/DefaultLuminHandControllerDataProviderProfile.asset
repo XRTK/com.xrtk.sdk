@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84c7ed27db75624bac8d09795da13ad, type: 3}
   m_Name: DefaultLuminHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 1
-  handTrackingEnabled: 1
+  isCustomProfile: 0
   keyPointFilterLevel: 2
   poseFilterLevel: 2
