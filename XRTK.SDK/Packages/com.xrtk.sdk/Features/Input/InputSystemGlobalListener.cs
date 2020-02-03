@@ -12,7 +12,7 @@ namespace XRTK.SDK.Input
     /// <summary>
     /// This component ensures that all input events are forwarded to this <see cref="GameObject"/> when focus or gaze is not required.
     /// </summary>
-    public abstract class InputSystemGlobalListener : MonoBehaviour
+    public class InputSystemGlobalListener : MonoBehaviour
     {
         private bool lateInitialize = true;
 
