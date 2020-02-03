@@ -63,7 +63,7 @@ MonoBehaviour:
     dataProviderName: Lumin Controller Data Provider
     priority: 1
     runtimePlatform: 33
-    profile: {fileID: 11400000, guid: 46e3cbc14c3003149bd31c1b287d362d, type: 2}
+    profile: {fileID: 0}
   - dataProviderType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     dataProviderName: Oculus Controller Data Provider
@@ -90,3 +90,9 @@ MonoBehaviour:
     priority: 1
     runtimePlatform: 64
     profile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
+  - dataProviderType:
+      reference: XRTK.Lumin.Controllers.Hands.LuminHandControllerDataProvider, XRTK.Lumin
+    dataProviderName: Lumin Hand Controller Data Provider
+    priority: 1
+    runtimePlatform: 32
+    profile: {fileID: 11400000, guid: 1b116c9f84493294d823efe7cfb8700a, type: 2}
