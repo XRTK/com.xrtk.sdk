@@ -905,6 +905,7 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             PrimaryPointer.OverrideGrabPoint = grabOffset;
+            transform.GetColliderBounds(ref cachedColliders);
             transform.SetCollidersActive(false, ref cachedColliders);
             Collider.enabled = true;
             body.isKinematic = false;
@@ -943,9 +944,9 @@ namespace XRTK.SDK.Input.Handlers
 
             MixedRealityToolkit.InputSystem?.PopModalInputHandler();
 
-            transform.SetCollidersActive(true, ref cachedColliders);
-
             body.isKinematic = true;
+
+            transform.SetCollidersActive(true, ref cachedColliders);
 
             PrimaryPointer.SyncedTarget = null;
             PrimaryPointer.OverrideGrabPoint = null;
