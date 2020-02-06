@@ -905,7 +905,6 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             PrimaryPointer.OverrideGrabPoint = grabOffset;
-            transform.GetColliderBounds(ref cachedColliders);
             transform.SetCollidersActive(false, ref cachedColliders);
             Collider.enabled = true;
             body.isKinematic = false;
