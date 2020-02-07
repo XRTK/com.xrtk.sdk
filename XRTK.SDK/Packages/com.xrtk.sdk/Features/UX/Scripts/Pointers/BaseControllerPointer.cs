@@ -281,8 +281,57 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
+        private bool isFocusLocked = false;
+
         /// <inheritdoc />
-        public bool IsFocusLocked { get; set; }
+        public bool IsFocusLocked
+        {
+            get
+            {
+                if (isFocusLocked &&
+                    syncedTarget == null)
+                {
+                    isFocusLocked = false;
+                }
+
+                if (syncedTarget != null)
+                {
+                    if (syncedTarget.activeInHierarchy)
+                    {
+                        isFocusLocked = true;
+                    }
+                    else
+                    {
+                        isFocusLocked = false;
+                        syncedTarget = null;
+                    }
+                }
+
+                return isFocusLocked;
+            }
+            set
+            {
+                if (value && syncedTarget == null)
+                {
+                    if (Result.CurrentPointerTarget != null)
+                    {
+                        syncedTarget = Result.CurrentPointerTarget;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No Sync Target to lock onto!");
+                        return;
+                    }
+                }
+
+                if (!value && syncedTarget != null)
+                {
+                    syncedTarget = null;
+                }
+
+                isFocusLocked = value;
+            }
+        }
 
         /// <inheritdoc />
         public GameObject SyncedTarget
@@ -290,7 +339,7 @@ namespace XRTK.SDK.UX.Pointers
             get => syncedTarget = IsFocusLocked ? syncedTarget : null;
             set
             {
-                IsFocusLocked = value != null;
+                isFocusLocked = value != null;
                 syncedTarget = value;
             }
         }

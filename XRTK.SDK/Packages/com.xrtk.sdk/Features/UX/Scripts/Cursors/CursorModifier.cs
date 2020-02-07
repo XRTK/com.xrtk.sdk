@@ -199,13 +199,17 @@ namespace XRTK.SDK.UX.Cursors
 
         private void OnDisable()
         {
-            foreach (var inputSource in MixedRealityToolkit.InputSystem.DetectedInputSources)
+            if (MixedRealityToolkit.InputSystem != null)
             {
-                foreach (var pointer in inputSource.Pointers)
+                foreach (var inputSource in MixedRealityToolkit.InputSystem.DetectedInputSources)
                 {
-                    if (pointer.CursorModifier.HostTransform == HostTransform)
+                    foreach (var pointer in inputSource.Pointers)
                     {
-                        pointer.CursorModifier = null;
+                        if (pointer.CursorModifier != null &&
+                            pointer.CursorModifier.HostTransform == HostTransform)
+                        {
+                            pointer.CursorModifier = null;
+                        }
                     }
                 }
             }
