@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using XRTK.Definitions.Physics;
+using UnityEngine;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Services;
-using UnityEngine;
 
 namespace XRTK.SDK.UX.Cursors
 {
@@ -116,6 +115,8 @@ namespace XRTK.SDK.UX.Cursors
         /// <inheritdoc />
         public Vector3 GetModifiedPosition(IMixedRealityCursor cursor)
         {
+            Debug.Assert(gameObject.activeInHierarchy);
+
             if (SnapCursorPosition)
             {
                 // Snap if the targeted object has a cursor modifier that supports snapping
@@ -140,8 +141,9 @@ namespace XRTK.SDK.UX.Cursors
         /// <inheritdoc />
         public Quaternion GetModifiedRotation(IMixedRealityCursor cursor)
         {
-            RayStep lastStep = cursor.Pointer.Rays[cursor.Pointer.Rays.Length - 1];
-            Vector3 forward = UseGazeBasedNormal ? -lastStep.Direction : HostTransform.rotation * CursorNormalOffset;
+            Debug.Assert(gameObject.activeInHierarchy);
+            var lastStep = cursor.Pointer.Rays[cursor.Pointer.Rays.Length - 1];
+            var forward = UseGazeBasedNormal ? -lastStep.Direction : HostTransform.rotation * CursorNormalOffset;
 
             // Determine the cursor forward rotation
             return forward.magnitude > 0
@@ -152,12 +154,14 @@ namespace XRTK.SDK.UX.Cursors
         /// <inheritdoc />
         public Vector3 GetModifiedScale(IMixedRealityCursor cursor)
         {
+            Debug.Assert(gameObject.activeInHierarchy);
             return CursorScaleOffset;
         }
 
         /// <inheritdoc />
         public void GetModifiedTransform(IMixedRealityCursor cursor, out Vector3 position, out Quaternion rotation, out Vector3 scale)
         {
+            Debug.Assert(gameObject.activeInHierarchy);
             position = GetModifiedPosition(cursor);
             rotation = GetModifiedRotation(cursor);
             scale = GetModifiedScale(cursor);
@@ -191,6 +195,24 @@ namespace XRTK.SDK.UX.Cursors
         private void OnValidate()
         {
             Debug.Assert(HostTransform.GetComponent<Collider>() != null, $"A collider component is required on {hostTransform.gameObject.name} for the cursor modifier component on {gameObject.name} to function properly.");
+        }
+
+        private void OnDisable()
+        {
+            if (MixedRealityToolkit.InputSystem != null)
+            {
+                foreach (var inputSource in MixedRealityToolkit.InputSystem.DetectedInputSources)
+                {
+                    foreach (var pointer in inputSource.Pointers)
+                    {
+                        if (pointer.CursorModifier != null &&
+                            pointer.CursorModifier.HostTransform == HostTransform)
+                        {
+                            pointer.CursorModifier = null;
+                        }
+                    }
+                }
+            }
         }
 
         #endregion MonoBehaviour Implementaiton
