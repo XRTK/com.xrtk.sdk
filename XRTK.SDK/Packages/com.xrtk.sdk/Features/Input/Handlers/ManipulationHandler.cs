@@ -482,23 +482,31 @@ namespace XRTK.SDK.Input.Handlers
         {
             get
             {
+                var isSet = false;
+
                 if (BoundingBox != null &&
                     BoundingBox.BoundingBoxCollider != null)
                 {
-                    return BoundingBox.BoundingBoxCollider;
+                    thisCollider = BoundingBox.BoundingBoxCollider;
+                    isSet = true;
                 }
 
                 if (thisCollider == null)
                 {
                     thisCollider = gameObject.GetComponent<Collider>();
+                    isSet = true;
                 }
 
                 if (thisCollider == null)
                 {
                     thisCollider = gameObject.EnsureComponent<BoxCollider>();
+                    isSet = true;
                 }
 
-                transform.GetColliderBounds();
+                if (isSet)
+                {
+                    transform.GetColliderBounds(ref cachedColliders);
+                }
 
                 return thisCollider;
             }
@@ -556,6 +564,7 @@ namespace XRTK.SDK.Input.Handlers
         private float snappedVerticalPosition;
 
         private Transform snapTarget;
+        private Collider[] cachedColliders;
 
         #region Monobehaviour Implementation
 
@@ -896,8 +905,7 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             PrimaryPointer.OverrideGrabPoint = grabOffset;
-
-            transform.SetCollidersActive(false);
+            transform.SetCollidersActive(false, ref cachedColliders);
             Collider.enabled = true;
             body.isKinematic = false;
 
@@ -935,9 +943,9 @@ namespace XRTK.SDK.Input.Handlers
 
             MixedRealityToolkit.InputSystem?.PopModalInputHandler();
 
-            transform.SetCollidersActive(true);
-
             body.isKinematic = true;
+
+            transform.SetCollidersActive(true, ref cachedColliders);
 
             PrimaryPointer.SyncedTarget = null;
             PrimaryPointer.OverrideGrabPoint = null;
