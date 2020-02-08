@@ -12,7 +12,7 @@
   "src": "Assets/XRTK.Core",
   "author": "XRTK Team (https://github.com/XRTK)",
   "dependencies": {
-    "com.xrtk.core": "0.1.28",
+    "com.xrtk.core": "0.1.30",
     "com.unity.textmeshpro": "1.0.0"
   }
 }
