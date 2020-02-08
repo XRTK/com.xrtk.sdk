@@ -52,6 +52,9 @@ namespace XRTK.SDK.UX
 
             private int cachedTargetPrevLayer;
 
+            private Collider[] colliderCache;
+            private Collider[] parentColliderCache;
+
             /// <inheritdoc />
             void IMixedRealityPointerHandler.OnPointerDown(MixedRealityPointerEventData eventData)
             {
@@ -81,8 +84,8 @@ namespace XRTK.SDK.UX
                     cachedTargetPrevLayer = BoundingBoxParent.BoundingBoxCollider.gameObject.layer;
                     BoundingBoxParent.BoundingBoxCollider.transform.SetLayerRecursively(IgnoreRaycastLayer);
                     BoundingBoxParent.BoundingBoxCollider.enabled = false;
-                    BoundingBoxParent.transform.SetCollidersActive(false);
-                    transform.SetCollidersActive(false);
+                    BoundingBoxParent.transform.SetCollidersActive(false, ref parentColliderCache);
+                    transform.SetCollidersActive(false, ref colliderCache);
                     BoundingBoxParent.BoundingBoxCollider.enabled = true;
                     BoundingBoxParent.isManipulationEnabled = true;
                     eventData.Use();
@@ -103,8 +106,8 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.ResetHandleVisibility();
                     MixedRealityToolkit.InputSystem.PopModalInputHandler();
                     BoundingBoxParent.BoundingBoxCollider.transform.SetLayerRecursively(cachedTargetPrevLayer);
-                    BoundingBoxParent.transform.SetCollidersActive(true);
-                    transform.SetCollidersActive(true);
+                    BoundingBoxParent.transform.SetCollidersActive(true, ref parentColliderCache);
+                    transform.SetCollidersActive(true, ref colliderCache);
                     eventData.Use();
                 }
             }
@@ -552,6 +555,8 @@ namespace XRTK.SDK.UX
 
         private Vector3[] boundsCorners = new Vector3[8];
 
+        private Collider[] colliderCache;
+
         /// <summary>
         /// The current bounds corner positions.
         /// </summary>
@@ -994,7 +999,7 @@ namespace XRTK.SDK.UX
                 transform.rotation = Quaternion.identity;
                 Physics.SyncTransforms(); // Update collider bounds
 
-                var bounds = transform.GetColliderBounds(false);
+                var bounds = transform.GetColliderBounds(ref colliderCache, false);
 
                 BoundingBoxCollider = gameObject.AddComponent<BoxCollider>();
 
