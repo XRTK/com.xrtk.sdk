@@ -597,8 +597,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2591092903606399280}
   m_HandleRect: {fileID: 9221785712172736509}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1087,7 +1087,7 @@ Transform:
   m_GameObject: {fileID: 2161880003638299081}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 7059610919956172988}
   m_Father: {fileID: 0}
@@ -1124,16 +1124,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateLinkedTransform: 0
-  moveLerpTime: 0.1
-  rotateLerpTime: 0.1
+  moveLerpTime: 0.5
+  rotateLerpTime: 0.5
   scaleLerpTime: 0
   maintainScale: 1
   smoothing: 1
   lifetime: 0
   snapToGoalOnEnable: 1
   SolverHandler: {fileID: 5630857977071535010}
-  orientationType: 5
-  localOffset: {x: 0, y: 0, z: 1.5}
+  orientationType: 2
+  localOffset: {x: 0, y: 0, z: 2}
   worldOffset: {x: 0, y: 0, z: 0}
   useAngleSteppingForWorldOffset: 0
   tetherAngleSteps: 6
@@ -1167,8 +1167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logEntryTextColor: {r: 0, g: 0, b: 0, a: 1}
-  warningEntryTextColor: {r: 0.9607844, g: 0.7490196, b: 0, a: 1}
-  errorEntryTextColor: {r: 1, g: 0, b: 0, a: 1}
+  warningEntryTextColor: {r: 0.6, g: 0.46406245, b: 0, a: 1}
+  errorEntryTextColor: {r: 0.6, g: 0, b: 0, a: 1}
   maxEntries: 10
   logTextPrefab: {fileID: 720216609463083442, guid: d8c00e493400052458e2ec1b257fc827,
     type: 3}
@@ -1500,10 +1500,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-    m_PressedColor: {r: 0.16, g: 0.16, b: 0.16, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+    m_HighlightedColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+    m_PressedColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    m_SelectedColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     m_DisabledColor: {r: 1, g: 1, b: 1, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1519,7 +1519,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1163695198814191956}
+  m_TargetGraphic: {fileID: 5298575195987240790}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1549,7 +1549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.48, g: 0.48, b: 0.48, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1600,7 +1600,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.000061035156, y: -0.000091552734}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4780391842861944988
@@ -3199,7 +3199,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1278912945569988977}
   m_HandleRect: {fileID: 6647377600167767017}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
