@@ -5,7 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.Utilities;
 using XRTK.Extensions;
+using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Providers.Controllers.Hands;
+
+#if UNITY_EDITOR
+using XRTK.Utilities;
+#endif
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
@@ -56,6 +61,26 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             base.OnDisable();
         }
+
+#if UNITY_EDITOR
+
+        private void OnDrawGizmos()
+        {
+            IMixedRealityHandController handController = Controller as IMixedRealityHandController;
+            if (handController.TryGetBounds(TrackedHandBounds.Hand, out Bounds? handBounds))
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireCube(handBounds.Value.center, handBounds.Value.size);
+            }
+
+            if (handController.TryGetBounds(TrackedHandBounds.IndexFinger, out Bounds? indexFingerBounds))
+            {
+                Gizmos.color = Color.green;
+                GizmoUtilities.DrawWireCapsule(indexFingerBounds.Value.center, Quaternion.identity, .1f, 1f);
+            }
+        }
+
+#endif
 
         /// <inheritdoc />
         protected override void UpdateHandJointVisualization(HandData handData)
