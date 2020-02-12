@@ -19,7 +19,10 @@ namespace XRTK.SDK.UX.Controllers.Hands
     /// </summary>
     public class DefaultHandControllerVisualizer : BaseHandControllerVisualizer
     {
-        private Dictionary<TrackedHandJoint, Transform> jointTransforms = new Dictionary<TrackedHandJoint, Transform>();
+        private readonly Dictionary<TrackedHandJoint, Transform> jointTransforms = new Dictionary<TrackedHandJoint, Transform>();
+        private MeshFilter meshFilter;
+        private const float fingerColliderRadius = .007f;
+        private const int capsuleColliderZAxis = 2;
 
         [Header("Joint Visualization Settings")]
         [SerializeField]
@@ -43,21 +46,11 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [Tooltip("If this is not null and hand system supports hand meshes, use this mesh to render hand mesh.")]
         private GameObject handMeshPrefab = null;
 
-        /// <summary>
-        /// The mesh filter used for visualization.
-        /// </summary>
-        public MeshFilter MeshFilter { get; private set; }
-
-        /// <summary>
-        /// Provides read-only access to the joint transforms used for visualization.
-        /// </summary>
-        public IReadOnlyDictionary<TrackedHandJoint, Transform> JointTransforms => jointTransforms;
-
         /// <inheritdoc />
         protected override void OnDisable()
         {
-            ClearJoints();
-            ClearMesh();
+            ClearJointsVisualization();
+            ClearMeshVisualization();
 
             base.OnDisable();
         }
@@ -66,18 +59,18 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         private void OnDrawGizmos()
         {
-            IMixedRealityHandController handController = Controller as IMixedRealityHandController;
-            if (handController.TryGetBounds(TrackedHandBounds.Hand, out Bounds? handBounds))
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(handBounds.Value.center, handBounds.Value.size);
-            }
+            //IMixedRealityHandController handController = Controller as IMixedRealityHandController;
+            //if (handController.TryGetBounds(TrackedHandBounds.Hand, out HandBounds handBounds))
+            //{
+            //    Gizmos.color = Color.red;
+            //    Gizmos.DrawWireCube(handBounds.Bounds.center, handBounds.Bounds.size);
+            //}
 
-            if (handController.TryGetBounds(TrackedHandBounds.IndexFinger, out Bounds? indexFingerBounds))
-            {
-                Gizmos.color = Color.green;
-                GizmoUtilities.DrawWireCapsule(indexFingerBounds.Value.center, Quaternion.identity, .1f, 1f);
-            }
+            //if (handController.TryGetBounds(TrackedHandBounds.IndexFinger, out HandBounds indexFingerBounds))
+            //{
+            //    Gizmos.color = Color.green;
+            //    GizmoUtilities.DrawWireCapsule(indexFingerBounds.Bounds.center, indexFingerBounds.Rotation, .01f, indexFingerBounds.Bounds.size.magnitude);
+            //}
         }
 
 #endif
@@ -87,21 +80,24 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             if (!EnableHandJointVisualization)
             {
-                ClearJoints();
+                ClearJointsVisualization();
             }
             else
             {
                 IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses = handData.Joints.ToJointPoseDictionary();
                 foreach (TrackedHandJoint handJoint in jointPoses.Keys)
                 {
-                    if (handJoint != TrackedHandJoint.None && TryGetOrCreateJoint(handJoint, out Transform jointTransform))
+                    if (handJoint != TrackedHandJoint.None)
                     {
+                        Transform jointTransform = GetOrCreateJoint(handJoint);
                         MixedRealityPose jointPose = jointPoses[handJoint];
                         jointTransform.localPosition = jointPose.Position;
                         jointTransform.localRotation = jointPose.Rotation;
                     }
                 }
             }
+
+            UpdateHandColliders();
         }
 
         /// <inheritdoc />
@@ -110,13 +106,13 @@ namespace XRTK.SDK.UX.Controllers.Hands
             HandMeshData handMeshData = handData.Mesh;
             if (!EnableHandMeshVisualization || handMeshData == null || handMeshData.Empty)
             {
-                ClearMesh();
+                ClearMeshVisualization();
                 return;
             }
 
-            if (MeshFilter != null || CreateMeshFilter())
+            if (meshFilter != null || CreateMeshFilter())
             {
-                Mesh mesh = MeshFilter.mesh;
+                Mesh mesh = meshFilter.mesh;
 
                 mesh.vertices = handMeshData.Vertices;
                 mesh.normals = handMeshData.Normals;
@@ -127,35 +123,174 @@ namespace XRTK.SDK.UX.Controllers.Hands
                     mesh.uv = handMeshData.Uvs;
                 }
 
-                MeshFilter.transform.position = handMeshData.Position;
-                MeshFilter.transform.rotation = handMeshData.Rotation;
+                meshFilter.transform.position = handMeshData.Position;
+                meshFilter.transform.rotation = handMeshData.Rotation;
             }
         }
 
-        private void ClearJoints()
+        #region Hand Colliders / Physics
+
+        private void UpdateHandColliders()
+        {
+            IMixedRealityHandController handController = Controller as IMixedRealityHandController;
+
+            if (handController.TryGetBounds(TrackedHandBounds.Thumb, out Bounds[] thumbBounds))
+            {
+                // Thumb bounds are made up of two capsule collider bounds entries.
+                Bounds knuckleToMiddle = thumbBounds[0];
+                Bounds middleToTip = thumbBounds[1];
+
+                GameObject thumbKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.ThumbMetacarpalJoint).gameObject;
+                CapsuleCollider capsuleCollider = thumbKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, thumbKnuckleGameObject.transform);
+
+                GameObject thumbMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.ThumbProximalJoint).gameObject;
+                capsuleCollider = thumbMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, middleToTip, thumbMiddleGameObject.transform);
+            }
+
+            if (handController.TryGetBounds(TrackedHandBounds.IndexFinger, out Bounds[] indexFingerBounds))
+            {
+                // Index finger bounds are made up of two capsule collider bounds entries.
+                Bounds knuckleToMiddle = indexFingerBounds[0];
+                Bounds middleToTip = indexFingerBounds[1];
+
+                GameObject indexKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.IndexKnuckle).gameObject;
+                CapsuleCollider capsuleCollider = indexKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, indexKnuckleGameObject.transform);
+
+                GameObject indexMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.IndexMiddleJoint).gameObject;
+                capsuleCollider = indexMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, middleToTip, indexMiddleGameObject.transform);
+            }
+
+            if (handController.TryGetBounds(TrackedHandBounds.MiddleFinger, out Bounds[] middleFingerBounds))
+            {
+                // Middle finger bounds are made up of two capsule collider bounds entries.
+                Bounds knuckleToMiddle = middleFingerBounds[0];
+                Bounds middleToTip = middleFingerBounds[1];
+
+                GameObject middleKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleKnuckle).gameObject;
+                CapsuleCollider capsuleCollider = middleKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, middleKnuckleGameObject.transform);
+
+                GameObject middleMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleMiddleJoint).gameObject;
+                capsuleCollider = middleMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, middleToTip, middleMiddleGameObject.transform);
+            }
+
+            if (handController.TryGetBounds(TrackedHandBounds.RingFinger, out Bounds[] ringFingerBounds))
+            {
+                // Ring finger bounds are made up of two capsule collider bounds entries.
+                Bounds knuckleToMiddle = ringFingerBounds[0];
+                Bounds middleToTip = ringFingerBounds[1];
+
+                GameObject ringKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.RingKnuckle).gameObject;
+                CapsuleCollider capsuleCollider = ringKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, ringKnuckleGameObject.transform);
+
+                GameObject ringMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.RingMiddleJoint).gameObject;
+                capsuleCollider = ringMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, middleToTip, ringMiddleGameObject.transform);
+            }
+
+            if (handController.TryGetBounds(TrackedHandBounds.Pinky, out Bounds[] pinkyFingerBounds))
+            {
+                // Pinky finger bounds are made up of two capsule collider bounds entries.
+                Bounds knuckleToMiddle = pinkyFingerBounds[0];
+                Bounds middleToTip = pinkyFingerBounds[1];
+
+                GameObject pinkyKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyKnuckle).gameObject;
+                CapsuleCollider capsuleCollider = pinkyKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, pinkyKnuckleGameObject.transform);
+
+                GameObject pinkyMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyMiddleJoint).gameObject;
+                capsuleCollider = pinkyMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, middleToTip, pinkyMiddleGameObject.transform);
+            }
+
+            if (handController.TryGetBounds(TrackedHandBounds.Palm, out Bounds[] palmBounds))
+            {
+                // For the palm we create a composite collider using a capsule collider per
+                // finger for the area metacarpal <-> knuckle.
+                Bounds indexPalmBounds = palmBounds[0];
+                GameObject indexMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.IndexMetacarpal).gameObject;
+                CapsuleCollider capsuleCollider = indexMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, indexPalmBounds, indexMetacarpalGameObject.transform);
+
+                Bounds middlePalmBounds = palmBounds[1];
+                GameObject middleMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleMetacarpal).gameObject;
+                capsuleCollider = middleMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, middlePalmBounds, middleMetacarpalGameObject.transform);
+
+                Bounds ringPalmBounds = palmBounds[2];
+                GameObject ringMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.RingMetacarpal).gameObject;
+                capsuleCollider = ringMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, ringPalmBounds, ringMetacarpalGameObject.transform);
+
+                Bounds pinkyPalmBounds = palmBounds[3];
+                GameObject pinkyMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyMetacarpal).gameObject;
+                capsuleCollider = pinkyMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                ConfigureCapsuleCollider(capsuleCollider, pinkyPalmBounds, pinkyMetacarpalGameObject.transform);
+            }
+
+            if (handController.TryGetBounds(TrackedHandBounds.Hand, out Bounds[] handBounds))
+            {
+                // For full hand bounds we'll only get one bounds entry, which is a box
+                // encapsulating the whole hand.
+                Bounds fullHandBounds = handBounds[0];
+                BoxCollider boxCollider = GameObjectProxy.GetOrAddComponent<BoxCollider>();
+                boxCollider.center = fullHandBounds.center;
+                boxCollider.size = fullHandBounds.size;
+            }
+        }
+
+        private void ConfigureCapsuleCollider(CapsuleCollider collider, Bounds bounds, Transform jointTransform)
+        {
+            collider.radius = fingerColliderRadius;
+            collider.direction = capsuleColliderZAxis;
+            collider.height = bounds.size.magnitude;
+            collider.center = jointTransform.transform.InverseTransformPoint(bounds.center);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Clears any created joint visualization objects by destorying
+        /// all child transforms of a given joint transform.
+        /// </summary>
+        private void ClearJointsVisualization()
         {
             foreach (var joint in jointTransforms)
             {
-                if (Application.isEditor)
+                // We want to keep the joint transform here,
+                // it's not used for visualization and might still be needed
+                // for physics etc. Just delete child transforms, which were
+                // instantiated from visualization prefabs.
+                while (joint.Value.childCount > 0)
                 {
-                    DestroyImmediate(joint.Value.gameObject);
-                }
-                else
-                {
-                    Destroy(joint.Value.gameObject);
+                    if (Application.isEditor)
+                    {
+                        DestroyImmediate(joint.Value.GetChild(0).gameObject);
+                    }
+                    else
+                    {
+                        Destroy(joint.Value.GetChild(0).gameObject);
+                    }
                 }
             }
-
-            jointTransforms.Clear();
         }
 
-        private bool TryGetOrCreateJoint(TrackedHandJoint handJoint, out Transform jointTransform)
+        private Transform GetOrCreateJoint(TrackedHandJoint handJoint)
         {
             if (jointTransforms.TryGetValue(handJoint, out Transform existingJointTransform))
             {
-                jointTransform = existingJointTransform;
-                return true;
+                return existingJointTransform;
             }
+
+            Transform jointTransform = new GameObject($"{handJoint} Proxy Transform").transform;
+            jointTransform.parent = transform;
+            jointTransforms.Add(handJoint, jointTransform.transform);
 
             GameObject prefab = jointPrefab;
             if (handJoint == TrackedHandJoint.Palm)
@@ -170,38 +305,33 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             if (prefab != null)
             {
-                jointTransform = Instantiate(prefab).transform;
-                jointTransform.name = $"{handJoint} Proxy Transform";
-                jointTransform.parent = transform;
-                jointTransforms.Add(handJoint, jointTransform.transform);
-
+                GameObject jointVisualization = Instantiate(prefab, jointTransform);
                 if (handJoint == TrackedHandJoint.IndexTip)
                 {
-                    Renderer indexJointRenderer = jointTransform.GetComponent<Renderer>();
+                    Renderer indexJointRenderer = jointVisualization.GetComponent<Renderer>();
                     Material indexMaterial = indexJointRenderer.material;
                     indexMaterial.color = indexFingertipColor;
                     indexJointRenderer.material = indexMaterial;
                 }
-
-                return true;
             }
 
-            Debug.LogError($"Failed to create {handJoint} game object for hand joint visualization. Prefab not assigned.");
-            jointTransform = null;
-            return false;
+            return jointTransform;
         }
 
-        private void ClearMesh()
+        /// <summary>
+        /// Clears any existing hand mesh visualzation.
+        /// </summary>
+        private void ClearMeshVisualization()
         {
-            if (MeshFilter != null)
+            if (meshFilter != null)
             {
                 if (Application.isEditor)
                 {
-                    DestroyImmediate(MeshFilter.gameObject);
+                    DestroyImmediate(meshFilter.gameObject);
                 }
                 else
                 {
-                    Destroy(MeshFilter.gameObject);
+                    Destroy(meshFilter.gameObject);
                 }
             }
         }
@@ -210,7 +340,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             if (handMeshPrefab != null)
             {
-                MeshFilter = Instantiate(handMeshPrefab).GetComponent<MeshFilter>();
+                meshFilter = Instantiate(handMeshPrefab).GetComponent<MeshFilter>();
                 return true;
             }
 
