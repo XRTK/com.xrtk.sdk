@@ -1,12 +1,15 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.Utilities;
+using XRTK.EventDatum.Input;
 using XRTK.Extensions;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Providers.Controllers.Hands;
+using XRTK.SDK.Input.Handlers;
 
 #if UNITY_EDITOR
 using XRTK.Utilities;
@@ -17,13 +20,21 @@ namespace XRTK.SDK.UX.Controllers.Hands
     /// <summary>
     /// Default hand controller visualizer implementation.
     /// </summary>
-    public class DefaultHandControllerVisualizer : BaseHandControllerVisualizer
+    public class DefaultHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
         private readonly Dictionary<TrackedHandJoint, Transform> jointTransforms = new Dictionary<TrackedHandJoint, Transform>();
         private MeshFilter meshFilter;
-        private new Rigidbody rigidbody;
         private const float fingerColliderRadius = .007f;
         private const int capsuleColliderZAxis = 2;
+        private GameObject root;
+
+        [SerializeField]
+        [Tooltip("Renders the hand joints. Note: this could reduce performance.")]
+        private bool enableHandJointVisualization = true;
+
+        [SerializeField]
+        [Tooltip("Renders the hand mesh, if available. Note: this could reduce performance.")]
+        private bool enableHandMeshVisualization = false;
 
         [Header("Joint Visualization Settings")]
         [SerializeField]
@@ -47,11 +58,40 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [Tooltip("If this is not null and hand system supports hand meshes, use this mesh to render hand mesh.")]
         private GameObject handMeshPrefab = null;
 
+        /// <summary>
+        /// Is hand joint rendering enabled?
+        /// </summary>
+        protected bool EnableHandJointVisualization => enableHandJointVisualization;
+
+        /// <summary>
+        /// Is hand mesh rendering enabled?
+        /// </summary>
+        protected bool EnableHandMeshVisualization => enableHandMeshVisualization;
+
+        /// <inheritdoc />
+        public GameObject GameObjectProxy
+        {
+            get
+            {
+                try
+                {
+                    return gameObject;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
+
+        public GameObject PhysicsProxy { get; private set; }
+
         /// <inheritdoc />
         protected override void OnDisable()
         {
             ClearJointsVisualization();
             ClearMeshVisualization();
+            ClearPhysics();
 
             base.OnDisable();
         }
@@ -77,7 +117,20 @@ namespace XRTK.SDK.UX.Controllers.Hands
 #endif
 
         /// <inheritdoc />
-        protected override void UpdateHandJointVisualization(HandData handData)
+        public override void OnInputChanged(InputEventData<HandData> eventData)
+        {
+            if (eventData.Handedness != Controller.ControllerHandedness)
+            {
+                return;
+            }
+
+            VerifyPhysicsConfiguration();
+            HandData handData = eventData.InputData;
+            UpdateHandJointVisualization(handData);
+            UpdateHansMeshVisualization(handData);
+        }
+
+        private void UpdateHandJointVisualization(HandData handData)
         {
             if (!EnableHandJointVisualization)
             {
@@ -98,12 +151,10 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 }
             }
 
-            VerifyPhysicsConfiguration();
             UpdateHandColliders();
         }
 
-        /// <inheritdoc />
-        protected override void UpdateHansMeshVisualization(HandData handData)
+        private void UpdateHansMeshVisualization(HandData handData)
         {
             HandMeshData handMeshData = handData.Mesh;
             if (!EnableHandMeshVisualization || handMeshData == null || handMeshData.Empty)
@@ -134,12 +185,29 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         private void VerifyPhysicsConfiguration()
         {
-            if (rigidbody == null)
+            if (PhysicsProxy != null)
             {
-                rigidbody = GameObjectProxy.GetOrAddComponent<Rigidbody>();
-                rigidbody.isKinematic = true;
-                rigidbody.useGravity = false;
+                return;
             }
+
+            PhysicsProxy = new GameObject($"{GameObjectProxy.name}_PhysicsProxy");
+            PhysicsProxy.transform.parent = GameObjectProxy.transform.parent;
+
+            // Setup the kinematic rigidbody on the actual controller game object.
+            Rigidbody controllerRigidbody = GameObjectProxy.GetOrAddComponent<Rigidbody>();
+            controllerRigidbody.isKinematic = true;
+            controllerRigidbody.useGravity = false;
+
+            // Make the physics proxy a fixed joint rigidbody to the controller.
+            Rigidbody physicsRigidbody = PhysicsProxy.GetOrAddComponent<Rigidbody>();
+            physicsRigidbody.mass = float.MaxValue;
+            FixedJoint fixedJoint = PhysicsProxy.GetOrAddComponent<FixedJoint>();
+            fixedJoint.connectedBody = controllerRigidbody;
+            fixedJoint.breakForce = float.MaxValue;
+            fixedJoint.breakTorque = float.MaxValue;
+
+            // TODO: Only do this if hand physics enabled.
+            root = PhysicsProxy;
         }
 
         private void UpdateHandColliders()
@@ -246,15 +314,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 ConfigureCapsuleCollider(capsuleCollider, pinkyPalmBounds, pinkyMetacarpalGameObject.transform);
             }
 
-            if (handController.TryGetBounds(TrackedHandBounds.Hand, out Bounds[] handBounds))
-            {
-                // For full hand bounds we'll only get one bounds entry, which is a box
-                // encapsulating the whole hand.
-                Bounds fullHandBounds = handBounds[0];
-                BoxCollider boxCollider = GameObjectProxy.GetOrAddComponent<BoxCollider>();
-                boxCollider.center = fullHandBounds.center;
-                boxCollider.size = fullHandBounds.size;
-            }
+            //if (handController.TryGetBounds(TrackedHandBounds.Hand, out Bounds[] handBounds))
+            //{
+            //    // For full hand bounds we'll only get one bounds entry, which is a box
+            //    // encapsulating the whole hand.
+            //    Bounds fullHandBounds = handBounds[0];
+            //    BoxCollider boxCollider = root.GetOrAddComponent<BoxCollider>();
+            //    boxCollider.center = fullHandBounds.center;
+            //    boxCollider.size = fullHandBounds.size;
+            //}
         }
 
         private void ConfigureCapsuleCollider(CapsuleCollider collider, Bounds bounds, Transform jointTransform)
@@ -293,6 +361,42 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
         }
 
+        /// <summary>
+        /// Clears any existing hand mesh visualzation.
+        /// </summary>
+        private void ClearMeshVisualization()
+        {
+            if (meshFilter != null)
+            {
+                if (Application.isEditor)
+                {
+                    DestroyImmediate(meshFilter.gameObject);
+                }
+                else
+                {
+                    Destroy(meshFilter.gameObject);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears any physics related resources.
+        /// </summary>
+        private void ClearPhysics()
+        {
+            if (PhysicsProxy != null)
+            {
+                if (Application.isEditor)
+                {
+                    DestroyImmediate(PhysicsProxy);
+                }
+                else
+                {
+                    Destroy(PhysicsProxy);
+                }
+            }
+        }
+
         private Transform GetOrCreateJoint(TrackedHandJoint handJoint)
         {
             if (jointTransforms.TryGetValue(handJoint, out Transform existingJointTransform))
@@ -301,7 +405,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
 
             Transform jointTransform = new GameObject($"{handJoint} Proxy Transform").transform;
-            jointTransform.parent = transform;
+            jointTransform.parent = root.transform;
             jointTransforms.Add(handJoint, jointTransform.transform);
 
             GameObject prefab = jointPrefab;
@@ -330,29 +434,12 @@ namespace XRTK.SDK.UX.Controllers.Hands
             return jointTransform;
         }
 
-        /// <summary>
-        /// Clears any existing hand mesh visualzation.
-        /// </summary>
-        private void ClearMeshVisualization()
-        {
-            if (meshFilter != null)
-            {
-                if (Application.isEditor)
-                {
-                    DestroyImmediate(meshFilter.gameObject);
-                }
-                else
-                {
-                    Destroy(meshFilter.gameObject);
-                }
-            }
-        }
-
         private bool CreateMeshFilter()
         {
             if (handMeshPrefab != null)
             {
                 meshFilter = Instantiate(handMeshPrefab).GetComponent<MeshFilter>();
+                meshFilter.transform.parent = root.transform;
                 return true;
             }
 
