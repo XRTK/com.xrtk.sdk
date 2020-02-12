@@ -21,6 +21,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
     {
         private readonly Dictionary<TrackedHandJoint, Transform> jointTransforms = new Dictionary<TrackedHandJoint, Transform>();
         private MeshFilter meshFilter;
+        private new Rigidbody rigidbody;
         private const float fingerColliderRadius = .007f;
         private const int capsuleColliderZAxis = 2;
 
@@ -97,6 +98,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 }
             }
 
+            VerifyPhysicsConfiguration();
             UpdateHandColliders();
         }
 
@@ -129,6 +131,16 @@ namespace XRTK.SDK.UX.Controllers.Hands
         }
 
         #region Hand Colliders / Physics
+
+        private void VerifyPhysicsConfiguration()
+        {
+            if (rigidbody == null)
+            {
+                rigidbody = GameObjectProxy.GetOrAddComponent<Rigidbody>();
+                rigidbody.isKinematic = true;
+                rigidbody.useGravity = false;
+            }
+        }
 
         private void UpdateHandColliders()
         {
