@@ -6,13 +6,21 @@ using XRTK.Definitions.Physics;
 using XRTK.Utilities.Lines.DataProviders;
 using XRTK.Utilities.Lines.Renderers;
 
+#if PLATFORM_LUMIN
+using UnityEngine.XR.MagicLeap;
+#endif
+
 namespace XRTK.SDK.UX.Pointers
 {
     /// <summary>
     /// A simple line pointer for drawing lines from the input source origin to the current pointer position.
     /// </summary>
     public class LinePointer : BaseControllerPointer
-    {
+    {   
+        [Tooltip("Reference to the Beam's visual state animator.")]
+        [SerializeField]
+        protected Animator BeamAnimator = null;
+
         [SerializeField]
         protected Gradient LineColorSelected = new Gradient();
 
@@ -45,6 +53,9 @@ namespace XRTK.SDK.UX.Pointers
         [Tooltip("If no line renderers are specified, this array will be auto-populated on startup.")]
         private BaseMixedRealityLineRenderer[] lineRenderers;
 
+        [SerializeField]
+        protected bool HapticPulse = false;
+
         /// <summary>
         /// The current line renderers that this pointer is utilizing.
         /// </summary>
@@ -58,7 +69,10 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         private Vector3 syncedPosition;
+        private int holdCounter;
+        private int rolloverCounter;
 
+    
         private void CheckInitialization()
         {
             if (lineBase == null)
@@ -87,12 +101,14 @@ namespace XRTK.SDK.UX.Pointers
         protected virtual void OnValidate()
         {
             CheckInitialization();
+
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             CheckInitialization();
+
         }
 
         #endregion MonoBehaviour Implementation
@@ -158,7 +174,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.OnPostRaycast();
 
-            Gradient lineColor;
+            Gradient lineColor = LineColorValid;
 
             if (!IsInteractionEnabled)
             {
@@ -176,24 +192,84 @@ namespace XRTK.SDK.UX.Pointers
 
             // Used to ensure the line doesn't extend beyond the cursor
             float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0f;
+            
+            if (IsSelectPressed)
+            {
+                BeamAnimator.SetBool("triggerPull", true);
+
+                if(holdCounter<1f)
+                {
+                    #if PLATFORM_LUMIN     
+                    MLInput.GetController(0).StartFeedbackPatternVibe(MLInputControllerFeedbackPatternVibe.Click , MLInputControllerFeedbackIntensity.Low);
+                    #endif
+                    holdCounter++;
+                }
+
+                else
+                {
+                    MLInput.GetController(0).StopFeedbackPatternVibe();    
+                }
+            }
+
+            else 
+            {
+                BeamAnimator.SetBool("triggerPull", false);
+                holdCounter = 0;    
+            }
 
             // If we hit something
             if (Result.CurrentPointerTarget != null)
             {
                 clearWorldLength = Result.RayDistance;
-                lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
+                
+                //If object is marked as interactable (ie, a button that's not marked as inactive)
+                if(Result.CurrentPointerTarget.gameObject.tag == "Interactable")
+                {    
+                    lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
+                    BeamAnimator.SetBool("rollover", true);
+                    BeamAnimator.SetBool("interactable", true);
+                                        
+                   if(rolloverCounter<1f)
+                   {
+                       #if PLATFORM_LUMIN     
+                       MLInput.GetController(0).StartFeedbackPatternVibe(MLInputControllerFeedbackPatternVibe.Click , MLInputControllerFeedbackIntensity.Low);
+                       #endif
+                       rolloverCounter++;
+                   }
+
+                   else
+                   {
+                       MLInput.GetController(0).StopFeedbackPatternVibe(); 
+                       rolloverCounter = 0;     
+                   }
+                }
+                
+                //If object is collideable, but isn't marked as an interactable object.
+                else if(Result.CurrentPointerTarget.gameObject.tag == "Untagged")
+                {
+                    lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
+                    BeamAnimator.SetBool("rollover", false);
+                    BeamAnimator.SetBool("interactable", false);
+                }
+                
+                //If object is marked as disabled.
+                else if(Result.CurrentPointerTarget.gameObject.tag == "Disabled")
+                {
+                    lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
+                    BeamAnimator.SetBool("rollover", true);
+                    BeamAnimator.SetBool("interactable", false); 
+                }
             }
+
+            //If nothing is targeted.
             else
             {
                 clearWorldLength = PointerExtent;
-                lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
+                lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
+                BeamAnimator.SetBool("rollover", false);
+                BeamAnimator.SetBool("interactable", false);
             }
-
-            if (IsFocusLocked)
-            {
-                lineColor = LineColorLockFocus;
-            }
-
+        
             int maxClampLineSteps = LineCastResolution;
 
             for (var i = 0; i < lineRenderers.Length; i++)
@@ -203,6 +279,20 @@ namespace XRTK.SDK.UX.Pointers
                 lineRenderer.enabled = true;
                 maxClampLineSteps = Mathf.Max(maxClampLineSteps, lineRenderer.LineStepCount);
                 lineRenderer.LineColor = lineColor;
+            }
+
+
+            //This begins when the user "presses" over an interactable object.
+            if (IsFocusLocked)
+            {
+                lineColor = LineColorLockFocus;
+                BeamAnimator.SetBool("pressed", true);
+               
+            }
+
+            else 
+            {
+                BeamAnimator.SetBool("pressed", false);  
             }
 
             // If focus is locked, we're sticking to the target

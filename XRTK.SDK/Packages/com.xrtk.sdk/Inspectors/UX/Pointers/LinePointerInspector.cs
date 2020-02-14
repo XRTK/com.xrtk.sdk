@@ -11,6 +11,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
     {
         private const int maxRecommendedLinecastResolution = 20;
 
+        private SerializedProperty beamAnimator;
         private SerializedProperty lineColorSelected;
         private SerializedProperty lineColorValid;
         private SerializedProperty lineColorInvalid;
@@ -18,6 +19,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty lineColorLockFocus;
         private SerializedProperty lineCastResolution;
         private SerializedProperty lineRenderers;
+        private SerializedProperty hapticPulse;
 
         private bool linePointerFoldout = true;
 
@@ -25,6 +27,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         {
             base.OnEnable();
 
+            beamAnimator = serializedObject.FindProperty("BeamAnimator");
             lineColorSelected = serializedObject.FindProperty("LineColorSelected");
             lineColorValid = serializedObject.FindProperty("LineColorValid");
             lineColorInvalid = serializedObject.FindProperty("LineColorInvalid");
@@ -32,6 +35,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             lineColorLockFocus = serializedObject.FindProperty("LineColorLockFocus");
             lineCastResolution = serializedObject.FindProperty("LineCastResolution");
             lineRenderers = serializedObject.FindProperty("lineRenderers");
+            hapticPulse = serializedObject.FindProperty("HapticPulse");
         }
 
         /// <inheritdoc />
@@ -52,7 +56,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 {
                     EditorGUILayout.LabelField($"Note: values above {maxRecommendedLinecastResolution} should only be used when your line is expected to be highly non-uniform.", EditorStyles.miniLabel);
                 }
-
+                EditorGUILayout.PropertyField(beamAnimator);
                 EditorGUILayout.PropertyField(lineCastResolution);
                 EditorGUILayout.PropertyField(lineColorSelected);
                 EditorGUILayout.PropertyField(lineColorValid);
@@ -60,6 +64,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
                 EditorGUILayout.PropertyField(lineColorNoTarget);
                 EditorGUILayout.PropertyField(lineColorLockFocus);
                 EditorGUILayout.PropertyField(lineRenderers, true);
+                EditorGUILayout.PropertyField(hapticPulse, false);
                 EditorGUI.indentLevel--;
             }
 
