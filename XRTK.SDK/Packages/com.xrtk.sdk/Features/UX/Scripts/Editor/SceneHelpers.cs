@@ -1,0 +1,23 @@
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
+using UnityEditor;
+using UnityEngine;
+
+namespace XRTK.SDK.UX.Utilities
+{
+    public class SceneHelpers
+    {
+        /// <summary>
+        /// Simple scene helper to create the beginnings of a scene, creating the scene root and a floor.
+        /// </summary>
+        [MenuItem("Mixed Reality Toolkit/Tools/SDK/Create Floor", false, 1)]
+        public static void CreateFloor()
+        {
+            var sceneRoot = new GameObject("Scene Objects");
+            var floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            floor.name = "Ground";
+            floor.transform.SetParent(sceneRoot.transform);
+        }
+    }
+}
