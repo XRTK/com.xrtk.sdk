@@ -26,15 +26,11 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private const float fingerColliderRadius = .007f;
         private const int capsuleColliderZAxis = 2;
 
+        [Header("Joint Visualization Settings")]
         [SerializeField]
         [Tooltip("Renders the hand joints. Note: this could reduce performance.")]
         private bool enableHandJointVisualization = true;
 
-        [SerializeField]
-        [Tooltip("Renders the hand mesh, if available. Note: this could reduce performance.")]
-        private bool enableHandMeshVisualization = false;
-
-        [Header("Joint Visualization Settings")]
         [SerializeField]
         [Tooltip("The joint prefab to use.")]
         private GameObject jointPrefab = null;
@@ -52,6 +48,10 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private Color indexFingertipColor = Color.cyan;
 
         [Header("Mesh Visualization Settings")]
+        [SerializeField]
+        [Tooltip("Renders the hand mesh, if available. Note: this could reduce performance.")]
+        private bool enableHandMeshVisualization = false;
+
         [SerializeField]
         [Tooltip("If this is not null and hand system supports hand meshes, use this mesh to render hand mesh.")]
         private GameObject handMeshPrefab = null;
