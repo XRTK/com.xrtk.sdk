@@ -56,16 +56,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [Tooltip("If this is not null and hand system supports hand meshes, use this mesh to render hand mesh.")]
         private GameObject handMeshPrefab = null;
 
-        /// <summary>
-        /// Is hand joint rendering enabled?
-        /// </summary>
-        protected bool EnableHandJointVisualization => enableHandJointVisualization;
-
-        /// <summary>
-        /// Is hand mesh rendering enabled?
-        /// </summary>
-        protected bool EnableHandMeshVisualization => enableHandMeshVisualization;
-
         /// <inheritdoc />
         public GameObject GameObjectProxy
         {
@@ -107,14 +97,21 @@ namespace XRTK.SDK.UX.Controllers.Hands
             }
         }
 
-        /// <inheritdoc />
-        protected override void OnDisable()
+        protected override void OnDestroy()
         {
-            ClearJointsVisualization();
-            ClearMeshVisualization();
-            ClearPhysics();
+            if (GameObjectProxy != HandVisualizationGameObject)
+            {
+                if (Application.isEditor)
+                {
+                    DestroyImmediate(HandVisualizationGameObject);
+                }
+                else
+                {
+                    Destroy(HandVisualizationGameObject);
+                }
+            }
 
-            base.OnDisable();
+            base.OnDestroy();
         }
 
         /// <inheritdoc />
@@ -139,7 +136,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         private void UpdateHandJointVisualization(HandData handData)
         {
-            if (!EnableHandJointVisualization)
+            if (!enableHandJointVisualization)
             {
                 ClearJointsVisualization();
             }
@@ -162,7 +159,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private void UpdateHansMeshVisualization(HandData handData)
         {
             HandMeshData handMeshData = handData.Mesh;
-            if (!EnableHandMeshVisualization || handMeshData == null || handMeshData.Empty)
+            if (!enableHandMeshVisualization || handMeshData == null || handMeshData.Empty)
             {
                 ClearMeshVisualization();
                 return;
@@ -358,58 +355,12 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// </summary>
         private void ClearJointsVisualization()
         {
-            foreach (var joint in jointTransforms)
+            for (int i = 0; i < BaseHandController.JointCount; i++)
             {
-                // We want to keep the joint transform here,
-                // it's not used for visualization and might still be needed
-                // for physics etc. Just delete child transforms, which were
-                // instantiated from visualization prefabs.
-                while (joint.Value.childCount > 0)
+                TrackedHandJoint trackedHandJoint = (TrackedHandJoint)i;
+                if (jointTransforms.ContainsKey(trackedHandJoint))
                 {
-                    if (Application.isEditor)
-                    {
-                        DestroyImmediate(joint.Value.GetChild(0).gameObject);
-                    }
-                    else
-                    {
-                        Destroy(joint.Value.GetChild(0).gameObject);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Clears any existing hand mesh visualzation.
-        /// </summary>
-        private void ClearMeshVisualization()
-        {
-            if (meshFilter != null)
-            {
-                if (Application.isEditor)
-                {
-                    DestroyImmediate(meshFilter.gameObject);
-                }
-                else
-                {
-                    Destroy(meshFilter.gameObject);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Clears any physics related resources.
-        /// </summary>
-        private void ClearPhysics()
-        {
-            if (PhysicsCompanionGameObject != null)
-            {
-                if (Application.isEditor)
-                {
-                    DestroyImmediate(PhysicsCompanionGameObject);
-                }
-                else
-                {
-                    Destroy(PhysicsCompanionGameObject);
+                    jointTransforms[trackedHandJoint].gameObject.SetActive(false);
                 }
             }
         }
@@ -418,6 +369,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             if (jointTransforms.TryGetValue(handJoint, out Transform existingJointTransform))
             {
+                existingJointTransform.gameObject.SetActive(true);
                 return existingJointTransform;
             }
 
@@ -462,6 +414,21 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             Debug.LogError($"Failed to create mesh filter for hand mesh visualization. No prefab assigned.");
             return false;
+        }
+
+        private void ClearMeshVisualization()
+        {
+            if (meshFilter != null)
+            {
+                if (Application.isEditor)
+                {
+                    DestroyImmediate(meshFilter.gameObject);
+                }
+                else
+                {
+                    Destroy(meshFilter.gameObject);
+                }
+            }
         }
     }
 }
