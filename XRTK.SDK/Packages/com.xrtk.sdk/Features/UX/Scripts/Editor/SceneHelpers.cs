@@ -14,10 +14,15 @@ namespace XRTK.SDK.UX.Utilities
         [MenuItem("Mixed Reality Toolkit/Tools/SDK/Create Floor", false, 1)]
         public static void CreateFloor()
         {
-            var sceneRoot = new GameObject("Scene Objects");
-            var floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            floor.name = "Ground";
-            floor.transform.SetParent(sceneRoot.transform);
+            //check if there is already a Scene Objects GO
+            var sceneRoot = GameObject.Find("Scene Objects");
+            if(!sceneRoot)
+            {
+                sceneRoot = new GameObject("Scene Objects");
+                var floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
+                floor.name = "Ground";
+                floor.transform.SetParent(sceneRoot.transform);
+            }
         }
     }
 }
