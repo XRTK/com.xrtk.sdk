@@ -50,7 +50,8 @@ MonoBehaviour:
     id: 0
     description: None
     axisConstraint: 0
-  cursorPrefab: {fileID: 0}
+  cursorPrefab: {fileID: 1000012072213228, guid: 79f96834fcc44889b558cc13518979a0,
+    type: 3}
   disableCursorOnStart: 0
   setCursorVisibilityOnSourceDetected: 0
   raycastOrigin: {fileID: 0}
