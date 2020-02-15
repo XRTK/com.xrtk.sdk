@@ -125,10 +125,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 return;
             }
 
-            VerifyPhysicsConfiguration();
+            // It's important to update physics
+            // configuration before updating joints etc.
+            UpdatePhysicsConfiguration();
+
             HandData handData = eventData.InputData;
             UpdateHandJointVisualization(handData);
             UpdateHansMeshVisualization(handData);
+
+            // With visualzation in place, we can update colliders.
             UpdateHandColliders();
         }
 
@@ -183,7 +188,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         #region Hand Colliders / Physics
 
-        private void VerifyPhysicsConfiguration()
+        private void UpdatePhysicsConfiguration()
         {
             if (handControllerDataProvider.HandPhysicsEnabled)
             {
@@ -215,120 +220,123 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         private void UpdateHandColliders()
         {
-            IMixedRealityHandController handController = Controller as IMixedRealityHandController;
-            if (handControllerDataProvider.BoundsMode == HandBoundsMode.Fingers)
+            if (handControllerDataProvider.HandPhysicsEnabled)
             {
-                if (handController.TryGetBounds(TrackedHandBounds.Thumb, out Bounds[] thumbBounds))
+                IMixedRealityHandController handController = Controller as IMixedRealityHandController;
+                if (handControllerDataProvider.BoundsMode == HandBoundsMode.Fingers)
                 {
-                    // Thumb bounds are made up of two capsule collider bounds entries.
-                    Bounds knuckleToMiddle = thumbBounds[0];
-                    Bounds middleToTip = thumbBounds[1];
+                    if (handController.TryGetBounds(TrackedHandBounds.Thumb, out Bounds[] thumbBounds))
+                    {
+                        // Thumb bounds are made up of two capsule collider bounds entries.
+                        Bounds knuckleToMiddle = thumbBounds[0];
+                        Bounds middleToTip = thumbBounds[1];
 
-                    GameObject thumbKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.ThumbMetacarpalJoint).gameObject;
-                    CapsuleCollider capsuleCollider = thumbKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, thumbKnuckleGameObject.transform);
+                        GameObject thumbKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.ThumbMetacarpalJoint).gameObject;
+                        CapsuleCollider capsuleCollider = thumbKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, thumbKnuckleGameObject.transform);
 
-                    GameObject thumbMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.ThumbProximalJoint).gameObject;
-                    capsuleCollider = thumbMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, middleToTip, thumbMiddleGameObject.transform);
+                        GameObject thumbMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.ThumbProximalJoint).gameObject;
+                        capsuleCollider = thumbMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, middleToTip, thumbMiddleGameObject.transform);
+                    }
+
+                    if (handController.TryGetBounds(TrackedHandBounds.IndexFinger, out Bounds[] indexFingerBounds))
+                    {
+                        // Index finger bounds are made up of two capsule collider bounds entries.
+                        Bounds knuckleToMiddle = indexFingerBounds[0];
+                        Bounds middleToTip = indexFingerBounds[1];
+
+                        GameObject indexKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.IndexKnuckle).gameObject;
+                        CapsuleCollider capsuleCollider = indexKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, indexKnuckleGameObject.transform);
+
+                        GameObject indexMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.IndexMiddleJoint).gameObject;
+                        capsuleCollider = indexMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, middleToTip, indexMiddleGameObject.transform);
+                    }
+
+                    if (handController.TryGetBounds(TrackedHandBounds.MiddleFinger, out Bounds[] middleFingerBounds))
+                    {
+                        // Middle finger bounds are made up of two capsule collider bounds entries.
+                        Bounds knuckleToMiddle = middleFingerBounds[0];
+                        Bounds middleToTip = middleFingerBounds[1];
+
+                        GameObject middleKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleKnuckle).gameObject;
+                        CapsuleCollider capsuleCollider = middleKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, middleKnuckleGameObject.transform);
+
+                        GameObject middleMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleMiddleJoint).gameObject;
+                        capsuleCollider = middleMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, middleToTip, middleMiddleGameObject.transform);
+                    }
+
+                    if (handController.TryGetBounds(TrackedHandBounds.RingFinger, out Bounds[] ringFingerBounds))
+                    {
+                        // Ring finger bounds are made up of two capsule collider bounds entries.
+                        Bounds knuckleToMiddle = ringFingerBounds[0];
+                        Bounds middleToTip = ringFingerBounds[1];
+
+                        GameObject ringKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.RingKnuckle).gameObject;
+                        CapsuleCollider capsuleCollider = ringKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, ringKnuckleGameObject.transform);
+
+                        GameObject ringMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.RingMiddleJoint).gameObject;
+                        capsuleCollider = ringMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, middleToTip, ringMiddleGameObject.transform);
+                    }
+
+                    if (handController.TryGetBounds(TrackedHandBounds.Pinky, out Bounds[] pinkyFingerBounds))
+                    {
+                        // Pinky finger bounds are made up of two capsule collider bounds entries.
+                        Bounds knuckleToMiddle = pinkyFingerBounds[0];
+                        Bounds middleToTip = pinkyFingerBounds[1];
+
+                        GameObject pinkyKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyKnuckle).gameObject;
+                        CapsuleCollider capsuleCollider = pinkyKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, pinkyKnuckleGameObject.transform);
+
+                        GameObject pinkyMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyMiddleJoint).gameObject;
+                        capsuleCollider = pinkyMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, middleToTip, pinkyMiddleGameObject.transform);
+                    }
+
+                    if (handController.TryGetBounds(TrackedHandBounds.Palm, out Bounds[] palmBounds))
+                    {
+                        // For the palm we create a composite collider using a capsule collider per
+                        // finger for the area metacarpal <-> knuckle.
+                        Bounds indexPalmBounds = palmBounds[0];
+                        GameObject indexMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.IndexMetacarpal).gameObject;
+                        CapsuleCollider capsuleCollider = indexMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, indexPalmBounds, indexMetacarpalGameObject.transform);
+
+                        Bounds middlePalmBounds = palmBounds[1];
+                        GameObject middleMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleMetacarpal).gameObject;
+                        capsuleCollider = middleMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, middlePalmBounds, middleMetacarpalGameObject.transform);
+
+                        Bounds ringPalmBounds = palmBounds[2];
+                        GameObject ringMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.RingMetacarpal).gameObject;
+                        capsuleCollider = ringMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, ringPalmBounds, ringMetacarpalGameObject.transform);
+
+                        Bounds pinkyPalmBounds = palmBounds[3];
+                        GameObject pinkyMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyMetacarpal).gameObject;
+                        capsuleCollider = pinkyMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
+                        ConfigureCapsuleCollider(capsuleCollider, pinkyPalmBounds, pinkyMetacarpalGameObject.transform);
+                    }
                 }
-
-                if (handController.TryGetBounds(TrackedHandBounds.IndexFinger, out Bounds[] indexFingerBounds))
+                else if (handControllerDataProvider.BoundsMode == HandBoundsMode.Hand)
                 {
-                    // Index finger bounds are made up of two capsule collider bounds entries.
-                    Bounds knuckleToMiddle = indexFingerBounds[0];
-                    Bounds middleToTip = indexFingerBounds[1];
-
-                    GameObject indexKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.IndexKnuckle).gameObject;
-                    CapsuleCollider capsuleCollider = indexKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, indexKnuckleGameObject.transform);
-
-                    GameObject indexMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.IndexMiddleJoint).gameObject;
-                    capsuleCollider = indexMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, middleToTip, indexMiddleGameObject.transform);
-                }
-
-                if (handController.TryGetBounds(TrackedHandBounds.MiddleFinger, out Bounds[] middleFingerBounds))
-                {
-                    // Middle finger bounds are made up of two capsule collider bounds entries.
-                    Bounds knuckleToMiddle = middleFingerBounds[0];
-                    Bounds middleToTip = middleFingerBounds[1];
-
-                    GameObject middleKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleKnuckle).gameObject;
-                    CapsuleCollider capsuleCollider = middleKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, middleKnuckleGameObject.transform);
-
-                    GameObject middleMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleMiddleJoint).gameObject;
-                    capsuleCollider = middleMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, middleToTip, middleMiddleGameObject.transform);
-                }
-
-                if (handController.TryGetBounds(TrackedHandBounds.RingFinger, out Bounds[] ringFingerBounds))
-                {
-                    // Ring finger bounds are made up of two capsule collider bounds entries.
-                    Bounds knuckleToMiddle = ringFingerBounds[0];
-                    Bounds middleToTip = ringFingerBounds[1];
-
-                    GameObject ringKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.RingKnuckle).gameObject;
-                    CapsuleCollider capsuleCollider = ringKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, ringKnuckleGameObject.transform);
-
-                    GameObject ringMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.RingMiddleJoint).gameObject;
-                    capsuleCollider = ringMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, middleToTip, ringMiddleGameObject.transform);
-                }
-
-                if (handController.TryGetBounds(TrackedHandBounds.Pinky, out Bounds[] pinkyFingerBounds))
-                {
-                    // Pinky finger bounds are made up of two capsule collider bounds entries.
-                    Bounds knuckleToMiddle = pinkyFingerBounds[0];
-                    Bounds middleToTip = pinkyFingerBounds[1];
-
-                    GameObject pinkyKnuckleGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyKnuckle).gameObject;
-                    CapsuleCollider capsuleCollider = pinkyKnuckleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, knuckleToMiddle, pinkyKnuckleGameObject.transform);
-
-                    GameObject pinkyMiddleGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyMiddleJoint).gameObject;
-                    capsuleCollider = pinkyMiddleGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, middleToTip, pinkyMiddleGameObject.transform);
-                }
-
-                if (handController.TryGetBounds(TrackedHandBounds.Palm, out Bounds[] palmBounds))
-                {
-                    // For the palm we create a composite collider using a capsule collider per
-                    // finger for the area metacarpal <-> knuckle.
-                    Bounds indexPalmBounds = palmBounds[0];
-                    GameObject indexMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.IndexMetacarpal).gameObject;
-                    CapsuleCollider capsuleCollider = indexMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, indexPalmBounds, indexMetacarpalGameObject.transform);
-
-                    Bounds middlePalmBounds = palmBounds[1];
-                    GameObject middleMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.MiddleMetacarpal).gameObject;
-                    capsuleCollider = middleMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, middlePalmBounds, middleMetacarpalGameObject.transform);
-
-                    Bounds ringPalmBounds = palmBounds[2];
-                    GameObject ringMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.RingMetacarpal).gameObject;
-                    capsuleCollider = ringMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, ringPalmBounds, ringMetacarpalGameObject.transform);
-
-                    Bounds pinkyPalmBounds = palmBounds[3];
-                    GameObject pinkyMetacarpalGameObject = GetOrCreateJoint(TrackedHandJoint.PinkyMetacarpal).gameObject;
-                    capsuleCollider = pinkyMetacarpalGameObject.GetOrAddComponent<CapsuleCollider>();
-                    ConfigureCapsuleCollider(capsuleCollider, pinkyPalmBounds, pinkyMetacarpalGameObject.transform);
-                }
-            }
-            else if (handControllerDataProvider.BoundsMode == HandBoundsMode.Hand)
-            {
-                if (handController.TryGetBounds(TrackedHandBounds.Hand, out Bounds[] handBounds))
-                {
-                    // For full hand bounds we'll only get one bounds entry, which is a box
-                    // encapsulating the whole hand.
-                    Bounds fullHandBounds = handBounds[0];
-                    BoxCollider boxCollider = HandVisualizationGameObject.GetOrAddComponent<BoxCollider>();
-                    boxCollider.center = fullHandBounds.center;
-                    boxCollider.size = fullHandBounds.size;
-                    boxCollider.isTrigger = handControllerDataProvider.UseTriggers;
+                    if (handController.TryGetBounds(TrackedHandBounds.Hand, out Bounds[] handBounds))
+                    {
+                        // For full hand bounds we'll only get one bounds entry, which is a box
+                        // encapsulating the whole hand.
+                        Bounds fullHandBounds = handBounds[0];
+                        BoxCollider boxCollider = HandVisualizationGameObject.GetOrAddComponent<BoxCollider>();
+                        boxCollider.center = fullHandBounds.center;
+                        boxCollider.size = fullHandBounds.size;
+                        boxCollider.isTrigger = handControllerDataProvider.UseTriggers;
+                    }
                 }
             }
         }
