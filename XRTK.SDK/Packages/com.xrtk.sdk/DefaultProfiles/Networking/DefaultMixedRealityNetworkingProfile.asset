@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c0c9c4be8544379a5571fad761efd8, type: 3}
   m_Name: DefaultMixedRealityNetworkingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
   registeredNetworkDataProviders: []
