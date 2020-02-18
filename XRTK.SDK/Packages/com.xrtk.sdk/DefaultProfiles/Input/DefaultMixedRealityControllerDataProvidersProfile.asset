@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMixedRealityControllerDataProvidersProfile
   m_EditorClassIdentifier: 
   isEditable: 0
-  registeredControllerDataProviders:
+  configurations:
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
     name: Mouse Controller Data Provider

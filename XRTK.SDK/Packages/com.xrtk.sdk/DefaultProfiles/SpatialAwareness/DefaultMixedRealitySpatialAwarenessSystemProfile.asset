@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMixedRealitySpatialAwarenessSystemProfile
   m_EditorClassIdentifier: 
   isEditable: 0
-  registeredSpatialObserverDataProviders:
+  configurations:
   - instancedType:
       reference: XRTK.WindowsMixedReality.SpatialObservers.WindowsMixedRealitySpatialMeshObserver,
         XRTK.WindowsMixedReality
