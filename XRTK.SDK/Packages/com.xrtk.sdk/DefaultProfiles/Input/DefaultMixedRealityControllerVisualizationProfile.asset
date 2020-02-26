@@ -68,10 +68,10 @@ MonoBehaviour:
         XRTK
     handedness: 1
     useDefaultModel: 0
-    overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
+    overrideModel: {fileID: 9173983480249558903, guid: 081f7848cfd94b34f9c774490cd7e2fb,
       type: 3}
     controllerVisualizationType:
-      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
       id: 4
       description: Pointer Pose
@@ -86,10 +86,10 @@ MonoBehaviour:
         XRTK
     handedness: 2
     useDefaultModel: 0
-    overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,
+    overrideModel: {fileID: 4856844564559928852, guid: 58cc7659d29f83f47b10dfd3bc4d1c97,
       type: 3}
     controllerVisualizationType:
-      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
       id: 4
       description: Pointer Pose
@@ -103,10 +103,10 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
     handedness: 1
     useDefaultModel: 0
-    overrideModel: {fileID: 9173983480249558903, guid: 12df5e0d0c33a444a985de4e29533a24,
+    overrideModel: {fileID: 9173983480249558903, guid: 081f7848cfd94b34f9c774490cd7e2fb,
       type: 3}
     controllerVisualizationType:
-      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
       id: 4
       description: Pointer Pose
@@ -120,10 +120,10 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
     handedness: 2
     useDefaultModel: 0
-    overrideModel: {fileID: 4856844564559928852, guid: 17bda3d41a5c5bf4d8ea2220004b496f,
+    overrideModel: {fileID: 4856844564559928852, guid: 58cc7659d29f83f47b10dfd3bc4d1c97,
       type: 3}
     controllerVisualizationType:
-      reference: XRTK.SDK.UX.Controllers.Hands.DefaultHandControllerVisualizer, XRTK.SDK
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
       id: 4
       description: Pointer Pose
