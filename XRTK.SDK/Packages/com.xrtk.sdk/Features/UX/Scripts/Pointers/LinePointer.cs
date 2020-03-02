@@ -15,8 +15,8 @@ namespace XRTK.SDK.UX.Pointers
     /// <summary>
     /// A simple line pointer for drawing lines from the input source origin to the current pointer position.
     /// </summary>
-    public class LinePointer : BaseControllerPointer
-    {   
+    public class VimLinePointer : BaseControllerPointer
+    {
         [Tooltip("Reference to the Beam's visual state animator.")]
         [SerializeField]
         protected Animator BeamAnimator = null;
@@ -72,7 +72,7 @@ namespace XRTK.SDK.UX.Pointers
         private int holdCounter;
         private int rolloverCounter;
 
-    
+
         private void CheckInitialization()
         {
             if (lineBase == null)
@@ -192,72 +192,64 @@ namespace XRTK.SDK.UX.Pointers
 
             // Used to ensure the line doesn't extend beyond the cursor
             float cursorOffsetWorldLength = BaseCursor?.SurfaceCursorDistance ?? 0f;
-            
+
             if (IsSelectPressed)
             {
                 BeamAnimator.SetBool("triggerPull", true);
 
-                if(holdCounter<1f)
+                if (HapticPulse && holdCounter < 1f)
                 {
-                    #if PLATFORM_LUMIN     
+#if PLATFORM_LUMIN
                     MLInput.GetController(0).StartFeedbackPatternVibe(MLInputControllerFeedbackPatternVibe.Click , MLInputControllerFeedbackIntensity.Low);
-                    #endif
+#endif
                     holdCounter++;
-                }
-
-                else
-                {
-                    MLInput.GetController(0).StopFeedbackPatternVibe();    
                 }
             }
 
-            else 
+            else
             {
                 BeamAnimator.SetBool("triggerPull", false);
-                holdCounter = 0;    
+                holdCounter = 0;
             }
 
             // If we hit something
             if (Result.CurrentPointerTarget != null)
             {
                 clearWorldLength = Result.RayDistance;
-                
+
                 //If object is marked as interactable (ie, a button that's not marked as inactive)
-                if(Result.CurrentPointerTarget.gameObject.tag == "Interactable")
-                {    
+                if (Result.CurrentPointerTarget.gameObject.tag == "Interactable")
+                {
                     lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
                     BeamAnimator.SetBool("rollover", true);
                     BeamAnimator.SetBool("interactable", true);
-                                        
-                   if(rolloverCounter<1f)
-                   {
-                       #if PLATFORM_LUMIN     
-                       MLInput.GetController(0).StartFeedbackPatternVibe(MLInputControllerFeedbackPatternVibe.Click , MLInputControllerFeedbackIntensity.Low);
-                       #endif
-                       rolloverCounter++;
-                   }
 
-                   else
-                   {
-                       MLInput.GetController(0).StopFeedbackPatternVibe(); 
-                       rolloverCounter = 0;     
-                   }
+                    if (HapticPulse && rolloverCounter < 1f)
+                    {
+#if PLATFORM_LUMIN
+                        MLInput.GetController(0).StartFeedbackPatternVibe(MLInputControllerFeedbackPatternVibe.Click, MLInputControllerFeedbackIntensity.Low);
+#endif
+                        rolloverCounter++;
+                    }
                 }
-                
-                //If object is collideable, but isn't marked as an interactable object.
-                else if(Result.CurrentPointerTarget.gameObject.tag == "Untagged")
+                else
                 {
-                    lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
-                    BeamAnimator.SetBool("rollover", false);
-                    BeamAnimator.SetBool("interactable", false);
-                }
-                
-                //If object is marked as disabled.
-                else if(Result.CurrentPointerTarget.gameObject.tag == "Disabled")
-                {
-                    lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
-                    BeamAnimator.SetBool("rollover", true);
-                    BeamAnimator.SetBool("interactable", false); 
+                    rolloverCounter = 0;
+                    //If object is collideable, but isn't marked as an interactable object.
+                    if (Result.CurrentPointerTarget.gameObject.tag == "Untagged")
+                    {
+                        lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
+                        BeamAnimator.SetBool("rollover", false);
+                        BeamAnimator.SetBool("interactable", false);
+                    }
+
+                    //If object is marked as disabled.
+                    else if (Result.CurrentPointerTarget.gameObject.tag == "Disabled")
+                    {
+                        lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
+                        BeamAnimator.SetBool("rollover", true);
+                        BeamAnimator.SetBool("interactable", false);
+                    }
                 }
             }
 
@@ -269,7 +261,7 @@ namespace XRTK.SDK.UX.Pointers
                 BeamAnimator.SetBool("rollover", false);
                 BeamAnimator.SetBool("interactable", false);
             }
-        
+
             int maxClampLineSteps = LineCastResolution;
 
             for (var i = 0; i < lineRenderers.Length; i++)
@@ -287,12 +279,12 @@ namespace XRTK.SDK.UX.Pointers
             {
                 lineColor = LineColorLockFocus;
                 BeamAnimator.SetBool("pressed", true);
-               
+
             }
 
-            else 
+            else
             {
-                BeamAnimator.SetBool("pressed", false);  
+                BeamAnimator.SetBool("pressed", false);
             }
 
             // If focus is locked, we're sticking to the target
