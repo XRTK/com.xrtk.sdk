@@ -15,7 +15,7 @@ namespace XRTK.SDK.UX.Pointers
     /// <summary>
     /// A simple line pointer for drawing lines from the input source origin to the current pointer position.
     /// </summary>
-    public class VimLinePointer : BaseControllerPointer
+    public class LinePointer : BaseControllerPointer
     {
         [Tooltip("Reference to the Beam's visual state animator.")]
         [SerializeField]
