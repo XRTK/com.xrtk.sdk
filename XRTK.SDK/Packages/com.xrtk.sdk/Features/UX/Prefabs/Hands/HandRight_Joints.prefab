@@ -47,9 +47,9 @@ MonoBehaviour:
   destroyOnSourceLost: 1
   useSourcePoseData: 1
   poseAction:
-    id: 0
-    description: None
-    axisConstraint: 0
+    id: 4
+    description: Pointer Pose
+    axisConstraint: 7
   jointPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
     type: 3}
   palmPrefab: {fileID: 6797406804172968804, guid: 80997b0aa2ab2d7429bb5e7f1cddbace,

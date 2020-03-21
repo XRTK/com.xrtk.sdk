@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 807390424017236910}
   - component: {fileID: 7059414244795525261}
   m_Layer: 0
-  m_Name: HandLeft
+  m_Name: HandLeft_Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,17 +47,8 @@ MonoBehaviour:
   destroyOnSourceLost: 1
   useSourcePoseData: 1
   poseAction:
-    id: 0
-    description: None
-    axisConstraint: 0
-  enableHandJointVisualization: 0
-  jointPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
-    type: 3}
-  palmPrefab: {fileID: 6797406804172968804, guid: 80997b0aa2ab2d7429bb5e7f1cddbace,
-    type: 3}
-  fingertipPrefab: {fileID: 4719395302953375155, guid: ceff11f7c8b644246b621c521c0ba767,
-    type: 3}
-  indexFingertipColor: {r: 0, g: 1, b: 1, a: 1}
-  enableHandMeshVisualization: 1
+    id: 4
+    description: Pointer Pose
+    axisConstraint: 7
   handMeshPrefab: {fileID: 1887883006053652, guid: 81cacd47fbb47714d8b19cffb1edf4af,
     type: 3}
