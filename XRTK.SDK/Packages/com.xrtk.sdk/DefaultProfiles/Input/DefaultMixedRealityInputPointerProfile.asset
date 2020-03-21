@@ -49,10 +49,10 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
         XRTK
     handedness: 3
-    pointerPrefab: {fileID: 1705443038328656654, guid: 6fe8fd7ffcc83e947b469d1c661ffa47,
+    pointerPrefab: {fileID: 1247086986094436, guid: 54d78dc3333741c5b7f30fe3506096ba,
       type: 3}
   - controllerType:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
     handedness: 3
-    pointerPrefab: {fileID: 1705443038328656654, guid: 6fe8fd7ffcc83e947b469d1c661ffa47,
+    pointerPrefab: {fileID: 1247086986094436, guid: 54d78dc3333741c5b7f30fe3506096ba,
       type: 3}
