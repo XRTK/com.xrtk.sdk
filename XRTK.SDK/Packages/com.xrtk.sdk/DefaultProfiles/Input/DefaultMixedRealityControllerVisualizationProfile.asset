@@ -77,9 +77,9 @@ MonoBehaviour:
       description: Pointer Pose
       axisConstraint: 7
     alternatePoseAction:
-      id: 3
-      description: Grip Pose
-      axisConstraint: 7
+      id: 0
+      description: None
+      axisConstraint: 0
   - description: Simulated Hand Controller
     controllerType:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
@@ -95,9 +95,9 @@ MonoBehaviour:
       description: Pointer Pose
       axisConstraint: 7
     alternatePoseAction:
-      id: 3
-      description: Grip Pose
-      axisConstraint: 7
+      id: 0
+      description: None
+      axisConstraint: 0
   - description: Mixed Reality Hand Controller
     controllerType:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
@@ -112,9 +112,9 @@ MonoBehaviour:
       description: Pointer Pose
       axisConstraint: 7
     alternatePoseAction:
-      id: 3
-      description: Grip Pose
-      axisConstraint: 7
+      id: 0
+      description: None
+      axisConstraint: 0
   - description: Mixed Reality Hand Controller
     controllerType:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
@@ -129,6 +129,6 @@ MonoBehaviour:
       description: Pointer Pose
       axisConstraint: 7
     alternatePoseAction:
-      id: 3
-      description: Grip Pose
-      axisConstraint: 7
+      id: 0
+      description: None
+      axisConstraint: 0
