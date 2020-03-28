@@ -12,29 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1564b9320d5f4bdf9823a35bb66d61a7, type: 3}
   m_Name: DefaultMixedRealityDiagnosticsSystemProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
+  configurations:
+  - instancedType:
+      reference: XRTK.Services.DiagnosticsSystem.MixedRealityMemoryDiagnosticsDataProvider,
+        XRTK
+    name: Memory Diagnostics Data Provider
+    priority: 0
+    runtimePlatform: -1
+    configurationProfile: {fileID: 0}
+  - instancedType:
+      reference: XRTK.Services.DiagnosticsSystem.MixedRealityFrameDiagnosticsDataProvider,
+        XRTK
+    name: Frame Diagnostics Data Provider
+    priority: 1
+    runtimePlatform: -1
+    configurationProfile: {fileID: 0}
+  - instancedType:
+      reference: XRTK.Services.DiagnosticsSystem.MixedRealityConsoleDiagnosticsDataProvider,
+        XRTK
+    name: Console Diagnostics Data Provider
+    priority: 2
+    runtimePlatform: -1
+    configurationProfile: {fileID: 0}
   diagnosticsWindowPrefab: {fileID: 2161880003638299081, guid: be9153b959e0d4d4aa50a4a1a6617daa,
     type: 3}
   showDiagnosticsWindowOnStart: 1
-  registeredDiagnosticsDataProviders:
-  - dataProviderType:
-      reference: XRTK.Services.DiagnosticsSystem.MixedRealityMemoryDiagnosticsDataProvider,
-        XRTK
-    dataProviderName: Memory Diagnostics Data Provider
-    priority: 1
-    runtimePlatform: -1
-    profile: {fileID: 0}
-  - dataProviderType:
-      reference: XRTK.Services.DiagnosticsSystem.MixedRealityFrameDiagnosticsDataProvider,
-        XRTK
-    dataProviderName: Frame Diagnostics Data Provider
-    priority: 1
-    runtimePlatform: -1
-    profile: {fileID: 0}
-  - dataProviderType:
-      reference: XRTK.Services.DiagnosticsSystem.MixedRealityConsoleDiagnosticsDataProvider,
-        XRTK
-    dataProviderName: Console Diagnostics Data Provider
-    priority: 1
-    runtimePlatform: -1
-    profile: {fileID: 0}

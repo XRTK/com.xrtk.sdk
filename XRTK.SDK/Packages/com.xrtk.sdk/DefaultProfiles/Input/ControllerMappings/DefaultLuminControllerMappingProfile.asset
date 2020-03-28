@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8edcd6f437a8f024190e49cc25f4734e, type: 3}
   m_Name: DefaultLuminControllerMappingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
   hasSetupDefaults: 1
   controllerMappings:
   - description: Lumin Motion Controller Left
@@ -30,6 +30,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -43,6 +44,7 @@ MonoBehaviour:
         description: Trigger
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -56,6 +58,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -69,6 +72,7 @@ MonoBehaviour:
         description: Select
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -82,6 +86,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -95,6 +100,7 @@ MonoBehaviour:
         description: Menu
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -108,6 +114,7 @@ MonoBehaviour:
         description: Scroll
         axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -121,6 +128,7 @@ MonoBehaviour:
         description: Grip Press
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -134,6 +142,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -153,6 +162,7 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -166,6 +176,7 @@ MonoBehaviour:
         description: Trigger
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -179,6 +190,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -192,6 +204,7 @@ MonoBehaviour:
         description: Select
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -205,6 +218,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -218,6 +232,7 @@ MonoBehaviour:
         description: Menu
         axisConstraint: 2
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -231,6 +246,7 @@ MonoBehaviour:
         description: Scroll
         axisConstraint: 4
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -244,6 +260,7 @@ MonoBehaviour:
         description: Grip Press
         axisConstraint: 3
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0
@@ -257,6 +274,7 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 0
+      inputName: 
       axisCodeX: 
       axisCodeY: 
       invertXAxis: 0

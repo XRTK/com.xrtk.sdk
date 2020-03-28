@@ -11,8 +11,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7586d5ce1704458aad54224cfafad39, type: 3}
   m_Name: DefaultMixedRealityInputActionsProfile
-  m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  m_EditorClassIdentifier:
+  isEditable: 0
   inputActions:
   - id: 1
     description: Select
