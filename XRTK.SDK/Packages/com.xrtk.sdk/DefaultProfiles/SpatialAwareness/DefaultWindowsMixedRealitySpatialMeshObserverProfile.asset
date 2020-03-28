@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f87d1ac67141afaf834f81454c9aeb, type: 3}
   m_Name: DefaultWindowsMixedRealitySpatialMeshObserverProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: 41ce31a4954544c58d16f6b3c4c88f4b, type: 2}
+  isEditable: 0
   startupBehavior: 0
   observationExtents: {x: 3, y: 3, z: 3}
   isStationaryObserver: 0
@@ -23,7 +22,6 @@ MonoBehaviour:
   meshLevelOfDetail: 0
   meshTrianglesPerCubicMeter: 0
   meshRecalculateNormals: 1
-  meshDisplayOption: 0
   meshVisibleMaterial: {fileID: 2100000, guid: 58998db165b741089929938ea4d1b249, type: 2}
   meshOcclusionMaterial: {fileID: 2100000, guid: 0062b17981f34cf18ad1f9060db0cb2b,
     type: 2}
