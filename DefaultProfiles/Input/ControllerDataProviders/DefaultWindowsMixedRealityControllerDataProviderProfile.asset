@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe9eeb08f95b1c1419ad17953d9a48ee, type: 3}
   m_Name: DefaultWindowsMixedRealityControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
   manipulationGestures: 12
   navigationGestures: 112
   useRailsNavigation: 0
