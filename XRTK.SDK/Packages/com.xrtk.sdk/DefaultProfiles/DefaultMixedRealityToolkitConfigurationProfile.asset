@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8053d706eb6545b99330d640fbe7e7d2, type: 3}
   m_Name: DefaultMixedRealityToolkitConfigurationProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
   enableCameraSystem: 1
   cameraSystemType:
     reference: XRTK.Services.CameraSystem.MixedRealityCameraSystem, XRTK
