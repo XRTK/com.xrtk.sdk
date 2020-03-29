@@ -45,7 +45,8 @@ MonoBehaviour:
     name: Windows Mixed Reality Controller Data Provider
     priority: 4
     runtimePlatform: 17
-    configurationProfile: {fileID: 0}
+    configurationProfile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849,
+      type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
     name: Windows Speech Data Provider
@@ -69,30 +70,33 @@ MonoBehaviour:
     name: Oculus Controller Data Provider
     priority: 8
     runtimePlatform: 67
-    configurationProfile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
+    configurationProfile: {fileID: 0}
   - instancedType:
       reference: XRTK.Providers.Controllers.Simulation.SimulatedControllerDataProvider,
         XRTK
     name: Simulated Controller Data Provider
-    priority: 1
+    priority: 9
     runtimePlatform: 1
-    configurationProfile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56, type: 2}
+    configurationProfile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56,
+      type: 2}
   - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.Hands.WindowsMixedRealityHandControllerDataProvider,
         XRTK.WindowsMixedReality
     name: Windows Mixed Reality Hand Controller Data Provider
-    priority: 1
+    priority: 10
     runtimePlatform: 16
-    configurationProfile: {fileID: 11400000, guid: 8a5d0fbb07851a2409d0177ff1f998c7, type: 2}
+    configurationProfile: {fileID: 0}
   - instancedType:
       reference: XRTK.Oculus.Controllers.Hands.OculusHandControllerDataProvider, XRTK.Oculus
     name: Oculus Hand Controller Data Provider
-    priority: 1
+    priority: 11
     runtimePlatform: 64
-    configurationProfile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
+    configurationProfile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415,
+      type: 2}
   - instancedType:
       reference: XRTK.Lumin.Controllers.Hands.LuminHandControllerDataProvider, XRTK.Lumin
     name: Lumin Hand Controller Data Provider
-    priority: 1
+    priority: 12
     runtimePlatform: 32
-    configurationProfile: {fileID: 11400000, guid: 1b116c9f84493294d823efe7cfb8700a, type: 2}
+    configurationProfile: {fileID: 11400000, guid: 1b116c9f84493294d823efe7cfb8700a,
+      type: 2}
