@@ -11,88 +11,88 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d628c3f3d8034aa7a4c414bf96227e1a, type: 3}
   m_Name: DefaultMixedRealityControllerDataProvidersProfile
-  m_EditorClassIdentifier: 
-  isCustomProfile: 0
-  registeredControllerDataProviders:
-  - dataProviderType:
+  m_EditorClassIdentifier:
+  isEditable: 0
+  configurations:
+  - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
-    dataProviderName: Mouse Controller Data Provider
-    priority: 1
+    name: Mouse Controller Data Provider
+    priority: 0
     runtimePlatform: 31
-    profile: {fileID: 0}
-  - dataProviderType:
+    configurationProfile: {fileID: 0}
+  - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
-    dataProviderName: Touch Screen Controller Data Provider
+    name: Touch Screen Controller Data Provider
     priority: 1
     runtimePlatform: 223
-    profile: {fileID: 0}
-  - dataProviderType:
+    configurationProfile: {fileID: 0}
+  - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
         XRTK
-    dataProviderName: Unity Joystick Controller Data Provider
-    priority: 1
-    runtimePlatform: 223
-    profile: {fileID: 0}
-  - dataProviderType:
-      reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
-    dataProviderName: Open VR Controller Data Provider
+    name: Unity Joystick Controller Data Provider
     priority: 2
+    runtimePlatform: 223
+    configurationProfile: {fileID: 0}
+  - instancedType:
+      reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
+    name: Open VR Controller Data Provider
+    priority: 3
     runtimePlatform: 31
-    profile: {fileID: 0}
-  - dataProviderType:
+    configurationProfile: {fileID: 0}
+  - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
         XRTK.WindowsMixedReality
-    dataProviderName: Windows Mixed Reality Controller Data Provider
-    priority: 1
+    name: Windows Mixed Reality Controller Data Provider
+    priority: 4
     runtimePlatform: 17
-    profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
-  - dataProviderType:
+    configurationProfile: {fileID: 0}
+  - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
-    dataProviderName: Windows Speech Data Provider
-    priority: 1
+    name: Windows Speech Data Provider
+    priority: 5
     runtimePlatform: 19
-    profile: {fileID: 0}
-  - dataProviderType:
+    configurationProfile: {fileID: 0}
+  - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
-    dataProviderName: Windows Dictation Data Provider
-    priority: 1
+    name: Windows Dictation Data Provider
+    priority: 6
     runtimePlatform: 19
-    profile: {fileID: 0}
-  - dataProviderType:
+    configurationProfile: {fileID: 0}
+  - instancedType:
       reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
-    dataProviderName: Lumin Controller Data Provider
-    priority: 1
+    name: Lumin Controller Data Provider
+    priority: 7
     runtimePlatform: 33
-    profile: {fileID: 0}
-  - dataProviderType:
+    configurationProfile: {fileID: 0}
+  - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
-    dataProviderName: Oculus Controller Data Provider
-    priority: 1
+    name: Oculus Controller Data Provider
+    priority: 8
     runtimePlatform: 67
-    profile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
-  - dataProviderType:
+    configurationProfile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
+  - instancedType:
       reference: XRTK.Providers.Controllers.Simulation.SimulatedControllerDataProvider,
         XRTK
-    dataProviderName: Simulated Controller Data Provider
+    name: Simulated Controller Data Provider
     priority: 1
     runtimePlatform: 1
-    profile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56, type: 2}
-  - dataProviderType:
+    configurationProfile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56, type: 2}
+  - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.Hands.WindowsMixedRealityHandControllerDataProvider,
         XRTK.WindowsMixedReality
-    dataProviderName: Windows Mixed Reality Hand Controller Data Provider
+    name: Windows Mixed Reality Hand Controller Data Provider
     priority: 1
     runtimePlatform: 16
-    profile: {fileID: 11400000, guid: 8a5d0fbb07851a2409d0177ff1f998c7, type: 2}
-  - dataProviderType:
+    configurationProfile: {fileID: 11400000, guid: 8a5d0fbb07851a2409d0177ff1f998c7, type: 2}
+  - instancedType:
       reference: XRTK.Oculus.Controllers.Hands.OculusHandControllerDataProvider, XRTK.Oculus
-    dataProviderName: Oculus Hand Controller Data Provider
+    name: Oculus Hand Controller Data Provider
     priority: 1
     runtimePlatform: 64
-    profile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
-  - dataProviderType:
+    configurationProfile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
+  - instancedType:
       reference: XRTK.Lumin.Controllers.Hands.LuminHandControllerDataProvider, XRTK.Lumin
-    dataProviderName: Lumin Hand Controller Data Provider
+    name: Lumin Hand Controller Data Provider
     priority: 1
     runtimePlatform: 32
-    profile: {fileID: 11400000, guid: 1b116c9f84493294d823efe7cfb8700a, type: 2}
+    configurationProfile: {fileID: 11400000, guid: 1b116c9f84493294d823efe7cfb8700a, type: 2}

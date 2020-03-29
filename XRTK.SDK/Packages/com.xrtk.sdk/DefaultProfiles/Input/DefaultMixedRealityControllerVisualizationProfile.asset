@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e889ee36d1db42b482979f81f550d3b0, type: 3}
   m_Name: DefaultMixedRealityControllerVisualizationProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
   renderMotionControllers: 1
   controllerVisualizationType:
     reference: XRTK.SDK.UX.Controllers.DefaultMixedRealityControllerVisualizer, XRTK.SDK

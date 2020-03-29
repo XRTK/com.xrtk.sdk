@@ -11,8 +11,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad754132a294fad4490673a98acb2ef9, type: 3}
   m_Name: DefaultNativeOculusTouchControllerMappingProfile
-  m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  m_EditorClassIdentifier:
+  isEditable: 0
   hasSetupDefaults: 1
   controllerMappings:
   - description: Oculus Touch Controller Left
@@ -30,9 +30,9 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
+      inputName:
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 1
@@ -45,8 +45,8 @@ MonoBehaviour:
         axisConstraint: 3
       keyCode: 0
       inputName: LIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 2
@@ -59,8 +59,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 3
@@ -73,8 +73,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 4
@@ -87,8 +87,8 @@ MonoBehaviour:
         axisConstraint: 2
       keyCode: 0
       inputName: LIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 5
@@ -101,8 +101,8 @@ MonoBehaviour:
         axisConstraint: 3
       keyCode: 0
       inputName: LHandTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 6
@@ -115,8 +115,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LHandTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 7
@@ -129,8 +129,8 @@ MonoBehaviour:
         axisConstraint: 4
       keyCode: 0
       inputName: LThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 8
@@ -143,8 +143,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 9
@@ -157,8 +157,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 10
@@ -171,8 +171,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 11
@@ -185,8 +185,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: X
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 12
@@ -199,8 +199,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: Y
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 13
@@ -213,8 +213,8 @@ MonoBehaviour:
         axisConstraint: 2
       keyCode: 0
       inputName: Start
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 14
@@ -227,8 +227,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: X
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 15
@@ -241,8 +241,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: Y
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 16
@@ -255,8 +255,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LTouchpad
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 17
@@ -269,8 +269,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LThumbRest
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 18
@@ -283,8 +283,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: LThumbRest
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
   - description: Oculus Touch Controller Right
@@ -302,9 +302,9 @@ MonoBehaviour:
         description: Pointer Pose
         axisConstraint: 7
       keyCode: 0
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
+      inputName:
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 1
@@ -317,8 +317,8 @@ MonoBehaviour:
         axisConstraint: 3
       keyCode: 0
       inputName: RIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 2
@@ -331,8 +331,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 3
@@ -345,8 +345,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 4
@@ -359,8 +359,8 @@ MonoBehaviour:
         axisConstraint: 2
       keyCode: 0
       inputName: RIndexTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 5
@@ -373,8 +373,8 @@ MonoBehaviour:
         axisConstraint: 3
       keyCode: 0
       inputName: RHandTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 6
@@ -387,8 +387,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RHandTrigger
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 7
@@ -401,8 +401,8 @@ MonoBehaviour:
         axisConstraint: 4
       keyCode: 0
       inputName: RThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 8
@@ -415,8 +415,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 9
@@ -429,8 +429,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 10
@@ -443,8 +443,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RThumbstick
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 11
@@ -457,8 +457,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: A
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 12
@@ -471,8 +471,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: B
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 13
@@ -485,8 +485,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: A
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 14
@@ -499,8 +499,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: B
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 15
@@ -513,8 +513,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RTouchpad
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 16
@@ -527,8 +527,8 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RThumbRest
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
     - id: 17
@@ -541,7 +541,7 @@ MonoBehaviour:
         axisConstraint: 0
       keyCode: 0
       inputName: RThumbRest
-      axisCodeX: 
-      axisCodeY: 
+      axisCodeX:
+      axisCodeY:
       invertXAxis: 0
       invertYAxis: 0
