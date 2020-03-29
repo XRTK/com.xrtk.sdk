@@ -20,11 +20,13 @@ MonoBehaviour:
     name: Windows Mixed Reality Spatial Mesh Observer
     priority: 0
     runtimePlatform: 17
-    configurationProfile: {fileID: 0}
+    configurationProfile: {fileID: 11400000, guid: 8e73975fd19e4224b46d0b0fea26349b,
+      type: 2}
   - instancedType:
       reference: XRTK.Lumin.SpatialObservers.LuminSpatialMeshObserver, XRTK.Lumin
     name: Lumin Spatial Observer Data Provider
     priority: 1
     runtimePlatform: 32
-    configurationProfile: {fileID: 0}
+    configurationProfile: {fileID: 11400000, guid: 6cbcb6266beaa724780d064525cf2896,
+      type: 2}
   meshDisplayOption: 0
