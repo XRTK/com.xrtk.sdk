@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 054f653be9eb6f94b9894ca3c7be1ae6, type: 3}
   m_Name: DefaultSimulatedControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
-  controllerSimulationEnabled: 1
+  isEditable: 0
   simulatedControllerType:
     reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
       XRTK
@@ -27,11 +26,3 @@ MonoBehaviour:
   toggleRightPersistentKey: 121
   rightControllerTrackedKey: 32
   rotationSpeed: 100
-  registeredControllerDataProviders:
-  - dataProviderType:
-      reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
-        XRTK
-    dataProviderName: Simulated Hand Controller Data Provider
-    priority: 1
-    runtimePlatform: 1
-    profile: {fileID: 11400000, guid: cbed43298a63b38459e380f61096a062, type: 2}
