@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d628c3f3d8034aa7a4c414bf96227e1a, type: 3}
   m_Name: DefaultMixedRealityControllerDataProvidersProfile
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   isEditable: 0
   configurations:
   - instancedType:
@@ -54,7 +54,8 @@ MonoBehaviour:
     runtimePlatform: 19
     configurationProfile: {fileID: 0}
   - instancedType:
-      reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
+      reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider,
+        XRTK
     name: Windows Dictation Data Provider
     priority: 6
     runtimePlatform: 19
@@ -72,12 +73,12 @@ MonoBehaviour:
     runtimePlatform: 67
     configurationProfile: {fileID: 0}
   - instancedType:
-      reference: XRTK.Providers.Controllers.Simulation.SimulatedControllerDataProvider,
+      reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
         XRTK
-    name: Simulated Controller Data Provider
+    name: Simulated Hand Controller Data Provider
     priority: 9
     runtimePlatform: 1
-    configurationProfile: {fileID: 11400000, guid: 6222a8cbe708b06438176694991e3e56,
+    configurationProfile: {fileID: 11400000, guid: cbed43298a63b38459e380f61096a062,
       type: 2}
   - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.Hands.WindowsMixedRealityHandControllerDataProvider,
@@ -87,7 +88,8 @@ MonoBehaviour:
     runtimePlatform: 16
     configurationProfile: {fileID: 0}
   - instancedType:
-      reference: XRTK.Oculus.Controllers.Hands.OculusHandControllerDataProvider, XRTK.Oculus
+      reference: XRTK.Oculus.Controllers.Hands.OculusHandControllerDataProvider,
+        XRTK.Oculus
     name: Oculus Hand Controller Data Provider
     priority: 11
     runtimePlatform: 64
