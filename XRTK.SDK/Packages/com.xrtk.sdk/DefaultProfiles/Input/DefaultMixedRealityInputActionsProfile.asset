@@ -11,50 +11,62 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7586d5ce1704458aad54224cfafad39, type: 3}
   m_Name: DefaultMixedRealityInputActionsProfile
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   isEditable: 0
   inputActions:
-  - id: 1
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 1
     description: Select
     axisConstraint: 2
-  - id: 2
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 2
     description: Menu
     axisConstraint: 2
-  - id: 3
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 3
     description: Grip Pose
     axisConstraint: 7
-  - id: 4
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 4
     description: Pointer Pose
     axisConstraint: 7
-  - id: 5
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 5
     description: Teleport Direction
     axisConstraint: 4
-  - id: 6
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 6
     description: Trigger
     axisConstraint: 3
-  - id: 7
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 7
     description: Grip Press
     axisConstraint: 3
-  - id: 8
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 8
     description: Hold Action
     axisConstraint: 0
-  - id: 9
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 9
     description: Manipulate Action
     axisConstraint: 0
-  - id: 10
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 10
     description: Navigation Action
     axisConstraint: 0
-  - id: 11
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 11
     description: Scroll
     axisConstraint: 4
-  - id: 12
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 12
     description: Mouse Delta
     axisConstraint: 4
-  - id: 13
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 13
     description: Movement Direction
     axisConstraint: 4
-  - id: 14
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 14
     description: Rotation Direction
     axisConstraint: 4
-  inputActionProfiles:
-  - {fileID: 11400000, guid: ff0ce1c240ac8d342962c9c28f93d52c, type: 2}
