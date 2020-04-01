@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8053d706eb6545b99330d640fbe7e7d2, type: 3}
   m_Name: DefaultMixedRealityToolkitConfigurationProfile
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   isEditable: 0
   enableCameraSystem: 1
   cameraSystemType:
