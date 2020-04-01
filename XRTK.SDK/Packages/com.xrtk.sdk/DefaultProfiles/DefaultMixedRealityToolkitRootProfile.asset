@@ -45,10 +45,9 @@ MonoBehaviour:
   enableDiagnosticsSystem: 1
   diagnosticsSystemType:
     reference: XRTK.Services.DiagnosticsSystem.MixedRealityDiagnosticsSystem, XRTK
-  enableNativeLibrarySystem: 1
+  enableNativeLibrarySystem: 0
   nativeLibrarySystemType:
-    reference: XRTK.Services.NativeLibrarySystem, XRTK
-  nativeLibrarySystemProfile: {fileID: 11400000, guid: 2837fa8930bc6b24884910e99b4d8c8e,
-    type: 2}
+    reference: 
+  nativeLibrarySystemProfile: {fileID: 0}
   registeredServiceProvidersProfile: {fileID: 11400000, guid: acea2c25fd504369954fa833a8c4ea5b,
     type: 2}
