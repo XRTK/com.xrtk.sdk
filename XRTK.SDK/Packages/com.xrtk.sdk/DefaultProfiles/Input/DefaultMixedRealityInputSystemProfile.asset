@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96a16673d92d4e8fa24750357b3cf906, type: 3}
   m_Name: DefaultMixedRealityInputSystemProfile
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   isEditable: 0
   focusProviderType:
     reference: XRTK.Services.InputSystem.FocusProvider, XRTK
@@ -28,4 +28,6 @@ MonoBehaviour:
   controllerMappingProfiles: {fileID: 11400000, guid: f83e1d143c5a46dba5e70f497a7a996d,
     type: 2}
   controllerVisualizationProfile: {fileID: 11400000, guid: d7daaacd4b9b4529a2bb2c06d10b5ae6,
+    type: 2}
+  handTrackingProfile: {fileID: 11400000, guid: 1630060c3269e6c499984f574c5c935d,
     type: 2}

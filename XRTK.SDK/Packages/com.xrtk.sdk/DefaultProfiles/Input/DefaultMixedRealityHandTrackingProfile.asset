@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b27d03798f3048fa9d37899f20aaad1c, type: 3}
-  m_Name: DefaultWindowsMixedRealityHandControllerProfile
+  m_Script: {fileID: 11500000, guid: e59c0e9dea8c4544091323a3819be589, type: 3}
+  m_Name: DefaultMixedRealityHandTrackingProfile
   m_EditorClassIdentifier: 
-  isEditable: 1
+  isEditable: 0
   handMeshingEnabled: 0
   handRayType:
     reference: 

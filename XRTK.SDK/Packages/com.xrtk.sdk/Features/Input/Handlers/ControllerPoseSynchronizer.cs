@@ -94,9 +94,6 @@ namespace XRTK.SDK.Input.Handlers
             set => poseAction = value;
         }
 
-        /// <inheritdoc />
-        public virtual void OnInputChanged(InputEventData<HandData> eventData) { }
-
         #endregion IMixedRealityControllerPoseSynchronizer Implementation
 
         #region IMixedRealitySourcePoseHandler Implementation
@@ -160,6 +157,9 @@ namespace XRTK.SDK.Input.Handlers
                 }
             }
         }
+
+        /// <inheritdoc />
+        public virtual void OnInputChanged(InputEventData<HandData> eventData) { }
 
         #endregion IMixedRealitySourcePoseHandler Implementation
 
