@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
-using UnityEngine;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -16,15 +16,15 @@ namespace XRTK.SDK.Input.Handlers
     {
         [SerializeField]
         [Tooltip("The input actions to be recognized on pointer up.")]
-        private InputActionEventPair onPointerUpActionEvent;
+        private InputActionEventPair onPointerUpActionEvent = null;
 
         [SerializeField]
         [Tooltip("The input actions to be recognized on pointer down.")]
-        private InputActionEventPair onPointerDownActionEvent;
+        private InputActionEventPair onPointerDownActionEvent = null;
 
         [SerializeField]
         [Tooltip("The input actions to be recognized on pointer clicked.")]
-        private InputActionEventPair onPointerClickedActionEvent;
+        private InputActionEventPair onPointerClickedActionEvent = null;
 
         #region IMixedRealityPointerHandler Implementation
 
