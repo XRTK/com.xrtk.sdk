@@ -105,7 +105,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 61c1e7929b6fa704a9b36bd96c8ced3b, type: 2}
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     name: Oculus Controller Data Provider
@@ -115,7 +115,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 812963d03fdf0d046a28b423b70f473e, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
         XRTK
@@ -125,28 +125,3 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
     profile: {fileID: 11400000, guid: cbed43298a63b38459e380f61096a062, type: 2}
-  - instancedType:
-      reference: XRTK.WindowsMixedReality.Controllers.Hands.WindowsMixedRealityHandControllerDataProvider,
-        XRTK.WindowsMixedReality
-    name: Windows Mixed Reality Hand Controller Data Provider
-    priority: 10
-    platformEntries:
-      runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 11400000, guid: 4d3282a503ed2714f89cd628a249c1c1, type: 2}
-  - instancedType:
-      reference: XRTK.Oculus.Controllers.Hands.OculusHandControllerDataProvider, XRTK.Oculus
-    name: Oculus Hand Controller Data Provider
-    priority: 11
-    platformEntries:
-      runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-    profile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
-  - instancedType:
-      reference: XRTK.Lumin.Controllers.Hands.LuminHandControllerDataProvider, XRTK.Lumin
-    name: Lumin Hand Controller Data Provider
-    priority: 12
-    platformEntries:
-      runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
-    profile: {fileID: 11400000, guid: 1b116c9f84493294d823efe7cfb8700a, type: 2}

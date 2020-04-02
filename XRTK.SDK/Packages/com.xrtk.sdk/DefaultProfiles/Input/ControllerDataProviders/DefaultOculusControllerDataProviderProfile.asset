@@ -9,9 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d84c7ed27db75624bac8d09795da13ad, type: 3}
-  m_Name: DefaultLuminHandControllerDataProviderProfile
+  m_Script: {fileID: 11500000, guid: 90f3e2e415703f24db18a5caa501bb3c, type: 3}
+  m_Name: DefaultOculusControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
-  keyPointFilterLevel: 2
-  poseFilterLevel: 2
+  isEditable: 0
+  handMeshingEnabled: 0
+  handRayType:
+    reference: 
+  handPhysicsEnabled: 0
+  useTriggers: 0
+  boundsMode: 0
+  minConfidenceRequired: 1
