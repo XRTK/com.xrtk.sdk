@@ -133,7 +133,6 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
     profile: {fileID: 11400000, guid: 4d3282a503ed2714f89cd628a249c1c1, type: 2}
   - instancedType:
       reference: XRTK.Oculus.Controllers.Hands.OculusHandControllerDataProvider, XRTK.Oculus
@@ -142,7 +141,6 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
     profile: {fileID: 11400000, guid: 440e002106df2af40806c7b351290415, type: 2}
   - instancedType:
       reference: XRTK.Lumin.Controllers.Hands.LuminHandControllerDataProvider, XRTK.Lumin
