@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Providers.Controllers.Hands;
 
@@ -40,7 +41,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 return;
             }
 
-            for (int i = 0; i < BaseHandController.JointCount; i++)
+            for (int i = 0; i < HandData.JointCount; i++)
             {
                 CreateJointVisualizerIfNotExists((TrackedHandJoint)i);
             }

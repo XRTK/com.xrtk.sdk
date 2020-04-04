@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using XRTK.Definitions.Controllers.Hands;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
@@ -102,7 +103,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             // configuration before updating joints.
             UpdatePhysicsConfiguration();
 
-            HandData handData = eventData.InputData;
+            var handData = eventData.InputData;
             UpdateHandJointTransforms(handData);
 
             // With joints updated, we can update colliders.
@@ -111,13 +112,14 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         private void UpdateHandJointTransforms(HandData handData)
         {
-            IReadOnlyDictionary<TrackedHandJoint, MixedRealityPose> jointPoses = handData.Joints.ToJointPoseDictionary();
-            foreach (TrackedHandJoint handJoint in jointPoses.Keys)
+            var jointPoses = handData.Joints.ToJointPoseDictionary();
+
+            foreach (var handJoint in jointPoses.Keys)
             {
                 if (handJoint != TrackedHandJoint.None)
                 {
-                    Transform jointTransform = GetOrCreateJointTransform(handJoint);
-                    MixedRealityPose jointPose = jointPoses[handJoint];
+                    var jointTransform = GetOrCreateJointTransform(handJoint);
+                    var jointPose = jointPoses[handJoint];
                     jointTransform.localPosition = jointPose.Position;
                     jointTransform.localRotation = jointPose.Rotation;
                 }
