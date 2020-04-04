@@ -8,7 +8,7 @@ using XRTK.Providers.Controllers.Hands;
 namespace XRTK.SDK.UX.Controllers.Hands
 {
     /// <summary>
-    /// Hand controller visualizer visuailzing hand mesh data.
+    /// Hand controller visualizer visualizing hand mesh data.
     /// </summary>
     public class HandControllerMeshVisualizer : BaseHandControllerVisualizer
     {
