@@ -86,9 +86,18 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
+        XRTK.WindowsMixedReality
+    name: Windows Mixed Reality Hand Controller Data Provider
+    priority: 6
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+    profile: {fileID: 11400000, guid: 4d3282a503ed2714f89cd628a249c1c1, type: 2}
+  - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
     name: Windows Dictation Data Provider
-    priority: 6
+    priority: 7
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
@@ -98,7 +107,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
     name: Lumin Controller Data Provider
-    priority: 7
+    priority: 8
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
@@ -106,7 +115,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     name: Oculus Controller Data Provider
-    priority: 8
+    priority: 9
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -116,7 +125,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
     name: Oculus Hand Controller Data Provider
-    priority: 9
+    priority: 10
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -125,7 +134,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
         XRTK
     name: Simulated Hand Controller Data Provider
-    priority: 10
+    priority: 11
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
