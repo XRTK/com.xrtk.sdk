@@ -14,15 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focusProviderType:
     reference: XRTK.Services.InputSystem.FocusProvider, XRTK
+  pointingExtent: 10
+  pointingRaycastLayerMasks:
+  - serializedVersion: 2
+    m_Bits: 4294967291
+  drawDebugPointingRays: 1
+  debugPointingRayColors:
+  - {r: 0, g: 1, b: 0, a: 1}
+  gazeProviderType:
+    reference: XRTK.SDK.Input.GazeProvider, XRTK.SDK
+  gazeCursorPrefab: {fileID: 1000012072213228, guid: 79f96834fcc44889b558cc13518979a0,
+    type: 3}
   inputActionsProfile: {fileID: 11400000, guid: 399335ccc89c4d12b79f3539ca7771db,
     type: 2}
-  pointerProfile: {fileID: 11400000, guid: 7f7b533148094cc180702e9402dd9938, type: 2}
-  gesturesProfile: {fileID: 11400000, guid: 47280a6380eb40d5952dc5a5da00a89e, type: 2}
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,
     type: 2}
+  gesturesProfile: {fileID: 11400000, guid: 47280a6380eb40d5952dc5a5da00a89e, type: 2}
   controllerDataProvidersProfile: {fileID: 11400000, guid: 8d8097329112459891015c72988485cd,
-    type: 2}
-  controllerMappingProfiles: {fileID: 11400000, guid: f83e1d143c5a46dba5e70f497a7a996d,
-    type: 2}
-  controllerVisualizationProfile: {fileID: 11400000, guid: d7daaacd4b9b4529a2bb2c06d10b5ae6,
     type: 2}

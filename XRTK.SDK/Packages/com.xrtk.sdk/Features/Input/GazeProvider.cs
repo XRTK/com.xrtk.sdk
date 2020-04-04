@@ -372,10 +372,9 @@ namespace XRTK.SDK.Input
 
             if (GazeCursor == null &&
                 MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile != null &&
-                MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.PointerProfile != null &&
-                MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.PointerProfile.GazeCursorPrefab != null)
+                MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.GazeCursorPrefab != null)
             {
-                var cursor = Instantiate(MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.PointerProfile.GazeCursorPrefab, MixedRealityToolkit.CameraSystem?.CameraRig.PlayspaceTransform);
+                var cursor = Instantiate(MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.GazeCursorPrefab, MixedRealityToolkit.CameraSystem?.CameraRig.PlayspaceTransform);
                 SetGazeCursor(cursor);
             }
 
