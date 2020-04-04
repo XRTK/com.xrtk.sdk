@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Providers.Controllers.Hands;
 
@@ -39,7 +40,8 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 return;
             }
 
-            HandMeshData handMeshData = eventData.InputData.Mesh;
+            var handMeshData = eventData.InputData.Mesh;
+
             if (meshFilter != null || CreateMeshFilter())
             {
                 Mesh mesh = meshFilter.mesh;
