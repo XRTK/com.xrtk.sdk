@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d628c3f3d8034aa7a4c414bf96227e1a, type: 3}
   m_Name: DefaultMixedRealityControllerDataProvidersProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   configurations:
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
@@ -74,7 +73,6 @@ MonoBehaviour:
     priority: 4
     platformEntries:
       runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
     profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
   - instancedType:
@@ -104,7 +102,6 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
     profile: {fileID: 11400000, guid: 61c1e7929b6fa704a9b36bd96c8ced3b, type: 2}
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
@@ -113,14 +110,22 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+    profile: {fileID: 11400000, guid: 812963d03fdf0d046a28b423b70f473e, type: 2}
+  - instancedType:
+      reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
+    name: Oculus Hand Controller Data Provider
+    priority: 9
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
     profile: {fileID: 11400000, guid: 812963d03fdf0d046a28b423b70f473e, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
         XRTK
     name: Simulated Hand Controller Data Provider
-    priority: 9
+    priority: 10
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
