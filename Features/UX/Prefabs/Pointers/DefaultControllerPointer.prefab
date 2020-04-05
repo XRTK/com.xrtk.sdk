@@ -158,6 +158,7 @@ MonoBehaviour:
   destroyOnSourceLost: 1
   useSourcePoseData: 0
   poseAction:
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 4
     description: Pointer Pose
     axisConstraint: 7
@@ -167,16 +168,19 @@ MonoBehaviour:
   setCursorVisibilityOnSourceDetected: 0
   raycastOrigin: {fileID: 0}
   activeHoldAction:
+    profileGuid: 00000000000000000000000000000000
     id: 0
     description: None
     axisConstraint: 0
   pointerAction:
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 1
     description: Select
     axisConstraint: 2
   requiresHoldAction: 0
+  enablePointerOnStart: 0
   overrideGlobalPointerExtent: 0
-  pointerExtent: 10
+  defaultPointerExtent: 10
   pointerOrientation: 0
   LineColorSelected:
     serializedVersion: 2
@@ -327,7 +331,6 @@ MonoBehaviour:
   lineBase: {fileID: 6863193991115524521}
   lineRenderers:
   - {fileID: 1526809385130449531}
-  gravityDistorter: {fileID: 1307499967629831868}
 --- !u!120 &3080660041806603478
 LineRenderer:
   m_ObjectHideFlags: 0

@@ -17,30 +17,35 @@ MonoBehaviour:
   - description: Hold
     gestureType: 3
     action:
+      profileGuid: 47280a6380eb40d5952dc5a5da00a89e
       id: 8
       description: Hold Action
       axisConstraint: 0
   - description: Navigation
     gestureType: 4
     action:
+      profileGuid: 47280a6380eb40d5952dc5a5da00a89e
       id: 10
       description: Navigation Action
       axisConstraint: 0
   - description: Manipulation
     gestureType: 5
     action:
+      profileGuid: 47280a6380eb40d5952dc5a5da00a89e
       id: 9
       description: Manipulate Action
       axisConstraint: 0
   - description: Tap
     gestureType: 1
     action:
+      profileGuid: 47280a6380eb40d5952dc5a5da00a89e
       id: 1
       description: Select
       axisConstraint: 2
   - description: Double Tap
     gestureType: 2
     action:
+      profileGuid: 47280a6380eb40d5952dc5a5da00a89e
       id: 1
       description: Select
       axisConstraint: 2
