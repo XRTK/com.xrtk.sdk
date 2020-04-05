@@ -19,10 +19,40 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
     handedness: 1
     useCustomInteractionMappings: 0
-    interactions: []
+    interactions:
+    - id: 0
+      description: 
+      axisType: 7
+      inputType: 3
+      inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
+        id: 4
+        description: Pointer Pose
+        axisConstraint: 7
+      keyCode: 0
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
   - description: Hand Controller Right
     controllerType:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
-    interactions: []
+    interactions:
+    - id: 0
+      description: 
+      axisType: 7
+      inputType: 3
+      inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
+        id: 4
+        description: Pointer Pose
+        axisConstraint: 7
+      keyCode: 0
+      inputName: 
+      axisCodeX: 
+      axisCodeY: 
+      invertXAxis: 0
+      invertYAxis: 0
