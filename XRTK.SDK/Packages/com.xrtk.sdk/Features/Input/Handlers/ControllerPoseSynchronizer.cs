@@ -52,7 +52,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The current tracking state of the assigned <see cref="IMixedRealityController"/>
         /// </summary>
-        protected TrackingState TrackingState = TrackingState.NotTracked;
+        protected TrackingState TrackingState { get; set; } = TrackingState.NotTracked;
 
         private IMixedRealityController controller;
 
