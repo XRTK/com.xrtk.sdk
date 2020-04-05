@@ -99,6 +99,11 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 return;
             }
 
+            // Update the visualizers tracking state.
+            TrackingState = eventData.InputData.IsTracked
+                ? Definitions.Devices.TrackingState.Tracked
+                : Definitions.Devices.TrackingState.NotTracked;
+
             // It's important to update physics
             // configuration before updating joints.
             UpdatePhysicsConfiguration();
