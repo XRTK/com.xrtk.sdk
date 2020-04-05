@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e59c0e9dea8c4544091323a3819be589, type: 3}
   m_Name: DefaultMixedRealityHandTrackingProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   handMeshingEnabled: 0
-  handRayType:
-    reference: 
   handPhysicsEnabled: 0
   useTriggers: 0
   boundsMode: 0
