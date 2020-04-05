@@ -19,30 +19,35 @@ MonoBehaviour:
   - keyword: Menu
     keyCode: 0
     action:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
   - keyword: Toggle Diagnostics
     keyCode: 0
     action:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
   - keyword: Toggle Frame Rate
     keyCode: 0
     action:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
   - keyword: Toggle Processor
     keyCode: 0
     action:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
   - keyword: Toggle Memory
     keyCode: 0
     action:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0

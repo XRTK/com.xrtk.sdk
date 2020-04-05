@@ -47,6 +47,7 @@ MonoBehaviour:
   destroyOnSourceLost: 0
   useSourcePoseData: 0
   poseAction:
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 12
     description: Mouse Delta
     axisConstraint: 4
@@ -56,10 +57,12 @@ MonoBehaviour:
   setCursorVisibilityOnSourceDetected: 0
   raycastOrigin: {fileID: 0}
   activeHoldAction:
+    profileGuid: 00000000000000000000000000000000
     id: 0
     description: None
     axisConstraint: 0
   pointerAction:
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 1
     description: Select
     axisConstraint: 2
