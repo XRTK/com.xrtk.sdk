@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: DefaultOculusHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
   handMeshingEnabled: 0
-  handRayType:
-    reference: 
   handPhysicsEnabled: 0
   useTriggers: 0
   boundsMode: 0
-  minConfidenceRequired: 1
+  minConfidenceRequired: 0
