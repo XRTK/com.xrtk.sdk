@@ -10,12 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8fa0957ca27c2b74da71e4a2444ad550, type: 3}
-  m_Name: DefaultLuminControllerDataProviderProfile
+  m_Name: DefaultLuminHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   handMeshingEnabled: 0
-  handRayType:
-    reference: 
   handPhysicsEnabled: 0
   useTriggers: 0
   boundsMode: 0

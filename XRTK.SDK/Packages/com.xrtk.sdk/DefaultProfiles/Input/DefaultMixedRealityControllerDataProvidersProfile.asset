@@ -111,11 +111,19 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
-    profile: {fileID: 11400000, guid: 61c1e7929b6fa704a9b36bd96c8ced3b, type: 2}
+    profile: {fileID: 0}
+  - instancedType:
+      reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
+    name: Lumin Hand Controller Data Provider
+    priority: 9
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
+    profile: {fileID: 11400000, guid: 42f948f15f8c0e247895967b78967832, type: 2}
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     name: Oculus Controller Data Provider
-    priority: 9
+    priority: 10
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -125,7 +133,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
     name: Oculus Hand Controller Data Provider
-    priority: 10
+    priority: 11
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -134,7 +142,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
         XRTK
     name: Simulated Hand Controller Data Provider
-    priority: 11
+    priority: 12
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
