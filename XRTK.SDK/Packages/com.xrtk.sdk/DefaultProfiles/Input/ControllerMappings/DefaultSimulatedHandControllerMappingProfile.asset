@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff490729fb2a2b4da8da5154ed07183, type: 3}
   m_Name: DefaultSimulatedHandControllerMappingProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   hasSetupDefaults: 1
   controllerMappings:
   - description: Simulated Hand Controller Left
@@ -134,20 +133,6 @@ MonoBehaviour:
       axisCodeY: 
       invertXAxis: 0
       invertYAxis: 0
-    - id: 8
-      description: Move
-      axisType: 7
-      inputType: 3
-      inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
-      invertXAxis: 0
-      invertYAxis: 0
   - description: Simulated Hand Controller Right
     controllerType:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
@@ -262,20 +247,6 @@ MonoBehaviour:
         description: None
         axisConstraint: 0
       keyCode: 281
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
-      invertXAxis: 0
-      invertYAxis: 0
-    - id: 8
-      description: Move
-      axisType: 7
-      inputType: 3
-      inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
       inputName: 
       axisCodeX: 
       axisCodeY: 

@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd6ee3b1a67286499036d1dd14e8552, type: 3}
   m_Name: DefaultHandControllerMappingProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   hasSetupDefaults: 1
   controllerMappings:
   - description: Hand Controller Left
@@ -20,66 +19,10 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
     handedness: 1
     useCustomInteractionMappings: 0
-    interactions:
-    - id: 0
-      description: Spatial Pointer
-      axisType: 7
-      inputType: 3
-      inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
-      invertXAxis: 0
-      invertYAxis: 0
-    - id: 2
-      description: Select
-      axisType: 2
-      inputType: 25
-      inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
-      invertXAxis: 0
-      invertYAxis: 0
+    interactions: []
   - description: Hand Controller Right
     controllerType:
       reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
     handedness: 2
     useCustomInteractionMappings: 0
-    interactions:
-    - id: 0
-      description: Spatial Pointer
-      axisType: 7
-      inputType: 3
-      inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
-      invertXAxis: 0
-      invertYAxis: 0
-    - id: 2
-      description: Select
-      axisType: 2
-      inputType: 25
-      inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
-      keyCode: 0
-      inputName: 
-      axisCodeX: 
-      axisCodeY: 
-      invertXAxis: 0
-      invertYAxis: 0
+    interactions: []
