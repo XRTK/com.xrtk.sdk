@@ -14,21 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configurations:
   - instancedType:
-      reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
-    name: Mouse Controller Data Provider
-    priority: 0
-    platformEntries:
-      runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 0}
-  - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
     name: Touch Screen Controller Data Provider
-    priority: 1
+    priority: 0
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -43,7 +31,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
         XRTK
     name: Unity Joystick Controller Data Provider
-    priority: 2
+    priority: 1
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -57,7 +45,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
     name: Open VR Controller Data Provider
-    priority: 3
+    priority: 2
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
@@ -70,7 +58,7 @@ MonoBehaviour:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
         XRTK.WindowsMixedReality
     name: Windows Mixed Reality Controller Data Provider
-    priority: 4
+    priority: 3
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
@@ -78,7 +66,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
     name: Windows Speech Data Provider
-    priority: 5
+    priority: 4
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
@@ -89,7 +77,7 @@ MonoBehaviour:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
         XRTK.WindowsMixedReality
     name: Windows Mixed Reality Hand Controller Data Provider
-    priority: 6
+    priority: 5
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
@@ -97,7 +85,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
     name: Windows Dictation Data Provider
-    priority: 7
+    priority: 6
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
@@ -107,7 +95,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
     name: Lumin Controller Data Provider
-    priority: 8
+    priority: 7
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
@@ -115,7 +103,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
     name: Lumin Hand Controller Data Provider
-    priority: 9
+    priority: 8
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
@@ -123,7 +111,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     name: Oculus Controller Data Provider
-    priority: 10
+    priority: 9
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -133,7 +121,7 @@ MonoBehaviour:
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
     name: Oculus Hand Controller Data Provider
-    priority: 11
+    priority: 10
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
@@ -142,7 +130,7 @@ MonoBehaviour:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
         XRTK
     name: Simulated Hand Controller Data Provider
-    priority: 12
+    priority: 11
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
