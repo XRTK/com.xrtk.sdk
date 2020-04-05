@@ -12,13 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a16673d92d4e8fa24750357b3cf906, type: 3}
   m_Name: DefaultMixedRealityInputSystemProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
-  parentProfile: {fileID: 11400000, guid: 99874ef12e4f4f27ae4888ce1c693090, type: 2}
   focusProviderType:
     reference: XRTK.Services.InputSystem.FocusProvider, XRTK
   inputActionsProfile: {fileID: 11400000, guid: 399335ccc89c4d12b79f3539ca7771db,
-    type: 2}
-  inputActionRulesProfile: {fileID: 11400000, guid: ef567c286b1542c8bc638fad1ccbe250,
     type: 2}
   pointerProfile: {fileID: 11400000, guid: 7f7b533148094cc180702e9402dd9938, type: 2}
   gesturesProfile: {fileID: 11400000, guid: 47280a6380eb40d5952dc5a5da00a89e, type: 2}

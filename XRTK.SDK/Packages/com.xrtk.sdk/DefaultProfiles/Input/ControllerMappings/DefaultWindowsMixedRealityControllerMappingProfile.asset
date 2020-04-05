@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a77269983a934c18a85a96fdff6e0ef6, type: 3}
   m_Name: DefaultWindowsMixedRealityControllerMappingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
   hasSetupDefaults: 1
   controllerMappings:
   - description: Windows Mixed Reality HoloLens Hand Input
@@ -27,6 +27,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 4
         description: Pointer Pose
         axisConstraint: 7
@@ -41,6 +42,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 14
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 3
         description: Grip Pose
         axisConstraint: 7
@@ -55,6 +57,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 13
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -69,6 +72,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -83,6 +87,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 11
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -97,6 +102,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 25
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 1
         description: Select
         axisConstraint: 2
@@ -111,6 +117,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -125,6 +132,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 22
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -139,6 +147,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 24
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -153,6 +162,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 27
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -167,6 +177,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -181,6 +192,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 18
       inputAction:
+        profileGuid: 
         id: 0
         description: None
         axisConstraint: 0
@@ -202,6 +214,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 4
         description: Pointer Pose
         axisConstraint: 7
@@ -216,6 +229,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 14
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 3
         description: Grip Pose
         axisConstraint: 7
@@ -230,6 +244,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 13
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 7
         description: Grip Press
         axisConstraint: 3
@@ -244,6 +259,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 6
         description: Trigger
         axisConstraint: 3
@@ -258,6 +274,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 11
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -272,6 +289,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 25
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 1
         description: Select
         axisConstraint: 2
@@ -286,6 +304,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -300,6 +319,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 22
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -314,6 +334,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 24
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -328,6 +349,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 27
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 2
         description: Menu
         axisConstraint: 2
@@ -342,6 +364,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -356,6 +379,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 18
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -377,6 +401,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 4
         description: Pointer Pose
         axisConstraint: 7
@@ -391,6 +416,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 14
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 3
         description: Grip Pose
         axisConstraint: 7
@@ -405,6 +431,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 13
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 7
         description: Grip Press
         axisConstraint: 3
@@ -419,6 +446,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 6
         description: Trigger
         axisConstraint: 3
@@ -433,6 +461,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 11
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -447,6 +476,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 25
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 1
         description: Select
         axisConstraint: 2
@@ -461,6 +491,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -475,6 +506,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 22
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -489,6 +521,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 24
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -503,6 +536,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 27
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 2
         description: Menu
         axisConstraint: 2
@@ -517,6 +551,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -531,6 +566,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 18
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -552,6 +588,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 4
         description: Pointer Pose
         axisConstraint: 7
@@ -566,6 +603,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 14
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 3
         description: Grip Pose
         axisConstraint: 7
@@ -580,6 +618,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 7
         description: Grip Press
         axisConstraint: 3
@@ -594,6 +633,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 6
         description: Trigger
         axisConstraint: 3
@@ -608,6 +648,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -622,6 +663,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 11
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 1
         description: Select
         axisConstraint: 2
@@ -636,6 +678,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -650,6 +693,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 22
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -664,6 +708,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 24
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -678,6 +723,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 2
         description: Menu
         axisConstraint: 2
@@ -692,6 +738,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -706,6 +753,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -727,6 +775,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 3
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 4
         description: Pointer Pose
         axisConstraint: 7
@@ -741,6 +790,7 @@ MonoBehaviour:
       axisType: 7
       inputType: 14
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 3
         description: Grip Pose
         axisConstraint: 7
@@ -755,6 +805,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 7
         description: Grip Press
         axisConstraint: 3
@@ -769,6 +820,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 6
         description: Trigger
         axisConstraint: 3
@@ -783,6 +835,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 13
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -797,6 +850,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 11
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 1
         description: Select
         axisConstraint: 2
@@ -811,6 +865,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 21
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -825,6 +880,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 22
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -839,6 +895,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 24
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -853,6 +910,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 2
         description: Menu
         axisConstraint: 2
@@ -867,6 +925,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 5
         description: Teleport Direction
         axisConstraint: 4
@@ -881,6 +940,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0

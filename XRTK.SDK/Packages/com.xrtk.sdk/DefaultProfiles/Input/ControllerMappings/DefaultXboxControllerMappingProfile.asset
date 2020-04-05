@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b5b96daf57415a8080c7ef4d929e15, type: 3}
   m_Name: DefaultXboxControllerMappingProfile
   m_EditorClassIdentifier: 
-  isCustomProfile: 0
+  isEditable: 0
   hasSetupDefaults: 1
   controllerMappings:
   - description: Xbox Controller
@@ -26,6 +26,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 13
         description: Movement Direction
         axisConstraint: 4
@@ -40,6 +41,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -54,6 +56,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 17
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 14
         description: Rotation Direction
         axisConstraint: 4
@@ -68,6 +71,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -82,6 +86,7 @@ MonoBehaviour:
       axisType: 4
       inputType: 49
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -96,6 +101,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 6
         description: Trigger
         axisConstraint: 3
@@ -110,6 +116,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -124,6 +131,7 @@ MonoBehaviour:
       axisType: 3
       inputType: 10
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -138,6 +146,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -152,6 +161,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 2
         description: Menu
         axisConstraint: 2
@@ -166,6 +176,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -180,6 +191,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -194,6 +206,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 399335ccc89c4d12b79f3539ca7771db
         id: 1
         description: Select
         axisConstraint: 2
@@ -208,6 +221,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -222,6 +236,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
@@ -236,6 +251,7 @@ MonoBehaviour:
       axisType: 2
       inputType: 7
       inputAction:
+        profileGuid: 00000000000000000000000000000000
         id: 0
         description: None
         axisConstraint: 0
