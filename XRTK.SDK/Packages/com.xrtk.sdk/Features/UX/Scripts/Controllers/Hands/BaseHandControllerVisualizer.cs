@@ -55,21 +55,12 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// </summary>
         protected GameObject HandVisualizationGameObject => HandControllerDataProvider.HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObjectProxy;
 
+        private IMixedRealityHandControllerDataProvider handControllerDataProvider;
+
         /// <summary>
         /// The active hand controller data provider.
         /// </summary>
-        protected IMixedRealityHandControllerDataProvider HandControllerDataProvider { get; private set; }
-
-        /// <inheritdoc />
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-
-            if (HandControllerDataProvider == null)
-            {
-                HandControllerDataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>();
-            }
-        }
+        protected IMixedRealityHandControllerDataProvider HandControllerDataProvider => handControllerDataProvider ?? (handControllerDataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>());
 
         /// <inheritdoc />
         protected override void OnDestroy()
