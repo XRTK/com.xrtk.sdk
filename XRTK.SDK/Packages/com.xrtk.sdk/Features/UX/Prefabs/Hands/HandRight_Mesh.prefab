@@ -47,8 +47,8 @@ MonoBehaviour:
   destroyOnSourceLost: 1
   useSourcePoseData: 1
   poseAction:
-    id: 4
-    description: Pointer Pose
-    axisConstraint: 7
+    id: 0
+    description: None
+    axisConstraint: 0
   handMeshPrefab: {fileID: 1887883006053652, guid: 81cacd47fbb47714d8b19cffb1edf4af,
     type: 3}
