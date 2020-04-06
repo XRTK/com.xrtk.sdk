@@ -21,6 +21,7 @@ MonoBehaviour:
   globalRightHandModel: {fileID: 1760394390528354, guid: 3c945620dae24228acea8b9402529ce6,
     type: 3}
   globalPointerPose:
+    profileGuid: f6f5194f5d1d44f45ba598de54fea490
     id: 4
     description: Pointer Pose
     axisConstraint: 7
@@ -36,10 +37,12 @@ MonoBehaviour:
       reference: XRTK.SDK.UX.Controllers.WindowsMixedRealityControllerVisualizer,
         XRTK.SDK
     poseAction:
+      profileGuid: f6f5194f5d1d44f45ba598de54fea490
       id: 4
       description: Pointer Pose
       axisConstraint: 7
     alternatePoseAction:
+      profileGuid: f6f5194f5d1d44f45ba598de54fea490
       id: 3
       description: Grip Pose
       axisConstraint: 7
@@ -54,10 +57,12 @@ MonoBehaviour:
       reference: XRTK.SDK.UX.Controllers.WindowsMixedRealityControllerVisualizer,
         XRTK.SDK
     poseAction:
+      profileGuid: f6f5194f5d1d44f45ba598de54fea490
       id: 4
       description: Pointer Pose
       axisConstraint: 7
     alternatePoseAction:
+      profileGuid: f6f5194f5d1d44f45ba598de54fea490
       id: 3
       description: Grip Pose
       axisConstraint: 7
@@ -72,10 +77,12 @@ MonoBehaviour:
     controllerVisualizationType:
       reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
     alternatePoseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
@@ -90,10 +97,12 @@ MonoBehaviour:
     controllerVisualizationType:
       reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
     alternatePoseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
@@ -107,10 +116,12 @@ MonoBehaviour:
     controllerVisualizationType:
       reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
     alternatePoseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
@@ -124,10 +135,12 @@ MonoBehaviour:
     controllerVisualizationType:
       reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
     poseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
     alternatePoseAction:
+      profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
