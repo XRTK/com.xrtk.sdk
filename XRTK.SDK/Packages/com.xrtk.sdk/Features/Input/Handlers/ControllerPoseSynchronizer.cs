@@ -158,9 +158,6 @@ namespace XRTK.SDK.Input.Handlers
             }
         }
 
-        /// <inheritdoc />
-        public virtual void OnInputChanged(InputEventData<HandData> eventData) { }
-
         #endregion IMixedRealitySourcePoseHandler Implementation
 
         #region IMixedRealityInputHandler Implementation
@@ -173,6 +170,9 @@ namespace XRTK.SDK.Input.Handlers
 
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<float> eventData) { }
+
+        /// <inheritdoc />
+        public virtual void OnInputChanged(InputEventData<HandData> eventData) { }
 
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<Vector2> eventData) { }
