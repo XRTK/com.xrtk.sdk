@@ -62,6 +62,7 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
     profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
@@ -126,7 +127,6 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
     profile: {fileID: 11400000, guid: 812963d03fdf0d046a28b423b70f473e, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
