@@ -5,14 +5,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
-using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem.Controllers.Hands;
 using XRTK.Interfaces.Providers.Controllers;
-using XRTK.Providers.Controllers.Hands;
 using XRTK.SDK.Input.Handlers;
-using XRTK.Services;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
@@ -42,7 +39,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         }
 
         /// <summary>
-        /// If using physics with hand, the actual hand visualation is done
+        /// If using physics with hand, the actual hand visualization is done
         /// on a companion game object which is connected to the <see cref="GameObjectProxy"/>
         /// using a <see cref="FixedJoint"/>. For physics to work properly while maintaining
         /// the platforms controller tracking we cannot attach colliders and a rigidbody to the
@@ -53,14 +50,14 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// <summary>
         /// The actual game object that is parent to all controller visualization of this hand controller.
         /// </summary>
-        protected GameObject HandVisualizationGameObject => HandControllerDataProvider.HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObjectProxy;
+        protected GameObject HandVisualizationGameObject => ((IMixedRealityHandControllerDataProvider)Controller.ControllerDataProvider).HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObjectProxy;
 
         private IMixedRealityHandControllerDataProvider handControllerDataProvider;
 
         /// <summary>
         /// The active hand controller data provider.
         /// </summary>
-        protected IMixedRealityHandControllerDataProvider HandControllerDataProvider => handControllerDataProvider ?? (handControllerDataProvider = MixedRealityToolkit.GetService<IMixedRealityHandControllerDataProvider>());
+        protected IMixedRealityHandControllerDataProvider HandControllerDataProvider => handControllerDataProvider ?? (handControllerDataProvider = (IMixedRealityHandControllerDataProvider)Controller.ControllerDataProvider);
 
         /// <inheritdoc />
         protected override void OnDestroy()
@@ -158,7 +155,8 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             if (HandControllerDataProvider.HandPhysicsEnabled)
             {
-                IMixedRealityHandController handController = Controller as IMixedRealityHandController;
+                var handController = (IMixedRealityHandController)Controller;
+
                 if (HandControllerDataProvider.BoundsMode == HandBoundsMode.Fingers)
                 {
                     if (handController.TryGetBounds(TrackedHandBounds.Thumb, out Bounds[] thumbBounds))
@@ -282,7 +280,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             collider.radius = fingerColliderRadius;
             collider.direction = capsuleColliderZAxis;
             collider.height = bounds.size.magnitude;
-            collider.center = jointTransform.transform.InverseTransformPoint(bounds.center);
+            collider.center = jointTransform.InverseTransformPoint(bounds.center);
             collider.isTrigger = HandControllerDataProvider.UseTriggers;
         }
 

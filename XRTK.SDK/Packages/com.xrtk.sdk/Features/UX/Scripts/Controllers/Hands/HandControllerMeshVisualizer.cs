@@ -4,7 +4,6 @@
 using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
-using XRTK.Providers.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {

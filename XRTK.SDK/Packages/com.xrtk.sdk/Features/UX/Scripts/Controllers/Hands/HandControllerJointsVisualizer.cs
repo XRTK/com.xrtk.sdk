@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
-using XRTK.Providers.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
     /// <summary>
-    /// Hand controller visualizer visuailzing hand joints.
+    /// Hand controller visualizer visualizing hand joints.
     /// </summary>
     public class HandControllerJointsVisualizer : BaseHandControllerVisualizer
     {
@@ -54,24 +53,30 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 return;
             }
 
-            GameObject prefab = jointPrefab;
-            if (handJoint == TrackedHandJoint.Palm)
+            var prefab = jointPrefab;
+
+            switch (handJoint)
             {
-                prefab = palmPrefab;
-            }
-            else if (handJoint == TrackedHandJoint.IndexTip || handJoint == TrackedHandJoint.MiddleTip
-                || handJoint == TrackedHandJoint.PinkyTip || handJoint == TrackedHandJoint.RingTip || handJoint == TrackedHandJoint.ThumbTip)
-            {
-                prefab = fingertipPrefab;
+                case TrackedHandJoint.Palm:
+                    prefab = palmPrefab;
+                    break;
+                case TrackedHandJoint.IndexTip:
+                case TrackedHandJoint.MiddleTip:
+                case TrackedHandJoint.PinkyTip:
+                case TrackedHandJoint.RingTip:
+                case TrackedHandJoint.ThumbTip:
+                    prefab = fingertipPrefab;
+                    break;
             }
 
             if (prefab != null)
             {
-                GameObject jointVisualization = Instantiate(prefab, GetOrCreateJointTransform(handJoint));
+                var jointVisualization = Instantiate(prefab, GetOrCreateJointTransform(handJoint));
+
                 if (handJoint == TrackedHandJoint.IndexTip)
                 {
-                    Renderer indexJointRenderer = jointVisualization.GetComponent<Renderer>();
-                    Material indexMaterial = indexJointRenderer.material;
+                    var indexJointRenderer = jointVisualization.GetComponent<Renderer>();
+                    var indexMaterial = indexJointRenderer.material;
                     indexMaterial.color = indexFingertipColor;
                     indexJointRenderer.material = indexMaterial;
                 }
