@@ -24,7 +24,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 6261b3ec6f8067e4b84e0eb263ec4490, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
     name: Touch Screen Controller Data Provider
@@ -76,7 +76,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
     name: Windows Speech Data Provider
