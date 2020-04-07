@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a77a13b8e0bc48acaa8594833e47d96c, type: 3}
   m_Name: DefaultMixedRealityControllerMappingProfiles
   m_EditorClassIdentifier: 
-  isEditable: 0
   controllerMappingProfiles:
   - {fileID: 11400000, guid: a3d986e05a0242d9b4b4d1be1543149b, type: 2}
   - {fileID: 11400000, guid: 037f788d893441f289c4f87185f262cb, type: 2}
@@ -25,4 +24,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6419d794ce6246aeb1ff2a5554a2ed23, type: 2}
   - {fileID: 11400000, guid: 4a819f7672c7b1e4f8667519a153faa8, type: 2}
   - {fileID: 11400000, guid: 369b877ec9227dc48a689d463457deb9, type: 2}
+  - {fileID: 11400000, guid: c1d0fcbc1ed2aa04dbe19fd45d8487de, type: 2}
+  - {fileID: 11400000, guid: bf98d8e5e8b0d1248a6b729b7b853f5a, type: 2}
   - {fileID: 11400000, guid: a3b430a794cb1ba4c98da9fb37961f9a, type: 2}
