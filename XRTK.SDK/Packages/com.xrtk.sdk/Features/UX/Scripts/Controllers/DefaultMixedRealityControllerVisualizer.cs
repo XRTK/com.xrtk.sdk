@@ -3,9 +3,9 @@
 
 using System;
 using UnityEngine;
-using XRTK.Definitions.Controllers;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.SDK.Input.Handlers;
+using XRTK.Definitions.Controllers;
 
 namespace XRTK.SDK.UX.Controllers
 {
