@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d628c3f3d8034aa7a4c414bf96227e1a, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d0188c7a9d12f649b2b1ce2b6b2e82c, type: 3}
   m_Name: DefaultMixedRealityControllerDataProvidersProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   configurations:
   - instancedType:
-      reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
+      reference: XRTK.Definitions.Controllers.UnityInput.MouseDataProvider, XRTK
     name: Mouse Controller Data Provider
     priority: 0
     platformEntries:
@@ -25,7 +24,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
     name: Touch Screen Controller Data Provider
@@ -39,7 +38,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
         XRTK
@@ -54,9 +53,10 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
-      reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataControllerDataProvider,
+        XRTK
     name: Open VR Controller Data Provider
     priority: 3
     platformEntries:
@@ -66,7 +66,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
         XRTK.WindowsMixedReality
@@ -76,8 +76,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    configurationProfile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849,
-      type: 2}
+    profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
     name: Windows Speech Data Provider
@@ -87,7 +86,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
     name: Windows Dictation Data Provider
@@ -97,7 +96,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
     name: Lumin Controller Data Provider
@@ -106,7 +105,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     name: Oculus Controller Data Provider
@@ -116,4 +115,4 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}

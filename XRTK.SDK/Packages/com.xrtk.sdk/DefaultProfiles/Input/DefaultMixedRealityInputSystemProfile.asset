@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focusProviderType:
     reference: XRTK.Services.InputSystem.FocusProvider, XRTK
+  gazeProviderType:
+    reference: XRTK.SDK.Input.GazeProvider, XRTK.SDK
+  gazeCursorPrefab: {fileID: 1000012072213228, guid: 79f96834fcc44889b558cc13518979a0,
+    type: 3}
   pointingExtent: 10
   pointingRaycastLayerMasks:
   - serializedVersion: 2
@@ -21,14 +25,10 @@ MonoBehaviour:
   drawDebugPointingRays: 1
   debugPointingRayColors:
   - {r: 0, g: 1, b: 0, a: 1}
-  gazeProviderType:
-    reference: XRTK.SDK.Input.GazeProvider, XRTK.SDK
-  gazeCursorPrefab: {fileID: 1000012072213228, guid: 79f96834fcc44889b558cc13518979a0,
-    type: 3}
   inputActionsProfile: {fileID: 11400000, guid: 399335ccc89c4d12b79f3539ca7771db,
     type: 2}
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,
     type: 2}
   gesturesProfile: {fileID: 11400000, guid: 47280a6380eb40d5952dc5a5da00a89e, type: 2}
-  controllerDataProvidersProfile: {fileID: 11400000, guid: 8d8097329112459891015c72988485cd,
+  controllerDataProvidersProfile: {fileID: 11400000, guid: c9396f48eab383747926cb27bc5c13fc,
     type: 2}
