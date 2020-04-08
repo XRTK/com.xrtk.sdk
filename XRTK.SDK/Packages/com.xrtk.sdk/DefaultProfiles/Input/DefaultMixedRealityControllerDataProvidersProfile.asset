@@ -24,7 +24,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 11400000, guid: 6261b3ec6f8067e4b84e0eb263ec4490, type: 2}
+    profile: {fileID: 11400000, guid: 8e961655c572f7140a4e7ab2fe229e25, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
     name: Touch Screen Controller Data Provider
@@ -38,7 +38,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: e7b412e1120a3ad47b012f51880956dc, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
         XRTK
@@ -53,7 +53,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 0a5c40dbb69a4814884abf3f65b2e586, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataControllerDataProvider,
         XRTK
@@ -66,7 +66,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 60c5b96658b16f143920253ca52f837b, type: 2}
   - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
         XRTK.WindowsMixedReality
@@ -76,7 +76,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: c9d40f49e1de03448959c48966743c68, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
     name: Windows Speech Data Provider
@@ -105,7 +105,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 5b1f82879eb4632478a5db77034ca34a, type: 2}
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
     name: Oculus Controller Data Provider
@@ -115,4 +115,4 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 4fe7357c194ec4749998b699b0a69c32, type: 2}

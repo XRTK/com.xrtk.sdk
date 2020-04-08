@@ -25,6 +25,10 @@ MonoBehaviour:
   drawDebugPointingRays: 1
   debugPointingRayColors:
   - {r: 0, g: 1, b: 0, a: 1}
+  handMeshingEnabled: 1
+  handPhysicsEnabled: 0
+  useTriggers: 0
+  boundsMode: 0
   inputActionsProfile: {fileID: 11400000, guid: 399335ccc89c4d12b79f3539ca7771db,
     type: 2}
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,
