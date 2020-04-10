@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d0188c7a9d12f649b2b1ce2b6b2e82c, type: 3}
+  m_Name: DefaultMixedRealityControllerDataProvidersProfile
+  m_EditorClassIdentifier: 
+  configurations:
+  - instancedType:
+      reference: XRTK.Providers.Controllers.UnityInput.MouseDataProvider, XRTK
+    name: Mouse Controller Data Provider
+    priority: 0
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+    profile: {fileID: 11400000, guid: a2a4350cf0bc6a84cb524749c3c95eae, type: 2}
