@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d420c170b42dfe0438e2aa2a829775ed, type: 3}
+  m_Name: HoloLensControllerProfile
+  m_EditorClassIdentifier: 
+  controllerType:
+    reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityController,
+      XRTK.WindowsMixedReality
+  handedness: 0
+  visualizationProfile: {fileID: 0}
+  useCustomInteractions: 0
+  interactionMappingProfiles:
+  - {fileID: 11400000, guid: 276d084c2bceed04b94fd467c7e5fc14, type: 2}
+  - {fileID: 11400000, guid: f3146fda244cb8d4693c2edc69bdb2c3, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 655359d9ab4f1da47a04ec9990240e22, type: 2}
+  - {fileID: 11400000, guid: 5f74fb8ba2c5a29448299a01af87774b, type: 2}
+  - {fileID: 11400000, guid: 8d8794911a998b94eb8f0888571a053f, type: 2}
+  - {fileID: 11400000, guid: 4eaf38b9901b6b441aa6ac202ffcdce3, type: 2}
+  - {fileID: 11400000, guid: 24d8eac42de191b488b9dd55924c3af3, type: 2}
+  - {fileID: 11400000, guid: 6b8a8ac073290c74bbf946eb7bdfe0ff, type: 2}
+  - {fileID: 11400000, guid: 05262587f04417a4593d2b37d3c62d8d, type: 2}
+  - {fileID: 11400000, guid: b1522456040b87f43af8e8aa023f6ca1, type: 2}

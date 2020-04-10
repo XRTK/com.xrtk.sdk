@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d420c170b42dfe0438e2aa2a829775ed, type: 3}
+  m_Name: RightLuminControllerProfile
+  m_EditorClassIdentifier: 
+  controllerType:
+    reference: XRTK.Lumin.Controllers.LuminController, XRTK.Lumin
+  handedness: 2
+  visualizationProfile: {fileID: 0}
+  useCustomInteractions: 0
+  interactionMappingProfiles:
+  - {fileID: 11400000, guid: 61515541a200226488f40c9bdf1af770, type: 2}
+  - {fileID: 11400000, guid: fe97b8da701d8e748bfa594ff72036fc, type: 2}
+  - {fileID: 11400000, guid: df9eb6bb9808fc140b67d276a308ef33, type: 2}
+  - {fileID: 11400000, guid: c1ef9dff7040ce54fb12bc0636a8c9bd, type: 2}
+  - {fileID: 11400000, guid: 7713ce6149015cb42aa3f6ab2cf09806, type: 2}
+  - {fileID: 11400000, guid: 6ab8d27eff0a7c1409d46cc271de1715, type: 2}
+  - {fileID: 11400000, guid: a0395ab304553b6409124f6c11006e97, type: 2}
+  - {fileID: 11400000, guid: 6124a588ba2e3a3419df92f167dee458, type: 2}
+  - {fileID: 11400000, guid: f62e52bcc7726204bbd1078b3632dbb2, type: 2}
