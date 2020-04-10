@@ -17,5 +17,4 @@ MonoBehaviour:
   handedness: 0
   visualizationProfile: {fileID: 0}
   useCustomInteractions: 1
-  interactionMappingProfiles:
-  - {fileID: 0}
+  interactionMappingProfiles: []
