@@ -16,7 +16,8 @@ MonoBehaviour:
     reference: XRTK.Providers.Controllers.OpenVR.WindowsMixedRealityOpenVRMotionController,
       XRTK
   handedness: 1
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: fe125eaaf5547684d8506b794c5a6016,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: 4eabae8f23a506948894ceab3ed56bed, type: 2}

@@ -15,7 +15,8 @@ MonoBehaviour:
   controllerType:
     reference: XRTK.Oculus.Controllers.OculusGoController, XRTK.Oculus
   handedness: 2
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: 5ee67c77447ce88409a3e04e57806963,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: 4435970912345784997f617003e48a6d, type: 2}

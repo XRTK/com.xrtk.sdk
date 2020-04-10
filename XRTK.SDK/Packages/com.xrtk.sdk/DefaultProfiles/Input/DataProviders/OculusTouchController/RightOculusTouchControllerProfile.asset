@@ -15,7 +15,8 @@ MonoBehaviour:
   controllerType:
     reference: XRTK.Oculus.Controllers.OculusTouchController, XRTK.Oculus
   handedness: 2
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: 5ee67c77447ce88409a3e04e57806963,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: b3dda0b9a337a1b4f8b49b4abe228acb, type: 2}

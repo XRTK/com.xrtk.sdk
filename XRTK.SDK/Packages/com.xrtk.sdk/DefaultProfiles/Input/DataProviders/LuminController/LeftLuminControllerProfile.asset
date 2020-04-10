@@ -15,7 +15,8 @@ MonoBehaviour:
   controllerType:
     reference: XRTK.Lumin.Controllers.LuminController, XRTK.Lumin
   handedness: 1
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: fe125eaaf5547684d8506b794c5a6016,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: cbe5d373928df6a4181b74d42e771b81, type: 2}

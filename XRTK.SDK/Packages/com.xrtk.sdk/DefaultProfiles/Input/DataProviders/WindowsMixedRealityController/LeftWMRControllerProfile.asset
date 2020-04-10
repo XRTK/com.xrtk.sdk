@@ -16,7 +16,8 @@ MonoBehaviour:
     reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityController,
       XRTK.WindowsMixedReality
   handedness: 1
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: f381de7e7e4e4974a9c264a1b9453066,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: 4eabae8f23a506948894ceab3ed56bed, type: 2}

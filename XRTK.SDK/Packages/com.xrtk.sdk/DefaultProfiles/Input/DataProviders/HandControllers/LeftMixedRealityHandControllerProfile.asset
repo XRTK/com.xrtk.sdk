@@ -15,6 +15,7 @@ MonoBehaviour:
   controllerType:
     reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
   handedness: 1
-  visualizationProfile: {fileID: 0}
-  useCustomInteractions: 0
+  visualizationProfile: {fileID: 11400000, guid: d03625d21fb0bfb41b6642f492e27754,
+    type: 2}
+  useCustomInteractions: 1
   interactionMappingProfiles: []

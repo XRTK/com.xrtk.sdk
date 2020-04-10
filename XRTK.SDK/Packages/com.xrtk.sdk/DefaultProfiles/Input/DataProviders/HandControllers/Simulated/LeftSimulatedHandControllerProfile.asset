@@ -16,7 +16,8 @@ MonoBehaviour:
     reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
       XRTK
   handedness: 1
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: d03625d21fb0bfb41b6642f492e27754,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: 840c6c58517905a438509123ade977c9, type: 2}

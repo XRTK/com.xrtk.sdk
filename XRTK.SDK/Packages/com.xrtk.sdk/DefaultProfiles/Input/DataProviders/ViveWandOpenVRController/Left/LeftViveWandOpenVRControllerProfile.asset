@@ -15,7 +15,8 @@ MonoBehaviour:
   controllerType:
     reference: XRTK.Providers.Controllers.OpenVR.ViveWandOpenVRController, XRTK
   handedness: 1
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: fe125eaaf5547684d8506b794c5a6016,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: b494544118a382d46997c719668ca001, type: 2}
