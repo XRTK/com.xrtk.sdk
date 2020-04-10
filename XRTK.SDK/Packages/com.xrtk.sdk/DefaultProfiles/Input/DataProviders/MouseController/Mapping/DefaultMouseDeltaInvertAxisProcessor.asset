@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf89b42d98d441ee99759646f3ab757d, type: 3}
-  m_Name: MouseDeltaInvertAxisProcessor
+  m_Name: DefaultMouseDeltaInvertAxisProcessor
   m_EditorClassIdentifier: 
   invertX: 1
   invertY: 0

@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61e2d46e023f80b4fb38f37eb18eff3b, type: 3}
-  m_Name: DefaultMouseControllerDataProviderProfile
+  m_Script: {fileID: 11500000, guid: f98460a8fca343d097417f9fc0cb54a0, type: 3}
+  m_Name: DefaultUnityInputControllerDataProfile
   m_EditorClassIdentifier: 
   hasSetupDefaults: 1
   controllerMappingProfiles:
-  - {fileID: 11400000, guid: 6fff4a7b0d402fb489a8dfd19d6fee88, type: 2}
+  - {fileID: 11400000, guid: da76d6a33e4db524e82dc81941fe7836, type: 2}
+  - {fileID: 11400000, guid: 0d32262d7aa7a67458d247a2709f04d2, type: 2}

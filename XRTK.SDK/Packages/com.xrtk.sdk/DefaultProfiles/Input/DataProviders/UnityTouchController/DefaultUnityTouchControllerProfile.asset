@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d420c170b42dfe0438e2aa2a829775ed, type: 3}
+  m_Name: DefaultUnityTouchControllerProfile
+  m_EditorClassIdentifier: 
+  controllerType:
+    reference: XRTK.Providers.Controllers.UnityInput.UnityTouchController, XRTK
+  handedness: 7
+  visualizationProfile: {fileID: 0}
+  useCustomInteractions: 1
+  interactionMappingProfiles:
+  - {fileID: 11400000, guid: ebaad6d767178e24b9eb45f27adf6c1a, type: 2}
+  - {fileID: 11400000, guid: 3b39c5a4424c4ad4c89128c7f86a2d50, type: 2}
+  - {fileID: 11400000, guid: eddae251e9d60a846b9a81a3c6b683f0, type: 2}

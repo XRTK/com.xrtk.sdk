@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d0188c7a9d12f649b2b1ce2b6b2e82c, type: 3}
-  m_Name: DefaultMixedRealityControllerDataProvidersProfile
+  m_Name: DefaultMixedRealityInputDataProvidersProfile
   m_EditorClassIdentifier: 
   configurations:
   - instancedType:
@@ -25,3 +25,18 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
     profile: {fileID: 11400000, guid: a2a4350cf0bc6a84cb524749c3c95eae, type: 2}
+  - instancedType:
+      reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
+    name: Unity Touch Data Provider
+    priority: 1
+    platformEntries:
+      runtimePlatforms: []
+    profile: {fileID: 11400000, guid: 30f1afb97be1db54e9e04aa6b965b410, type: 2}
+  - instancedType:
+      reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
+        XRTK
+    name: Unity Joystick Data Provider
+    priority: 2
+    platformEntries:
+      runtimePlatforms: []
+    profile: {fileID: 11400000, guid: 69ab987a62681cf4d9f4042ef17b0ddd, type: 2}

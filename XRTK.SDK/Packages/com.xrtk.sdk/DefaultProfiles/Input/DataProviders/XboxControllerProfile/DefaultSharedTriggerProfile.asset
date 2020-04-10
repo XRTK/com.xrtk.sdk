@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3fb79524faca40478c0844c24e542f7, type: 3}
-  m_Name: DefaultRightMouseButtonProfile
+  m_Name: DefaultSharedTriggerProfile
   m_EditorClassIdentifier: 
   interactionMapping:
-    description: Right Mouse Button
+    description: Shared Trigger
     stateChangeType: 0
-    axisType: 2
-    inputType: 7
+    axisType: 3
+    inputType: 10
     inputAction:
-      profileGuid: 399335ccc89c4d12b79f3539ca7771db
-      id: 2
-      description: Menu
-      axisConstraint: 2
-    keyCode: 324
+      profileGuid: 00000000000000000000000000000000
+      id: 0
+      description: None
+      axisConstraint: 0
+    keyCode: 0
     inputName: 
-    axisCodeX: 
+    axisCodeX: AXIS_3
     axisCodeY: 
     inputProcessors: []
   pointerProfiles: []
