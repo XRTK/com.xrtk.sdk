@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a1ad34855542cbbd15a6a6dde2e935, type: 3}
   m_Name: DefaultMixedRealitySpatialAwarenessSystemProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   configurations:
   - instancedType:
       reference: XRTK.WindowsMixedReality.SpatialObservers.WindowsMixedRealitySpatialMeshObserver,
@@ -23,8 +22,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-    configurationProfile: {fileID: 11400000, guid: 8e73975fd19e4224b46d0b0fea26349b,
-      type: 2}
+    profile: {fileID: 11400000, guid: 8e73975fd19e4224b46d0b0fea26349b, type: 2}
   - instancedType:
       reference: XRTK.Lumin.SpatialObservers.LuminSpatialMeshObserver, XRTK.Lumin
     name: Lumin Spatial Observer Data Provider
@@ -32,6 +30,5 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
-    configurationProfile: {fileID: 11400000, guid: 6cbcb6266beaa724780d064525cf2896,
-      type: 2}
+    profile: {fileID: 11400000, guid: 6cbcb6266beaa724780d064525cf2896, type: 2}
   meshDisplayOption: 0

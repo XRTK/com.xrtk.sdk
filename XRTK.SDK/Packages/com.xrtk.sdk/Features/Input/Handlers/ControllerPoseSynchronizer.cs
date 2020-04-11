@@ -7,6 +7,7 @@ using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.Providers.Controllers;
 using UnityEngine;
+using XRTK.Definitions.Controllers.Hands;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -50,7 +51,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The current tracking state of the assigned <see cref="IMixedRealityController"/>
         /// </summary>
-        protected TrackingState TrackingState = TrackingState.NotTracked;
+        protected TrackingState TrackingState { get; set; } = TrackingState.NotTracked;
 
         private IMixedRealityController controller;
 
@@ -169,6 +170,9 @@ namespace XRTK.SDK.Input.Handlers
 
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<float> eventData) { }
+
+        /// <inheritdoc />
+        public virtual void OnInputChanged(InputEventData<HandData> eventData) { }
 
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<Vector2> eventData) { }
