@@ -4,7 +4,7 @@
 using UnityEngine;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
-using XRTK.Interfaces.Providers.Controllers;
+using XRTK.Interfaces.Providers.Speech;
 using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
