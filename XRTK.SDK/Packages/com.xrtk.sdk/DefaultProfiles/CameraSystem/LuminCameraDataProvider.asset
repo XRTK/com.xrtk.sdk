@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00d813fd5a164e19a160f322b2926006, type: 3}
-  m_Name: BaseMixedRealityCameraDataProviderProfile
+  m_Name: LuminCameraDataProvider
   m_EditorClassIdentifier: 
   isCameraPersistent: 1
   nearClipPlaneOpaqueDisplay: 0.1
@@ -23,6 +23,6 @@ MonoBehaviour:
   transparentQualityLevel: 0
   cameraRigType:
     reference: XRTK.Services.CameraSystem.DefaultCameraRig, XRTK
-  defaultHeadHeight: 1.6
+  defaultHeadHeight: 0
   bodyAdjustmentAngle: 60
   bodyAdjustmentSpeed: 1
