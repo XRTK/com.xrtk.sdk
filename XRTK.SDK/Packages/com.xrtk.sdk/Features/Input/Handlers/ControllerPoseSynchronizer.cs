@@ -8,6 +8,7 @@ using XRTK.EventDatum.Input;
 using XRTK.Interfaces.Providers.Controllers;
 using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
+using XRTK.Interfaces.InputSystem.Handlers;
 
 namespace XRTK.SDK.Input.Handlers
 {
