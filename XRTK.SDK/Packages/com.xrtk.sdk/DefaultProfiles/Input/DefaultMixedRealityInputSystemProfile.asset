@@ -34,5 +34,5 @@ MonoBehaviour:
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,
     type: 2}
   gesturesProfile: {fileID: 11400000, guid: 47280a6380eb40d5952dc5a5da00a89e, type: 2}
-  controllerDataProvidersProfile: {fileID: 11400000, guid: c9396f48eab383747926cb27bc5c13fc,
+  inputDataProvidersProfile: {fileID: 11400000, guid: c9396f48eab383747926cb27bc5c13fc,
     type: 2}
