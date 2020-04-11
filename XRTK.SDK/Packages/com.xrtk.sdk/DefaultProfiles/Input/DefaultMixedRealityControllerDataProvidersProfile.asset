@@ -65,7 +65,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
     profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
   - instancedType:
-      reference: XRTK.Providers.Controllers.Speech.WindowsSpeechDataProvider, XRTK
+      reference: XRTK.Providers.Speech.WindowsSpeechDataProvider, XRTK
     name: Windows Speech Data Provider
     priority: 4
     platformEntries:
@@ -84,7 +84,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
     profile: {fileID: 11400000, guid: 4d3282a503ed2714f89cd628a249c1c1, type: 2}
   - instancedType:
-      reference: XRTK.Providers.Controllers.Speech.WindowsDictationDataProvider, XRTK
+      reference: XRTK.Providers.Speech.WindowsDictationDataProvider, XRTK
     name: Windows Dictation Data Provider
     priority: 6
     platformEntries:
