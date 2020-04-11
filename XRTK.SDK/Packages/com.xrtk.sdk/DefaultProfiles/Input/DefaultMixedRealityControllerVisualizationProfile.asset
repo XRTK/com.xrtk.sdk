@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e889ee36d1db42b482979f81f550d3b0, type: 3}
   m_Name: DefaultMixedRealityControllerVisualizationProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   renderMotionControllers: 1
   controllerVisualizationType:
     reference: XRTK.SDK.UX.Controllers.DefaultMixedRealityControllerVisualizer, XRTK.SDK
@@ -62,3 +61,73 @@ MonoBehaviour:
       id: 3
       description: Grip Pose
       axisConstraint: 7
+  - description: Simulated Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
+        XRTK
+    handedness: 1
+    useDefaultModel: 0
+    overrideModel: {fileID: 9173983480249558903, guid: 081f7848cfd94b34f9c774490cd7e2fb,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
+    poseAction:
+      id: 0
+      description: None
+      axisConstraint: 0
+    alternatePoseAction:
+      id: 0
+      description: None
+      axisConstraint: 0
+  - description: Simulated Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandController,
+        XRTK
+    handedness: 2
+    useDefaultModel: 0
+    overrideModel: {fileID: 4856844564559928852, guid: 58cc7659d29f83f47b10dfd3bc4d1c97,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
+    poseAction:
+      id: 0
+      description: None
+      axisConstraint: 0
+    alternatePoseAction:
+      id: 0
+      description: None
+      axisConstraint: 0
+  - description: Mixed Reality Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
+    handedness: 1
+    useDefaultModel: 0
+    overrideModel: {fileID: 9173983480249558903, guid: 081f7848cfd94b34f9c774490cd7e2fb,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
+    poseAction:
+      id: 0
+      description: None
+      axisConstraint: 0
+    alternatePoseAction:
+      id: 0
+      description: None
+      axisConstraint: 0
+  - description: Mixed Reality Hand Controller
+    controllerType:
+      reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
+    handedness: 2
+    useDefaultModel: 0
+    overrideModel: {fileID: 4856844564559928852, guid: 58cc7659d29f83f47b10dfd3bc4d1c97,
+      type: 3}
+    controllerVisualizationType:
+      reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
+    poseAction:
+      id: 0
+      description: None
+      axisConstraint: 0
+    alternatePoseAction:
+      id: 0
+      description: None
+      axisConstraint: 0

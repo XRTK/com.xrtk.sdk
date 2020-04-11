@@ -57,7 +57,7 @@ namespace XRTK.SDK.Input
             }
             catch (Exception e)
             {
-                Debug.LogError($"{e.ToString()}");
+                Debug.LogError($"{e}");
                 return false;
             }
 

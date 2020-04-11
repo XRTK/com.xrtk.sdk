@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c156ea3e1a7a493dac236ed84c4a819a, type: 3}
   m_Name: DefaultMixedRealityInputPointerProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   pointingExtent: 10
   pointingRaycastLayerMasks:
   - serializedVersion: 2
