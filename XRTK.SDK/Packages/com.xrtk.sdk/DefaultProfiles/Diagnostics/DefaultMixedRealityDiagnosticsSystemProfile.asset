@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1564b9320d5f4bdf9823a35bb66d61a7, type: 3}
   m_Name: DefaultMixedRealityDiagnosticsSystemProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   configurations:
   - instancedType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityMemoryDiagnosticsDataProvider,
@@ -30,7 +29,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityFrameDiagnosticsDataProvider,
         XRTK
@@ -47,7 +46,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityConsoleDiagnosticsDataProvider,
         XRTK
@@ -64,7 +63,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    configurationProfile: {fileID: 0}
+    profile: {fileID: 0}
   diagnosticsWindowPrefab: {fileID: 2161880003638299081, guid: be9153b959e0d4d4aa50a4a1a6617daa,
     type: 3}
   showDiagnosticsWindowOnStart: 1
