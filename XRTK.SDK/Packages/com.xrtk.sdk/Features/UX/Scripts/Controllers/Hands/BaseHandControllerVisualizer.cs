@@ -7,8 +7,8 @@ using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
-using XRTK.Interfaces.InputSystem.Controllers.Hands;
-using XRTK.Interfaces.Providers.Controllers;
+using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Interfaces.Providers.Controllers.Hands;
 using XRTK.SDK.Input.Handlers;
 
 namespace XRTK.SDK.UX.Controllers.Hands
