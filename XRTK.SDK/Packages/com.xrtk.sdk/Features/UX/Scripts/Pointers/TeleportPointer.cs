@@ -287,7 +287,7 @@ namespace XRTK.SDK.UX.Pointers
                         // if it's less than zero, then we don't have activation
                         if (offsetRotationAngle > 0)
                         {
-                            var cameraRig = MixedRealityToolkit.CameraSystem.CameraRig;
+                            var cameraRig = MixedRealityToolkit.CameraSystem.MainCameraRig;
 
                             Debug.Assert(cameraRig != null, "Teleport pointer requires the camera system be enabled with a valid camera rig!");
 

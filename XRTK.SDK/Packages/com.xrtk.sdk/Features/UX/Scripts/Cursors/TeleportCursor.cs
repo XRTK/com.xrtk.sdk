@@ -106,7 +106,7 @@ namespace XRTK.SDK.UX.Cursors
             transform.position = focusDetails.EndPoint;
 
             var cameraTransform = MixedRealityToolkit.CameraSystem != null
-                ? MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform
+                ? MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform
                 : CameraCache.Main.transform;
             var forward = cameraTransform.forward;
             forward.y = 0f;
