@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50519740e1dd4b5f97f104c7dc8d6ae6, type: 3}
-  m_Name: DefaultMixedRealityCameraProfile
+  m_Name: DefaultMixedRealityCameraSystemProfile
   m_EditorClassIdentifier: 
   cameraDataProvidersProfile: {fileID: 11400000, guid: 65955cc2f253c61439ea429d6cf343b0,
     type: 2}
