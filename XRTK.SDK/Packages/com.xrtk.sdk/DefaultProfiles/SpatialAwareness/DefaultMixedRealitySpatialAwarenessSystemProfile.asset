@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a1ad34855542cbbd15a6a6dde2e935, type: 3}
   m_Name: DefaultMixedRealitySpatialAwarenessSystemProfile
   m_EditorClassIdentifier: 
-  onlyRegisterSinglePlatform: 1
   configurations:
   - instancedType:
       reference: XRTK.WindowsMixedReality.SpatialObservers.WindowsMixedRealitySpatialMeshObserver,
