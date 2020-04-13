@@ -19,11 +19,10 @@ MonoBehaviour:
     priority: 0
     platformEntries:
       runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
     profile: {fileID: 0}
