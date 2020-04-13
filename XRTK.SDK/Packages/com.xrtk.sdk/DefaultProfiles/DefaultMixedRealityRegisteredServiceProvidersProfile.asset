@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c48e65a9914a9ab61b891d9b405064, type: 3}
   m_Name: DefaultMixedRealityRegisteredServiceProvidersProfile
   m_EditorClassIdentifier: 
-  onlyRegisterSinglePlatform: 0
   configurations: []

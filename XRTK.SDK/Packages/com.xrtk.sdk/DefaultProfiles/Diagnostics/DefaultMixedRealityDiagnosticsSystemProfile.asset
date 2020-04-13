@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1564b9320d5f4bdf9823a35bb66d61a7, type: 3}
   m_Name: DefaultMixedRealityDiagnosticsSystemProfile
   m_EditorClassIdentifier: 
-  onlyRegisterSinglePlatform: 0
   configurations:
   - instancedType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityMemoryDiagnosticsDataProvider,
