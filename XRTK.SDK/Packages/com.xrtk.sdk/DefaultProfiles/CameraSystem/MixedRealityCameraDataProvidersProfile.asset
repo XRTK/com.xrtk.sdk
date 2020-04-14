@@ -27,7 +27,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
-      reference: XRTK.Providers.CameraSystem.BaseCameraDataProvider, XRTK
+      reference: XRTK.Lumin.Providers.CameraSystem.LuminCameraDataProvider, XRTK.Lumin
     name: Lumin Camera Data Provider
     priority: 1
     platformEntries:
