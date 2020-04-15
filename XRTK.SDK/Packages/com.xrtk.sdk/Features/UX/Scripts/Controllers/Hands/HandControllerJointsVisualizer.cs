@@ -16,6 +16,10 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private readonly Dictionary<TrackedHandJoint, GameObject> jointVisualizations = new Dictionary<TrackedHandJoint, GameObject>();
 
         [SerializeField]
+        [Tooltip("The wrist prefab to use.")]
+        private GameObject wristPrefab = null;
+
+        [SerializeField]
         [Tooltip("The joint prefab to use.")]
         private GameObject jointPrefab = null;
 
@@ -42,7 +46,11 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             for (int i = 0; i < HandData.JointCount; i++)
             {
-                CreateJointVisualizerIfNotExists((TrackedHandJoint)i);
+                var joint = (TrackedHandJoint)i;
+                if (joint != TrackedHandJoint.None)
+                {
+                    CreateJointVisualizerIfNotExists(joint);
+                }
             }
         }
 
@@ -57,6 +65,9 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             switch (handJoint)
             {
+                case TrackedHandJoint.Wrist:
+                    prefab = wristPrefab;
+                    break;
                 case TrackedHandJoint.Palm:
                     prefab = palmPrefab;
                     break;
