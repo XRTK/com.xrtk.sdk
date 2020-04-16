@@ -40,3 +40,4 @@ MonoBehaviour:
   handPhysicsEnabled: 0
   useTriggers: 0
   boundsMode: 0
+  trackedPoses: []
