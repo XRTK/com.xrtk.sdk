@@ -44,4 +44,4 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 57a7de86787ebb74ead8edbc180d4d14, type: 2}
