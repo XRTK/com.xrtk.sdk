@@ -22,7 +22,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
-    profile: {fileID: 11400000, guid: 8e73975fd19e4224b46d0b0fea26349b, type: 2}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Lumin.SpatialObservers.LuminSpatialMeshObserver, XRTK.Lumin
     name: Lumin Spatial Observer Data Provider
@@ -31,5 +31,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
-    profile: {fileID: 11400000, guid: 6cbcb6266beaa724780d064525cf2896, type: 2}
+    profile: {fileID: 0}
   meshDisplayOption: 0
+  globalMeshObserverProfile: {fileID: 11400000, guid: 6cbcb6266beaa724780d064525cf2896,
+    type: 2}
