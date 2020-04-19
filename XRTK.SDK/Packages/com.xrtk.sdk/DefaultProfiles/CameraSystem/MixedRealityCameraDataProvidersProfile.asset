@@ -25,7 +25,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: c02516a14adf1ff45b2e6feaefd1d090, type: 2}
   - instancedType:
       reference: XRTK.Lumin.Providers.CameraSystem.LuminCameraDataProvider, XRTK.Lumin
     name: Lumin Camera Data Provider
