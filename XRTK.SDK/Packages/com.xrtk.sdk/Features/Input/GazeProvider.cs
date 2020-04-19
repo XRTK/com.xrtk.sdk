@@ -189,8 +189,17 @@ namespace XRTK.SDK.Input
                 {
                     stabilizer.UpdateStability(gazeTransform.localPosition, gazeTransform.localRotation * Vector3.forward);
                     var transformParent = gazeTransform.parent;
-                    newGazeOrigin = transformParent.TransformPoint(stabilizer.StablePosition);
-                    newGazeNormal = transformParent.TransformDirection(stabilizer.StableRay.direction);
+
+                    if (transformParent != null)
+                    {
+                        newGazeOrigin = transformParent.TransformPoint(stabilizer.StablePosition);
+                        newGazeNormal = transformParent.TransformDirection(stabilizer.StableRay.direction);
+                    }
+                    else
+                    {
+                        newGazeOrigin = gazeTransform.TransformPoint(stabilizer.StablePosition);
+                        newGazeNormal = gazeTransform.TransformDirection(stabilizer.StableRay.direction);
+                    }
                 }
 
                 Vector3 endPoint = newGazeOrigin + (newGazeNormal * pointerExtent);
