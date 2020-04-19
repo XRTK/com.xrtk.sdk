@@ -11,8 +11,39 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50519740e1dd4b5f97f104c7dc8d6ae6, type: 3}
   m_Name: DefaultMixedRealityCameraSystemProfile
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
+  configurations:
+  - instancedType:
+      reference: XRTK.Providers.CameraSystem.BaseCameraDataProvider, XRTK
+    name: Default Camera Data Provider
+    priority: 0
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+    profile: {fileID: 11400000, guid: c02516a14adf1ff45b2e6feaefd1d090, type: 2}
+  - instancedType:
+      reference: XRTK.Lumin.Providers.CameraSystem.LuminCameraDataProvider, XRTK.Lumin
+    name: Lumin Camera Data Provider
+    priority: 1
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
+    profile: {fileID: 11400000, guid: 10c5453922d4a744595e0415ef57dda4, type: 2}
+  - instancedType:
+      reference: XRTK.WindowsMixedReality.Providers.CameraSystem.WindowsMixedRealityCameraDataProvider,
+        XRTK.WindowsMixedReality
+    name: Windows Mixed Reality Camera Data Provider
+    priority: 2
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+    profile: {fileID: 11400000, guid: 57a7de86787ebb74ead8edbc180d4d14, type: 2}
   globalCameraProfile: {fileID: 11400000, guid: c02516a14adf1ff45b2e6feaefd1d090,
-    type: 2}
-  cameraDataProvidersProfile: {fileID: 11400000, guid: 65955cc2f253c61439ea429d6cf343b0,
     type: 2}
