@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50519740e1dd4b5f97f104c7dc8d6ae6, type: 3}
   m_Name: DefaultMixedRealityCameraSystemProfile
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   configurations:
   - instancedType:
       reference: XRTK.Providers.CameraSystem.BaseCameraDataProvider, XRTK
@@ -45,5 +45,14 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
     profile: {fileID: 11400000, guid: 57a7de86787ebb74ead8edbc180d4d14, type: 2}
+  - instancedType:
+      reference: XRTK.Oculus.Providers.CameraSystem.OculusCameraDataProvider, XRTK.Oculus
+    name: Oculus Camera Data Provider
+    priority: 3
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Oculus.OculusPlatform, XRTK.Oculus
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
+    profile: {fileID: 0}
   globalCameraProfile: {fileID: 11400000, guid: c02516a14adf1ff45b2e6feaefd1d090,
     type: 2}
