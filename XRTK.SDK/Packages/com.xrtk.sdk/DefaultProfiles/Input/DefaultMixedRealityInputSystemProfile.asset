@@ -11,7 +11,136 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96a16673d92d4e8fa24750357b3cf906, type: 3}
   m_Name: DefaultMixedRealityInputSystemProfile
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
+  configurations:
+  - instancedType:
+      reference: XRTK.Providers.Controllers.UnityInput.UnityTouchDataProvider, XRTK
+    name: Unity Touch Data Provider
+    priority: 0
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+    profile: {fileID: 11400000, guid: 30f1afb97be1db54e9e04aa6b965b410, type: 2}
+  - instancedType:
+      reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
+        XRTK
+    name: Unity Joystick Data Provider
+    priority: 1
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+    profile: {fileID: 11400000, guid: 69ab987a62681cf4d9f4042ef17b0ddd, type: 2}
+  - instancedType:
+      reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataControllerDataProvider,
+        XRTK
+    name: OpenVR Data Controller Data Provider
+    priority: 2
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+    profile: {fileID: 11400000, guid: b120d542bee585744b5567157705b9f3, type: 2}
+  - instancedType:
+      reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
+        XRTK
+    name: Simulated Hand Controller Data Provider
+    priority: 3
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+    profile: {fileID: 11400000, guid: 6bd4ff02967a9b24197b8cd2593ddfa4, type: 2}
+  - instancedType:
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
+        XRTK.WindowsMixedReality
+    name: Windows Mixed Reality Controller Data Provider
+    priority: 4
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+    profile: {fileID: 11400000, guid: 8e0139954c0b0ab41a6f5fce7c0594e1, type: 2}
+  - instancedType:
+      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
+        XRTK.WindowsMixedReality
+    name: Windows Mixed Reality Hand Controller Data Provider
+    priority: 5
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+    profile: {fileID: 11400000, guid: 11ef7a331fa0a164bb9ac3e5cae510ff, type: 2}
+  - instancedType:
+      reference: XRTK.Providers.Speech.WindowsSpeechDataProvider, XRTK
+    name: Windows Speech Data Provider
+    priority: 6
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+    profile: {fileID: 0}
+  - instancedType:
+      reference: XRTK.Providers.Speech.WindowsDictationDataProvider, XRTK
+    name: Windows Dictation Data Provider
+    priority: 7
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+    profile: {fileID: 0}
+  - instancedType:
+      reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
+    name: Lumin Controller Data Provider
+    priority: 8
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+    profile: {fileID: 11400000, guid: 5e14f9e6f5088544a932ed6a0f1e7cf1, type: 2}
+  - instancedType:
+      reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
+    name: Lumin Hand Controller Data Provider
+    priority: 9
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
+    profile: {fileID: 11400000, guid: 0cd9251200b020a4797b46b8679c570f, type: 2}
+  - instancedType:
+      reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
+    name: Oculus Controller Data Provider
+    priority: 10
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
+    profile: {fileID: 11400000, guid: b849f3a28dc36b84a92d2ec4d8239cd6, type: 2}
+  - instancedType:
+      reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
+    name: Oculus Hand Controller Data Provider
+    priority: 11
+    platformEntries:
+      runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+    profile: {fileID: 11400000, guid: d9b3b9f611dffee4883c089dc35e0ce7, type: 2}
   focusProviderType:
     reference: XRTK.Services.InputSystem.FocusProvider, XRTK
   gazeProviderType:
@@ -43,5 +172,3 @@ MonoBehaviour:
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,
     type: 2}
   gesturesProfile: {fileID: 11400000, guid: 47280a6380eb40d5952dc5a5da00a89e, type: 2}
-  inputDataProvidersProfile: {fileID: 11400000, guid: c9396f48eab383747926cb27bc5c13fc,
-    type: 2}
