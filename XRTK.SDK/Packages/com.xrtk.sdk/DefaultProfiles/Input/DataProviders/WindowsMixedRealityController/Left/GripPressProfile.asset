@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3fb79524faca40478c0844c24e542f7, type: 3}
-  m_Name: GripPressProfile(bool)
+  m_Name: GripPressProfile
   m_EditorClassIdentifier: 
   interactionMapping:
     description: Grip Press
     stateChangeType: 0
-    axisType: 2
-    inputType: 7
+    axisType: 3
+    inputType: 13
     inputAction:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+      profileGuid: 1f6893f98bc96dd47b9e70e4ff211ed7
+      id: 7
+      description: Grip Press
+      axisConstraint: 3
     keyCode: 0
     inputName: 
-    axisCodeX: AXIS_12
+    axisCodeX: AXIS_11
     axisCodeY: 
     inputProcessors: []
   pointerProfiles: []
