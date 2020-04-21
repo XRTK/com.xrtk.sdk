@@ -22,7 +22,7 @@ MonoBehaviour:
   interactionMappingProfiles:
   - {fileID: 11400000, guid: 2383d0f88b769e842b742f8a8b099c6d, type: 2}
   - {fileID: 11400000, guid: ee806d7f585c7c34295c77499684b046, type: 2}
-  - {fileID: 11400000, guid: c3f9ae5b537d35b48900b35d9d17b4e5, type: 2}
+  - {fileID: 11400000, guid: 57cf8e3c0f0470e418fee2c4919c460a, type: 2}
   - {fileID: 11400000, guid: 38db213a242a3864dbb2410d676c2324, type: 2}
   - {fileID: 11400000, guid: 6b556181d2b71654486e12acfeaf4c70, type: 2}
   - {fileID: 11400000, guid: be34017cfd537b94cbeab39839f72881, type: 2}

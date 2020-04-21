@@ -16,7 +16,7 @@ MonoBehaviour:
     description: Thumbstick Click
     stateChangeType: 0
     axisType: 2
-    inputType: 7
+    inputType: 18
     inputAction:
       profileGuid: 00000000000000000000000000000000
       id: 0
