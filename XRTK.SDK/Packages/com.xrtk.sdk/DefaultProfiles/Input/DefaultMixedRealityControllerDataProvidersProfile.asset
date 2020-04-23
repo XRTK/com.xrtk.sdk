@@ -20,12 +20,12 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Providers.Controllers.UnityInput.UnityJoystickDataProvider,
@@ -35,12 +35,12 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataProvider, XRTK
@@ -48,11 +48,11 @@ MonoBehaviour:
     priority: 2
     platformEntries:
       runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
@@ -62,7 +62,8 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
     profile: {fileID: 11400000, guid: f0d940cf9cc45184bba3adf6d1350849, type: 2}
   - instancedType:
       reference: XRTK.Providers.Speech.WindowsSpeechDataProvider, XRTK
@@ -70,9 +71,9 @@ MonoBehaviour:
     priority: 4
     platformEntries:
       runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
@@ -89,9 +90,9 @@ MonoBehaviour:
     priority: 6
     platformEntries:
       runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
@@ -100,6 +101,7 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
@@ -107,6 +109,7 @@ MonoBehaviour:
     priority: 8
     platformEntries:
       runtimePlatforms:
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
     profile: {fileID: 11400000, guid: 42f948f15f8c0e247895967b78967832, type: 2}
   - instancedType:
@@ -115,9 +118,8 @@ MonoBehaviour:
     priority: 9
     platformEntries:
       runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
+      - reference: XRTK.Oculus.OculusPlatform, XRTK.Oculus
     profile: {fileID: 11400000, guid: 812963d03fdf0d046a28b423b70f473e, type: 2}
   - instancedType:
       reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
@@ -125,8 +127,8 @@ MonoBehaviour:
     priority: 10
     platformEntries:
       runtimePlatforms:
-      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
+      - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
+      - reference: XRTK.Oculus.OculusPlatform, XRTK.Oculus
     profile: {fileID: 11400000, guid: 812963d03fdf0d046a28b423b70f473e, type: 2}
   - instancedType:
       reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedHandControllerDataProvider,
