@@ -31,6 +31,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [Tooltip("Material tint color for index fingertip.")]
         private Color indexFingertipColor = Color.cyan;
 
+        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)
         {
             base.OnInputChanged(eventData);

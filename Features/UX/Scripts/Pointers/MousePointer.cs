@@ -82,7 +82,7 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnPreRaycast()
         {
-            transform.position = MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform.position;
+            transform.position = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.position;
 
             if (TryGetPointingRay(out var pointingRay))
             {
@@ -166,7 +166,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (cursorWasDisabledOnDown)
                 {
                     BaseCursor?.SetVisibility(true);
-                    transform.rotation = MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform.rotation;
+                    transform.rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
                 }
                 else
                 {
@@ -251,7 +251,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (isDisabled)
                 {
                     BaseCursor?.SetVisibility(true);
-                    transform.rotation = MixedRealityToolkit.CameraSystem.CameraRig.CameraTransform.rotation;
+                    transform.rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
                 }
 
                 shouldUpdate = true;
