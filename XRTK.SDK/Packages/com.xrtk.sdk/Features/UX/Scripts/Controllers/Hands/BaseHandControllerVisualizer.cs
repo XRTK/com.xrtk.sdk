@@ -113,8 +113,8 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 {
                     var jointTransform = GetOrCreateJointTransform(handJoint);
                     var jointPose = jointPoses[handJoint];
-                    jointTransform.localPosition = jointPose.Position;
-                    jointTransform.localRotation = jointPose.Rotation;
+                    jointTransform.localPosition = jointTransform.parent.InverseTransformPoint(jointPose.Position);
+                    jointTransform.localRotation = Quaternion.Inverse(jointPose.Rotation) * jointTransform.parent.rotation;
                 }
             }
         }
