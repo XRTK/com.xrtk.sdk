@@ -2,6 +2,8 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.﻿
 
 using UnityEditor;
+using UnityEngine;
+using XRTK.Inspectors.Extensions;
 using XRTK.SDK.UX.Pointers;
 
 namespace XRTK.SDK.Inspectors.UX.Pointers
@@ -9,21 +11,22 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
     [CustomEditor(typeof(MousePointer))]
     public class MousePointerInspector : BaseControllerPointerInspector
     {
+        private readonly GUIContent mousePointerFoldoutContent = new GUIContent("Mouse Pointer Settings");
+
         private SerializedProperty hideCursorWhenInactive;
         private SerializedProperty hideTimeout;
         private SerializedProperty movementThresholdToUnHide;
         private SerializedProperty speed;
-        private bool mousePointerFoldout = true;
 
         protected override void OnEnable()
         {
             DrawBasePointerActions = false;
             base.OnEnable();
 
-            hideCursorWhenInactive = serializedObject.FindProperty("hideCursorWhenInactive");
-            movementThresholdToUnHide = serializedObject.FindProperty("movementThresholdToUnHide");
-            hideTimeout = serializedObject.FindProperty("hideTimeout");
-            speed = serializedObject.FindProperty("speed");
+            hideCursorWhenInactive = serializedObject.FindProperty(nameof(hideCursorWhenInactive));
+            movementThresholdToUnHide = serializedObject.FindProperty(nameof(movementThresholdToUnHide));
+            hideTimeout = serializedObject.FindProperty(nameof(hideTimeout));
+            speed = serializedObject.FindProperty(nameof(speed));
         }
 
         public override void OnInspectorGUI()
@@ -31,9 +34,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             base.OnInspectorGUI();
             serializedObject.Update();
 
-            mousePointerFoldout = EditorGUILayout.Foldout(mousePointerFoldout, "Mouse Pointer Settings", true);
-
-            if (mousePointerFoldout)
+            if (hideCursorWhenInactive.FoldoutWithBoldLabelPropertyField(mousePointerFoldoutContent))
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(hideCursorWhenInactive);

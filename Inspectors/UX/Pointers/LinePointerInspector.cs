@@ -2,6 +2,8 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.﻿
 
 using UnityEditor;
+using UnityEngine;
+using XRTK.Inspectors.Extensions;
 using XRTK.SDK.UX.Pointers;
 
 namespace XRTK.SDK.Inspectors.UX.Pointers
@@ -10,6 +12,7 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
     public class LinePointerInspector : BaseControllerPointerInspector
     {
         private const int maxRecommendedLinecastResolution = 20;
+        private readonly GUIContent foldoutContent = new GUIContent("Line Pointer Settings");
 
         private SerializedProperty lineColorSelected;
         private SerializedProperty lineColorValid;
@@ -19,19 +22,17 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty lineCastResolution;
         private SerializedProperty lineRenderers;
 
-        private bool linePointerFoldout = true;
-
         protected override void OnEnable()
         {
             base.OnEnable();
 
-            lineColorSelected = serializedObject.FindProperty("LineColorSelected");
-            lineColorValid = serializedObject.FindProperty("LineColorValid");
-            lineColorInvalid = serializedObject.FindProperty("LineColorInvalid");
-            lineColorNoTarget = serializedObject.FindProperty("LineColorNoTarget");
-            lineColorLockFocus = serializedObject.FindProperty("LineColorLockFocus");
-            lineCastResolution = serializedObject.FindProperty("LineCastResolution");
-            lineRenderers = serializedObject.FindProperty("lineRenderers");
+            lineColorSelected = serializedObject.FindProperty(nameof(lineColorSelected));
+            lineColorValid = serializedObject.FindProperty(nameof(lineColorValid));
+            lineColorInvalid = serializedObject.FindProperty(nameof(lineColorInvalid));
+            lineColorNoTarget = serializedObject.FindProperty(nameof(lineColorNoTarget));
+            lineColorLockFocus = serializedObject.FindProperty(nameof(lineColorLockFocus));
+            lineCastResolution = serializedObject.FindProperty(nameof(lineCastResolution));
+            lineRenderers = serializedObject.FindProperty(nameof(lineRenderers));
         }
 
         /// <inheritdoc />
@@ -40,9 +41,9 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             base.OnInspectorGUI();
             serializedObject.Update();
 
-            linePointerFoldout = EditorGUILayout.Foldout(linePointerFoldout, "Line Pointer Settings", true);
+            lineCastResolution.isExpanded = EditorGUILayoutExtensions.FoldoutWithBoldLabel(lineCastResolution.isExpanded, foldoutContent);
 
-            if (linePointerFoldout)
+            if (lineCastResolution.isExpanded)
             {
                 EditorGUI.indentLevel++;
 
