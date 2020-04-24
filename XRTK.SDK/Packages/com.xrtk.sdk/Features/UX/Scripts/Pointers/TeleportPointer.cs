@@ -111,11 +111,11 @@ namespace XRTK.SDK.UX.Pointers
             switch (targetResult)
             {
                 case TeleportSurfaceResult.None:
-                    return lineColorNoTarget;
+                    return LineColorNoTarget;
                 case TeleportSurfaceResult.Valid:
-                    return lineColorValid;
+                    return LineColorValid;
                 case TeleportSurfaceResult.Invalid:
-                    return lineColorInvalid;
+                    return LineColorInvalid;
                 case TeleportSurfaceResult.HotSpot:
                     return lineColorHotSpot;
                 default:
@@ -153,9 +153,9 @@ namespace XRTK.SDK.UX.Pointers
             }
 
             // Make sure our array will hold
-            if (Rays == null || Rays.Length != lineCastResolution)
+            if (Rays == null || Rays.Length != LineCastResolution)
             {
-                Rays = new RayStep[lineCastResolution];
+                Rays = new RayStep[LineCastResolution];
             }
 
             float stepSize = 1f / Rays.Length;
@@ -233,7 +233,7 @@ namespace XRTK.SDK.UX.Pointers
                     }
 
                     // Clamp the end of the parabola to the result hit's point
-                    LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, lineCastResolution);
+                    LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, LineCastResolution);
                     BaseCursor?.SetVisibility(TeleportSurfaceResult == TeleportSurfaceResult.Valid || TeleportSurfaceResult == TeleportSurfaceResult.HotSpot);
                 }
                 else
