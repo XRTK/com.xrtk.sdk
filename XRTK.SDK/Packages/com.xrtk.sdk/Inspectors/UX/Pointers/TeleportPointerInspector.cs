@@ -2,6 +2,8 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.﻿
 
 using UnityEditor;
+using UnityEngine;
+using XRTK.Inspectors.Extensions;
 using XRTK.SDK.UX.Pointers;
 
 namespace XRTK.SDK.Inspectors.UX.Pointers
@@ -9,6 +11,8 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
     [CustomEditor(typeof(TeleportPointer))]
     public class TeleportPointerInspector : LinePointerInspector
     {
+        private readonly GUIContent teleportFoldoutHeader = new GUIContent("Teleport Pointer Settings");
+
         private SerializedProperty teleportAction;
         private SerializedProperty inputThreshold;
         private SerializedProperty angleOffset;
@@ -22,25 +26,23 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
         private SerializedProperty validLayers;
         private SerializedProperty invalidLayers;
 
-        private bool teleportPointerFoldout = true;
-
         protected override void OnEnable()
         {
             DrawBasePointerActions = false;
             base.OnEnable();
 
-            teleportAction = serializedObject.FindProperty("teleportAction");
-            inputThreshold = serializedObject.FindProperty("inputThreshold");
-            angleOffset = serializedObject.FindProperty("angleOffset");
-            teleportActivationAngle = serializedObject.FindProperty("teleportActivationAngle");
-            rotateActivationAngle = serializedObject.FindProperty("rotateActivationAngle");
-            rotationAmount = serializedObject.FindProperty("rotationAmount");
-            backStrafeActivationAngle = serializedObject.FindProperty("backStrafeActivationAngle");
-            strafeAmount = serializedObject.FindProperty("strafeAmount");
-            upDirectionThreshold = serializedObject.FindProperty("upDirectionThreshold");
-            lineColorHotSpot = serializedObject.FindProperty("LineColorHotSpot");
-            validLayers = serializedObject.FindProperty("ValidLayers");
-            invalidLayers = serializedObject.FindProperty("InvalidLayers");
+            teleportAction = serializedObject.FindProperty(nameof(teleportAction));
+            inputThreshold = serializedObject.FindProperty(nameof(inputThreshold));
+            angleOffset = serializedObject.FindProperty(nameof(angleOffset));
+            teleportActivationAngle = serializedObject.FindProperty(nameof(teleportActivationAngle));
+            rotateActivationAngle = serializedObject.FindProperty(nameof(rotateActivationAngle));
+            rotationAmount = serializedObject.FindProperty(nameof(rotationAmount));
+            backStrafeActivationAngle = serializedObject.FindProperty(nameof(backStrafeActivationAngle));
+            strafeAmount = serializedObject.FindProperty(nameof(strafeAmount));
+            upDirectionThreshold = serializedObject.FindProperty(nameof(upDirectionThreshold));
+            lineColorHotSpot = serializedObject.FindProperty(nameof(lineColorHotSpot));
+            validLayers = serializedObject.FindProperty(nameof(validLayers));
+            invalidLayers = serializedObject.FindProperty(nameof(invalidLayers));
         }
 
         public override void OnInspectorGUI()
@@ -48,12 +50,9 @@ namespace XRTK.SDK.Inspectors.UX.Pointers
             base.OnInspectorGUI();
             serializedObject.Update();
 
-            teleportPointerFoldout = EditorGUILayout.Foldout(teleportPointerFoldout, "Teleport Pointer Settings", true);
-
-            if (teleportPointerFoldout)
+            if (teleportAction.FoldoutWithBoldLabelPropertyField(teleportFoldoutHeader))
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(teleportAction);
                 EditorGUILayout.PropertyField(inputThreshold);
                 EditorGUILayout.PropertyField(angleOffset);
                 EditorGUILayout.PropertyField(teleportActivationAngle);
