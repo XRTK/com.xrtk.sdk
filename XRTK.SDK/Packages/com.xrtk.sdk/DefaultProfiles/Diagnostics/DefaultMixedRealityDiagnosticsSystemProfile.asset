@@ -21,15 +21,6 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AllPlatforms, XRTK
-      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.CurrentBuildTarget, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
-      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityFrameDiagnosticsDataProvider,
@@ -39,15 +30,6 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AllPlatforms, XRTK
-      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.CurrentBuildTarget, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
-      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
       reference: XRTK.Services.DiagnosticsSystem.MixedRealityConsoleDiagnosticsDataProvider,
@@ -57,15 +39,6 @@ MonoBehaviour:
     platformEntries:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.AllPlatforms, XRTK
-      - reference: XRTK.Definitions.Platforms.AndroidPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.CurrentBuildTarget, XRTK
-      - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.IOSPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
-      - reference: XRTK.Definitions.Platforms.OSXPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.UniversalWindowsPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WebGlPlatform, XRTK
-      - reference: XRTK.Definitions.Platforms.WindowsStandalonePlatform, XRTK
     profile: {fileID: 0}
   diagnosticsWindowPrefab: {fileID: 2161880003638299081, guid: be9153b959e0d4d4aa50a4a1a6617daa,
     type: 3}

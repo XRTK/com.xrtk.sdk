@@ -189,8 +189,17 @@ namespace XRTK.SDK.Input
                 {
                     stabilizer.UpdateStability(gazeTransform.localPosition, gazeTransform.localRotation * Vector3.forward);
                     var transformParent = gazeTransform.parent;
-                    newGazeOrigin = transformParent.TransformPoint(stabilizer.StablePosition);
-                    newGazeNormal = transformParent.TransformDirection(stabilizer.StableRay.direction);
+
+                    if (transformParent != null)
+                    {
+                        newGazeOrigin = transformParent.TransformPoint(stabilizer.StablePosition);
+                        newGazeNormal = transformParent.TransformDirection(stabilizer.StableRay.direction);
+                    }
+                    else
+                    {
+                        newGazeOrigin = gazeTransform.TransformPoint(stabilizer.StablePosition);
+                        newGazeNormal = gazeTransform.TransformDirection(stabilizer.StableRay.direction);
+                    }
                 }
 
                 Vector3 endPoint = newGazeOrigin + (newGazeNormal * pointerExtent);
@@ -281,6 +290,8 @@ namespace XRTK.SDK.Input
 
         private void LateUpdate()
         {
+            if (gazeTransform == null) { return; }
+
             // Update head velocity.
             Vector3 headPosition = GazeOrigin;
             Vector3 headDelta = headPosition - lastHeadPosition;
@@ -320,7 +331,7 @@ namespace XRTK.SDK.Input
         protected override void OnDisable()
         {
             base.OnDisable();
-            GazePointer.BaseCursor?.SetVisibility(false);
+            GazePointer?.BaseCursor?.SetVisibility(false);
             MixedRealityToolkit.InputSystem?.RaiseSourceLost(GazeInputSource);
         }
 
@@ -361,12 +372,26 @@ namespace XRTK.SDK.Input
 
         private IMixedRealityPointer InitializeGazePointer()
         {
+            if (MixedRealityToolkit.InputSystem == null) { return null; }
+
             if (gazeTransform == null)
             {
-                gazeTransform = CameraCache.Main.transform;
+                gazeTransform = MixedRealityToolkit.CameraSystem != null
+                    ? MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform
+                    : CameraCache.Main.transform;
             }
 
-            Debug.Assert(gazeTransform != null, "No gaze transform to raycast from!");
+            if (gazeTransform == null)
+            {
+                Debug.LogError("No gaze transform to raycast from!");
+                return null;
+            }
+
+            if (gazeTransform.parent == null)
+            {
+                Debug.LogError($"{nameof(gazeTransform)}:{gazeTransform.name} must have a parent!");
+                return null;
+            }
 
             gazePointer = new InternalGazePointer(this, "Gaze Pointer", null, raycastLayerMasks, maxGazeCollisionDistance, gazeTransform, stabilizer);
 
@@ -374,7 +399,7 @@ namespace XRTK.SDK.Input
                 MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile != null &&
                 MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.GazeCursorPrefab != null)
             {
-                var cursor = Instantiate(MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.GazeCursorPrefab, MixedRealityToolkit.CameraSystem?.MainCameraRig.PlayspaceTransform);
+                var cursor = Instantiate(MixedRealityToolkit.Instance.ActiveProfile.InputSystemProfile.GazeCursorPrefab, gazeTransform.parent);
                 SetGazeCursor(cursor);
             }
 
