@@ -3,6 +3,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
@@ -57,15 +58,36 @@ namespace XRTK.SDK.UX.Pointers
         private float upDirectionThreshold = 0.2f;
 
         [SerializeField]
-        protected Gradient LineColorHotSpot = new Gradient();
+        [FormerlySerializedAs("LineColorHotSpot")]
+        private Gradient lineColorHotSpot = new Gradient();
+
+        protected Gradient LineColorHotSpot
+        {
+            get => lineColorHotSpot;
+            set => lineColorHotSpot = value;
+        }
 
         [SerializeField]
+        [FormerlySerializedAs("ValidLayers")]
         [Tooltip("Layers that are considered 'valid' for navigation")]
-        protected LayerMask ValidLayers = Physics.DefaultRaycastLayers;
+        private LayerMask validLayers = Physics.DefaultRaycastLayers;
+
+        protected LayerMask ValidLayers
+        {
+            get => validLayers;
+            set => validLayers = value;
+        }
 
         [SerializeField]
+        [FormerlySerializedAs("InvalidLayers")]
         [Tooltip("Layers that are considered 'invalid' for navigation")]
-        protected LayerMask InvalidLayers = Physics.IgnoreRaycastLayer;
+        private LayerMask invalidLayers = Physics.IgnoreRaycastLayer;
+
+        protected LayerMask InvalidLayers
+        {
+            get => invalidLayers;
+            set => invalidLayers = value;
+        }
 
         private Vector2 currentInputPosition = Vector2.zero;
 
@@ -75,7 +97,7 @@ namespace XRTK.SDK.UX.Pointers
 
         private bool canMove = false;
 
-        private bool isTeleportSystemEnabled => MixedRealityToolkit.IsInitialized &&
+        private bool IsTeleportSystemEnabled => MixedRealityToolkit.IsInitialized &&
                                                 MixedRealityToolkit.HasActiveProfile &&
                                                 MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled;
 
@@ -89,13 +111,13 @@ namespace XRTK.SDK.UX.Pointers
             switch (targetResult)
             {
                 case TeleportSurfaceResult.None:
-                    return LineColorNoTarget;
+                    return lineColorNoTarget;
                 case TeleportSurfaceResult.Valid:
-                    return LineColorValid;
+                    return lineColorValid;
                 case TeleportSurfaceResult.Invalid:
-                    return LineColorInvalid;
+                    return lineColorInvalid;
                 case TeleportSurfaceResult.HotSpot:
-                    return LineColorHotSpot;
+                    return lineColorHotSpot;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
             }
@@ -104,7 +126,7 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityPointer Implementation
 
         /// <inheritdoc />
-        public override bool IsInteractionEnabled => !IsTeleportRequestActive && teleportEnabled && isTeleportSystemEnabled;
+        public override bool IsInteractionEnabled => !IsTeleportRequestActive && teleportEnabled && IsTeleportSystemEnabled;
 
         /// <inheritdoc />
         public override float PointerOrientation
@@ -131,9 +153,9 @@ namespace XRTK.SDK.UX.Pointers
             }
 
             // Make sure our array will hold
-            if (Rays == null || Rays.Length != LineCastResolution)
+            if (Rays == null || Rays.Length != lineCastResolution)
             {
-                Rays = new RayStep[LineCastResolution];
+                Rays = new RayStep[lineCastResolution];
             }
 
             float stepSize = 1f / Rays.Length;
@@ -161,7 +183,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (Result.CurrentPointerTarget != null)
                 {
                     // Check if it's in our valid layers
-                    if (((1 << Result.CurrentPointerTarget.layer) & ValidLayers.value) != 0)
+                    if (((1 << Result.CurrentPointerTarget.layer) & validLayers.value) != 0)
                     {
                         // See if it's a hot spot
                         if (TeleportHotSpot != null && TeleportHotSpot.IsActive)
@@ -177,7 +199,7 @@ namespace XRTK.SDK.UX.Pointers
                                 : TeleportSurfaceResult.Invalid;
                         }
                     }
-                    else if (((1 << Result.CurrentPointerTarget.layer) & InvalidLayers) != 0)
+                    else if (((1 << Result.CurrentPointerTarget.layer) & invalidLayers) != 0)
                     {
                         TeleportSurfaceResult = TeleportSurfaceResult.Invalid;
                     }
@@ -211,7 +233,7 @@ namespace XRTK.SDK.UX.Pointers
                     }
 
                     // Clamp the end of the parabola to the result hit's point
-                    LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, LineCastResolution);
+                    LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, lineCastResolution);
                     BaseCursor?.SetVisibility(TeleportSurfaceResult == TeleportSurfaceResult.Valid || TeleportSurfaceResult == TeleportSurfaceResult.HotSpot);
                 }
                 else
@@ -240,7 +262,7 @@ namespace XRTK.SDK.UX.Pointers
         public override void OnInputChanged(InputEventData<Vector2> eventData)
         {
             // Don't process input if we've got an active teleport request in progress.
-            if (IsTeleportRequestActive || !isTeleportSystemEnabled) { return; }
+            if (IsTeleportRequestActive || !IsTeleportSystemEnabled) { return; }
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
