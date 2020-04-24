@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using UnityEngine.Serialization;
 using XRTK.Definitions.Physics;
 using XRTK.Utilities.Lines.DataProviders;
 using XRTK.Utilities.Lines.Renderers;
@@ -14,24 +15,66 @@ namespace XRTK.SDK.UX.Pointers
     public class LinePointer : BaseControllerPointer
     {
         [SerializeField]
-        protected Gradient LineColorSelected = new Gradient();
+        [FormerlySerializedAs("LineColorSelected")]
+        private Gradient lineColorSelected = new Gradient();
+
+        protected Gradient LineColorSelected
+        {
+            get => lineColorSelected;
+            set => lineColorSelected = value;
+        }
 
         [SerializeField]
-        protected Gradient LineColorValid = new Gradient();
+        [FormerlySerializedAs("LineColorValid")]
+        private Gradient lineColorValid = new Gradient();
+
+        protected Gradient LineColorValid
+        {
+            get => lineColorValid;
+            set => lineColorValid = value;
+        }
 
         [SerializeField]
-        protected Gradient LineColorInvalid = new Gradient();
+        [FormerlySerializedAs("LineColorInvalid")]
+        private Gradient lineColorInvalid = new Gradient();
+
+        protected Gradient LineColorInvalid
+        {
+            get => lineColorInvalid;
+            set => lineColorInvalid = value;
+        }
 
         [SerializeField]
-        protected Gradient LineColorNoTarget = new Gradient();
+        [FormerlySerializedAs("LineColorNoTarget")]
+        private Gradient lineColorNoTarget = new Gradient();
+
+        protected Gradient LineColorNoTarget
+        {
+            get => lineColorNoTarget;
+            set => lineColorNoTarget = value;
+        }
 
         [SerializeField]
-        protected Gradient LineColorLockFocus = new Gradient();
+        [FormerlySerializedAs("LineColorLockFocus")]
+        private Gradient lineColorLockFocus = new Gradient();
+
+        protected Gradient LineColorLockFocus
+        {
+            get => lineColorLockFocus;
+            set => lineColorLockFocus = value;
+        }
 
         [Range(2, 50)]
         [SerializeField]
+        [FormerlySerializedAs("LineCastResolution")]
         [Tooltip("This setting has a high performance cost. Values above 20 are not recommended.")]
-        protected int LineCastResolution = 10;
+        private int lineCastResolution = 10;
+
+        protected int LineCastResolution
+        {
+            get => lineCastResolution;
+            set => lineCastResolution = value;
+        }
 
         [SerializeField]
         private BaseMixedRealityLineDataProvider lineBase;
@@ -56,8 +99,6 @@ namespace XRTK.SDK.UX.Pointers
             get => lineRenderers;
             set => lineRenderers = value;
         }
-
-        private Vector3 syncedPosition;
 
         private void CheckInitialization()
         {
@@ -137,9 +178,9 @@ namespace XRTK.SDK.UX.Pointers
             }
 
             // Make sure our array will hold
-            if (Rays == null || Rays.Length != LineCastResolution)
+            if (Rays == null || Rays.Length != lineCastResolution)
             {
-                Rays = new RayStep[LineCastResolution];
+                Rays = new RayStep[lineCastResolution];
             }
 
             var stepSize = 1f / Rays.Length;
@@ -181,20 +222,20 @@ namespace XRTK.SDK.UX.Pointers
             if (Result.CurrentPointerTarget != null)
             {
                 clearWorldLength = Result.RayDistance;
-                lineColor = IsSelectPressed ? LineColorSelected : LineColorValid;
+                lineColor = IsSelectPressed ? lineColorSelected : lineColorValid;
             }
             else
             {
                 clearWorldLength = PointerExtent;
-                lineColor = IsSelectPressed ? LineColorSelected : LineColorNoTarget;
+                lineColor = IsSelectPressed ? lineColorSelected : lineColorNoTarget;
             }
 
             if (IsFocusLocked)
             {
-                lineColor = LineColorLockFocus;
+                lineColor = lineColorLockFocus;
             }
 
-            int maxClampLineSteps = LineCastResolution;
+            int maxClampLineSteps = lineCastResolution;
 
             for (var i = 0; i < lineRenderers.Length; i++)
             {

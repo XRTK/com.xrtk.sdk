@@ -2,7 +2,9 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.﻿
 
 using UnityEditor;
+using UnityEngine;
 using XRTK.Definitions.Utilities;
+using XRTK.Inspectors.Extensions;
 using XRTK.SDK.Input.Handlers;
 
 namespace XRTK.SDK.Inspectors.Input.Handlers
@@ -10,23 +12,20 @@ namespace XRTK.SDK.Inspectors.Input.Handlers
     [CustomEditor(typeof(ControllerPoseSynchronizer))]
     public class ControllerPoseSynchronizerInspector : Editor
     {
-        private const string SynchronizationSettingsKey = "XRTK_Inspector_SynchronizationSettingsFoldout";
+        private readonly GUIContent synchronizationSettings = new GUIContent("Synchronization Settings");
         private static readonly string[] HandednessLabels = { "Left", "Right" };
 
-        private static bool synchronizationSettingsFoldout = true;
-
-        private SerializedProperty handedness;
         private SerializedProperty useSourcePoseData;
         private SerializedProperty poseAction;
+        private SerializedProperty handedness;
 
         protected bool DrawHandednessProperty = true;
 
         protected virtual void OnEnable()
         {
-            synchronizationSettingsFoldout = SessionState.GetBool(SynchronizationSettingsKey, synchronizationSettingsFoldout);
-            handedness = serializedObject.FindProperty("handedness");
-            useSourcePoseData = serializedObject.FindProperty("useSourcePoseData");
-            poseAction = serializedObject.FindProperty("poseAction");
+            useSourcePoseData = serializedObject.FindProperty(nameof(useSourcePoseData));
+            poseAction = serializedObject.FindProperty(nameof(poseAction));
+            handedness = serializedObject.FindProperty(nameof(handedness));
         }
 
         public override void OnInspectorGUI()
@@ -35,40 +34,34 @@ namespace XRTK.SDK.Inspectors.Input.Handlers
 
             EditorGUILayout.Space();
             EditorGUI.BeginChangeCheck();
-            synchronizationSettingsFoldout = EditorGUILayout.Foldout(synchronizationSettingsFoldout, "Synchronization Settings", true);
 
-            if (EditorGUI.EndChangeCheck())
+            if (useSourcePoseData.FoldoutWithBoldLabelPropertyField(synchronizationSettings))
             {
-                SessionState.SetBool(SynchronizationSettingsKey, synchronizationSettingsFoldout);
-            }
+                EditorGUI.indentLevel++;
 
-            if (!synchronizationSettingsFoldout) { return; }
-
-            EditorGUI.indentLevel++;
-
-            if (DrawHandednessProperty)
-            {
-                var currentHandedness = (Handedness)handedness.enumValueIndex;
-                var handIndex = currentHandedness == Handedness.Right ? 1 : 0;
-
-                EditorGUI.BeginChangeCheck();
-                var newHandednessIndex = EditorGUILayout.Popup(handedness.displayName, handIndex, HandednessLabels);
-
-                if (EditorGUI.EndChangeCheck())
+                if (!useSourcePoseData.boolValue)
                 {
-                    currentHandedness = newHandednessIndex == 0 ? Handedness.Left : Handedness.Right;
-                    handedness.enumValueIndex = (int)currentHandedness;
+                    EditorGUILayout.PropertyField(poseAction);
                 }
+
+                if (DrawHandednessProperty)
+                {
+                    var currentHandedness = (Handedness)handedness.enumValueIndex;
+                    var handIndex = currentHandedness == Handedness.Right ? 1 : 0;
+
+                    EditorGUI.BeginChangeCheck();
+                    var newHandednessIndex = EditorGUILayout.Popup(handedness.displayName, handIndex, HandednessLabels);
+
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        currentHandedness = newHandednessIndex == 0 ? Handedness.Left : Handedness.Right;
+                        handedness.enumValueIndex = (int)currentHandedness;
+                    }
+                }
+
+                EditorGUI.indentLevel--;
             }
 
-            EditorGUILayout.PropertyField(useSourcePoseData);
-
-            if (!useSourcePoseData.boolValue)
-            {
-                EditorGUILayout.PropertyField(poseAction);
-            }
-
-            EditorGUI.indentLevel--;
             serializedObject.ApplyModifiedProperties();
         }
     }
