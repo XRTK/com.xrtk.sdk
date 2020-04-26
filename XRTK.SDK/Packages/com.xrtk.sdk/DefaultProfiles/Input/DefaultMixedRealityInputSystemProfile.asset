@@ -103,7 +103,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
-      reference: XRTK.Lumin.Controllers.LuminControllerDataProvider, XRTK.Lumin
+      reference: XRTK.Lumin.Providers.Controllers.LuminControllerDataProvider, XRTK.Lumin
     name: Lumin Controller Data Provider
     priority: 8
     platformEntries:
@@ -112,7 +112,8 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 11400000, guid: 5e14f9e6f5088544a932ed6a0f1e7cf1, type: 2}
   - instancedType:
-      reference: XRTK.Lumin.Controllers.LuminHandControllerDataProvider, XRTK.Lumin
+      reference: XRTK.Lumin.Providers.Controllers.LuminHandControllerDataProvider,
+        XRTK.Lumin
     name: Lumin Hand Controller Data Provider
     priority: 9
     platformEntries:

@@ -24,7 +24,8 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 0}
   - instancedType:
-      reference: XRTK.Lumin.SpatialObservers.LuminSpatialMeshObserver, XRTK.Lumin
+      reference: XRTK.Lumin.Providers.SpatialAwareness.SpatialObservers.LuminSpatialMeshObserver,
+        XRTK.Lumin
     name: Lumin Spatial Observer Data Provider
     priority: 1
     platformEntries:
