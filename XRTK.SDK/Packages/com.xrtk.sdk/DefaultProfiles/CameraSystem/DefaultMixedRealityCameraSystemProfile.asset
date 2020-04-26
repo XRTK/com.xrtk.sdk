@@ -34,7 +34,7 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: XRTK.Definitions.Platforms.LuminPlatform, XRTK.Lumin
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
-    profile: {fileID: 11400000, guid: 10c5453922d4a744595e0415ef57dda4, type: 2}
+    profile: {fileID: 0}
   - instancedType:
       reference: XRTK.WindowsMixedReality.Providers.CameraSystem.WindowsMixedRealityCameraDataProvider,
         XRTK.WindowsMixedReality

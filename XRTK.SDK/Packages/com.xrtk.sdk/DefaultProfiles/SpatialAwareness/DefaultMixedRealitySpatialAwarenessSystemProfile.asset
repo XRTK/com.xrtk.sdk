@@ -35,3 +35,4 @@ MonoBehaviour:
   meshDisplayOption: 0
   globalMeshObserverProfile: {fileID: 11400000, guid: 6cbcb6266beaa724780d064525cf2896,
     type: 2}
+  globalSurfaceObserverProfile: {fileID: 0}
