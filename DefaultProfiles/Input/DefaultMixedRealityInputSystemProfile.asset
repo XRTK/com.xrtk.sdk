@@ -42,8 +42,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 11400000, guid: 69ab987a62681cf4d9f4042ef17b0ddd, type: 2}
   - instancedType:
-      reference: XRTK.Providers.Controllers.OpenVR.OpenVRDataControllerDataProvider,
-        XRTK
+      reference: XRTK.Providers.Controllers.OpenVR.OpenVRControllerDataProvider, XRTK
     name: OpenVR Data Controller Data Provider
     priority: 2
     platformEntries:
