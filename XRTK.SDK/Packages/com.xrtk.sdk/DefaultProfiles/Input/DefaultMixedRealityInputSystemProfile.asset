@@ -64,7 +64,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.EditorPlatform, XRTK
     profile: {fileID: 11400000, guid: 6bd4ff02967a9b24197b8cd2593ddfa4, type: 2}
   - instancedType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityControllerDataProvider,
+      reference: XRTK.WindowsMixedReality.Providers.InputSystem.Controllers.WindowsMixedRealityControllerDataProvider,
         XRTK.WindowsMixedReality
     name: Windows Mixed Reality Controller Data Provider
     priority: 4
@@ -74,7 +74,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 11400000, guid: 8e0139954c0b0ab41a6f5fce7c0594e1, type: 2}
   - instancedType:
-      reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityHandControllerDataProvider,
+      reference: XRTK.WindowsMixedReality.Providers.InputSystem.Controllers.WindowsMixedRealityHandControllerDataProvider,
         XRTK.WindowsMixedReality
     name: Windows Mixed Reality Hand Controller Data Provider
     priority: 5

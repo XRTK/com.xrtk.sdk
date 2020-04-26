@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HoloLensControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.WindowsMixedReality.Controllers.WindowsMixedRealityMotionController,
+    reference: XRTK.WindowsMixedReality.Providers.InputSystem.Controllers.WindowsMixedRealityMotionController,
       XRTK.WindowsMixedReality
   handedness: 0
   visualizationProfile: {fileID: 0}

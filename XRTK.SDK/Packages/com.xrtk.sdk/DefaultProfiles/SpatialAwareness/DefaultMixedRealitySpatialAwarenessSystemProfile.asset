@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configurations:
   - instancedType:
-      reference: XRTK.WindowsMixedReality.SpatialObservers.WindowsMixedRealitySpatialMeshObserver,
+      reference: XRTK.WindowsMixedReality.Providers.SpatialAwarenessSystem.SpatialObservers.WindowsMixedRealitySpatialMeshObserver,
         XRTK.WindowsMixedReality
     name: Windows Mixed Reality Spatial Mesh Observer
     priority: 0
