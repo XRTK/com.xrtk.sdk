@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7586d5ce1704458aad54224cfafad39, type: 3}
   m_Name: DefaultMixedRealityInputActionsProfile
   m_EditorClassIdentifier: 
-  isEditable: 0
   inputActions:
   - profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 1
