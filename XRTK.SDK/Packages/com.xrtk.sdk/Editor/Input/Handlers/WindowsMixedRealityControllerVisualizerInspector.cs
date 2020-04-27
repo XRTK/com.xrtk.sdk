@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using XRTK.SDK.UX.Controllers;
 
-namespace XRTK.SDK.Inspectors.Input.Handlers
+namespace XRTK.SDK.Editor.Input.Handlers
 {
     [CustomEditor(typeof(WindowsMixedRealityControllerVisualizer))]
     public class WindowsMixedRealityControllerVisualizerInspector : DefaultMixedRealityControllerVisualizerInspector

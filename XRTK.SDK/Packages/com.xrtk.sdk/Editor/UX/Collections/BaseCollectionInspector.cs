@@ -4,10 +4,10 @@
 using UnityEditor;
 using XRTK.SDK.UX.Collections;
 
-namespace XRTK.SDK.Inspectors.UX.Collections
+namespace XRTK.SDK.Editor.UX.Collections
 {
     [CustomEditor(typeof(BaseObjectCollection), true)]
-    public class BaseCollectionInspector : Editor
+    public class BaseCollectionInspector : UnityEditor.Editor
     {
     }
 }

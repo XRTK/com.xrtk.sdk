@@ -122,7 +122,7 @@ MonoBehaviour:
       - reference: XRTK.Definitions.Platforms.CurrentBuildTargetPlatform, XRTK
     profile: {fileID: 11400000, guid: 0cd9251200b020a4797b46b8679c570f, type: 2}
   - instancedType:
-      reference: XRTK.Oculus.Controllers.OculusControllerDataProvider, XRTK.Oculus
+      reference: XRTK.Oculus.Providers.Controllers.OculusControllerDataProvider, XRTK.Oculus
     name: Oculus Controller Data Provider
     priority: 10
     platformEntries:
@@ -131,7 +131,8 @@ MonoBehaviour:
       - reference: XRTK.Oculus.OculusPlatform, XRTK.Oculus
     profile: {fileID: 11400000, guid: b849f3a28dc36b84a92d2ec4d8239cd6, type: 2}
   - instancedType:
-      reference: XRTK.Oculus.Controllers.OculusHandControllerDataProvider, XRTK.Oculus
+      reference: XRTK.Oculus.Providers.Controllers.OculusHandControllerDataProvider,
+        XRTK.Oculus
     name: Oculus Hand Controller Data Provider
     priority: 11
     platformEntries:

@@ -3,10 +3,10 @@
 
 using UnityEditor;
 using UnityEngine;
-using XRTK.Inspectors.Extensions;
+using XRTK.Editor.Extensions;
 using XRTK.SDK.UX.Pointers;
 
-namespace XRTK.SDK.Inspectors.UX.Pointers
+namespace XRTK.SDK.Editor.UX.Pointers
 {
     [CustomEditor(typeof(ParabolicTeleportPointer))]
     public class ParabolicTeleportPointerInspector : TeleportPointerInspector

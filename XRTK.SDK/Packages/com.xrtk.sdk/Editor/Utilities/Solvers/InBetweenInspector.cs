@@ -5,10 +5,10 @@ using UnityEditor;
 using UnityEngine;
 using XRTK.SDK.Utilities.Solvers;
 
-namespace XRTK.SDK.Inspectors.Utilities.Solvers
+namespace XRTK.SDK.Editor.Utilities.Solvers
 {
     [CustomEditor(typeof(InBetween))]
-    public class InBetweenEditor : Editor
+    public class InBetweenEditor : UnityEditor.Editor
     {
         private SerializedProperty trackedObjectProperty;
         private SerializedProperty transformTargetProperty;

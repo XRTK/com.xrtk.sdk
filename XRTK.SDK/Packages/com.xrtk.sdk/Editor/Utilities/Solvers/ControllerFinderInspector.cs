@@ -5,10 +5,10 @@ using UnityEditor;
 using UnityEngine;
 using XRTK.SDK.Utilities.Solvers;
 
-namespace XRTK.SDK.Inspectors.Utilities.Solvers
+namespace XRTK.SDK.Editor.Utilities.Solvers
 {
     [CustomEditor(typeof(ControllerFinder))]
-    public abstract class ControllerFinderInspector : Editor
+    public abstract class ControllerFinderInspector : UnityEditor.Editor
     {
         private SerializedProperty handednessProperty;
 

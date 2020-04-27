@@ -4,13 +4,13 @@
 using UnityEditor;
 using UnityEngine;
 using XRTK.Definitions.Utilities;
-using XRTK.Inspectors.Extensions;
+using XRTK.Editor.Extensions;
 using XRTK.SDK.Input.Handlers;
 
-namespace XRTK.SDK.Inspectors.Input.Handlers
+namespace XRTK.SDK.Editor.Input.Handlers
 {
     [CustomEditor(typeof(ControllerPoseSynchronizer))]
-    public class ControllerPoseSynchronizerInspector : Editor
+    public class ControllerPoseSynchronizerInspector : UnityEditor.Editor
     {
         private readonly GUIContent synchronizationSettings = new GUIContent("Synchronization Settings");
         private static readonly string[] HandednessLabels = { "Left", "Right" };

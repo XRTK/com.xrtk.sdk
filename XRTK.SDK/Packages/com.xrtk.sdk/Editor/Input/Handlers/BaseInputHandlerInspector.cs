@@ -3,9 +3,9 @@
 
 using UnityEditor;
 
-namespace XRTK.SDK.Inspectors.Input.Handlers
+namespace XRTK.SDK.Editor.Input.Handlers
 {
-    public class BaseInputHandlerInspector : Editor
+    public class BaseInputHandlerInspector : UnityEditor.Editor
     {
         private SerializedProperty isFocusRequired;
 

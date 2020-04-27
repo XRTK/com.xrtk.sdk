@@ -4,7 +4,7 @@
 using UnityEditor;
 using XRTK.SDK.Input.Handlers;
 
-namespace XRTK.SDK.Inspectors.Input.Handlers
+namespace XRTK.SDK.Editor.Input.Handlers
 {
     [CustomEditor(typeof(PointerClickHandler))]
     public class PointerClickHandlerInspector : BaseInputHandlerInspector

@@ -4,7 +4,7 @@
 using UnityEditor;
 using XRTK.SDK.UX.Controllers;
 
-namespace XRTK.SDK.Inspectors.Input.Handlers
+namespace XRTK.SDK.Editor.Input.Handlers
 {
     [CustomEditor(typeof(DefaultMixedRealityControllerVisualizer))]
     public class DefaultMixedRealityControllerVisualizerInspector : ControllerPoseSynchronizerInspector { }

@@ -3,11 +3,11 @@
 
 using UnityEditor;
 using UnityEngine;
-using XRTK.Inspectors.Extensions;
-using XRTK.SDK.Inspectors.Input.Handlers;
+using XRTK.Editor.Extensions;
+using XRTK.SDK.Editor.Input.Handlers;
 using XRTK.SDK.UX.Pointers;
 
-namespace XRTK.SDK.Inspectors.UX.Pointers
+namespace XRTK.SDK.Editor.UX.Pointers
 {
     [CustomEditor(typeof(BaseControllerPointer))]
     public class BaseControllerPointerInspector : ControllerPoseSynchronizerInspector

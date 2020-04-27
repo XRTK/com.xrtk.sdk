@@ -6,10 +6,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
-using XRTK.Inspectors.Extensions;
+using XRTK.Editor.Extensions;
 using XRTK.SDK.Input.Handlers;
 
-namespace XRTK.SDK.Inspectors.Input.Handlers
+namespace XRTK.SDK.Editor.Input.Handlers
 {
     [CustomEditor(typeof(SpeechInputHandler))]
     public class SpeechInputHandlerInspector : BaseInputHandlerInspector
