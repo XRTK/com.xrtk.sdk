@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RightOculusTouchControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Oculus.Controllers.OculusTouchController, XRTK.Oculus
+    reference: XRTK.Oculus.Providers.Controllers.OculusTouchController, XRTK.Oculus
   handedness: 2
   visualizationProfile: {fileID: 11400000, guid: 5ee67c77447ce88409a3e04e57806963,
     type: 2}

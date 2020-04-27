@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OculusRemoteControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Oculus.Controllers.OculusRemoteController, XRTK.Oculus
+    reference: XRTK.Oculus.Providers.Controllers.OculusRemoteController, XRTK.Oculus
   handedness: 0
   visualizationProfile: {fileID: 0}
   useCustomInteractions: 0
