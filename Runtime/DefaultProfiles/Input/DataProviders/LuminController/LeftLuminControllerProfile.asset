@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LeftLuminControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Lumin.Controllers.LuminController, XRTK.Lumin
+    reference: XRTK.Lumin.Providers.Controllers.LuminController, XRTK.Lumin
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: fe125eaaf5547684d8506b794c5a6016,
     type: 2}
