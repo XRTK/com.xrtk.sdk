@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e575260027d17dc41a06f78eb50d0132, type: 3}
+  m_Script: {fileID: 11500000, guid: 67355724a5b4fd841bbf691ac44ad25d, type: 3}
   m_Name: ThumbsUpHandPose
   m_EditorClassIdentifier: 
-  id: ok
+  id: thumbs-up
   description: OK sign.
   isDefault: 0
-  keyCode: 52
+  isSelectionPose: 0
+  keyCode: 55
   data: {fileID: 4900000, guid: 71175c7404cbaee408470b929ff3ae1f, type: 3}

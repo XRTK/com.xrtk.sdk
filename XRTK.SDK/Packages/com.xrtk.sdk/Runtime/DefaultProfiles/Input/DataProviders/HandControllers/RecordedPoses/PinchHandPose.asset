@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e575260027d17dc41a06f78eb50d0132, type: 3}
+  m_Script: {fileID: 11500000, guid: 67355724a5b4fd841bbf691ac44ad25d, type: 3}
   m_Name: PinchHandPose
   m_EditorClassIdentifier: 
   id: pinch
   description: Index finger and Thumb touching, index tip does not move.
   isDefault: 0
-  keyCode: 323
+  isSelectionPose: 0
+  keyCode: 52
   data: {fileID: 4900000, guid: 00711cdd19e18a74db7fc25c63d9a0bf, type: 3}
