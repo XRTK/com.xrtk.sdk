@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LeftOculusGoControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Oculus.Controllers.OculusGoController, XRTK.Oculus
+    reference: XRTK.Oculus.Providers.Controllers.OculusGoController, XRTK.Oculus
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: fe125eaaf5547684d8506b794c5a6016,
     type: 2}
