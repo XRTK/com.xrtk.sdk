@@ -16,5 +16,5 @@ MonoBehaviour:
   description: Index finger and Thumb touching, wrist does not move.
   isDefault: 0
   isSelectionPose: 0
-  keyCode: 53
+  keyCode: 51
   data: {fileID: 4900000, guid: 6bcf1fd0588649141811cbcb8135da00, type: 3}

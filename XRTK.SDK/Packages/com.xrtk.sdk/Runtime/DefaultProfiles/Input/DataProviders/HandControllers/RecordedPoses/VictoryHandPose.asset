@@ -16,5 +16,5 @@ MonoBehaviour:
   description: Victory sign.
   isDefault: 0
   isSelectionPose: 0
-  keyCode: 56
+  keyCode: 53
   data: {fileID: 4900000, guid: 21f98e595bbf7294c96c87c187f41196, type: 3}

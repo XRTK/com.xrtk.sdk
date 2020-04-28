@@ -16,5 +16,5 @@ MonoBehaviour:
   description: Relaxed hand pose.
   isDefault: 1
   isSelectionPose: 0
-  keyCode: 51
+  keyCode: 0
   data: {fileID: 4900000, guid: 09df9528e8b9f6549a5f0989692b84ed, type: 3}

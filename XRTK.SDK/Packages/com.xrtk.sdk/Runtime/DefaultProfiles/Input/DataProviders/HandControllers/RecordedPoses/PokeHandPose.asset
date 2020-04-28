@@ -16,5 +16,5 @@ MonoBehaviour:
   description: Index finger stretched out.
   isDefault: 0
   isSelectionPose: 0
-  keyCode: 54
+  keyCode: 324
   data: {fileID: 4900000, guid: 22b97ff789b664c4f9b9ee223c29eee7, type: 3}
