@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RightVisualizationProfile
   m_EditorClassIdentifier: 
   controllerVisualizationType:
-    reference: XRTK.SDK.UX.Controllers.WindowsMixedRealityControllerVisualizer, XRTK.SDK
+    reference: 66444029-7951-40bc-b488-429e178b193a
   useDefaultModels: 1
   model: {fileID: 1760394390528354, guid: 3c945620dae24228acea8b9402529ce6, type: 3}
   pointerPose:

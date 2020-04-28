@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace XRTK.SDK.UX.Controllers
 {
+    [System.Runtime.InteropServices.Guid("66444029-7951-40BC-B488-429E178B193A")]
     public class WindowsMixedRealityControllerVisualizer : DefaultMixedRealityControllerVisualizer
     {
         [Prefab]

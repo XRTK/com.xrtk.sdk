@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RightOculusTouchOpenVRControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.OpenVR.OculusTouchOpenVRController, XRTK
+    reference: f5779130-4990-44f7-a61a-196b34fa3aef
   handedness: 2
   visualizationProfile: {fileID: 11400000, guid: 5ee67c77447ce88409a3e04e57806963,
     type: 2}

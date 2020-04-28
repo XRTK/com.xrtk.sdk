@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LeftMixedRealityHandControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.Hands.MixedRealityHandController, XRTK
+    reference: b18a9a6c-e5fd-40ae-89e9-9822415ec62b
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: d03625d21fb0bfb41b6642f492e27754,
     type: 2}
