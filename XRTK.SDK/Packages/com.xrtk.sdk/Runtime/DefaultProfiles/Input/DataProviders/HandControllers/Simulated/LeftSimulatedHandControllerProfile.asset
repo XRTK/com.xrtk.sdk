@@ -19,11 +19,12 @@ MonoBehaviour:
     type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
-  - {fileID: 11400000, guid: 840c6c58517905a438509123ade977c9, type: 2}
-  - {fileID: 11400000, guid: b7a023ed9a50a624691ad0b5a440cb3c, type: 2}
-  - {fileID: 11400000, guid: 5cbd8750552cd9a469234791978a7d9f, type: 2}
-  - {fileID: 11400000, guid: 1b20f6af9b5a4b04db68d0d3360f22b3, type: 2}
-  - {fileID: 11400000, guid: e27d24f02c2a18644b3779d7cdbe558d, type: 2}
-  - {fileID: 11400000, guid: 77425eb492db9f841be8429a707cac85, type: 2}
-  - {fileID: 11400000, guid: 7c7175d2c832a1d4795b54f95310082e, type: 2}
-  - {fileID: 11400000, guid: 212e13dbdd5de81429f1a8e127154c43, type: 2}
+  - {fileID: 11400000, guid: f44a8ca60623dae40ab7bb587b25f9a4, type: 2}
+  - {fileID: 11400000, guid: 75cc1e0a54a5fe648a4cde0278665293, type: 2}
+  - {fileID: 11400000, guid: 17f3fbe848f439d42b507e772d4815f2, type: 2}
+  - {fileID: 11400000, guid: d41a902589d58634c91da2d0bddc63a2, type: 2}
+  - {fileID: 11400000, guid: 02740da3b13d2504d8d707db21806544, type: 2}
+  - {fileID: 11400000, guid: 2aed84cf960b4a44e945ade98bcd6a46, type: 2}
+  - {fileID: 11400000, guid: 5147df11251971d49bad06a892acb4b8, type: 2}
+  - {fileID: 11400000, guid: d66ff6bdac77e284a9b56cd8ff7588f8, type: 2}
+  - {fileID: 11400000, guid: e001f5e0dec2fdc4e8f7361051c16285, type: 2}
