@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultXboxControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.UnityInput.XboxController, XRTK
+    reference: 71e70c1b-9f77-4b69-bfc7-974905bb7702
   handedness: 0
   visualizationProfile: {fileID: 0}
   useCustomInteractions: 0

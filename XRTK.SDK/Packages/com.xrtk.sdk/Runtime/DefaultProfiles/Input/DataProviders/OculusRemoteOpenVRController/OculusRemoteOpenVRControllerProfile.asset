@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OculusRemoteOpenVRControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.OpenVR.OculusRemoteOpenVRController, XRTK
+    reference: 24a7e9ca-43f0-487a-9e2b-609ccedf2756
   handedness: 0
   visualizationProfile: {fileID: 0}
   useCustomInteractions: 0
