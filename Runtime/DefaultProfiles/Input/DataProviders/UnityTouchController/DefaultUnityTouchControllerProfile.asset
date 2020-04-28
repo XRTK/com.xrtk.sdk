@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultUnityTouchControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.UnityInput.UnityTouchController, XRTK
+    reference: 98f97eda-4418-4b4b-88e9-e4f1f0734e4e
   handedness: 7
   visualizationProfile: {fileID: 0}
   useCustomInteractions: 1

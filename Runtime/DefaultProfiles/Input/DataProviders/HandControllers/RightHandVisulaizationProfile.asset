@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RightHandVisulaizationProfile
   m_EditorClassIdentifier: 
   controllerVisualizationType:
-    reference: XRTK.SDK.UX.Controllers.Hands.HandControllerJointsVisualizer, XRTK.SDK
+    reference: 0b653537-d237-4622-acc6-e351209a5882
   useDefaultModels: 0
   model: {fileID: 4856844564559928852, guid: 58cc7659d29f83f47b10dfd3bc4d1c97, type: 3}
   pointerPose:

@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: LeftWMROpenVRControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.OpenVR.WindowsMixedRealityOpenVRMotionController,
-      XRTK
+    reference: 193f55d4-44e0-4d3b-82fd-0cb417b3668b
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: fe125eaaf5547684d8506b794c5a6016,
     type: 2}
