@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: LeftSimulatedHandControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.Simulation.Hands.SimulatedMixedRealityHandController,
-      XRTK
+    reference: 435c4f16-8e23-4228-b2b0-5fce09a97043
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: d03625d21fb0bfb41b6642f492e27754,
     type: 2}

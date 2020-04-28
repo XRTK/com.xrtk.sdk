@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RightViveWandOpenVRControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.OpenVR.ViveWandOpenVRController, XRTK
+    reference: 506f192f-b93f-43b3-a34f-b15dfd855631
   handedness: 2
   visualizationProfile: {fileID: 11400000, guid: 5ee67c77447ce88409a3e04e57806963,
     type: 2}

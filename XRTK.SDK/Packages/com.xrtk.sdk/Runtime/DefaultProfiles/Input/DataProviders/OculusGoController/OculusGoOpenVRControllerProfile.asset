@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OculusGoOpenVRControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.OpenVR.OculusGoOpenVRController, XRTK
+    reference: f57df6f5-167e-45e8-b3f2-195d2c57a3f4
   handedness: 0
   visualizationProfile: {fileID: 0}
   useCustomInteractions: 0

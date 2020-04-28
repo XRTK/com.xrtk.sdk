@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: RightWMRControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.WindowsMixedReality.Providers.InputSystem.Controllers.WindowsMixedRealityMotionController,
-      XRTK.WindowsMixedReality
+    reference: 37aa1554-3d46-4c72-aac4-31023775f62b
   handedness: 2
   visualizationProfile: {fileID: 11400000, guid: 6266c5605a2b6b84898b429cb917a3e4,
     type: 2}

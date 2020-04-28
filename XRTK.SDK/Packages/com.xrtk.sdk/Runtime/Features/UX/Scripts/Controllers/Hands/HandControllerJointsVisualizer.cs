@@ -11,6 +11,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
     /// <summary>
     /// Hand controller visualizer visualizing hand joints.
     /// </summary>
+    [System.Runtime.InteropServices.Guid("0B653537-D237-4622-ACC6-E351209A5882")]
     public class HandControllerJointsVisualizer : BaseHandControllerVisualizer
     {
         private readonly Dictionary<TrackedHandJoint, GameObject> jointVisualizations = new Dictionary<TrackedHandJoint, GameObject>();

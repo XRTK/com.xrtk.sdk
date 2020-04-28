@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMouseControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.UnityInput.MouseController, XRTK
+    reference: a80e17f6-8221-49c3-bc4b-cab495c91d6c
   handedness: 7
   visualizationProfile: {fileID: 0}
   useCustomInteractions: 1

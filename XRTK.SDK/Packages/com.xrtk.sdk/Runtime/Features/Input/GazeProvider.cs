@@ -18,6 +18,7 @@ namespace XRTK.SDK.Input
     /// This class provides Gaze as an Input Source so users can interact with objects using their head.
     /// </summary>
     [DisallowMultipleComponent]
+    [System.Runtime.InteropServices.Guid("BED2C9A4-48C5-49D2-BCA4-3D351153BA75")]
     public class GazeProvider : InputSystemGlobalListener, IMixedRealityGazeProvider, IMixedRealityInputHandler
     {
         private const float VelocityThreshold = 0.1f;
