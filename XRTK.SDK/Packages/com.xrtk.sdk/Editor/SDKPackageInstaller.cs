@@ -12,11 +12,12 @@ namespace XRTK.SDK.Editor
     [InitializeOnLoad]
     internal static class SDKPackageInstaller
     {
-        private static readonly string DefaultPath = $"{MixedRealityPreferences.ProfileGenerationPath}SDK\\";
+        private static readonly string DefaultPath = $"{MixedRealityPreferences.ProfileGenerationPath}SDK";
         private static readonly string HiddenPath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).ToForwardSlashes()}\\{MixedRealityPreferences.HIDDEN_PROFILES_PATH}");
 
         static SDKPackageInstaller()
         {
+            EditorPreferences.Set($"{nameof(SDKPackageInstaller)}", false);
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}", false))
             {
                 EditorPreferences.Set($"{nameof(SDKPackageInstaller)}", PackageInstaller.TryInstallProfiles(HiddenPath, DefaultPath));
