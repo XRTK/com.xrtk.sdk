@@ -17,7 +17,6 @@ namespace XRTK.SDK.Editor
 
         static SDKPackageInstaller()
         {
-            EditorPreferences.Set($"{nameof(SDKPackageInstaller)}", false);
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}", false))
             {
                 EditorPreferences.Set($"{nameof(SDKPackageInstaller)}", PackageInstaller.TryInstallProfiles(HiddenPath, DefaultPath));
