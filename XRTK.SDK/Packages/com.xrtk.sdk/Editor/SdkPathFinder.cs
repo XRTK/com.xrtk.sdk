@@ -9,5 +9,10 @@ namespace XRTK.SDK.Editor
     /// <summary>
     /// Dummy scriptable object used to find the relative path of the com.xrtk.sdk.
     /// </summary>
-    internal class SdkPathFinder : ScriptableObject, IPathFinder { }
+    /// <inheritdoc cref="IPathFinder" />
+    public class SdkPathFinder : ScriptableObject, IPathFinder
+    {
+        /// <inheritdoc />
+        public string Location => $"/Editor/{nameof(SdkPathFinder)}.cs";
+    }
 }
