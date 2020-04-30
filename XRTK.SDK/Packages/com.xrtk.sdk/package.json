@@ -15,7 +15,7 @@
     "com.xrtk.core": "0.2.0",
     "com.unity.textmeshpro": "1.0.0"
   },
-  "samples": [
+  "profiles": [
     {
       "displayName": "Default Profiles",
       "path": "Profiles~/"
