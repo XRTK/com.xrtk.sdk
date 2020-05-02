@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3fb79524faca40478c0844c24e542f7, type: 3}
-  m_Name: GrabProfile
+  m_Name: HandSelectInteractionMappingProfile
   m_EditorClassIdentifier: 
   interactionMapping:
-    description: Grab
+    description: Select
     stateChangeType: 0
-    axisType: 3
-    inputType: 13
+    axisType: 2
+    inputType: 25
     inputAction:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+      profileGuid: 399335ccc89c4d12b79f3539ca7771db
+      id: 1
+      description: Select
+      axisConstraint: 2
     keyCode: 0
     inputName: 
     axisCodeX: 

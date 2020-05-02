@@ -20,9 +20,9 @@ MonoBehaviour:
   useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: b7f65e3d3581e3d46ba01ecb4fedd827, type: 2}
-  - {fileID: 11400000, guid: cd23741cb70b7ae40b319a4ef6eee003, type: 2}
-  - {fileID: 11400000, guid: 43e9f87fa76d5554883940341589436b, type: 2}
-  - {fileID: 11400000, guid: a96fb30df2bb6c24aa97a0e1468cd24a, type: 2}
+  - {fileID: 11400000, guid: 1fd0c5cd50876514bb0027af902ed920, type: 2}
+  - {fileID: 11400000, guid: 19c83b8e6eb6cd244a53e0edf4df46dd, type: 2}
+  - {fileID: 11400000, guid: 80556dee026997f4ba146ffda4710f79, type: 2}
   - {fileID: 11400000, guid: 0551abc69395db944b2dd5e53319b4f5, type: 2}
   - {fileID: 11400000, guid: 13fd1b11dc0b10d408317dd2bfb18128, type: 2}
   - {fileID: 11400000, guid: 6e32cf2e094311d4192e374843bc9623, type: 2}
