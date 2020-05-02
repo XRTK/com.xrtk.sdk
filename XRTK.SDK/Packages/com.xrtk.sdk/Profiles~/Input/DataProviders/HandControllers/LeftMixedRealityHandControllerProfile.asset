@@ -17,6 +17,9 @@ MonoBehaviour:
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: d03625d21fb0bfb41b6642f492e27754,
     type: 2}
-  useCustomInteractions: 1
+  useCustomInteractions: 0
   interactionMappingProfiles:
   - {fileID: 11400000, guid: b7f65e3d3581e3d46ba01ecb4fedd827, type: 2}
+  - {fileID: 11400000, guid: 0c81fe4959ca49d4bae702f1cc8e16c4, type: 2}
+  - {fileID: 11400000, guid: 19c83b8e6eb6cd244a53e0edf4df46dd, type: 2}
+  - {fileID: 11400000, guid: 6182ebd8567606448b5d4a695574424c, type: 2}
