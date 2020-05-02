@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67355724a5b4fd841bbf691ac44ad25d, type: 3}
-  m_Name: OpenHandPose
+  m_Name: OpenSteadyGrabPointHandPose
   m_EditorClassIdentifier: 
-  id: open
+  id: open-steady-grab-point
   description: Relaxed hand pose.
-  isDefault: 1
+  isDefault: 0
   isSelectionPose: 0
-  keyCode: 0
-  data: {fileID: 4900000, guid: f5a9db29d9d2bd741b793a18dac228d6, type: 3}
+  keyCode: 54
+  data: {fileID: 4900000, guid: 574d1cd3fada57744a97166ef77bdd45, type: 3}
