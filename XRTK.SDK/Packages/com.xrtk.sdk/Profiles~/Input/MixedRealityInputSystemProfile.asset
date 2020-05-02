@@ -106,6 +106,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1251200226ad995498472e45aaf12178, type: 2}
   - {fileID: 11400000, guid: 5e6bcc3863bdc634d82a8a59598a070b, type: 2}
   - {fileID: 11400000, guid: 2f6c29c72cd30c74f9717c932bd87a4a, type: 2}
+  - {fileID: 11400000, guid: 7f8c95a0360d2a04abee2a9b0863b6f5, type: 2}
   inputActionsProfile: {fileID: 11400000, guid: 399335ccc89c4d12b79f3539ca7771db,
     type: 2}
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,

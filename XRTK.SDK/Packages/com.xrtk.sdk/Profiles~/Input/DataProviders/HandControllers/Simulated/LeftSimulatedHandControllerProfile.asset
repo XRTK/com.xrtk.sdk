@@ -19,7 +19,7 @@ MonoBehaviour:
     type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
-  - {fileID: 11400000, guid: f44a8ca60623dae40ab7bb587b25f9a4, type: 2}
+  - {fileID: 11400000, guid: b7f65e3d3581e3d46ba01ecb4fedd827, type: 2}
   - {fileID: 11400000, guid: 75cc1e0a54a5fe648a4cde0278665293, type: 2}
   - {fileID: 11400000, guid: 17f3fbe848f439d42b507e772d4815f2, type: 2}
   - {fileID: 11400000, guid: d41a902589d58634c91da2d0bddc63a2, type: 2}
