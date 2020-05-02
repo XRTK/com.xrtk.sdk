@@ -13,8 +13,21 @@ MonoBehaviour:
   m_Name: RightSimulatedMixedRealityHandControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: 
-  handedness: 0
-  visualizationProfile: {fileID: 0}
-  useCustomInteractions: 1
-  interactionMappingProfiles: []
+    reference: 435c4f16-8e23-4228-b2b0-5fce09a97043
+  handedness: 2
+  visualizationProfile: {fileID: 11400000, guid: 9adf8f0578d6fa24c82c170dfc36ae43,
+    type: 2}
+  useCustomInteractions: 0
+  interactionMappingProfiles:
+  - {fileID: 11400000, guid: b7f65e3d3581e3d46ba01ecb4fedd827, type: 2}
+  - {fileID: 11400000, guid: cd23741cb70b7ae40b319a4ef6eee003, type: 2}
+  - {fileID: 11400000, guid: 43e9f87fa76d5554883940341589436b, type: 2}
+  - {fileID: 11400000, guid: a96fb30df2bb6c24aa97a0e1468cd24a, type: 2}
+  - {fileID: 11400000, guid: 0551abc69395db944b2dd5e53319b4f5, type: 2}
+  - {fileID: 11400000, guid: 13fd1b11dc0b10d408317dd2bfb18128, type: 2}
+  - {fileID: 11400000, guid: 6e32cf2e094311d4192e374843bc9623, type: 2}
+  - {fileID: 11400000, guid: cea22b7899ba53c46925c1857b5e6248, type: 2}
+  - {fileID: 11400000, guid: 74825e5640b18d747975fbc8e31bed01, type: 2}
+  - {fileID: 11400000, guid: 781e927490acb8940949867800cb076d, type: 2}
+  - {fileID: 11400000, guid: 6461093495593f1438fa08f8cf59e15c, type: 2}
+  - {fileID: 11400000, guid: 74a71e8548cfeeb438cae2e36763e235, type: 2}

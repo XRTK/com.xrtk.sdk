@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: MoveCloser(Depth)Profile
   m_EditorClassIdentifier: 
   interactionMapping:
-    description: None
+    description: Move Closer (Depth)
     stateChangeType: 0
-    axisType: 0
-    inputType: 0
+    axisType: 2
+    inputType: 7
     inputAction:
       profileGuid: 00000000000000000000000000000000
       id: 0
       description: None
       axisConstraint: 0
-    keyCode: 0
+    keyCode: 281
     inputName: 
     axisCodeX: 
     axisCodeY: 

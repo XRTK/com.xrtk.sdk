@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49a51e5acd0c6c547bfb8f97fcf09037, type: 3}
   m_Name: SimulatedHandControllerDataProviderProfile
   m_EditorClassIdentifier: 
-  hasSetupDefaults: 0
+  hasSetupDefaults: 1
   controllerMappingProfiles:
   - {fileID: 11400000, guid: e5de6ea5e8157aa46892ed4c81439f0c, type: 2}
+  - {fileID: 11400000, guid: fab679676d59f77478f115d3091013aa, type: 2}
   simulatedUpdateFrequency: 0
   controllerHideTimeout: 0.2
   defaultDistance: 0.5

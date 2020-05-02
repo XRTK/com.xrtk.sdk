@@ -15,10 +15,11 @@ MonoBehaviour:
   controllerType:
     reference: 435c4f16-8e23-4228-b2b0-5fce09a97043
   handedness: 1
-  visualizationProfile: {fileID: 0}
+  visualizationProfile: {fileID: 11400000, guid: d03625d21fb0bfb41b6642f492e27754,
+    type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
-  - {fileID: 11400000, guid: eb71a10d2248e2847b3551ab4d47217e, type: 2}
+  - {fileID: 11400000, guid: b7f65e3d3581e3d46ba01ecb4fedd827, type: 2}
   - {fileID: 11400000, guid: 1fd0c5cd50876514bb0027af902ed920, type: 2}
   - {fileID: 11400000, guid: 0f1e943dcb760c142a76e3f571394b42, type: 2}
   - {fileID: 11400000, guid: 80556dee026997f4ba146ffda4710f79, type: 2}
