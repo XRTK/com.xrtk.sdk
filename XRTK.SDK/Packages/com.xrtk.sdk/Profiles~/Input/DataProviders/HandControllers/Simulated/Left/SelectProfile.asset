@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3fb79524faca40478c0844c24e542f7, type: 3}
-  m_Name: MoveCloser(Depth)Profile
+  m_Name: SelectProfile
   m_EditorClassIdentifier: 
   interactionMapping:
-    description: None
+    description: Select
     stateChangeType: 0
-    axisType: 0
-    inputType: 0
+    axisType: 2
+    inputType: 25
     inputAction:
       profileGuid: 00000000000000000000000000000000
       id: 0
