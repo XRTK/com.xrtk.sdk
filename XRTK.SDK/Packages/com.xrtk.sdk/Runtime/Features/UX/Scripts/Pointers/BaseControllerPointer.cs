@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
@@ -9,6 +9,7 @@ using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
+using XRTK.Extensions.XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Physics;
@@ -77,6 +78,8 @@ namespace XRTK.SDK.UX.Pointers
         protected bool IsTeleportRequestActive = false;
 
         private bool lateRegisterTeleport = true;
+
+        private GameObject capturedNearInteractionObject = null;
 
         /// <summary>
         /// The forward direction of the targeting ray
@@ -153,7 +156,7 @@ namespace XRTK.SDK.UX.Pointers
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"{e.ToString()}");
+                    Debug.LogError(e);
                     return;
                 }
 
@@ -170,6 +173,36 @@ namespace XRTK.SDK.UX.Pointers
                 if (this == null) { return; }
 
                 SetCursor();
+            }
+        }
+
+        protected virtual void OnCollisionEnter(Collision other)
+        {
+            if (nearInteractionCollider != null &&
+                other.IsValidCollision(PointerRaycastLayerMasksOverride ??
+                                       MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks))
+            {
+                capturedNearInteractionObject = other.gameObject;
+                MixedRealityToolkit.InputSystem.RaiseOnInputDown(InputSourceParent, Handedness, pointerAction);
+            }
+        }
+
+        protected virtual void OnCollisionStay(Collision other)
+        {
+            if (nearInteractionCollider != null &&
+                capturedNearInteractionObject == other.gameObject)
+            {
+                MixedRealityToolkit.InputSystem.RaiseOnInputPressed(InputSourceParent, Handedness, pointerAction);
+            }
+        }
+
+        protected virtual void OnCollisionExit(Collision other)
+        {
+            if (nearInteractionCollider != null &&
+                capturedNearInteractionObject == other.gameObject)
+            {
+                capturedNearInteractionObject = null;
+                MixedRealityToolkit.InputSystem.RaiseOnInputUp(InputSourceParent, Handedness, pointerAction);
             }
         }
 
@@ -256,6 +289,16 @@ namespace XRTK.SDK.UX.Pointers
 
         /// <inheritdoc />
         public IMixedRealityTeleportHotSpot TeleportHotSpot { get; set; }
+
+        [SerializeField]
+        private Collider nearInteractionCollider = null;
+
+        /// <inheritdoc />
+        public Collider NearInteractionCollider
+        {
+            get => nearInteractionCollider;
+            protected set => nearInteractionCollider = value;
+        }
 
         /// <inheritdoc />
         public virtual bool IsInteractionEnabled
@@ -386,7 +429,6 @@ namespace XRTK.SDK.UX.Pointers
 
         [Min(0.01f)]
         [SerializeField]
-        [FormerlySerializedAs("pointerExtent")]
         private float defaultPointerExtent = 10f;
 
         /// <inheritdoc />
@@ -396,7 +438,7 @@ namespace XRTK.SDK.UX.Pointers
         public RayStep[] Rays { get; protected set; } = { new RayStep(Vector3.zero, Vector3.forward) };
 
         /// <inheritdoc />
-        public LayerMask[] PrioritizedLayerMasksOverride { get; set; } = null;
+        public LayerMask[] PointerRaycastLayerMasksOverride { get; set; } = null;
 
         /// <inheritdoc />
         public IMixedRealityFocusHandler FocusHandler { get; set; }
@@ -465,11 +507,6 @@ namespace XRTK.SDK.UX.Pointers
 
         #region IEquality Implementation
 
-        private static bool Equals(IMixedRealityPointer left, IMixedRealityPointer right)
-        {
-            return left.Equals(right);
-        }
-
         /// <inheritdoc />
         bool IEqualityComparer.Equals(object left, object right)
         {
@@ -479,11 +516,10 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) { return false; }
+            if (obj is null) { return false; }
+            if (this == null) { return false; }
             if (ReferenceEquals(this, obj)) { return true; }
-            if (obj.GetType() != GetType()) { return false; }
-
-            return Equals((IMixedRealityPointer)obj);
+            return obj.GetType() == GetType() && Equals((IMixedRealityPointer)obj);
         }
 
         private bool Equals(IMixedRealityPointer other)
