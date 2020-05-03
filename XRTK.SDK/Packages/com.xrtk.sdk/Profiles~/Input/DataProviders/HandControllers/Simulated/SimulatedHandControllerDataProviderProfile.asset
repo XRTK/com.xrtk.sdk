@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasSetupDefaults: 1
   controllerMappingProfiles:
-  - {fileID: 11400000, guid: e5de6ea5e8157aa46892ed4c81439f0c, type: 2}
-  - {fileID: 11400000, guid: fab679676d59f77478f115d3091013aa, type: 2}
+  - {fileID: 11400000, guid: e7410f969234129419325b60dd7ef6b5, type: 2}
+  - {fileID: 11400000, guid: 7c17bff23a6d6e44b9a2225f53257bba, type: 2}
   simulatedUpdateFrequency: 0
   controllerHideTimeout: 0.2
   defaultDistance: 0.5
