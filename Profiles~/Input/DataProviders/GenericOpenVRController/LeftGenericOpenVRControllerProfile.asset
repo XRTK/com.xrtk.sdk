@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LeftGenericOpenVRControllerProfile
   m_EditorClassIdentifier: 
   controllerType:
-    reference: XRTK.Providers.Controllers.OpenVR.GenericOpenVRController, XRTK
+    reference: 8de3a393-71f8-47a4-89fe-7927b034deab
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: fe125eaaf5547684d8506b794c5a6016,
     type: 2}
