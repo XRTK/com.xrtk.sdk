@@ -18,6 +18,25 @@ namespace XRTK.SDK.Editor
 
         static SDKPackageInstaller()
         {
+            EditorApplication.delayCall += CheckPackage;
+        }
+
+        [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", true, -1)]
+        private static bool ImportLuminPackageAssetsValidation()
+        {
+            return !Directory.Exists($"{DefaultPath}\\Profiles");
+        }
+
+        [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", false, -1)]
+        private static void ImportLuminPackageAssets()
+        {
+            EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", false);
+            EditorApplication.delayCall += CheckPackage;
+        }
+
+        private static void CheckPackage()
+        {
+
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Profiles", false))
             {
                 EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles"));
