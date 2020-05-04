@@ -13,13 +13,19 @@ namespace XRTK.SDK.Editor
     internal static class SDKPackageInstaller
     {
         private static readonly string DefaultPath = $"{MixedRealityPreferences.ProfileGenerationPath}SDK";
-        private static readonly string HiddenPath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).ToForwardSlashes()}\\{MixedRealityPreferences.HIDDEN_PROFILES_PATH}");
+        private static readonly string HiddenProfilePath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).ToForwardSlashes()}\\{MixedRealityPreferences.HIDDEN_PROFILES_PATH}");
+        private static readonly string HiddenPrefabPath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).ToForwardSlashes()}\\{MixedRealityPreferences.HIDDEN_PREFABS_PATH}");
 
         static SDKPackageInstaller()
         {
-            if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}", false))
+            if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Profiles", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}", PackageInstaller.TryInstallProfiles(HiddenPath, DefaultPath));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallProfiles(HiddenProfilePath, DefaultPath));
+            }
+
+            if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
+            {
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallProfiles(HiddenPrefabPath, DefaultPath));
             }
         }
     }

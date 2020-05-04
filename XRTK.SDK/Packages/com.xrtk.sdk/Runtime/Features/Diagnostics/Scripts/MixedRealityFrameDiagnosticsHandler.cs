@@ -1,11 +1,13 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XRTK.Attributes;
 using XRTK.EventDatum.DiagnosticsSystem;
 using XRTK.Interfaces.DiagnosticsSystem.Handlers;
 
@@ -33,13 +35,32 @@ namespace XRTK.SDK.DiagnosticsSystem
         [Tooltip("The text component used to display the GPU FPS information.")]
         private TextMeshProUGUI gpuFrameRateText = null;
 
+        [Prefab]
         [SerializeField]
-        [Tooltip("Image components used to visualize missed frames.")]
-        private Image[] missedFrameImages = null;
+        [Tooltip("Image component used to visualize missed frames.")]
+        private GameObject missedFrameImagePrefab = null;
+
+        [SerializeField]
+        private Transform missedFramesContainer = null;
+
+        [SerializeField]
+        [Tooltip("The number of frames to show.")]
+        private int imageFrameCount = 30;
+
+        private readonly List<Image> missedFrameImages = new List<Image>();
 
         private string displayDecimalFormat = null;
 
         private string DisplayedDecimalFormat => displayDecimalFormat ?? (displayDecimalFormat = $"{{0:F{displayedDecimalDigits}}}");
+
+        private void Awake()
+        {
+            for (int i = 0; i < imageFrameCount; i++)
+            {
+                var imageFrameObject = Instantiate(missedFrameImagePrefab, missedFramesContainer);
+                missedFrameImages.Add(imageFrameObject.GetComponent<Image>());
+            }
+        }
 
         /// <inheritdoc />
         public void OnFrameRateChanged(FrameEventData eventData)
