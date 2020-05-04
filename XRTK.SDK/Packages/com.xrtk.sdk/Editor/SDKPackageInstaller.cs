@@ -20,12 +20,12 @@ namespace XRTK.SDK.Editor
         {
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Profiles", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallProfiles(HiddenProfilePath, DefaultPath));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles"));
             }
 
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallProfiles(HiddenPrefabPath, DefaultPath));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs"));
             }
         }
     }
