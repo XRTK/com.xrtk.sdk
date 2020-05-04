@@ -18,14 +18,33 @@ namespace XRTK.SDK.Editor
 
         static SDKPackageInstaller()
         {
+            EditorApplication.delayCall += CheckPackage;
+        }
+
+        [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", true, -1)]
+        private static bool ImportPackageAssetsValidation()
+        {
+            return !Directory.Exists($"{DefaultPath}\\Profiles");
+        }
+
+        [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", false, -1)]
+        private static void ImportPackageAssets()
+        {
+            EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", false);
+            EditorApplication.delayCall += CheckPackage;
+        }
+
+        private static void CheckPackage()
+        {
+
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Profiles", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallProfiles(HiddenProfilePath, DefaultPath));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles"));
             }
 
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallProfiles(HiddenPrefabPath, DefaultPath));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs"));
             }
         }
     }
