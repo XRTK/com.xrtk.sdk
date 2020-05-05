@@ -46,7 +46,7 @@ namespace XRTK.SDK.Editor
                 EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", updateProfileGUIDs);
             }
 
-            if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
+            if (updateProfileGUIDs && !EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
             {
                 updatePrefabsGUIDs = PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs", false);
                 EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", updatePrefabsGUIDs);
@@ -55,6 +55,12 @@ namespace XRTK.SDK.Editor
             if (updateProfileGUIDs && updatePrefabsGUIDs)
             {
                 PackageInstaller.RegenerateGuids(new[] { $"{DefaultPath}\\Profiles", $"{DefaultPath}\\Prefabs" });
+            }
+            else
+            {
+                //Unset prefs as one of the copies has failed.
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", false);
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", false);
             }
         }
     }
