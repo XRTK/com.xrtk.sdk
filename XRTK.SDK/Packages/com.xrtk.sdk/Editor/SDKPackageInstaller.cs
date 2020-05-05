@@ -44,7 +44,7 @@ namespace XRTK.SDK.Editor
 
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs"));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs", "prefab"));
             }
         }
     }
