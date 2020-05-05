@@ -6,6 +6,7 @@ using UnityEditor;
 using XRTK.Editor;
 using XRTK.Extensions;
 using XRTK.Utilities.Editor;
+using XRTK.Editor.Utilities;
 
 namespace XRTK.SDK.Editor
 {
@@ -36,15 +37,23 @@ namespace XRTK.SDK.Editor
 
         private static void CheckPackage()
         {
+            var updateGUIDs = false;
 
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Profiles", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles"));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles", false));
+                updateGUIDs = true;
             }
 
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs"));
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs", false));
+                updateGUIDs = true;
+            }
+
+            if (updateGUIDs)
+            {
+                PackageInstaller.RegenerateGuids(new[] { $"{DefaultPath}\\Profiles", $"{DefaultPath}\\Prefabs" });
             }
         }
     }
