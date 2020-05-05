@@ -37,21 +37,22 @@ namespace XRTK.SDK.Editor
 
         private static void CheckPackage()
         {
-            var updateGUIDs = false;
+            var updateProfileGUIDs = false;
+            var updatePrefabsGUIDs = false;
 
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Profiles", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles", false));
-                updateGUIDs = true;
+                updateProfileGUIDs = PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles", false);
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", updateProfileGUIDs);
             }
 
             if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
             {
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs", false));
-                updateGUIDs = true;
+                updatePrefabsGUIDs = PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs", false);
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", updatePrefabsGUIDs);
             }
 
-            if (updateGUIDs)
+            if (updateProfileGUIDs && updatePrefabsGUIDs)
             {
                 PackageInstaller.RegenerateGuids(new[] { $"{DefaultPath}\\Profiles", $"{DefaultPath}\\Prefabs" });
             }
