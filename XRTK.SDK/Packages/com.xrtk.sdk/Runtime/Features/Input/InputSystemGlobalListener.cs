@@ -1,11 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System;
-using System.Threading.Tasks;
 using UnityEngine;
 using XRTK.Services;
-using XRTK.Utilities.Async;
 
 namespace XRTK.SDK.Input
 {
@@ -29,7 +26,7 @@ namespace XRTK.SDK.Input
         protected virtual async void Start()
         {
             if (lateInitialize &&
-                await ValidateInputSystemAsync())
+                await MixedRealityToolkit.ValidateInputSystemAsync())
             {
                 // We've been destroyed during the await.
                 if (this == null) { return; }
@@ -47,21 +44,6 @@ namespace XRTK.SDK.Input
         protected virtual void OnDestroy()
         {
             MixedRealityToolkit.InputSystem?.Unregister(gameObject);
-        }
-
-        protected static async Task<bool> ValidateInputSystemAsync()
-        {
-            try
-            {
-                await MixedRealityToolkit.InputSystem.WaitUntil(system => system != null);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-                return false;
-            }
-
-            return true;
         }
     }
 }
