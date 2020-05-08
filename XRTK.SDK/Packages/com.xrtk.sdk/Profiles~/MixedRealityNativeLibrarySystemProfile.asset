@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce89b309ed4c7ba46bd4a2a7d366f1fd, type: 3}
-  m_Name: DefaultNativeLibrarySystemProfile
+  m_Name: MixedRealityNativeLibrarySystemProfile
   m_EditorClassIdentifier: 
   configurations: []
