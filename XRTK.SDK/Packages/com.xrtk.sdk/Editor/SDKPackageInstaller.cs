@@ -1,12 +1,12 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using XRTK.Editor;
 using XRTK.Extensions;
 using XRTK.Utilities.Editor;
-using XRTK.Editor.Utilities;
 
 namespace XRTK.SDK.Editor
 {
@@ -16,6 +16,11 @@ namespace XRTK.SDK.Editor
         private static readonly string DefaultPath = $"{MixedRealityPreferences.ProfileGenerationPath}SDK";
         private static readonly string HiddenProfilePath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).ToForwardSlashes()}\\{MixedRealityPreferences.HIDDEN_PROFILES_PATH}");
         private static readonly string HiddenPrefabPath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).ToForwardSlashes()}\\{MixedRealityPreferences.HIDDEN_PREFABS_PATH}");
+        private static readonly Dictionary<string, string> DefaultSdkAssets = new Dictionary<string, string>
+        {
+            {HiddenProfilePath,  $"{DefaultPath}\\Profiles"},
+            {HiddenPrefabPath, $"{DefaultPath}\\Prefabs"}
+        };
 
         static SDKPackageInstaller()
         {
@@ -25,42 +30,21 @@ namespace XRTK.SDK.Editor
         [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", true, -1)]
         private static bool ImportPackageAssetsValidation()
         {
-            return !Directory.Exists($"{DefaultPath}\\Profiles");
+            return !Directory.Exists($"{DefaultPath}\\Profiles") || Directory.Exists($"{DefaultPath}\\Prefabs");
         }
 
         [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", false, -1)]
         private static void ImportPackageAssets()
         {
-            EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", false);
+            EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Assets", false);
             EditorApplication.delayCall += CheckPackage;
         }
 
         private static void CheckPackage()
         {
-            var updateProfileGUIDs = false;
-            var updatePrefabsGUIDs = false;
-
-            if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Profiles", false))
+            if (!EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Assets", false))
             {
-                updateProfileGUIDs = PackageInstaller.TryInstallAssets(HiddenProfilePath, $"{DefaultPath}\\Profiles", false);
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", updateProfileGUIDs);
-            }
-
-            if (updateProfileGUIDs && !EditorPreferences.Get($"{nameof(SDKPackageInstaller)}.Prefabs", false))
-            {
-                updatePrefabsGUIDs = PackageInstaller.TryInstallAssets(HiddenPrefabPath, $"{DefaultPath}\\Prefabs", false);
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", updatePrefabsGUIDs);
-            }
-
-            if (updateProfileGUIDs && updatePrefabsGUIDs)
-            {
-                PackageInstaller.RegenerateGuids(new[] { $"{DefaultPath}\\Profiles", $"{DefaultPath}\\Prefabs" });
-            }
-            else
-            {
-                //Unset prefs as one of the copies has failed.
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Profiles", false);
-                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Prefabs", false);
+                EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Assets", PackageInstaller.TryInstallAssets(DefaultSdkAssets));
             }
         }
     }
