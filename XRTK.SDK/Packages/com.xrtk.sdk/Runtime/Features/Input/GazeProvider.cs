@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using UnityEngine;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
@@ -126,7 +127,20 @@ namespace XRTK.SDK.Input
         public Vector3 HeadMovementDirection { get; private set; }
 
         /// <inheritdoc />
-        public GameObject GameObjectReference => gameObject;
+        public GameObject GameObject
+        {
+            get
+            {
+                try
+                {
+                    return gameObject;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
 
         private float lastHitDistance = 2.0f;
 
@@ -384,7 +398,7 @@ namespace XRTK.SDK.Input
 
             if (gazeTransform == null)
             {
-                Debug.LogError("No gaze transform to raycast from!");
+                Debug.LogError($"No {nameof(gazeTransform)} to raycast from!");
                 return null;
             }
 

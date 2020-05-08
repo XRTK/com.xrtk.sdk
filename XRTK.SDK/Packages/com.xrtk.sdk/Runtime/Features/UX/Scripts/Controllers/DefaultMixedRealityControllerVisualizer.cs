@@ -17,7 +17,7 @@ namespace XRTK.SDK.UX.Controllers
     public class DefaultMixedRealityControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
         /// <inheritdoc />
-        public GameObject GameObjectProxy
+        public GameObject GameObject
         {
             get
             {

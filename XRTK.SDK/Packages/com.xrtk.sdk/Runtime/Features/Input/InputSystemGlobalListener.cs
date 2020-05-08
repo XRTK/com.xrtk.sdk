@@ -49,7 +49,7 @@ namespace XRTK.SDK.Input
             MixedRealityToolkit.InputSystem?.Unregister(gameObject);
         }
 
-        protected async Task<bool> ValidateInputSystemAsync()
+        protected static async Task<bool> ValidateInputSystemAsync()
         {
             try
             {
@@ -57,7 +57,7 @@ namespace XRTK.SDK.Input
             }
             catch (Exception e)
             {
-                Debug.LogError($"{e}");
+                Debug.LogError(e);
                 return false;
             }
 
