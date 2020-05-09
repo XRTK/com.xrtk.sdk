@@ -1164,7 +1164,7 @@ MonoBehaviour:
   warningEntryTextColor: {r: 0.6, g: 0.46406245, b: 0, a: 1}
   errorEntryTextColor: {r: 0.6, g: 0, b: 0, a: 1}
   maxEntries: 10
-  logTextPrefab: {fileID: 720216609463083442, guid: 3ec3c96e45954d19b17df32acf3e5bf2,
+  logTextPrefab: {fileID: 720216609463083442, guid: d8c00e493400052458e2ec1b257fc827,
     type: 3}
   contentRoot: {fileID: 2889816609432434618}
 --- !u!114 &6581399821875318963
@@ -1182,7 +1182,7 @@ MonoBehaviour:
   displayedDecimalDigits: 2
   cpuFrameRateText: {fileID: 4885367340671142721}
   gpuFrameRateText: {fileID: 1539632551991241600}
-  missedFrameImagePrefab: {fileID: 6530276075474649117, guid: 062cad3882c64189bd0f9ede37a6bd1a,
+  missedFrameImagePrefab: {fileID: 6530276075474649117, guid: 6d1da8d093e2f51458c9cf173da5aa8d,
     type: 3}
   missedFramesContainer: {fileID: 2536808488545107692}
   imageFrameCount: 30
