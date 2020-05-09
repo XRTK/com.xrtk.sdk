@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
+using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Teleport;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.TeleportSystem;
+using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
 using XRTK.Utilities;
-using System;
-using UnityEngine;
-using XRTK.SDK.UX.Pointers;
 
 namespace XRTK.SDK.UX.Cursors
 {

@@ -35,7 +35,7 @@ namespace XRTK.SDK.UX.Collections
             for (int i = 0; i < nodeList.Count; i++)
             {
                 var node = nodeList[i];
-                var newPos = VectorExtensions.ScatterMapping(nodeGrid[i], Radius);
+                var newPos = nodeGrid[i].ScatterMapping(Radius);
                 var nodeCollider = nodeList[i].Transform.GetComponentInChildren<Collider>();
 
                 if (nodeCollider != null)
