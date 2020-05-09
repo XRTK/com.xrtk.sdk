@@ -580,8 +580,6 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.OnInputUp(eventData);
 
-            if (Result.CurrentPointerTarget == null) { return; }
-
             if (eventData.SourceId == InputSourceParent.SourceId)
             {
                 if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
@@ -602,8 +600,6 @@ namespace XRTK.SDK.UX.Pointers
         public override void OnInputDown(InputEventData eventData)
         {
             base.OnInputDown(eventData);
-
-            if (Result.CurrentPointerTarget == null) { return; }
 
             if (eventData.SourceId == InputSourceParent.SourceId)
             {
