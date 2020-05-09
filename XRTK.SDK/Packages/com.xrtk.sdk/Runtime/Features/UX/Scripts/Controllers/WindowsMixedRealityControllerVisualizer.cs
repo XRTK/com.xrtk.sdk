@@ -1,12 +1,12 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using UnityEngine;
 using XRTK.Attributes;
 using XRTK.Definitions.Devices;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.Providers.Controllers;
-using UnityEngine;
 
 namespace XRTK.SDK.UX.Controllers
 {
@@ -17,9 +17,6 @@ namespace XRTK.SDK.UX.Controllers
         [SerializeField]
         private GameObject touchpadTouchVisualizer = null;
 
-        /// <summary>
-        /// 
-        /// </summary>
         public GameObject TouchpadTouchVisualizer
         {
             get => touchpadTouchVisualizer;
@@ -71,6 +68,7 @@ namespace XRTK.SDK.UX.Controllers
         private Vector2 lastTouchpadPosition;
         private double lastSelectPressedAmount;
 
+        /// <inheritdoc />
         public override IMixedRealityController Controller
         {
             get => base.Controller;
@@ -81,11 +79,11 @@ namespace XRTK.SDK.UX.Controllers
             }
         }
 
-        private void GetTransformData(Transform _transform)
+        private void GetTransformData(Transform root)
         {
-            for (int i = 0; i < _transform.childCount; i++)
+            for (int i = 0; i < root.childCount; i++)
             {
-                var child = _transform.GetChild(i);
+                var child = root.GetChild(i);
 
                 // Animation bounds are named in two pairs:
                 // pressed/unpressed and min/max. There is also a value
@@ -227,36 +225,43 @@ namespace XRTK.SDK.UX.Controllers
 
         #region IMixedRealityInputHandler Implementation
 
+        /// <inheritdoc />
         public override void OnInputDown(InputEventData eventData)
         {
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }
         }
 
+        /// <inheritdoc />
         public override void OnInputUp(InputEventData eventData)
         {
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }
         }
 
+        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<float> eventData)
         {
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }
         }
 
+        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Vector2> eventData)
         {
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }
         }
 
+        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Vector3> eventData)
         {
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }
         }
 
+        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Quaternion> eventData)
         {
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }
         }
 
+        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<MixedRealityPose> eventData)
         {
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }

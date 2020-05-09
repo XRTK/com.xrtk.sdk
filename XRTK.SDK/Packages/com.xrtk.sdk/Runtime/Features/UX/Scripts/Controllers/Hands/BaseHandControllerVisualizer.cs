@@ -23,7 +23,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private const int capsuleColliderZAxis = 2;
 
         /// <inheritdoc />
-        public GameObject GameObjectProxy
+        public GameObject GameObject
         {
             get
             {
@@ -40,17 +40,17 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         /// <summary>
         /// If using physics with hand, the actual hand visualization is done
-        /// on a companion game object which is connected to the <see cref="GameObjectProxy"/>
+        /// on a companion game object which is connected to the <see cref="GameObject"/>
         /// using a <see cref="FixedJoint"/>. For physics to work properly while maintaining
         /// the platforms controller tracking we cannot attach colliders and a rigidbody to the
-        /// <see cref="GameObjectProxy"/> since that would cause crazy behaviour on controller movement.
+        /// <see cref="GameObject"/> since that would cause crazy behaviour on controller movement.
         /// </summary>
         private GameObject PhysicsCompanionGameObject { get; set; }
 
         /// <summary>
         /// The actual game object that is parent to all controller visualization of this hand controller.
         /// </summary>
-        protected GameObject HandVisualizationGameObject => ((IMixedRealityHandControllerDataProvider)Controller.ControllerDataProvider).HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObjectProxy;
+        protected GameObject HandVisualizationGameObject => ((IMixedRealityHandControllerDataProvider)Controller.ControllerDataProvider).HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObject;
 
         private IMixedRealityHandControllerDataProvider handControllerDataProvider;
 
@@ -64,7 +64,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             // In case physics are enabled we need to take destroy the
             // physics game object as well when destroying the hand visualizer.
-            if (GameObjectProxy != HandVisualizationGameObject)
+            if (GameObject != HandVisualizationGameObject)
             {
                 if (Application.isEditor)
                 {
@@ -132,11 +132,11 @@ namespace XRTK.SDK.UX.Controllers.Hands
                     return;
                 }
 
-                PhysicsCompanionGameObject = new GameObject($"{GameObjectProxy.name}_Physics");
-                PhysicsCompanionGameObject.transform.parent = GameObjectProxy.transform.parent;
+                PhysicsCompanionGameObject = new GameObject($"{GameObject.name}_Physics");
+                PhysicsCompanionGameObject.transform.parent = GameObject.transform.parent;
 
                 // Setup the kinematic rigidbody on the actual controller game object.
-                Rigidbody controllerRigidbody = GameObjectProxy.GetOrAddComponent<Rigidbody>();
+                Rigidbody controllerRigidbody = GameObject.GetOrAddComponent<Rigidbody>();
                 controllerRigidbody.isKinematic = true;
                 controllerRigidbody.useGravity = false;
 

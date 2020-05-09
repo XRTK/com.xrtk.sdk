@@ -166,7 +166,7 @@ namespace XRTK.SDK.UX.Pointers
                 MixedRealityToolkit.TeleportSystem.Register(gameObject);
             }
 
-            if (await ValidateInputSystemAsync())
+            if (await MixedRealityToolkit.ValidateInputSystemAsync())
             {
                 // We've been destroyed during the await.
                 if (this == null) { return; }

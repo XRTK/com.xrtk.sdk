@@ -67,7 +67,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 return true;
             }
 
-            Debug.LogError($"Failed to create mesh filter for hand mesh visualization. No prefab assigned.");
+            Debug.LogError("Failed to create mesh filter for hand mesh visualization. No prefab assigned.");
             return false;
         }
     }
