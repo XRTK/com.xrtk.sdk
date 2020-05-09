@@ -153,7 +153,7 @@ namespace XRTK.SDK.UX.Pointers
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"{e.ToString()}");
+                    Debug.LogError($"{e}");
                     return;
                 }
 
@@ -164,7 +164,7 @@ namespace XRTK.SDK.UX.Pointers
                 MixedRealityToolkit.TeleportSystem.Register(gameObject);
             }
 
-            if (await ValidateInputSystemAsync())
+            if (await MixedRealityToolkit.ValidateInputSystemAsync())
             {
                 // We've been destroyed during the await.
                 if (this == null) { return; }

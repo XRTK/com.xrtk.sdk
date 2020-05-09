@@ -11,7 +11,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
     [CustomEditor(typeof(LinePointer))]
     public class LinePointerInspector : BaseControllerPointerInspector
     {
-        private const int maxRecommendedLinecastResolution = 20;
+        private const int MAX_RECOMMENDED_LINECAST_RESOLUTION = 20;
         private readonly GUIContent foldoutContent = new GUIContent("Line Pointer Settings");
 
         private SerializedProperty lineColorSelected;
@@ -49,9 +49,9 @@ namespace XRTK.SDK.Editor.UX.Pointers
 
                 int lineCastResolutionValue = lineCastResolution.intValue;
 
-                if (lineCastResolutionValue > maxRecommendedLinecastResolution)
+                if (lineCastResolutionValue > MAX_RECOMMENDED_LINECAST_RESOLUTION)
                 {
-                    EditorGUILayout.LabelField($"Note: values above {maxRecommendedLinecastResolution} should only be used when your line is expected to be highly non-uniform.", EditorStyles.miniLabel);
+                    EditorGUILayout.LabelField($"Note: values above {MAX_RECOMMENDED_LINECAST_RESOLUTION} should only be used when your line is expected to be highly non-uniform.", EditorStyles.miniLabel);
                 }
 
                 EditorGUILayout.PropertyField(lineCastResolution);
