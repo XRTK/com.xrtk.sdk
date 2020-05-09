@@ -1,4 +1,4 @@
-﻿// Copyright (c) XRTK. All rights reserved.
+// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
@@ -166,7 +166,7 @@ namespace XRTK.SDK.UX.Pointers
                 MixedRealityToolkit.TeleportSystem.Register(gameObject);
             }
 
-            if (await ValidateInputSystemAsync())
+            if (await MixedRealityToolkit.ValidateInputSystemAsync())
             {
                 // We've been destroyed during the await.
                 if (this == null) { return; }
