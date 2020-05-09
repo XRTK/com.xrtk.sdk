@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Services;
 using XRTK.Utilities;
-using UnityEngine;
 
 namespace XRTK.SDK.Input.Handlers
 {

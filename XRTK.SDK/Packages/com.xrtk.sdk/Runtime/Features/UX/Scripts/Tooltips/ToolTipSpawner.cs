@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System.Threading.Tasks;
+using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
-using XRTK.Utilities.Async;
-using System.Threading.Tasks;
-using UnityEngine;
 using XRTK.SDK.Input.Handlers;
+using XRTK.Utilities.Async;
 
 namespace XRTK.SDK.UX.ToolTips
 {
