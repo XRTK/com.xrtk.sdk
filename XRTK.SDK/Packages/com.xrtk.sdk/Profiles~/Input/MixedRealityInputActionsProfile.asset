@@ -69,3 +69,7 @@ MonoBehaviour:
     id: 14
     description: Rotation Direction
     axisConstraint: 4
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 15
+    description: Index Finger Pose
+    axisConstraint: 7
