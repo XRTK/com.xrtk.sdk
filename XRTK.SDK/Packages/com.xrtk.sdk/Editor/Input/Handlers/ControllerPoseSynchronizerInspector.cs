@@ -12,7 +12,7 @@ namespace XRTK.SDK.Editor.Input.Handlers
     [CustomEditor(typeof(ControllerPoseSynchronizer))]
     public class ControllerPoseSynchronizerInspector : UnityEditor.Editor
     {
-        private readonly GUIContent synchronizationSettings = new GUIContent("Synchronization Settings");
+        private static readonly GUIContent SynchronizationSettings = new GUIContent("Synchronization Settings");
         private static readonly string[] HandednessLabels = { "Left", "Right" };
 
         private SerializedProperty useSourcePoseData;
@@ -35,7 +35,7 @@ namespace XRTK.SDK.Editor.Input.Handlers
             EditorGUILayout.Space();
             EditorGUI.BeginChangeCheck();
 
-            if (useSourcePoseData.FoldoutWithBoldLabelPropertyField(synchronizationSettings))
+            if (useSourcePoseData.FoldoutWithBoldLabelPropertyField(SynchronizationSettings))
             {
                 EditorGUI.indentLevel++;
 
