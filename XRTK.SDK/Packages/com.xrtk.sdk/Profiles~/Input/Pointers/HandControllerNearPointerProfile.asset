@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c156ea3e1a7a493dac236ed84c4a819a, type: 3}
   m_Name: HandControllerNearPointerProfile
   m_EditorClassIdentifier: 
-  pointerPrefab: {fileID: 1247086986094436, guid: f143e0104678be940bc5579e8fd02b9a,
+  pointerPrefab: {fileID: 6198175003172875473, guid: 1fd3fff0f4e00844ea0cc05dbcbac113,
     type: 3}
   pointingExtent: 10
   pointingRaycastLayerMasks:
