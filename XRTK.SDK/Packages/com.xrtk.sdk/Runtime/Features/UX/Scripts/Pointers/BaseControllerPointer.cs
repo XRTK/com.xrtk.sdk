@@ -1,4 +1,4 @@
-﻿// Copyright (c) XRTK. All rights reserved.
+// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
@@ -175,7 +175,7 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        protected virtual void OnCollisionEnter(Collision other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             if (nearInteractionCollider != null &&
                 other.IsValidCollision(PointerRaycastLayerMasksOverride ??
@@ -186,7 +186,7 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        protected virtual void OnCollisionStay(Collision other)
+        protected virtual void OnTriggerStay(Collider other)
         {
             if (nearInteractionCollider != null &&
                 capturedNearInteractionObject == other.gameObject)
@@ -195,7 +195,7 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        protected virtual void OnCollisionExit(Collision other)
+        protected virtual void OnTriggerExit(Collider other)
         {
             if (nearInteractionCollider != null &&
                 capturedNearInteractionObject == other.gameObject)
