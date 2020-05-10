@@ -39,7 +39,6 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 // must be cleared per instructions here:
                 // https://docs.unity3d.com/ScriptReference/Mesh.html
                 if (lastHandMeshVertices != null &&
-                    lastHandMeshVertices.Length != 0 &&
                     lastHandMeshVertices.Length != handMeshData.Vertices.Length)
                 {
                     meshChanged = true;
