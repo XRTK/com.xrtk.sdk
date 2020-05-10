@@ -32,6 +32,14 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [Tooltip("Material tint color for index fingertip.")]
         private Color indexFingertipColor = Color.cyan;
 
+        private void OnEnable()
+        {
+            foreach (var jointVisualization in jointVisualizations)
+            {
+                jointVisualization.Value.SetActive(true);
+            }
+        }
+
         private void OnDisable()
         {
             foreach (var jointVisualization in jointVisualizations)
