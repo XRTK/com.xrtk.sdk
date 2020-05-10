@@ -19,27 +19,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private GameObject handMeshPrefab = null;
 
         /// <inheritdoc />
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-
-            if (!HandControllerDataProvider.HandMeshingEnabled)
-            {
-                Debug.LogWarning("Hand meshing is disabled but a hand mesh visualizer was assigned in the visualization profile.");
-            }
-        }
-
-        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)
         {
             base.OnInputChanged(eventData);
 
-            if (eventData.Handedness != Controller.ControllerHandedness)
+            var handMeshData = eventData.InputData.Mesh;
+            if (eventData.Handedness != Controller.ControllerHandedness || handMeshData.Empty)
             {
                 return;
             }
-
-            var handMeshData = eventData.InputData.Mesh;
 
             if (meshFilter != null || CreateMeshFilter())
             {
