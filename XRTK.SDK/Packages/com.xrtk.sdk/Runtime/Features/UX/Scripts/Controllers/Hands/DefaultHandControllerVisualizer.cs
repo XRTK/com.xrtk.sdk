@@ -365,6 +365,18 @@ namespace XRTK.SDK.UX.Controllers.Hands
                     meshVisualizer.UpdateVisualization(handData);
                 }
             }
+            else
+            {
+                if (jointsVisualizer != null)
+                {
+                    jointsVisualizer.gameObject.SetActive(false);
+                }
+
+                if (meshVisualizer != null)
+                {
+                    meshVisualizer.gameObject.SetActive(false);
+                }
+            }
         }
     }
 }
