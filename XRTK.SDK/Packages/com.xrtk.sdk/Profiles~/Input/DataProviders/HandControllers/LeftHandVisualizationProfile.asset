@@ -15,7 +15,7 @@ MonoBehaviour:
   controllerVisualizationType:
     reference: 0b653537-d237-4622-acc6-e351209a5882
   useDefaultModels: 0
-  model: {fileID: 9173983480249558903, guid: 081f7848cfd94b34f9c774490cd7e2fb, type: 3}
+  model: {fileID: 7398244499265140811, guid: 61feeca21178ba54682d3c61ff5f89a1, type: 3}
   pointerPose:
     profileGuid: 00000000000000000000000000000000
     id: 0

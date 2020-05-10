@@ -27,8 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 6562379902637120251}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44,14 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71894c53357d52a44b03004f02e70846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handedness: 1
-  destroyOnSourceLost: 1
-  useSourcePoseData: 1
-  poseAction:
-    profileGuid: 00000000000000000000000000000000
-    id: 0
-    description: None
-    axisConstraint: 0
   wristPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
     type: 3}
   jointPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
@@ -61,66 +52,3 @@ MonoBehaviour:
   fingertipPrefab: {fileID: 4719395302953375155, guid: ceff11f7c8b644246b621c521c0ba767,
     type: 3}
   indexFingertipColor: {r: 0, g: 1, b: 1, a: 1}
---- !u!1001 &6557838890691165925
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 807390424017236910}
-    m_Modifications:
-    - target: {fileID: 1370450866519632, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_Name
-      value: HandJointGizmo
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7644fc8494afb074f9d76648ac4da6f7, type: 3}
---- !u!4 &6562379902637120251 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4607474556101662, guid: 7644fc8494afb074f9d76648ac4da6f7,
-    type: 3}
-  m_PrefabInstance: {fileID: 6557838890691165925}
-  m_PrefabAsset: {fileID: 0}

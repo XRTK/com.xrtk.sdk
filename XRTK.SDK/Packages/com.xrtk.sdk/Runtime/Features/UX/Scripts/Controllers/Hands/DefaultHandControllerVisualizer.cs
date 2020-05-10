@@ -16,11 +16,22 @@ namespace XRTK.SDK.UX.Controllers.Hands
     /// <summary>
     /// Base hand controller visualizer implementation.
     /// </summary>
-    public class BaseHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
+    [System.Runtime.InteropServices.Guid("5d844e0b-f913-46b8-bc3b-fa6429e62c60")]
+    public class DefaultHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
         private readonly Dictionary<TrackedHandJoint, Transform> jointTransforms = new Dictionary<TrackedHandJoint, Transform>();
         private const float fingerColliderRadius = .007f;
         private const int capsuleColliderZAxis = 2;
+        HandControllerJointsVisualizer jointsVisualizer;
+        private HandControllerMeshVisualizer meshVisualizer;
+
+        [SerializeField]
+        [Tooltip("Visualization prefab instantiated once joint rendering mode is enabled for the first time.")]
+        private GameObject jointsModePrefab = null;
+
+        [SerializeField]
+        [Tooltip("Visualization prefab instantiated once mesh rendering mode is enabled for the first time.")]
+        private GameObject meshModePrefab = null;
 
         /// <inheritdoc />
         public GameObject GameObject
@@ -50,7 +61,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// <summary>
         /// The actual game object that is parent to all controller visualization of this hand controller.
         /// </summary>
-        protected GameObject HandVisualizationGameObject => ((IMixedRealityHandControllerDataProvider)Controller.ControllerDataProvider).HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObject;
+        public GameObject HandVisualizationGameObject => ((IMixedRealityHandControllerDataProvider)Controller.ControllerDataProvider).HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObject;
 
         private IMixedRealityHandControllerDataProvider handControllerDataProvider;
 
@@ -101,6 +112,9 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             // With joints updated, we can update colliders.
             UpdateHandColliders();
+
+            // Update visualizers depending on the current mode.
+            UpdateRendering(handData);
         }
 
         private void UpdateHandJointTransforms(HandData handData)
@@ -292,7 +306,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// </summary>
         /// <param name="handJoint">The hand joint a transform should be returned for.</param>
         /// <returns>Joint transform.</returns>
-        protected Transform GetOrCreateJointTransform(TrackedHandJoint handJoint)
+        public Transform GetOrCreateJointTransform(TrackedHandJoint handJoint)
         {
             if (jointTransforms.TryGetValue(handJoint, out Transform existingJointTransform))
             {
@@ -305,6 +319,52 @@ namespace XRTK.SDK.UX.Controllers.Hands
             jointTransforms.Add(handJoint, jointTransform.transform);
 
             return jointTransform;
+        }
+
+        private void UpdateRendering(HandData handData)
+        {
+            var renderingMode = HandControllerDataProvider.RenderingMode;
+            if (renderingMode != HandRenderingMode.None)
+            {
+                // Fallback to joints rendering if the platform did not provide
+                // any mesh data.
+                if (renderingMode == HandRenderingMode.Mesh &&
+                    handData.Mesh.Empty)
+                {
+                    renderingMode = HandRenderingMode.Joints;
+                }
+
+                if (renderingMode == HandRenderingMode.Joints)
+                {
+                    if (meshVisualizer != null)
+                    {
+                        meshVisualizer.gameObject.SetActive(false);
+                    }
+
+                    if (jointsVisualizer == null)
+                    {
+                        jointsVisualizer = Instantiate(jointsModePrefab, HandVisualizationGameObject.transform).GetComponent<HandControllerJointsVisualizer>();
+                    }
+
+                    jointsVisualizer.gameObject.SetActive(true);
+                    jointsVisualizer.UpdateVisualization(this);
+                }
+                else if (renderingMode == HandRenderingMode.Mesh)
+                {
+                    if (jointsVisualizer != null)
+                    {
+                        jointsVisualizer.gameObject.SetActive(false);
+                    }
+
+                    if (meshVisualizer == null)
+                    {
+                        meshVisualizer = Instantiate(meshModePrefab, HandVisualizationGameObject.transform).GetComponent<HandControllerMeshVisualizer>();
+                    }
+
+                    meshVisualizer.gameObject.SetActive(true);
+                    meshVisualizer.UpdateVisualization(handData);
+                }
+            }
         }
     }
 }
