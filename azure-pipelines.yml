@@ -1,0 +1,53 @@
+variables:
+  project.name: 'XRTK.SDK'
+  project.upmSha: ''
+  package.name: 'com.xrtk.sdk'
+  package.version: ''
+  EditorPath: ''
+  LogDirectory: ''
+  ${{ if eq( variables['build.reason'], 'PullRequest' ) }}:
+    date: ''
+  ${{ if ne( variables['build.reason'], 'PullRequest' ) }}:
+    date: ${{ '$(Date:yyyyMMdd)' }}
+  isReleaseBuild: $[ and( eq(variables['Build.SourceBranchName'], 'master'), or( eq(variables['build.reason'], 'BatchedCI'), eq(variables['build.reason'], 'Manual') ) ) ]
+  isPreviewBuild: $[ and( eq(variables['System.PullRequest.TargetBranch'], 'master'), eq(variables['build.reason'], 'PullRequest') ) ]
+
+name: $(package.name) ${{ coalesce( variables['date'], '$(System.PullRequest.PullRequestNumber)', '$(Date:yyyyMMdd)' ) }}$(Rev:.r)
+
+pr:
+  autoCancel: true
+  branches:
+   include:
+     - master
+     - development
+     - feature/*
+  paths:
+    include:
+    - azure-pipelines.yml
+    - azure_pipelines/*
+    - XRTK.SDK/*
+    exclude:
+      - '*'
+      - XRTK.SDK/Packages/com.xrtk.sdk/README.md
+      - XRTK.SDK/Packages/com.xrtk.sdk/LICENSE.md
+      - XRTK.SDK/Packages/com.xrtk.sdk/.github/*
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - azure-pipelines.yml
+      - azure_pipelines/*
+      - XRTK.SDK/*
+    exclude:
+      - '*'
+      - XRTK.SDK/Packages/com.xrtk.sdk/README.md
+      - XRTK.SDK/Packages/com.xrtk.sdk/LICENSE.md
+      - XRTK.SDK/Packages/com.xrtk.sdk/.github/*
+
+extends:
+  template: azure_pipelines/common.yml
+
