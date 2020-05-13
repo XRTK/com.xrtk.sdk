@@ -3,7 +3,7 @@
   "displayName": "XRTK.SDK",
   "description": "The SDK for the Mixed Reality Toolkit",
   "version": "0.2.0",
-  "unity": "2019.1",
+  "unity": "2019.3",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   "author": "XRTK Team (https://github.com/XRTK)",
   "dependencies": {
     "com.xrtk.core": "0.2.0-preview.34",
-    "com.unity.textmeshpro": "1.0.0"
+    "com.unity.textmeshpro": "2.0.1"
   },
   "profiles": [
     {
