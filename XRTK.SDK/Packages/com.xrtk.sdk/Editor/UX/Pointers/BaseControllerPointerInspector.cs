@@ -24,6 +24,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
         private SerializedProperty pointerOrientation;
         private SerializedProperty requiresHoldAction;
         private SerializedProperty enablePointerOnStart;
+        private SerializedProperty nearInteractionCollider;
 
         protected bool DrawBasePointerActions = true;
 
@@ -41,6 +42,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
             pointerOrientation = serializedObject.FindProperty(nameof(pointerOrientation));
             requiresHoldAction = serializedObject.FindProperty(nameof(requiresHoldAction));
             enablePointerOnStart = serializedObject.FindProperty(nameof(enablePointerOnStart));
+            nearInteractionCollider = serializedObject.FindProperty(nameof(nearInteractionCollider));
 
             DrawHandednessProperty = false;
         }
@@ -60,6 +62,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
                 EditorGUILayout.PropertyField(setCursorVisibilityOnSourceDetected);
                 EditorGUILayout.PropertyField(enablePointerOnStart);
                 EditorGUILayout.PropertyField(raycastOrigin);
+                EditorGUILayout.PropertyField(nearInteractionCollider);
                 EditorGUILayout.PropertyField(defaultPointerExtent);
                 EditorGUILayout.PropertyField(pointerOrientation);
                 EditorGUILayout.PropertyField(pointerAction);
