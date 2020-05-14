@@ -525,7 +525,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The current valid layer mask for any associated pointers when interacting with this object.
         /// </summary>
-        protected LayerMask[] LayerMasks => PrimaryPointer?.PrioritizedLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.FocusLayerMasks;
+        protected LayerMask[] LayerMasks => PrimaryPointer?.PointerRaycastLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks;
 
         #endregion Properties
 
