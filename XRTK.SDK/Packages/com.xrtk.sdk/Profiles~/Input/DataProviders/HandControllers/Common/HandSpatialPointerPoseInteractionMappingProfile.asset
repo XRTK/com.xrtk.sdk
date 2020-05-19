@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e3fb79524faca40478c0844c24e542f7, type: 3}
-  m_Name: HandSpatialPointerInteractionMappingProfile
+  m_Name: HandSpatialPointerPoseInteractionMappingProfile
   m_EditorClassIdentifier: 
   interactionMapping:
-    description: Index Spatial Pointer
+    description: Spatial Pointer Pose
     stateChangeType: 0
     axisType: 7
     inputType: 3

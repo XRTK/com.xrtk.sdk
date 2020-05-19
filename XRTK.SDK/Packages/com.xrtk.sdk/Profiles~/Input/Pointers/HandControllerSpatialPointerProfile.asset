@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c156ea3e1a7a493dac236ed84c4a819a, type: 3}
-  m_Name: HandControllerFarPointerProfile
+  m_Name: HandControllerSpatialPointerProfile
   m_EditorClassIdentifier: 
   pointerPrefab: {fileID: 1247086986094436, guid: 3c6b5e276e9a37446b574ff0ee1eee58,
     type: 3}

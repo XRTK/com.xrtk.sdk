@@ -61,7 +61,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         /// <summary>
         /// The actual game object that is parent to all controller visualization of this hand controller.
         /// </summary>
-        public GameObject HandVisualizationGameObject => ((IMixedRealityHandControllerDataProvider)Controller.ControllerDataProvider).HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObject;
+        public GameObject HandVisualizationGameObject => HandControllerDataProvider.HandPhysicsEnabled ? PhysicsCompanionGameObject : GameObject;
 
         private IMixedRealityHandControllerDataProvider handControllerDataProvider;
 
@@ -75,15 +75,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             // In case physics are enabled we need to take destroy the
             // physics game object as well when destroying the hand visualizer.
-            if (GameObject != HandVisualizationGameObject)
+            if (PhysicsCompanionGameObject != null)
             {
                 if (Application.isEditor)
                 {
-                    DestroyImmediate(HandVisualizationGameObject);
+                    DestroyImmediate(PhysicsCompanionGameObject);
                 }
                 else
                 {
-                    Destroy(HandVisualizationGameObject);
+                    Destroy(PhysicsCompanionGameObject);
                 }
             }
 
@@ -143,6 +143,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 // the physics companion is setup properly.
                 if (PhysicsCompanionGameObject != null)
                 {
+                    PhysicsCompanionGameObject.SetActive(true);
                     return;
                 }
 
@@ -153,15 +154,21 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 Rigidbody controllerRigidbody = GameObject.GetOrAddComponent<Rigidbody>();
                 controllerRigidbody.isKinematic = true;
                 controllerRigidbody.useGravity = false;
+                controllerRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
                 // Make the physics proxy a fixed joint rigidbody to the controller
                 // and give it an adamantium coated connection so it doesn't break.
                 Rigidbody physicsRigidbody = PhysicsCompanionGameObject.GetOrAddComponent<Rigidbody>();
                 physicsRigidbody.mass = float.MaxValue;
+                physicsRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 FixedJoint fixedJoint = PhysicsCompanionGameObject.GetOrAddComponent<FixedJoint>();
                 fixedJoint.connectedBody = controllerRigidbody;
                 fixedJoint.breakForce = float.MaxValue;
                 fixedJoint.breakTorque = float.MaxValue;
+            }
+            else if (PhysicsCompanionGameObject != null)
+            {
+                PhysicsCompanionGameObject.SetActive(false);
             }
         }
 
@@ -310,6 +317,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         {
             if (jointTransforms.TryGetValue(handJoint, out Transform existingJointTransform))
             {
+                existingJointTransform.parent = HandVisualizationGameObject.transform;
                 existingJointTransform.gameObject.SetActive(true);
                 return existingJointTransform;
             }

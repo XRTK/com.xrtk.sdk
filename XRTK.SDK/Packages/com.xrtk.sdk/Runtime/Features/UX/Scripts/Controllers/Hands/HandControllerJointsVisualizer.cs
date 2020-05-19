@@ -68,8 +68,9 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         private void CreateJointVisualizerIfNotExists(TrackedHandJoint handJoint)
         {
-            if (jointVisualizations.TryGetValue(handJoint, out _))
+            if (jointVisualizations.TryGetValue(handJoint, out GameObject jointObject))
             {
+                jointObject.SetActive(true);
                 return;
             }
 

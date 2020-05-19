@@ -53,5 +53,5 @@ MonoBehaviour:
     axisConstraint: 0
   jointsModePrefab: {fileID: 9173983480249558903, guid: 081f7848cfd94b34f9c774490cd7e2fb,
     type: 3}
-  meshModePrefab: {fileID: 1887883006053652, guid: 81cacd47fbb47714d8b19cffb1edf4af,
+  meshModePrefab: {fileID: 1887883006053652, guid: 12df5e0d0c33a444a985de4e29533a24,
     type: 3}

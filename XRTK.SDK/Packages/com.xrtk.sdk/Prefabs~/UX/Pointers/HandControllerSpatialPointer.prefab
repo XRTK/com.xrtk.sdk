@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3080660041806603478}
   - component: {fileID: 1526809385130449531}
   m_Layer: 0
-  m_Name: HandControllerFarPointer
+  m_Name: HandControllerSpatialPointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1247086986094436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9804cfa462754d0469b3fcb7e1dbf234, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d1a1d7915ba964419ef4bddb15415ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   handedness: 1
@@ -328,7 +328,7 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 4
-  lineCastResolution: 10
+  lineCastResolution: 2
   lineBase: {fileID: 6863193991115524521}
   lineRenderers:
   - {fileID: 1526809385130449531}
