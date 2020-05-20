@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LeftHandVisualizationProfile
   m_EditorClassIdentifier: 
   controllerVisualizationType:
-    reference: 0b653537-d237-4622-acc6-e351209a5882
+    reference: 5d844e0b-f913-46b8-bc3b-fa6429e62c60
   useDefaultModels: 0
   model: {fileID: 7398244499265140811, guid: 61feeca21178ba54682d3c61ff5f89a1, type: 3}
   pointerPose:
