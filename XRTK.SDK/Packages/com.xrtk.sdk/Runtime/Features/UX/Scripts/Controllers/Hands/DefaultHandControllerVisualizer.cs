@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
@@ -151,9 +152,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
                 PhysicsCompanionGameObject = new GameObject($"{GameObject.name}_Physics");
                 PhysicsCompanionGameObject.transform.parent = GameObject.transform.parent;
+                var parentConstraint = PhysicsCompanionGameObject.AddComponent<ParentConstraint>();
+                parentConstraint.AddSource(new ConstraintSource
+                {
+                    sourceTransform = GameObject.transform
+                });
 
                 // Setup the kinematic rigidbody on the actual controller game object.
                 Rigidbody controllerRigidbody = GameObject.GetOrAddComponent<Rigidbody>();
+                controllerRigidbody.mass = 1f; // 1 Kg
                 controllerRigidbody.isKinematic = true;
                 controllerRigidbody.useGravity = false;
                 controllerRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
@@ -161,7 +168,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 // Make the physics proxy a fixed joint rigidbody to the controller
                 // and give it an adamantium coated connection so it doesn't break.
                 Rigidbody physicsRigidbody = PhysicsCompanionGameObject.GetOrAddComponent<Rigidbody>();
-                physicsRigidbody.mass = float.MaxValue;
+                physicsRigidbody.mass = 1f; // 1 Kg
                 physicsRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 FixedJoint fixedJoint = PhysicsCompanionGameObject.GetOrAddComponent<FixedJoint>();
                 fixedJoint.connectedBody = controllerRigidbody;
