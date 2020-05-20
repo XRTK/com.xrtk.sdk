@@ -160,7 +160,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
                 // Setup the kinematic rigidbody on the actual controller game object.
                 Rigidbody controllerRigidbody = GameObject.GetOrAddComponent<Rigidbody>();
-                controllerRigidbody.mass = 1f; // 1 Kg
+                controllerRigidbody.mass = .46f; // 0.46 Kg average human hand weight
                 controllerRigidbody.isKinematic = true;
                 controllerRigidbody.useGravity = false;
                 controllerRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
@@ -168,7 +168,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 // Make the physics proxy a fixed joint rigidbody to the controller
                 // and give it an adamantium coated connection so it doesn't break.
                 Rigidbody physicsRigidbody = PhysicsCompanionGameObject.GetOrAddComponent<Rigidbody>();
-                physicsRigidbody.mass = 1f; // 1 Kg
+                physicsRigidbody.mass = .46f; // 0.46 Kg average human hand weight
                 physicsRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 FixedJoint fixedJoint = PhysicsCompanionGameObject.GetOrAddComponent<FixedJoint>();
                 fixedJoint.connectedBody = controllerRigidbody;
