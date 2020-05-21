@@ -30,7 +30,7 @@ namespace XRTK.SDK.UX.Pointers
         /// Is the near pointer in an idle state where it's not
         /// interacting with anything and not targeting anything?
         /// </summary>
-        private bool IsNearPointerIdle => NearPointer != null && NearPointer.Result.CurrentPointerTarget == null;
+        private bool IsNearPointerIdle => NearPointer == null || NearPointer.Result.CurrentPointerTarget == null || !NearPointer.IsInteractionEnabled;
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)
