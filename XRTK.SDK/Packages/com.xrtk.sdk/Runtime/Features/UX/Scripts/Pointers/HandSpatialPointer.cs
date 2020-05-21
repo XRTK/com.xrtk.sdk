@@ -16,9 +16,10 @@ namespace XRTK.SDK.UX.Pointers
     public class HandSpatialPointer : LinePointer
     {
         private IMixedRealityPointer nearPointer;
+        private bool handIsPointing;
 
         /// <inheritdoc />
-        public override bool IsInteractionEnabled => base.IsInteractionEnabled && IsNearPointerIdle;
+        public override bool IsInteractionEnabled => base.IsInteractionEnabled && IsNearPointerIdle && handIsPointing;
 
         /// <summary>
         /// Gets the near pointer attached to the hand.
@@ -37,14 +38,13 @@ namespace XRTK.SDK.UX.Pointers
             base.OnInputChanged(eventData);
 
             // This pointer type must only be used with hand controllers.
-            var handController = Controller as IMixedRealityHandController;
-            if (handController == null)
+            if (!(Controller is IMixedRealityHandController handController))
             {
                 Debug.LogError($"{typeof(HandSpatialPointer).Name} is only for use with {typeof(IMixedRealityHandController).Name} controllers!", this);
                 return;
             }
 
-            //enabled = handController.IsPointing;
+            handIsPointing = handController.IsPointing;
         }
 
         private IMixedRealityPointer InitializeNearPointerReference()
@@ -52,7 +52,7 @@ namespace XRTK.SDK.UX.Pointers
             for (int i = 0; i < Controller.InputSource.Pointers.Length; i++)
             {
                 var pointer = Controller.InputSource.Pointers[i];
-                if (!pointer.PointerId.Equals(PointerId))
+                if (!pointer.PointerId.Equals(PointerId) && pointer is HandNearPointer)
                 {
                     return pointer;
                 }

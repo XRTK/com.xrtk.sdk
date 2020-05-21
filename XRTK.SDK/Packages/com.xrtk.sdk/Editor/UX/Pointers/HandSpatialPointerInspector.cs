@@ -7,7 +7,7 @@ using XRTK.SDK.UX.Pointers;
 namespace XRTK.SDK.Editor.UX.Pointers
 {
     [CustomEditor(typeof(HandSpatialPointer))]
-    public class HandRayPointerInspector : LinePointerInspector
+    public class HandSpatialPointerInspector : LinePointerInspector
     {
 
     }
