@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: InvertDualAxisProcessor
   m_EditorClassIdentifier: 
   invertX: 0
-  invertY: 1
+  invertY: 0
