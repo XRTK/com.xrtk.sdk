@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
@@ -23,6 +23,8 @@ namespace XRTK.SDK.UX.Pointers
         private bool cursorWasDisabledOnDown = false;
 
         private bool isDisabled = true;
+
+        private Vector2 lastPosition;
 
         #region IMixedRealityMousePointer Implementaiton
 
@@ -73,6 +75,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 controller = value;
                 InputSourceParent = value.InputSource;
+                RaycastOrigin = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform;
                 Handedness = value.ControllerHandedness;
                 gameObject.name = "Spatial Mouse Pointer";
                 TrackingState = TrackingState.NotApplicable;
@@ -80,9 +83,31 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
+        public override bool TryGetPointingRay(out Ray pointingRay)
+        {
+            pointingRay = MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool TryGetPointerPosition(out Vector3 position)
+        {
+            position = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.position;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool TryGetPointerRotation(out Quaternion rotation)
+        {
+            rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
+            return true;
+        }
+
+        /// <inheritdoc />
         public override void OnPreRaycast()
         {
             transform.position = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.position;
+            transform.rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
 
             if (TryGetPointingRay(out var pointingRay))
             {
@@ -148,7 +173,7 @@ namespace XRTK.SDK.UX.Pointers
 
             if (UseSourcePoseData)
             {
-                UpdateMousePosition(eventData.SourceData.x, eventData.SourceData.y);
+                UpdateMousePosition(eventData.SourceData);
             }
         }
 
@@ -166,7 +191,6 @@ namespace XRTK.SDK.UX.Pointers
                 if (cursorWasDisabledOnDown)
                 {
                     BaseCursor?.SetVisibility(true);
-                    transform.rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
                 }
                 else
                 {
@@ -195,7 +219,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (!UseSourcePoseData &&
                     PoseAction == eventData.MixedRealityInputAction)
                 {
-                    UpdateMousePosition(eventData.InputData.x, eventData.InputData.y);
+                    UpdateMousePosition(eventData.InputData);
                 }
             }
         }
@@ -239,11 +263,13 @@ namespace XRTK.SDK.UX.Pointers
 
         #endregion Monobehaviour Implementaiton
 
-        private void UpdateMousePosition(float mouseX, float mouseY)
+        private void UpdateMousePosition(Vector2 mousePosition)
         {
             var shouldUpdate = false;
-            var scaledMouseX = mouseX * speed;
-            var scaledMouseY = mouseY * speed;
+            var delta = lastPosition - mousePosition;
+            lastPosition = mousePosition;
+            var scaledMouseX = delta.x * speed;
+            var scaledMouseY = delta.y * speed;
 
             if (Mathf.Abs(scaledMouseX) >= movementThresholdToUnHide ||
                 Mathf.Abs(scaledMouseY) >= movementThresholdToUnHide)
@@ -251,7 +277,6 @@ namespace XRTK.SDK.UX.Pointers
                 if (isDisabled)
                 {
                     BaseCursor?.SetVisibility(true);
-                    transform.rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
                 }
 
                 shouldUpdate = true;
@@ -262,11 +287,6 @@ namespace XRTK.SDK.UX.Pointers
             {
                 lastUpdateTime = Time.time;
             }
-
-            var newRotation = Vector3.zero;
-            newRotation.x += scaledMouseX;
-            newRotation.y += scaledMouseY;
-            transform.Rotate(newRotation, Space.World);
         }
     }
 }

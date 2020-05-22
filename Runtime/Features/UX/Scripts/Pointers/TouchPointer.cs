@@ -4,7 +4,7 @@
 using UnityEngine;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
-using XRTK.Utilities;
+using XRTK.Services;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
@@ -40,7 +40,7 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnPreRaycast()
         {
-            if (TryGetPointingRay(out Ray pointingRay))
+            if (TryGetPointingRay(out var pointingRay))
             {
                 Rays[0].CopyRay(pointingRay, PointerExtent);
 
@@ -68,7 +68,7 @@ namespace XRTK.SDK.UX.Pointers
             if (fingerId < 0) { return false; }
             position = Result.CurrentPointerTarget != null
                 ? Result.EndPoint
-                : CameraCache.Main.ScreenPointToRay(UnityEngine.Input.GetTouch(FingerId).position).GetPoint(PointerExtent);
+                : MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.ScreenPointToRay(UnityEngine.Input.GetTouch(FingerId).position).GetPoint(PointerExtent);
             return true;
         }
 
