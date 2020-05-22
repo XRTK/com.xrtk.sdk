@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c156ea3e1a7a493dac236ed84c4a819a, type: 3}
   m_Name: MousePointerProfile
   m_EditorClassIdentifier: 
-  pointerPrefab: {fileID: 1247086986094436, guid: 54d78dc3333741c5b7f30fe3506096ba,
+  pointerPrefab: {fileID: 1247086986094436, guid: 58ab5073b9b5477fbda6f619d37be0f0,
     type: 3}
   pointingExtent: 10
   pointingRaycastLayerMasks:
