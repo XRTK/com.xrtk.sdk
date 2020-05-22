@@ -46,6 +46,15 @@ namespace XRTK.SDK.UX.Pointers
         [Tooltip("Source transform for raycast origin - leave null to use default transform")]
         private Transform raycastOrigin = null;
 
+        /// <summary>
+        /// Source <see cref="Transform"/> for the raycast origin.
+        /// </summary>
+        public Transform RaycastOrigin
+        {
+            get => raycastOrigin == null ? transform : raycastOrigin;
+            protected set => raycastOrigin = value;
+        }
+
         [SerializeField]
         [Tooltip("The hold action that will enable the raise the input event for this pointer.")]
         private MixedRealityInputAction activeHoldAction = MixedRealityInputAction.None;
