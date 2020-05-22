@@ -16,7 +16,7 @@ MonoBehaviour:
     description: Trigger Press (Select)
     stateChangeType: 0
     axisType: 2
-    inputType: 13
+    inputType: 25
     inputAction:
       profileGuid: 399335ccc89c4d12b79f3539ca7771db
       id: 1
