@@ -16,10 +16,25 @@ namespace XRTK.SDK.UX.Pointers
     public class HandSpatialPointer : LinePointer
     {
         private IMixedRealityPointer nearPointer;
-        private bool handIsPointing;
+        private IMixedRealityHandController handController;
+
+        [SerializeField]
+        private Transform pointerPoseTransform = null;
+
+        [SerializeField]
+        [Tooltip("Local offset for the pointer pose transform when not pinching.")]
+        private Vector3 offsetStart = Vector3.zero;
+
+        [SerializeField]
+        [Tooltip("Local offset for the pointer pose transform when pinching.")]
+        private Vector3 offsetEnd = Vector3.zero;
 
         /// <inheritdoc />
-        public override bool IsInteractionEnabled => base.IsInteractionEnabled && IsNearPointerIdle && handIsPointing;
+        public override bool IsInteractionEnabled =>
+            base.IsInteractionEnabled &&
+            IsNearPointerIdle &&
+            HandController != null &&
+            HandController.IsPointing;
 
         /// <summary>
         /// Gets the near pointer attached to the hand.
@@ -27,24 +42,31 @@ namespace XRTK.SDK.UX.Pointers
         private IMixedRealityPointer NearPointer => nearPointer ?? (nearPointer = InitializeNearPointerReference());
 
         /// <summary>
+        /// Casted reference to the hand controller driving the pointer.
+        /// </summary>
+        private IMixedRealityHandController HandController => handController ?? (handController = InitializeHandControllerReference());
+
+        /// <summary>
         /// Is the near pointer in an idle state where it's not
         /// interacting with anything and not targeting anything?
         /// </summary>
         private bool IsNearPointerIdle => NearPointer == null || NearPointer.Result.CurrentPointerTarget == null || !NearPointer.IsInteractionEnabled;
 
-        /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<HandData> eventData)
+        private void Update()
         {
-            base.OnInputChanged(eventData);
+            UpdatePointerTransform();
+        }
 
+        private IMixedRealityHandController InitializeHandControllerReference()
+        {
             // This pointer type must only be used with hand controllers.
             if (!(Controller is IMixedRealityHandController handController))
             {
                 Debug.LogError($"{typeof(HandSpatialPointer).Name} is only for use with {typeof(IMixedRealityHandController).Name} controllers!", this);
-                return;
+                return null;
             }
 
-            handIsPointing = handController.IsPointing;
+            return handController;
         }
 
         private IMixedRealityPointer InitializeNearPointerReference()
@@ -59,6 +81,21 @@ namespace XRTK.SDK.UX.Pointers
             }
 
             return null;
+        }
+
+        private void UpdatePointerTransform()
+        {
+            if (IsInteractionEnabled)
+            {
+                pointerPoseTransform.gameObject.SetActive(true);
+                var pinchScale = Mathf.Clamp(1 - HandController.PinchStrength, .5f, 1f);
+                pointerPoseTransform.localScale = new Vector3(pinchScale, pinchScale, 1f);
+                pointerPoseTransform.localPosition = Vector3.Slerp(offsetStart, offsetEnd, HandController.PinchStrength);
+            }
+            else
+            {
+                pointerPoseTransform.gameObject.SetActive(false);
+            }
         }
     }
 }
