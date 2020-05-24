@@ -107,9 +107,6 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnPreRaycast()
         {
-            transform.position = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.position;
-            transform.rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
-
             if (TryGetPointingRay(out var pointingRay))
             {
                 Rays[0].CopyRay(pointingRay, PointerExtent);
@@ -129,6 +126,13 @@ namespace XRTK.SDK.UX.Pointers
                     Debug.DrawRay(pointingRay.origin, pointingRay.direction * PointerExtent, Color.yellow);
                 }
             }
+        }
+
+        /// <inheritdoc />
+        public override void OnPostRaycast()
+        {
+            transform.position = Result.EndPoint;
+            transform.LookAt(MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform);
         }
 
         #endregion IMixedRealityPointer Implementaiton
