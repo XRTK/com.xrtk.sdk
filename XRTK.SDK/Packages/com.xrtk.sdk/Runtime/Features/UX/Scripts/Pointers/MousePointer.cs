@@ -6,6 +6,7 @@ using XRTK.Definitions.Devices;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.Providers.Controllers;
+using XRTK.Providers.Controllers.Simulation.Hands;
 using XRTK.Services;
 using XRTK.Utilities.Physics;
 
@@ -137,16 +138,22 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnSourceDetected(SourceStateEventData eventData)
         {
-            if (RayStabilizer != null)
-            {
-                RayStabilizer = null;
-            }
-
             base.OnSourceDetected(eventData);
 
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
+                if (RayStabilizer != null)
+                {
+                    RayStabilizer = null;
+                }
+
                 isInteractionEnabled = true;
+            }
+
+            if (eventData.Controller is SimulatedMixedRealityHandController)
+            {
+                isInteractionEnabled = false;
+                BaseCursor?.SetVisibility(false);
             }
         }
 
@@ -158,6 +165,12 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 isInteractionEnabled = false;
+            }
+
+            if (eventData.Controller is SimulatedMixedRealityHandController)
+            {
+                isInteractionEnabled = true;
+                BaseCursor?.SetVisibility(true);
             }
         }
 
@@ -214,6 +227,8 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Vector2> eventData)
         {
+            if (isDisabled || !isInteractionEnabled) { return; }
+
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&

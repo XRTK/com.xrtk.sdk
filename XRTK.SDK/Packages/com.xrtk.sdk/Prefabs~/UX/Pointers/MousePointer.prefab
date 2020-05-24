@@ -68,8 +68,9 @@ MonoBehaviour:
     axisConstraint: 2
   requiresHoldAction: 0
   enablePointerOnStart: 1
+  nearInteractionCollider: {fileID: 0}
   overrideGlobalPointerExtent: 0
-  defaultPointerExtent: 2.5
+  defaultPointerExtent: 10
   pointerOrientation: 0
   hideCursorWhenInactive: 0
   movementThresholdToUnHide: 0.5
