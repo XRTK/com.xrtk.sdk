@@ -227,7 +227,7 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Vector2> eventData)
         {
-            if (isDisabled || !isInteractionEnabled) { return; }
+            if (!isInteractionEnabled) { return; }
 
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
