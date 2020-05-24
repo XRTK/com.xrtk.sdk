@@ -73,6 +73,6 @@ MonoBehaviour:
   defaultPointerExtent: 10
   pointerOrientation: 0
   hideCursorWhenInactive: 0
-  movementThresholdToUnHide: 0.5
+  movementThresholdToUnHide: 0.1
   hideTimeout: 3
   speed: 0.25
