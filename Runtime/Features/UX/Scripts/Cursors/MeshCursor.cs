@@ -3,7 +3,9 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using XRTK.Definitions.InputSystem;
+using XRTK.Services;
 
 namespace XRTK.SDK.UX.Cursors
 {
@@ -28,7 +30,15 @@ namespace XRTK.SDK.UX.Cursors
         /// <summary>
         /// Sprite renderer to change.  If null find one in children
         /// </summary>
-        public MeshRenderer TargetRenderer;
+        [SerializeField]
+        [FormerlySerializedAs("TargetRenderer")]
+        private MeshRenderer targetRenderer;
+
+        [SerializeField]
+        private float fixedSize = 1f;
+
+        [SerializeField]
+        private Vector3 fixedSizeOffset = Vector3.zero;
 
         /// <summary>
         /// On enable look for a sprite renderer on children
@@ -40,12 +50,25 @@ namespace XRTK.SDK.UX.Cursors
                 CursorStateData = new MeshCursorDatum[0];
             }
 
-            if (TargetRenderer == null)
+            if (targetRenderer == null)
             {
-                TargetRenderer = GetComponentInChildren<MeshRenderer>();
+                targetRenderer = GetComponentInChildren<MeshRenderer>();
             }
 
             base.OnEnable();
+        }
+
+        private void LateUpdate()
+        {
+            if (targetRenderer == null) { return; }
+
+            var targetTransform = targetRenderer.transform;
+            var cameraPosition = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.position;
+            var distance = (cameraPosition - targetTransform.position).magnitude;
+            var size = distance * fixedSize * MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.fieldOfView;
+
+            targetTransform.localScale = Vector3.one * size;
+            targetTransform.localPosition = new Vector3(fixedSizeOffset.x * size, fixedSizeOffset.y * size, fixedSizeOffset.z * size);
         }
 
         /// <summary>
@@ -76,15 +99,15 @@ namespace XRTK.SDK.UX.Cursors
         private void SetCursorState(MeshCursorDatum stateDatum)
         {
             // Return if we do not have an animator
-            if (TargetRenderer != null)
+            if (targetRenderer != null)
             {
-                var filter = TargetRenderer.gameObject.GetComponent<MeshFilter>();
+                var filter = targetRenderer.gameObject.GetComponent<MeshFilter>();
                 if (filter != null && stateDatum.CursorMesh != null)
                 {
                     filter.mesh = stateDatum.CursorMesh;
                 }
 
-                var targetTransform = TargetRenderer.transform;
+                var targetTransform = targetRenderer.transform;
                 targetTransform.localPosition = stateDatum.LocalOffset;
                 targetTransform.localScale = stateDatum.LocalScale;
             }
