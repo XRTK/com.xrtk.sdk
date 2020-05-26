@@ -18,10 +18,10 @@ MonoBehaviour:
     axisType: 4
     inputType: 17
     inputAction:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+      profileGuid: 399335ccc89c4d12b79f3539ca7771db
+      id: 5
+      description: Teleport Direction
+      axisConstraint: 4
     keyCode: 0
     inputName: 
     axisCodeX: AXIS_1
