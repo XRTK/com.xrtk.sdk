@@ -126,13 +126,10 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             foreach (var handJoint in jointPoses.Keys)
             {
-                if (handJoint != TrackedHandJoint.None)
-                {
-                    var jointTransform = GetOrCreateJointTransform(handJoint);
-                    var jointPose = jointPoses[handJoint];
-                    jointTransform.localPosition = jointPose.Position;
-                    jointTransform.rotation = jointPose.Rotation;
-                }
+                var jointTransform = GetOrCreateJointTransform(handJoint);
+                var jointPose = jointPoses[handJoint];
+                jointTransform.localPosition = jointPose.Position;
+                jointTransform.rotation = jointPose.Rotation;
             }
         }
 

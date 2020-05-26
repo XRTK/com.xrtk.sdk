@@ -59,10 +59,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             for (int i = 0; i < HandData.JointCount; i++)
             {
                 var joint = (TrackedHandJoint)i;
-                if (joint != TrackedHandJoint.None)
-                {
-                    CreateJointVisualizerIfNotExists(joint);
-                }
+                CreateJointVisualizerIfNotExists(joint);
             }
         }
 
