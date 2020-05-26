@@ -78,7 +78,9 @@ namespace XRTK.SDK.UX.Pointers
                 InputSourceParent = value.InputSource;
                 RaycastOrigin = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform;
                 Handedness = value.ControllerHandedness;
-                gameObject.name = "Spatial Mouse Pointer";
+                const string pointerName = "Spatial Mouse Pointer";
+                gameObject.name = pointerName;
+                PointerName = pointerName;
                 TrackingState = TrackingState.NotApplicable;
             }
         }
