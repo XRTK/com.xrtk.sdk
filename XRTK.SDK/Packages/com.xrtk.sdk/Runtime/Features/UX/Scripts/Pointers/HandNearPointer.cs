@@ -39,7 +39,7 @@ namespace XRTK.SDK.UX.Pointers
             // This pointer type must only be used with hand controllers.
             if (!(Controller is IMixedRealityHandController handController))
             {
-                Debug.LogError($"{typeof(HandNearPointer).Name} is only for use with {typeof(IMixedRealityHandController).Name} controllers!", this);
+                Debug.LogError($"{nameof(HandNearPointer)} is only for use with {nameof(IMixedRealityHandController)} controllers!", this);
                 return;
             }
 

@@ -10,11 +10,13 @@ using XRTK.Interfaces.InputSystem.Handlers;
 namespace XRTK.SDK.Input
 {
     /// <summary>
-    /// Utilitiy component to record a hand controller's data into a file.
+    /// Utility component to record a hand controller's data into a file.
     /// </summary>
     public class HandDataRecorder : InputSystemGlobalListener, IMixedRealityInputHandler<HandData>
     {
         private RecordedHandJoints currentRecording;
+        RecordedHandJoints recordedHandJoints = new RecordedHandJoints();
+        RecordedHandJoint[] jointPoses = new RecordedHandJoint[HandData.JointCount];
 
         [SerializeField]
         [Tooltip("The handedness of the hand to record data for.")]
@@ -26,35 +28,29 @@ namespace XRTK.SDK.Input
 
         private void Update()
         {
-            if (currentRecording != null && UnityEngine.Input.GetKeyDown(saveRecordingKey))
+            // TODO Update this to use an action instead of raw keyboard input
+            if (currentRecording != null && UnityEngine.Input.GetKeyUp(saveRecordingKey))
             {
+                // TODO dump to XRTK.Generated/Recorded Poses?
                 Debug.Log(JsonUtility.ToJson(currentRecording));
             }
         }
 
+        /// <inheritdoc />
         public void OnInputChanged(InputEventData<HandData> eventData)
         {
-#if UNITY_EDITOR
-
             if (targetHandedness != eventData.Handedness)
             {
                 return;
             }
 
-            var handData = eventData.InputData;
-            var recordedHandJoints = new RecordedHandJoints();
-            var jointPoses = new RecordedHandJoint[HandData.JointCount];
-
             for (int i = 0; i < HandData.JointCount; i++)
             {
-                var jointPose = handData.Joints[i];
-                jointPoses[i] = new RecordedHandJoint((TrackedHandJoint)i, jointPose);
+                jointPoses[i] = new RecordedHandJoint((TrackedHandJoint)i, eventData.InputData.Joints[i]);
             }
 
-            recordedHandJoints.items = jointPoses;
+            recordedHandJoints.Joints = jointPoses;
             currentRecording = recordedHandJoints;
-
-#endif
         }
     }
 }
