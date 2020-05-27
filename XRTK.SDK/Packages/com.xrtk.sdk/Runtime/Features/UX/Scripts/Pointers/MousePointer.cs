@@ -86,21 +86,21 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override bool TryGetPointingRay(out Ray pointingRay)
         {
-            pointingRay = MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition);
+            pointingRay = MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
             return true;
         }
 
         /// <inheritdoc />
         public override bool TryGetPointerPosition(out Vector3 position)
         {
-            position = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.position;
+            position = transform.position;
             return true;
         }
 
         /// <inheritdoc />
         public override bool TryGetPointerRotation(out Quaternion rotation)
         {
-            rotation = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.rotation;
+            rotation = transform.rotation;
             return true;
         }
 
@@ -118,7 +118,7 @@ namespace XRTK.SDK.UX.Pointers
 
                     if (MixedRealityRaycaster.DebugEnabled)
                     {
-                        Debug.DrawRay(RayStabilizer.StableRay.origin, RayStabilizer.StableRay.direction * PointerExtent, Color.green);
+                        Debug.DrawRay(RayStabilizer.StableRay.origin, RayStabilizer.StableRay.direction * PointerExtent, Color.yellow);
                     }
                 }
                 else if (MixedRealityRaycaster.DebugEnabled)
@@ -208,6 +208,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (cursorWasDisabledOnDown)
                 {
                     BaseCursor?.SetVisibility(true);
+                    isDisabled = false;
                 }
                 else
                 {
@@ -277,6 +278,14 @@ namespace XRTK.SDK.UX.Pointers
                 BaseCursor?.SetVisibility(false);
                 isDisabled = true;
                 lastUpdateTime = Time.time;
+            }
+        }
+
+        private void OnApplicationFocus(bool focus)
+        {
+            if (!focus)
+            {
+                isDisabled = true;
             }
         }
 
