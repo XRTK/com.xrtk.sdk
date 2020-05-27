@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasSetupDefaults: 1
   controllerMappingProfiles:
-  - {fileID: 11400000, guid: e7410f969234129419325b60dd7ef6b5, type: 2}
-  - {fileID: 11400000, guid: 7c17bff23a6d6e44b9a2225f53257bba, type: 2}
+  - {fileID: 11400000, guid: 4b5c2efa5f88d1548953da2172e3f5d5, type: 2}
+  - {fileID: 11400000, guid: 2713516723d50ce49a834fbee5d64ff4, type: 2}
   simulatedUpdateFrequency: 0
   controllerHideTimeout: 0.2
   defaultDistance: 0.5
@@ -27,7 +27,7 @@ MonoBehaviour:
   rightControllerTrackedKey: 32
   rotationSpeed: 100
   handPoseAnimationSpeed: 8
-  handMeshingEnabled: 0
+  renderingMode: 1
   handPhysicsEnabled: 0
   useTriggers: 0
   boundsMode: 0
