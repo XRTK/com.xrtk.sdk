@@ -33,7 +33,7 @@
       }
     },
     {
-      "joint": "ThumbMetacarpalJoint",
+      "joint": "ThumbMetacarpal",
       "pose": {
         "position": {
           "x": 0.0726172998547554,
@@ -49,7 +49,7 @@
       }
     },
     {
-      "joint": "ThumbProximalJoint",
+      "joint": "ThumbProximal",
       "pose": {
         "position": {
           "x": 0.033425573259592059,
@@ -65,7 +65,7 @@
       }
     },
     {
-      "joint": "ThumbDistalJoint",
+      "joint": "ThumbDistal",
       "pose": {
         "position": {
           "x": 0.014360085129737854,
@@ -113,7 +113,7 @@
       }
     },
     {
-      "joint": "IndexKnuckle",
+      "joint": "IndexProximal",
       "pose": {
         "position": {
           "x": 0.03474228084087372,
@@ -129,7 +129,7 @@
       }
     },
     {
-      "joint": "IndexMiddleJoint",
+      "joint": "IndexIntermediate",
       "pose": {
         "position": {
           "x": 0.011708781123161316,
@@ -145,7 +145,7 @@
       }
     },
     {
-      "joint": "IndexDistalJoint",
+      "joint": "IndexDistal",
       "pose": {
         "position": {
           "x": 0.007551820017397404,
@@ -193,7 +193,7 @@
       }
     },
     {
-      "joint": "MiddleKnuckle",
+      "joint": "MiddleProximal",
       "pose": {
         "position": {
           "x": 0.05473826080560684,
@@ -209,7 +209,7 @@
       }
     },
     {
-      "joint": "MiddleMiddleJoint",
+      "joint": "MiddleIntermediate",
       "pose": {
         "position": {
           "x": 0.03288401663303375,
@@ -225,7 +225,7 @@
       }
     },
     {
-      "joint": "MiddleDistalJoint",
+      "joint": "MiddleDistal",
       "pose": {
         "position": {
           "x": 0.03765859827399254,
@@ -273,7 +273,7 @@
       }
     },
     {
-      "joint": "RingKnuckle",
+      "joint": "RingProximal",
       "pose": {
         "position": {
           "x": 0.07221101969480515,
@@ -289,7 +289,7 @@
       }
     },
     {
-      "joint": "RingMiddleJoint",
+      "joint": "RingIntermediate",
       "pose": {
         "position": {
           "x": 0.05479241907596588,
@@ -305,7 +305,7 @@
       }
     },
     {
-      "joint": "RingDistalJoint",
+      "joint": "RingDistal",
       "pose": {
         "position": {
           "x": 0.05848679319024086,
@@ -337,7 +337,7 @@
       }
     },
     {
-      "joint": "PinkyMetacarpal",
+      "joint": "LittleMetacarpal",
       "pose": {
         "position": {
           "x": 0.10431554913520813,
@@ -353,7 +353,7 @@
       }
     },
     {
-      "joint": "PinkyKnuckle",
+      "joint": "LittleProximal",
       "pose": {
         "position": {
           "x": 0.08813987672328949,
@@ -369,7 +369,7 @@
       }
     },
     {
-      "joint": "PinkyMiddleJoint",
+      "joint": "LittleIntermediate",
       "pose": {
         "position": {
           "x": 0.07569940388202667,
@@ -385,7 +385,7 @@
       }
     },
     {
-      "joint": "PinkyDistalJoint",
+      "joint": "LittleDistal",
       "pose": {
         "position": {
           "x": 0.0749262273311615,
@@ -401,7 +401,7 @@
       }
     },
     {
-      "joint": "PinkyTip",
+      "joint": "LittleTip",
       "pose": {
         "position": {
           "x": 0.07520446181297302,

@@ -83,7 +83,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                     break;
                 case TrackedHandJoint.IndexTip:
                 case TrackedHandJoint.MiddleTip:
-                case TrackedHandJoint.PinkyTip:
+                case TrackedHandJoint.LittleTip:
                 case TrackedHandJoint.RingTip:
                 case TrackedHandJoint.ThumbTip:
                     prefab = fingertipPrefab;
