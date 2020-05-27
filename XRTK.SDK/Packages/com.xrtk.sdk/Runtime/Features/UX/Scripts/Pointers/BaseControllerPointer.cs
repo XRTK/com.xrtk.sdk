@@ -236,7 +236,6 @@ namespace XRTK.SDK.UX.Pointers
             set
             {
                 base.Controller = value;
-                pointerName = gameObject.name;
                 InputSourceParent = base.Controller.InputSource;
             }
         }
@@ -257,17 +256,11 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        private string pointerName = string.Empty;
-
         /// <inheritdoc />
         public string PointerName
         {
-            get => pointerName;
-            set
-            {
-                pointerName = value;
-                gameObject.name = value;
-            }
+            get => gameObject.name;
+            set => gameObject.name = value;
         }
 
         /// <inheritdoc />
