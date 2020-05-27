@@ -73,3 +73,7 @@ MonoBehaviour:
     id: 15
     description: Index Finger Pose
     axisConstraint: 7
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 16
+    description: Grip
+    axisConstraint: 2
