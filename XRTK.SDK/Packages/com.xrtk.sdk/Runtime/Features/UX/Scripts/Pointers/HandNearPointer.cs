@@ -4,7 +4,6 @@
 using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.Providers.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Pointers
@@ -14,22 +13,10 @@ namespace XRTK.SDK.UX.Pointers
     /// </summary>
     public class HandNearPointer : LinePointer
     {
-        //private IMixedRealityPointer spatialPointer;
         private bool handIsPinching;
 
         /// <inheritdoc />
         public override bool IsInteractionEnabled => base.IsInteractionEnabled && !handIsPinching;
-
-        /////// <summary>
-        /////// Gets the near pointer attached to the hand.
-        /////// </summary>
-        //private IMixedRealityPointer SpatialPointer => spatialPointer ?? (spatialPointer = InitializeSpatialPointerReference());
-
-        ///// <summary>
-        ///// Is the near pointer in an idle state where it's not
-        ///// interacting with anything and not targeting anything?
-        ///// </summary>
-        //private bool IsNearPointerIdle => NearPointer != null && NearPointer.Result.CurrentPointerTarget == null;
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)
@@ -45,19 +32,5 @@ namespace XRTK.SDK.UX.Pointers
 
             handIsPinching = handController.IsPinching;
         }
-
-        //private IMixedRealityPointer InitializeSpatialPointerReference()
-        //{
-        //    for (int i = 0; i < Controller.InputSource.Pointers.Length; i++)
-        //    {
-        //        var pointer = Controller.InputSource.Pointers[i];
-        //        if (!pointer.PointerId.Equals(PointerId) && pointer is HandSpatialPointer)
-        //        {
-        //            return pointer;
-        //        }
-        //    }
-
-        //    return null;
-        //}
     }
 }
