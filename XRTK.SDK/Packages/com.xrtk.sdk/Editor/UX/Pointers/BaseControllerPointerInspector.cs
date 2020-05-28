@@ -9,7 +9,7 @@ using XRTK.SDK.UX.Pointers;
 
 namespace XRTK.SDK.Editor.UX.Pointers
 {
-    [CustomEditor(typeof(BaseControllerPointer))]
+    [CustomEditor(typeof(BaseControllerPointer), true, isFallback = true)]
     public class BaseControllerPointerInspector : ControllerPoseSynchronizerInspector
     {
         private readonly GUIContent basePointerFoldoutHeader = new GUIContent("Base Pointer Settings");

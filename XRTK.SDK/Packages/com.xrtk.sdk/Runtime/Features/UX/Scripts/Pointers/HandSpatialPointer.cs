@@ -52,21 +52,16 @@ namespace XRTK.SDK.UX.Pointers
         /// </summary>
         private bool IsNearPointerIdle => NearPointer == null || NearPointer.Result.CurrentPointerTarget == null || !NearPointer.IsInteractionEnabled;
 
-        private void Update()
-        {
-            UpdatePointerTransform();
-        }
-
         private IMixedRealityHandController InitializeHandControllerReference()
         {
             // This pointer type must only be used with hand controllers.
-            if (!(Controller is IMixedRealityHandController handController))
+            if (!(Controller is IMixedRealityHandController controller))
             {
-                Debug.LogError($"{typeof(HandSpatialPointer).Name} is only for use with {typeof(IMixedRealityHandController).Name} controllers!", this);
+                Debug.LogError($"{nameof(HandSpatialPointer)} is only for use with {nameof(IMixedRealityHandController)} controllers!", this);
                 return null;
             }
 
-            return handController;
+            return controller;
         }
 
         private IMixedRealityPointer InitializeNearPointerReference()
@@ -74,7 +69,8 @@ namespace XRTK.SDK.UX.Pointers
             for (int i = 0; i < Controller.InputSource.Pointers.Length; i++)
             {
                 var pointer = Controller.InputSource.Pointers[i];
-                if (!pointer.PointerId.Equals(PointerId) && pointer is HandNearPointer)
+
+                if (pointer.PointerId != PointerId && pointer is HandNearPointer)
                 {
                     return pointer;
                 }
@@ -83,8 +79,11 @@ namespace XRTK.SDK.UX.Pointers
             return null;
         }
 
-        private void UpdatePointerTransform()
+        /// <inheritdoc />
+        public override void OnInputChanged(InputEventData<HandData> eventData)
         {
+            base.OnInputChanged(eventData);
+
             if (IsInteractionEnabled)
             {
                 pointerPoseTransform.gameObject.SetActive(true);
