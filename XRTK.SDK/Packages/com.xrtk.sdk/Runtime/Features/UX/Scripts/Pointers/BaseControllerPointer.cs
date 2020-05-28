@@ -298,9 +298,7 @@ namespace XRTK.SDK.UX.Pointers
         [SerializeField]
         private InteractionMode interactionMode = InteractionMode.Both;
 
-        /// <summary>
-        /// The <see cref="InteractionMode"/> this pointer supports.
-        /// </summary>
+        /// <inheritdoc />
         public virtual InteractionMode InteractionMode => interactionMode;
 
         [SerializeField]
