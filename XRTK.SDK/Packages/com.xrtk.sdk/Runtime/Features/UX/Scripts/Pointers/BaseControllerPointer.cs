@@ -4,10 +4,12 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using XRTK.Definitions;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
+using XRTK.Extensions;
 using XRTK.Extensions.XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
@@ -186,9 +188,9 @@ namespace XRTK.SDK.UX.Pointers
 
         protected virtual void OnTriggerEnter(Collider other)
         {
-            if (nearInteractionCollider != null &&
-                other.IsValidCollision(PointerRaycastLayerMasksOverride ??
-                                       MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks))
+            if (InteractionMode.HasFlags(InteractionMode.Near) &&
+                nearInteractionCollider != null &&
+                other.IsValidCollision(PointerRaycastLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks))
             {
                 capturedNearInteractionObject = other.gameObject;
                 MixedRealityToolkit.InputSystem.RaiseOnInputDown(InputSourceParent, Handedness, pointerAction);
@@ -197,7 +199,8 @@ namespace XRTK.SDK.UX.Pointers
 
         protected virtual void OnTriggerStay(Collider other)
         {
-            if (nearInteractionCollider != null &&
+            if (InteractionMode.HasFlags(InteractionMode.Near) &&
+                nearInteractionCollider != null &&
                 capturedNearInteractionObject == other.gameObject)
             {
                 MixedRealityToolkit.InputSystem.RaiseOnInputPressed(InputSourceParent, Handedness, pointerAction);
@@ -206,7 +209,8 @@ namespace XRTK.SDK.UX.Pointers
 
         protected virtual void OnTriggerExit(Collider other)
         {
-            if (nearInteractionCollider != null &&
+            if (InteractionMode.HasFlags(InteractionMode.Near) &&
+                nearInteractionCollider != null &&
                 capturedNearInteractionObject == other.gameObject)
             {
                 capturedNearInteractionObject = null;
@@ -290,6 +294,14 @@ namespace XRTK.SDK.UX.Pointers
 
         /// <inheritdoc />
         public IMixedRealityTeleportHotSpot TeleportHotSpot { get; set; }
+
+        [SerializeField]
+        private InteractionMode interactionMode = InteractionMode.Both;
+
+        /// <summary>
+        /// The <see cref="InteractionMode"/> this pointer supports.
+        /// </summary>
+        public virtual InteractionMode InteractionMode => interactionMode;
 
         [SerializeField]
         private Collider nearInteractionCollider = null;
@@ -557,7 +569,8 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.OnSourceLost(eventData);
 
-            if (eventData.SourceId == InputSourceParent.SourceId)
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                interactionMode.HasFlags(InteractionMode.Far))
             {
                 if (requiresHoldAction)
                 {
@@ -582,7 +595,8 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.OnInputUp(eventData);
 
-            if (eventData.SourceId == InputSourceParent.SourceId)
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                interactionMode.HasFlags(InteractionMode.Far))
             {
                 if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
                 {
@@ -603,7 +617,8 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.OnInputDown(eventData);
 
-            if (eventData.SourceId == InputSourceParent.SourceId)
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                interactionMode.HasFlags(InteractionMode.Far))
             {
                 if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
                 {
