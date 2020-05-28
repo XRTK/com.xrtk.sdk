@@ -97,9 +97,12 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 if (handJoint == TrackedHandJoint.IndexTip)
                 {
                     var indexJointRenderer = jointVisualization.GetComponent<Renderer>();
-                    var indexMaterial = indexJointRenderer.material;
-                    indexMaterial.color = indexFingertipColor;
-                    indexJointRenderer.material = indexMaterial;
+                    if (indexJointRenderer != null)
+                    {
+                        var indexMaterial = indexJointRenderer.material;
+                        indexMaterial.color = indexFingertipColor;
+                        indexJointRenderer.material = indexMaterial;
+                    }
                 }
 
                 jointVisualizations.Add(handJoint, jointVisualization);
