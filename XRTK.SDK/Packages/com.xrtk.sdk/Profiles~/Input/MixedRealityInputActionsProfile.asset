@@ -77,3 +77,7 @@ MonoBehaviour:
     id: 16
     description: Grip
     axisConstraint: 2
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 17
+    description: Tracked Hand Pose
+    axisConstraint: 1
