@@ -15,6 +15,14 @@ MonoBehaviour:
   id: flat
   description: Flat hand with fingers spread out.
   isDefault: 0
-  isSelectionPose: 0
   keyCode: 49
   data: {fileID: 4900000, guid: d01fab68eb29b1743b37beb044cfebe1, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 0.19951756
+  - 0.0063138288
+  - 0.0028837689
+  - 0.005681025
+  - 0.00097340444
+  gripStrength: 0.0039188415

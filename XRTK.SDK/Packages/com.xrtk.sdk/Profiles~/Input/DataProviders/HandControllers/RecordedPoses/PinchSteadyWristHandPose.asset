@@ -15,6 +15,14 @@ MonoBehaviour:
   id: pinch-steady-wrist
   description: Index finger and Thumb touching, wrist does not move.
   isDefault: 0
-  isSelectionPose: 0
   keyCode: 51
   data: {fileID: 4900000, guid: 8eaebf41206ee3546aed07b9a58f6a40, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 1
+  - 0.7133551
+  - 0.9268092
+  - 1
+  - 1
+  gripStrength: 0.9429617

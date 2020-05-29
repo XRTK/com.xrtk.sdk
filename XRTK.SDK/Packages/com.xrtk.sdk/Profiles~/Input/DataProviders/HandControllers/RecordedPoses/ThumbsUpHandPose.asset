@@ -15,6 +15,14 @@ MonoBehaviour:
   id: thumbs-up
   description: OK sign.
   isDefault: 0
-  isSelectionPose: 0
   keyCode: 52
   data: {fileID: 4900000, guid: f8236cb3fbe55ed499df0418bb28c0cd, type: 3}
+  didBake: 1
+  isGripping: 1
+  fingerCurlStrengths:
+  - 0.31353787
+  - 1
+  - 0.94159126
+  - 0.95732826
+  - 0.97244227
+  gripStrength: 0.9714226

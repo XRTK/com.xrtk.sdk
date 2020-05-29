@@ -15,6 +15,14 @@ MonoBehaviour:
   id: poke
   description: Index finger stretched out.
   isDefault: 0
-  isSelectionPose: 0
   keyCode: 324
   data: {fileID: 4900000, guid: 5f148c90347c0dc47bbfd1ed7a2d4334, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 1
+  - 0.12710708
+  - 0.6714742
+  - 0.9232829
+  - 0.9189967
+  gripStrength: 0.6932526

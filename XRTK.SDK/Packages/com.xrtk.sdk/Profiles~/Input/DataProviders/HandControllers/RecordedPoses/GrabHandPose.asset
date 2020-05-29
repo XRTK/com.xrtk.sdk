@@ -15,6 +15,14 @@ MonoBehaviour:
   id: grab
   description: Grab with whole hand, fist shape.
   isDefault: 0
-  isSelectionPose: 0
   keyCode: 50
   data: {fileID: 4900000, guid: 99870b188ec58c949b89786e62a77394, type: 3}
+  didBake: 1
+  isGripping: 1
+  fingerCurlStrengths:
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  gripStrength: 1

@@ -15,6 +15,14 @@ MonoBehaviour:
   id: pinch
   description: Index finger and Thumb touching, index tip does not move.
   isDefault: 0
-  isSelectionPose: 0
   keyCode: 323
   data: {fileID: 4900000, guid: c39432faae5de8245a47d3fb3d0a6a3d, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 1
+  - 0.6731408
+  - 0.9723644
+  - 1
+  - 1
+  gripStrength: 0.96465635

@@ -15,6 +15,14 @@ MonoBehaviour:
   id: open
   description: Relaxed hand pose.
   isDefault: 1
-  isSelectionPose: 0
   keyCode: 0
   data: {fileID: 4900000, guid: f5a9db29d9d2bd741b793a18dac228d6, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 0.66477686
+  - 0.090871215
+  - 0.8710865
+  - 1
+  - 1
+  gripStrength: 0.8003202
