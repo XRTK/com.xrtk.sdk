@@ -4,8 +4,10 @@
 using UnityEditor;
 using UnityEngine;
 using XRTK.Editor.Extensions;
+using XRTK.Extensions;
 using XRTK.SDK.Editor.Input.Handlers;
 using XRTK.SDK.UX.Pointers;
+using InteractionMode = XRTK.Definitions.InteractionMode;
 
 namespace XRTK.SDK.Editor.UX.Pointers
 {
@@ -24,6 +26,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
         private SerializedProperty pointerOrientation;
         private SerializedProperty requiresHoldAction;
         private SerializedProperty enablePointerOnStart;
+        private SerializedProperty interactionMode;
         private SerializedProperty nearInteractionCollider;
 
         protected bool DrawBasePointerActions = true;
@@ -42,6 +45,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
             pointerOrientation = serializedObject.FindProperty(nameof(pointerOrientation));
             requiresHoldAction = serializedObject.FindProperty(nameof(requiresHoldAction));
             enablePointerOnStart = serializedObject.FindProperty(nameof(enablePointerOnStart));
+            interactionMode = serializedObject.FindProperty(nameof(interactionMode));
             nearInteractionCollider = serializedObject.FindProperty(nameof(nearInteractionCollider));
 
             DrawHandednessProperty = false;
@@ -61,9 +65,21 @@ namespace XRTK.SDK.Editor.UX.Pointers
                 EditorGUILayout.PropertyField(disableCursorOnStart);
                 EditorGUILayout.PropertyField(setCursorVisibilityOnSourceDetected);
                 EditorGUILayout.PropertyField(enablePointerOnStart);
-                EditorGUILayout.PropertyField(raycastOrigin);
-                EditorGUILayout.PropertyField(nearInteractionCollider);
-                EditorGUILayout.PropertyField(defaultPointerExtent);
+                EditorGUILayout.PropertyField(interactionMode);
+
+                var interactionModeValue = (InteractionMode)interactionMode.intValue;
+
+                if (interactionModeValue.HasFlags(InteractionMode.Near))
+                {
+                    EditorGUILayout.PropertyField(nearInteractionCollider);
+                }
+
+                if (interactionModeValue.HasFlags(InteractionMode.Far))
+                {
+                    EditorGUILayout.PropertyField(raycastOrigin);
+                    EditorGUILayout.PropertyField(defaultPointerExtent);
+                }
+
                 EditorGUILayout.PropertyField(pointerOrientation);
                 EditorGUILayout.PropertyField(pointerAction);
 
