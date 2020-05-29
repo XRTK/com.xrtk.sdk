@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using XRTK.Definitions;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.Providers.Controllers.Hands;
@@ -17,6 +18,9 @@ namespace XRTK.SDK.UX.Pointers
 
         /// <inheritdoc />
         public override bool IsInteractionEnabled => base.IsInteractionEnabled && !handIsPinching;
+
+        /// <inheritdoc />
+        public override InteractionMode InteractionMode => InteractionMode.Near;
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)

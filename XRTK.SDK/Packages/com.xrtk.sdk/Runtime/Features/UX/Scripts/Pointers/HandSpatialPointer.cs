@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using XRTK.Definitions;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
@@ -78,6 +79,9 @@ namespace XRTK.SDK.UX.Pointers
 
             return null;
         }
+
+        /// <inheritdoc />
+        public override InteractionMode InteractionMode => InteractionMode.Far;
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<HandData> eventData)
