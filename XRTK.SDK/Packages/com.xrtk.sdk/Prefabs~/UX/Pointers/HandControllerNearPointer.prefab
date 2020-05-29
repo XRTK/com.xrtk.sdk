@@ -180,6 +180,7 @@ MonoBehaviour:
     axisConstraint: 2
   requiresHoldAction: 0
   enablePointerOnStart: 0
+  interactionMode: 2
   nearInteractionCollider: {fileID: -5168941210383110042}
   overrideGlobalPointerExtent: 0
   defaultPointerExtent: 0.5
