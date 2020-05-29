@@ -20,9 +20,9 @@ MonoBehaviour:
   didBake: 1
   isGripping: 1
   fingerCurlStrengths:
-  - 0.31353787
-  - 1
-  - 0.94159126
-  - 0.95732826
-  - 0.97244227
+  - 0.29784977
+  - 0.85514337
+  - 0.86561483
+  - 0.83954275
+  - 0.8154361
   gripStrength: 0.9714226

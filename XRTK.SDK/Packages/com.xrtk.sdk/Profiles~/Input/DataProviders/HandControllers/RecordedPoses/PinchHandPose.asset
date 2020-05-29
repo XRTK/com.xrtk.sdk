@@ -21,8 +21,8 @@ MonoBehaviour:
   isGripping: 0
   fingerCurlStrengths:
   - 1
-  - 0.6731408
-  - 0.9723644
-  - 1
+  - 0.65910643
+  - 0.9230474
+  - 0.98393315
   - 1
   gripStrength: 0.96465635
