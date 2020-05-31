@@ -105,15 +105,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             if (cursorInstance != null)
             {
-                if (Application.isEditor)
-                {
-                    DestroyImmediate(cursorInstance);
-                }
-                else
-                {
-                    Destroy(cursorInstance);
-                }
-
+                cursorInstance.Destroy();
                 cursorInstance = newCursor;
             }
 

@@ -7,6 +7,7 @@ using XRTK.Definitions.Devices;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
+using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Providers.Controllers;
 
@@ -20,8 +21,24 @@ namespace XRTK.SDK.Input.Handlers
     {
         #region IMixedRealityControllerPoseSynchronizer Implementation
 
+        private Transform poseDriver = null;
+
         /// <inheritdoc />
-        public Transform PoseDriver { get; set; }
+        public Transform PoseDriver
+        {
+            get
+            {
+                try
+                {
+                    return poseDriver;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            set => poseDriver = value;
+        }
 
         [SerializeField]
         [Tooltip("The handedness this controller should synchronize with.")]
@@ -114,14 +131,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (destroyOnSourceLost)
                 {
-                    if (Application.isEditor && !Application.isPlaying)
-                    {
-                        DestroyImmediate(gameObject);
-                    }
-                    else
-                    {
-                        Destroy(gameObject);
-                    }
+                    gameObject.Destroy();
                 }
             }
         }
@@ -150,7 +160,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
-                if (PoseDriver != null &&
+                if (!PoseDriver.IsNull() &&
                     UseSourcePoseData &&
                     TrackingState == TrackingState.Tracked)
                 {
