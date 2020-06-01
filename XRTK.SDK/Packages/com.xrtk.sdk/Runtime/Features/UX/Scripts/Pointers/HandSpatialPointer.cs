@@ -33,9 +33,10 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override bool IsInteractionEnabled =>
             base.IsInteractionEnabled &&
-            IsNearPointerIdle &&
+            (IsNearPointerIdle &&
             HandController != null &&
-            HandController.IsPointing;
+            HandController.IsPointing) ||
+            (IsSelectPressed && Result.CurrentPointerTarget != null);
 
         /// <summary>
         /// Gets the near pointer attached to the hand.
