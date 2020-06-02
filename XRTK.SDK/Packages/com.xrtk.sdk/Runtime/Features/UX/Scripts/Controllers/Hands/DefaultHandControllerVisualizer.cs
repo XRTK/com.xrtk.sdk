@@ -1,7 +1,6 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -45,7 +44,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 {
                     return gameObject;
                 }
-                catch (Exception)
+                catch
                 {
                     return null;
                 }
@@ -80,14 +79,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             // physics game object as well when destroying the hand visualizer.
             if (PhysicsCompanionGameObject != null)
             {
-                if (Application.isEditor)
-                {
-                    DestroyImmediate(PhysicsCompanionGameObject);
-                }
-                else
-                {
-                    Destroy(PhysicsCompanionGameObject);
-                }
+                PhysicsCompanionGameObject.Destroy();
             }
 
             base.OnDestroy();
