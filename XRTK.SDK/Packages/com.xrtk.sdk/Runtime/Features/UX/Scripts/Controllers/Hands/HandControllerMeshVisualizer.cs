@@ -61,7 +61,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 }
 
                 //meshFilter.transform.position = handMeshData.Position;
-                meshFilter.transform.rotation = handMeshData.Rotation;
+                meshFilter.transform.rotation = handData.RootPose.Rotation;
             }
         }
     }
