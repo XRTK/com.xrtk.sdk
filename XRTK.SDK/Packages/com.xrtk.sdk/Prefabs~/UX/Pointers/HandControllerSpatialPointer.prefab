@@ -375,21 +375,21 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0.029799275}
-  - {x: 0, y: 0, z: 0.09381431}
-  - {x: 0, y: 0, z: 0.15785313}
-  - {x: 0, y: 0, z: 0.22193189}
-  - {x: 0, y: 0, z: 0.2860669}
-  - {x: 0, y: 0, z: 0.35027426}
-  - {x: 0, y: 0, z: 0.41457027}
-  - {x: 0, y: 0, z: 0.47897112}
-  - {x: 0, y: 0, z: 0.54349303}
-  - {x: 0, y: 0, z: 0.6081523}
-  - {x: 0, y: 0, z: 0.67296493}
-  - {x: 0, y: 0, z: 0.7379472}
-  - {x: 0, y: 0, z: 0.8031155}
-  - {x: 0, y: 0, z: 0.86848587}
-  - {x: 0, y: 0, z: 0.93407464}
+  - {x: 0, y: 0, z: 0.15348725}
+  - {x: 0, y: 0, z: 0.2093078}
+  - {x: 0, y: 0, z: 0.26516858}
+  - {x: 0, y: 0, z: 0.32108033}
+  - {x: 0, y: 0, z: 0.37705365}
+  - {x: 0, y: 0, z: 0.43309948}
+  - {x: 0, y: 0, z: 0.48922837}
+  - {x: 0, y: 0, z: 0.54545105}
+  - {x: 0, y: 0, z: 0.60177845}
+  - {x: 0, y: 0, z: 0.65822107}
+  - {x: 0, y: 0, z: 0.7147896}
+  - {x: 0, y: 0, z: 0.7714949}
+  - {x: 0, y: 0, z: 0.8283477}
+  - {x: 0, y: 0, z: 0.8853587}
+  - {x: 0, y: 0, z: 0.9425385}
   - {x: 0, y: 0, z: 0.999898}
   m_Parameters:
     serializedVersion: 3
@@ -633,6 +633,26 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 5533073c4b0c4bec9fbb2b19f3f8e814, type: 2}
+    - target: {fileID: -1504981713932161579, guid: 020718e6e118ec3489dbc21ec763a517,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 020718e6e118ec3489dbc21ec763a517,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 020718e6e118ec3489dbc21ec763a517,
+        type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 020718e6e118ec3489dbc21ec763a517,
+        type: 3}
+      propertyPath: m_ReflectionProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 020718e6e118ec3489dbc21ec763a517, type: 3}
 --- !u!4 &6392329022490078173 stripped
