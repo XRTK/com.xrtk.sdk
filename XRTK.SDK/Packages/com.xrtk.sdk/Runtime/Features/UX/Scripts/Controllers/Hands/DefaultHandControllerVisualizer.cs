@@ -111,7 +111,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 UpdateHandColliders();
 
                 // Update visualizers depending on the current mode.
-                UpdateRendering(handData);
+                UpdateRendering();
             }
         }
 
@@ -368,15 +368,16 @@ namespace XRTK.SDK.UX.Controllers.Hands
             return jointTransform;
         }
 
-        private void UpdateRendering(HandData handData)
+        private void UpdateRendering()
         {
             var renderingMode = HandControllerDataProvider.RenderingMode;
             if (renderingMode != HandRenderingMode.None)
             {
-                // Fallback to joints rendering if the platform did not provide
-                // any mesh data.
+                var handController = (IMixedRealityHandController)Controller;
+
+                // Fallback to joints rendering if mesh data is not available.
                 if (renderingMode == HandRenderingMode.Mesh &&
-                    handData.Mesh.Empty)
+                    !handController.TryGetHandMeshData(out var handMeshData))
                 {
                     renderingMode = HandRenderingMode.Joints;
                 }
@@ -409,7 +410,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                     }
 
                     meshVisualizer.gameObject.SetActive(true);
-                    meshVisualizer.UpdateVisualization(handData);
+                    meshVisualizer.UpdateVisualization(handMeshData);
                 }
             }
             else

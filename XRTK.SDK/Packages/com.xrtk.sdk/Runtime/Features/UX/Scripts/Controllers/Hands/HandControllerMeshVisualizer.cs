@@ -14,13 +14,12 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private MeshFilter meshFilter = null;
 
         /// <summary>
-        /// Updates the mesh visuailzation using latest hand data.
+        /// Updates the mesh visuailzation using latest hand mesh data.
         /// </summary>
-        /// <param name="handData">New hand data.</param>
-        public void UpdateVisualization(HandData handData)
+        /// <param name="handMeshData">New hand mesh data.</param>
+        public void UpdateVisualization(HandMeshData handMeshData)
         {
-            var handMeshData = handData.Mesh;
-            if (handMeshData.Empty)
+            if (handMeshData.IsEmpty)
             {
                 return;
             }
@@ -61,7 +60,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 }
 
                 //meshFilter.transform.position = handMeshData.Position;
-                meshFilter.transform.rotation = handData.RootPose.Rotation;
+                //meshFilter.transform.rotation = handData.RootPose.Rotation;
             }
         }
     }
