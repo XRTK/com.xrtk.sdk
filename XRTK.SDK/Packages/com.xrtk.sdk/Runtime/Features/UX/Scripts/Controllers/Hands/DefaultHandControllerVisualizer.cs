@@ -98,18 +98,21 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 ? Definitions.Devices.TrackingState.Tracked
                 : Definitions.Devices.TrackingState.NotTracked;
 
-            // It's important to update physics
-            // configuration before updating joints.
-            UpdatePhysicsConfiguration();
+            if (TrackingState == Definitions.Devices.TrackingState.Tracked)
+            {
+                // It's important to update physics
+                // configuration before updating joints.
+                UpdatePhysicsConfiguration();
 
-            var handData = eventData.InputData;
-            UpdateHandJointTransforms(handData);
+                var handData = eventData.InputData;
+                UpdateHandJointTransforms(handData);
 
-            // With joints updated, we can update colliders.
-            UpdateHandColliders();
+                // With joints updated, we can update colliders.
+                UpdateHandColliders();
 
-            // Update visualizers depending on the current mode.
-            UpdateRendering(handData);
+                // Update visualizers depending on the current mode.
+                UpdateRendering(handData);
+            }
         }
 
         private void UpdateHandJointTransforms(HandData handData)
