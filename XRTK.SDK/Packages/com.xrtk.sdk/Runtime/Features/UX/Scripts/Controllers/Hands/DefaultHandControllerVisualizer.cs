@@ -117,12 +117,11 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
         private void UpdateHandJointTransforms(HandData handData)
         {
-            var jointPoses = handData.Joints.ToJointPoseDictionary();
-
-            foreach (var handJoint in jointPoses.Keys)
+            for (int i = 0; i < HandData.JointCount; i++)
             {
+                var handJoint = (TrackedHandJoint)i;
                 var jointTransform = GetOrCreateJointTransform(handJoint);
-                var jointPose = jointPoses[handJoint];
+                var jointPose = handData.Joints[i];
                 jointTransform.localPosition = jointPose.Position;
                 jointTransform.localRotation = jointPose.Rotation;
             }
