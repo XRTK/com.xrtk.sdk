@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using XRTK.Definitions.Controllers.Hands;
+using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem.Handlers;
@@ -86,44 +87,45 @@ namespace XRTK.SDK.UX.Controllers.Hands
         }
 
         /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<HandData> eventData)
+        public override void OnInputChanged(InputEventData<MixedRealityPose> eventData)
         {
+            base.OnInputChanged(eventData);
+
             if (eventData.Handedness != Controller.ControllerHandedness)
             {
                 return;
             }
 
+            var handController = (IMixedRealityHandController)Controller;
+
             // Update the visualizers tracking state.
-            TrackingState = eventData.InputData.IsTracked
-                ? Definitions.Devices.TrackingState.Tracked
-                : Definitions.Devices.TrackingState.NotTracked;
+            TrackingState = handController.TrackingState;
 
             if (TrackingState == Definitions.Devices.TrackingState.Tracked)
             {
                 // It's important to update physics
-                // configuration before updating joints.
+                // configuration first.
                 UpdatePhysicsConfiguration();
 
-                var handData = eventData.InputData;
-                UpdateHandJointTransforms(handData);
-
-                // With joints updated, we can update colliders.
+                UpdateHandJointTransforms();
                 UpdateHandColliders();
-
-                // Update visualizers depending on the current mode.
                 UpdateRendering();
             }
         }
 
-        private void UpdateHandJointTransforms(HandData handData)
+        private void UpdateHandJointTransforms()
         {
+            var handController = (IMixedRealityHandController)Controller;
+
             for (int i = 0; i < HandData.JointCount; i++)
             {
                 var handJoint = (TrackedHandJoint)i;
-                var jointTransform = GetOrCreateJointTransform(handJoint);
-                var jointPose = handData.Joints[i];
-                jointTransform.localPosition = jointPose.Position;
-                jointTransform.localRotation = jointPose.Rotation;
+                if (handController.TryGetJointPose(handJoint, out var jointPose))
+                {
+                    var jointTransform = GetOrCreateJointTransform(handJoint);
+                    jointTransform.localPosition = jointPose.Position;
+                    jointTransform.localRotation = jointPose.Rotation;
+                }
             }
         }
 

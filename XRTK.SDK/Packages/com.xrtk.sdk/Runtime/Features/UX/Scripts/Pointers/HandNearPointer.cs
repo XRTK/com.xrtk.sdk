@@ -3,7 +3,7 @@
 
 using UnityEngine;
 using XRTK.Definitions;
-using XRTK.Definitions.Controllers.Hands;
+using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.Providers.Controllers.Hands;
 
@@ -23,7 +23,7 @@ namespace XRTK.SDK.UX.Pointers
         public override InteractionMode InteractionMode => InteractionMode.Near;
 
         /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<HandData> eventData)
+        public override void OnInputChanged(InputEventData<MixedRealityPose> eventData)
         {
             base.OnInputChanged(eventData);
 
