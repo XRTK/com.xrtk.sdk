@@ -140,16 +140,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 if (PhysicsCompanionGameObject != null)
                 {
                     PhysicsCompanionGameObject.SetActive(true);
+                    PhysicsCompanionGameObject.transform.localPosition = GameObject.transform.localPosition;
+                    PhysicsCompanionGameObject.transform.localRotation = GameObject.transform.localRotation;
                     return;
                 }
 
                 PhysicsCompanionGameObject = new GameObject($"{GameObject.name}_Physics");
-                PhysicsCompanionGameObject.transform.parent = GameObject.transform.parent;
-                var parentConstraint = PhysicsCompanionGameObject.AddComponent<ParentConstraint>();
-                parentConstraint.AddSource(new ConstraintSource
-                {
-                    sourceTransform = GameObject.transform
-                });
+                PhysicsCompanionGameObject.transform.SetParent(GameObject.transform.parent, false);
+                PhysicsCompanionGameObject.transform.localPosition = GameObject.transform.localPosition;
+                PhysicsCompanionGameObject.transform.localRotation = GameObject.transform.localRotation;
 
                 // Setup the kinematic rigidbody on the actual controller game object.
                 Rigidbody controllerRigidbody = GameObject.GetOrAddComponent<Rigidbody>();
@@ -363,7 +362,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                 return existingJointTransform;
             }
 
-            Transform jointTransform = new GameObject($"{handJoint}ProxyTransform").transform;
+            Transform jointTransform = new GameObject($"{handJoint}").transform;
             jointTransform.parent = HandVisualizationGameObject.transform;
             jointTransforms.Add(handJoint, jointTransform.transform);
 
