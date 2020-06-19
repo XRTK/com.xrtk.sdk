@@ -19,12 +19,12 @@ MonoBehaviour:
     type: 2}
   useCustomInteractions: 0
   interactionMappingProfiles:
-  - {fileID: 11400000, guid: b7f65e3d3581e3d46ba01ecb4fedd827, type: 2}
+  - {fileID: 11400000, guid: e47d35b7a8a79774c8f8386e9350cb41, type: 2}
   - {fileID: 11400000, guid: 1fd0c5cd50876514bb0027af902ed920, type: 2}
   - {fileID: 11400000, guid: 118d8e619c1393b49bbf1d387651668c, type: 2}
-  - {fileID: 11400000, guid: 8e01cb476d731534093fe5edd227c54c, type: 2}
-  - {fileID: 11400000, guid: b24f94bd93cab98498809436cb5b685f, type: 2}
-  - {fileID: 11400000, guid: 80556dee026997f4ba146ffda4710f79, type: 2}
+  - {fileID: 11400000, guid: ff17201622b23b64f8065fd2e8a79b5a, type: 2}
+  - {fileID: 11400000, guid: ff17201622b23b64f8065fd2e8a79b5a, type: 2}
+  - {fileID: 11400000, guid: 5e2b50bb0283a7a46aa1cb475066855f, type: 2}
   - {fileID: 11400000, guid: 65fe769960045eb4284e122669355d0f, type: 2}
   - {fileID: 11400000, guid: 7a31aa9670c8b0046ab22a9a8c86aabd, type: 2}
   - {fileID: 11400000, guid: 3265960ea5cd94f499bf02eb746a79af, type: 2}
