@@ -3,8 +3,8 @@
 
 using UnityEngine;
 using XRTK.Definitions;
-using XRTK.Definitions.Utilities;
-using XRTK.EventDatum.Input;
+using XRTK.Definitions.Physics;
+using XRTK.Extensions;
 using XRTK.Interfaces.Providers.Controllers.Hands;
 
 namespace XRTK.SDK.UX.Pointers
@@ -12,29 +12,46 @@ namespace XRTK.SDK.UX.Pointers
     /// <summary>
     /// Hand controller near interaction pointer.
     /// </summary>
-    public class HandNearPointer : LinePointer
+    public class HandNearPointer : BaseControllerPointer
     {
-        private bool handIsPinching;
+        private IMixedRealityHandController handController;
 
         /// <inheritdoc />
-        public override bool IsInteractionEnabled => base.IsInteractionEnabled && !handIsPinching;
+        public override bool IsInteractionEnabled => base.IsInteractionEnabled && !HandController.IsPinching;
 
         /// <inheritdoc />
         public override InteractionMode InteractionMode => InteractionMode.Near;
 
-        /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<MixedRealityPose> eventData)
-        {
-            base.OnInputChanged(eventData);
+        /// <summary>
+        /// Casted reference to the hand controller driving the pointer.
+        /// </summary>
+        private IMixedRealityHandController HandController => handController ?? (handController = InitializeHandControllerReference());
 
+        private IMixedRealityHandController InitializeHandControllerReference()
+        {
             // This pointer type must only be used with hand controllers.
-            if (!(Controller is IMixedRealityHandController handController))
+            if (!(Controller is IMixedRealityHandController controller))
             {
                 Debug.LogError($"{nameof(HandNearPointer)} is only for use with {nameof(IMixedRealityHandController)} controllers!", this);
-                return;
+                return null;
             }
 
-            handIsPinching = handController.IsPinching;
+            return controller;
+        }
+
+        /// <inheritdoc />
+        public override void OnPreRaycast()
+        {
+            if (Rays == null || Rays.Length > 1)
+            {
+                Rays = new RayStep[1];
+            }
+
+            var origin = TryGetPointerPosition(out var pointerPosition) ? pointerPosition : Vector3.zero;
+            var terminus = CapturedNearInteractionObject.IsNull() ? origin + Vector3.forward : origin + CapturedNearInteractionObject.transform.forward;
+
+            Rays[0] = new RayStep();
+            Rays[0].UpdateRayStep(ref origin, ref terminus);
         }
     }
 }
