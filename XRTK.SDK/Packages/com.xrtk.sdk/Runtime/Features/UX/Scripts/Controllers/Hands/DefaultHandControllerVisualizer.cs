@@ -21,8 +21,8 @@ namespace XRTK.SDK.UX.Controllers.Hands
     public class DefaultHandControllerVisualizer : ControllerPoseSynchronizer, IMixedRealityControllerVisualizer
     {
         private readonly Dictionary<TrackedHandJoint, Transform> jointTransforms = new Dictionary<TrackedHandJoint, Transform>();
+        private readonly Dictionary<TrackedHandJoint, CapsuleCollider> fingerBoundsModeColliders = new Dictionary<TrackedHandJoint, CapsuleCollider>();
         private BoxCollider handBoundsModeCollider;
-        private Dictionary<TrackedHandJoint, CapsuleCollider> fingerBoundsModeColliders = new Dictionary<TrackedHandJoint, CapsuleCollider>();
         private const float fingerColliderRadius = .007f;
         private const int capsuleColliderZAxis = 2;
         HandControllerJointsVisualizer jointsVisualizer;
