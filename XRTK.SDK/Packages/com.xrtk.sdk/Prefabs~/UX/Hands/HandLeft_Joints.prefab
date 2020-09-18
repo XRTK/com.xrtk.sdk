@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71894c53357d52a44b03004f02e70846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wristPrefab: {fileID: 1370450866519632, guid: 7644fc8494afb074f9d76648ac4da6f7,
+  wristPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
     type: 3}
   jointPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
     type: 3}
