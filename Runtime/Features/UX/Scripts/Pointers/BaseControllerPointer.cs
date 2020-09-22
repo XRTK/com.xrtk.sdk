@@ -89,7 +89,11 @@ namespace XRTK.SDK.UX.Pointers
 
         private bool lateRegisterTeleport = true;
 
-        private GameObject capturedNearInteractionObject = null;
+        /// <summary>
+        /// Gets the currently captured near interaction object. Only applicable
+        /// if <see cref="InteractionMode.Both"/> or <see cref="InteractionMode.Near"/>.
+        /// </summary>
+        protected GameObject CapturedNearInteractionObject { get; private set; } = null;
 
         /// <summary>
         /// The forward direction of the targeting ray
@@ -184,7 +188,14 @@ namespace XRTK.SDK.UX.Pointers
                 nearInteractionCollider != null &&
                 other.IsValidCollision(PointerRaycastLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks))
             {
-                capturedNearInteractionObject = other.gameObject;
+                CapturedNearInteractionObject = other.gameObject;
+
+                // Force update the focus provider so the focused target
+                // gets updated before raising the event. If we don't update
+                // the focus provider here, the event will not be raised on the
+                // capture near interaction object.
+                MixedRealityToolkit.InputSystem.FocusProvider.Update();
+
                 MixedRealityToolkit.InputSystem.RaiseOnInputDown(InputSourceParent, Handedness, pointerAction);
             }
         }
@@ -193,8 +204,14 @@ namespace XRTK.SDK.UX.Pointers
         {
             if (InteractionMode.HasFlags(InteractionMode.Near) &&
                 nearInteractionCollider != null &&
-                capturedNearInteractionObject == other.gameObject)
+                CapturedNearInteractionObject == other.gameObject)
             {
+                // Force update the focus provider so the focused target
+                // gets updated before raising the event. If we don't update
+                // the focus provider here, the event will not be raised on the
+                // capture near interaction object.
+                MixedRealityToolkit.InputSystem.FocusProvider.Update();
+
                 MixedRealityToolkit.InputSystem.RaiseOnInputPressed(InputSourceParent, Handedness, pointerAction);
             }
         }
@@ -203,10 +220,16 @@ namespace XRTK.SDK.UX.Pointers
         {
             if (InteractionMode.HasFlags(InteractionMode.Near) &&
                 nearInteractionCollider != null &&
-                capturedNearInteractionObject == other.gameObject)
+                CapturedNearInteractionObject == other.gameObject)
             {
-                capturedNearInteractionObject = null;
+                // Force update the focus provider so the focused target
+                // gets updated before raising the event. If we don't update
+                // the focus provider here, the event will not be raised on the
+                // capture near interaction object.
+                MixedRealityToolkit.InputSystem.FocusProvider.Update();
+
                 MixedRealityToolkit.InputSystem.RaiseOnInputUp(InputSourceParent, Handedness, pointerAction);
+                CapturedNearInteractionObject = null;
             }
         }
 
