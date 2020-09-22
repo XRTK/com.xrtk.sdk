@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
-using XRTK.Definitions.Controllers.Hands;
 using XRTK.Definitions.Devices;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Utilities;
@@ -182,9 +181,6 @@ namespace XRTK.SDK.Input.Handlers
 
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<float> eventData) { }
-
-        /// <inheritdoc />
-        public virtual void OnInputChanged(InputEventData<HandData> eventData) { }
 
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<Vector2> eventData) { }

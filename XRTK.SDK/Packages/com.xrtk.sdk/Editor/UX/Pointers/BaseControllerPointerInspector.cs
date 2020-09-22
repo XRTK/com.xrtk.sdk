@@ -11,7 +11,7 @@ using InteractionMode = XRTK.Definitions.InteractionMode;
 
 namespace XRTK.SDK.Editor.UX.Pointers
 {
-    [CustomEditor(typeof(BaseControllerPointer))]
+    [CustomEditor(typeof(BaseControllerPointer), true, isFallback = true)]
     public class BaseControllerPointerInspector : ControllerPoseSynchronizerInspector
     {
         private readonly GUIContent basePointerFoldoutHeader = new GUIContent("Base Pointer Settings");

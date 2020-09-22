@@ -4,17 +4,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
-using XRTK.EventDatum.Input;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
-    /// <summary>
-    /// Hand controller visualizer visualizing hand joints.
-    /// </summary>
-    [System.Runtime.InteropServices.Guid("0B653537-D237-4622-ACC6-E351209A5882")]
-    public class HandControllerJointsVisualizer : BaseHandControllerVisualizer
+    public class HandControllerJointsVisualizer : MonoBehaviour
     {
         private readonly Dictionary<TrackedHandJoint, GameObject> jointVisualizations = new Dictionary<TrackedHandJoint, GameObject>();
+        private DefaultHandControllerVisualizer mainVisualizer;
+
+        [SerializeField]
+        [Tooltip("The wrist prefab to use.")]
+        private GameObject wristPrefab = null;
 
         [SerializeField]
         [Tooltip("The joint prefab to use.")]
@@ -32,26 +32,42 @@ namespace XRTK.SDK.UX.Controllers.Hands
         [Tooltip("Material tint color for index fingertip.")]
         private Color indexFingertipColor = Color.cyan;
 
-        /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<HandData> eventData)
+        private void OnEnable()
         {
-            base.OnInputChanged(eventData);
-
-            if (eventData.Handedness != Controller.ControllerHandedness)
+            foreach (var jointVisualization in jointVisualizations)
             {
-                return;
+                jointVisualization.Value.SetActive(true);
             }
+        }
+
+        private void OnDisable()
+        {
+            foreach (var jointVisualization in jointVisualizations)
+            {
+                jointVisualization.Value.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// Updates the joints visuailzation.
+        /// </summary>
+        /// <param name="mainVisualizer">The managing visuailzer component.</param>
+        public void UpdateVisualization(DefaultHandControllerVisualizer mainVisualizer)
+        {
+            this.mainVisualizer = mainVisualizer;
 
             for (int i = 0; i < HandData.JointCount; i++)
             {
-                CreateJointVisualizerIfNotExists((TrackedHandJoint)i);
+                var joint = (TrackedHandJoint)i;
+                CreateJointVisualizerIfNotExists(joint);
             }
         }
 
         private void CreateJointVisualizerIfNotExists(TrackedHandJoint handJoint)
         {
-            if (jointVisualizations.TryGetValue(handJoint, out _))
+            if (jointVisualizations.TryGetValue(handJoint, out GameObject jointObject))
             {
+                jointObject.SetActive(true);
                 return;
             }
 
@@ -59,12 +75,15 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             switch (handJoint)
             {
+                case TrackedHandJoint.Wrist:
+                    prefab = wristPrefab;
+                    break;
                 case TrackedHandJoint.Palm:
                     prefab = palmPrefab;
                     break;
                 case TrackedHandJoint.IndexTip:
                 case TrackedHandJoint.MiddleTip:
-                case TrackedHandJoint.PinkyTip:
+                case TrackedHandJoint.LittleTip:
                 case TrackedHandJoint.RingTip:
                 case TrackedHandJoint.ThumbTip:
                     prefab = fingertipPrefab;
@@ -73,14 +92,17 @@ namespace XRTK.SDK.UX.Controllers.Hands
 
             if (prefab != null)
             {
-                var jointVisualization = Instantiate(prefab, GetOrCreateJointTransform(handJoint));
+                var jointVisualization = Instantiate(prefab, mainVisualizer.GetOrCreateJointTransform(handJoint));
 
                 if (handJoint == TrackedHandJoint.IndexTip)
                 {
                     var indexJointRenderer = jointVisualization.GetComponent<Renderer>();
-                    var indexMaterial = indexJointRenderer.material;
-                    indexMaterial.color = indexFingertipColor;
-                    indexJointRenderer.material = indexMaterial;
+                    if (indexJointRenderer != null)
+                    {
+                        var indexMaterial = indexJointRenderer.material;
+                        indexMaterial.color = indexFingertipColor;
+                        indexJointRenderer.material = indexMaterial;
+                    }
                 }
 
                 jointVisualizations.Add(handJoint, jointVisualization);
