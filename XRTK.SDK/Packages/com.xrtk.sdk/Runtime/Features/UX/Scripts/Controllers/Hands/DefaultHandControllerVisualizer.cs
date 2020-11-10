@@ -179,7 +179,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
             {
                 var handController = (IMixedRealityHandController)Controller;
 
-                if (HandControllerDataProvider.BoundsMode == HandBoundsMode.Fingers)
+                if (HandControllerDataProvider.BoundsMode == HandBoundsLOD.High)
                 {
                     // Make sure to disable other colliders not needed for the fingers mode.
                     DisableHandBounds();
@@ -284,7 +284,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
                         ConfigureCapsuleCollider(capsuleCollider, pinkyPalmBounds, pinkyMetacarpalGameObject.transform);
                     }
                 }
-                else if (HandControllerDataProvider.BoundsMode == HandBoundsMode.Hand)
+                else if (HandControllerDataProvider.BoundsMode == HandBoundsLOD.Low)
                 {
                     DisableFingerBounds();
 
