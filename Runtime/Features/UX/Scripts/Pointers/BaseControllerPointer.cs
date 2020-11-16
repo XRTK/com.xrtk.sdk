@@ -91,7 +91,7 @@ namespace XRTK.SDK.UX.Pointers
 
         /// <summary>
         /// Gets the currently captured near interaction object. Only applicable
-        /// if <see cref="InteractionMode.Both"/> or <see cref="InteractionMode.Near"/>.
+        /// if <see cref="XRTK.Definitions.InteractionMode.Both"/> or <see cref="XRTK.Definitions.InteractionMode.Near"/>.
         /// </summary>
         protected GameObject CapturedNearInteractionObject { get; private set; } = null;
 
