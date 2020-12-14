@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Animations;
 using XRTK.Definitions.Controllers.Hands;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;

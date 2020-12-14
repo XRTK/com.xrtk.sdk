@@ -10,7 +10,6 @@ using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
 using XRTK.Extensions;
-using XRTK.Extensions.XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Physics;
