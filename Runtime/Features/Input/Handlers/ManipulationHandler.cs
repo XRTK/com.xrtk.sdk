@@ -8,7 +8,6 @@ using XRTK.Definitions.Physics;
 using XRTK.Definitions.SpatialAwarenessSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
-using XRTK.Extensions.XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.SDK.UX;
