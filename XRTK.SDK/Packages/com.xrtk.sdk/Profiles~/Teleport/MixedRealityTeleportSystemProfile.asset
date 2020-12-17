@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: MixedRealityTeleportSystemProfile
   m_EditorClassIdentifier: 
   configurations: []
-  teleportDuration: 0.25
+  teleportHandlerComponent:
+    reference: cb3ee7a8-114e-44d6-9edc-cd55049fefb6
