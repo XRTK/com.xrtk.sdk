@@ -15,6 +15,13 @@ namespace XRTK.SDK.TeleportSystem
     /// </summary>
     public abstract class BaseTeleportHandler : MonoBehaviour, IMixedRealityTeleportComponentHandler
     {
+        private IMixedRealityTeleportSystem teleportSystem;
+
+        /// <summary>
+        /// Gets the active <see cref="IMixedRealityTeleportSystem"/> implementation instance.
+        /// </summary>
+        protected IMixedRealityTeleportSystem TeleportSystem => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetService<IMixedRealityTeleportSystem>());
+
         /// <summary>
         /// This method is called when the behaviour becomes enabled and active.
         /// </summary>
