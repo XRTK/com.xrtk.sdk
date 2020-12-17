@@ -12,15 +12,16 @@ namespace XRTK.SDK.TeleportSystem
     /// This <see cref="IMixedRealityTeleportSystem"/> handler implementation will
     /// perform an instant teleport to the target location.
     /// </summary>
-    [RequireComponent(typeof(Camera))]
     [System.Runtime.InteropServices.Guid("cb3ee7a8-114e-44d6-9edc-cd55049fefb6")]
     public class InstantTeleportHandler : BaseTeleportHandler
     {
         [SerializeField]
+        [Tooltip("Assign the transform with the camera component attached. If not set, the component uses its own transform.")]
         private Transform cameraTransform = null;
 
         [SerializeField]
-        private Transform parentTransform = null;
+        [Tooltip("Assign the transform being teleported to the target location. If not set, the component game object's parent transform is used.")]
+        private Transform teleportTransform = null;
 
         private Vector3 targetPosition;
         private Vector3 targetRotation;
@@ -35,10 +36,10 @@ namespace XRTK.SDK.TeleportSystem
                 cameraTransform = transform;
             }
 
-            if (parentTransform.IsNull())
+            if (teleportTransform.IsNull())
             {
-                parentTransform = cameraTransform.parent;
-                Debug.Assert(parentTransform != null,
+                teleportTransform = cameraTransform.parent;
+                Debug.Assert(teleportTransform != null,
                     $"{nameof(InstantTeleportHandler)} requires that the camera be parented under another object " +
                     $"or a parent transform was assigned in editor.");
             }
@@ -68,10 +69,10 @@ namespace XRTK.SDK.TeleportSystem
             }
 
             var height = targetPosition.y;
-            targetPosition -= cameraTransform.position - parentTransform.position;
+            targetPosition -= cameraTransform.position - teleportTransform.position;
             targetPosition.y = height;
-            parentTransform.position = targetPosition;
-            parentTransform.RotateAround(cameraTransform.position, Vector3.up, targetRotation.y - cameraTransform.eulerAngles.y);
+            teleportTransform.position = targetPosition;
+            teleportTransform.RotateAround(cameraTransform.position, Vector3.up, targetRotation.y - cameraTransform.eulerAngles.y);
 
             TeleportSystem.RaiseTeleportComplete(eventData.Pointer, eventData.HotSpot);
         }
