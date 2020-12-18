@@ -15,6 +15,7 @@ using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Physics;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Interfaces.TeleportSystem;
+using XRTK.Interfaces.TeleportSystem.Handlers;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
 using XRTK.Utilities.Async;

@@ -7,7 +7,7 @@ using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Teleport;
 using XRTK.Interfaces.InputSystem;
-using XRTK.Interfaces.TeleportSystem;
+using XRTK.Interfaces.TeleportSystem.Handlers;
 using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
 using XRTK.Utilities;
