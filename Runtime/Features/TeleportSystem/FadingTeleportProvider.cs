@@ -10,11 +10,11 @@ using XRTK.Interfaces.TeleportSystem;
 namespace XRTK.SDK.TeleportSystem
 {
     /// <summary>
-    /// This <see cref="IMixedRealityTeleportSystem"/> handler implementation will
+    /// This <see cref="IMixedRealityTeleportSystem"/> provider implementation will
     /// fade out the camera when teleporting and fade it back in when done.
     /// </summary>
     [System.Runtime.InteropServices.Guid("0db5b0fd-9ac3-487a-abfd-754963f4e2a3")]
-    public class FadingTeleportHandler : BaseTeleportHandler
+    public class FadingTeleportProvider : BaseTeleportProvider
     {
         [SerializeField]
         [Tooltip("Assign the transform with the camera component attached. If not set, the component uses its own transform.")]
@@ -53,7 +53,7 @@ namespace XRTK.SDK.TeleportSystem
             {
                 teleportTransform = cameraTransform.parent;
                 Debug.Assert(teleportTransform != null,
-                    $"{nameof(InstantTeleportHandler)} requires that the camera be parented under another object " +
+                    $"{nameof(InstantTeleportProvider)} requires that the camera be parented under another object " +
                     $"or a parent transform was assigned in editor.");
             }
 
@@ -164,7 +164,7 @@ namespace XRTK.SDK.TeleportSystem
                 // We use a simple sphere around the camera / head, which
                 // we can fade in/out to simulate the camera fading to black.
                 fadeSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                fadeSphere.name = $"{nameof(FadingTeleportHandler)}_Fade";
+                fadeSphere.name = $"{nameof(FadingTeleportProvider)}_Fade";
                 fadeSphere.transform.SetParent(cameraTransform);
                 fadeSphere.transform.localPosition = Vector3.zero;
                 fadeSphere.transform.localRotation = Quaternion.identity;
@@ -220,7 +220,7 @@ namespace XRTK.SDK.TeleportSystem
                 }
                 else
                 {
-                    Debug.LogError($"{nameof(FadingTeleportHandler)} does not support render pipelines. The handler won't be able to fade in and out.");
+                    Debug.LogError($"{nameof(FadingTeleportProvider)} does not support render pipelines. The handler won't be able to fade in and out.");
                 }
 
                 fadeSphereRenderer.material = blackMaterial;
