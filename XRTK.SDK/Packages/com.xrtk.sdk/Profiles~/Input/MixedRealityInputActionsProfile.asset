@@ -22,10 +22,6 @@ MonoBehaviour:
     description: Menu
     axisConstraint: 2
   - profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 3
-    description: Grip Pose
-    axisConstraint: 7
-  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 4
     description: Pointer Pose
     axisConstraint: 7
@@ -36,10 +32,6 @@ MonoBehaviour:
   - profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 6
     description: Trigger
-    axisConstraint: 3
-  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 7
-    description: Grip Press
     axisConstraint: 3
   - profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 8
@@ -74,6 +66,14 @@ MonoBehaviour:
     description: Index Finger Pose
     axisConstraint: 7
   - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 7
+    description: Grip Strength
+    axisConstraint: 3
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 16
-    description: Grip
+    description: Grip Press
     axisConstraint: 2
+  - profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 3
+    description: Grip Pose
+    axisConstraint: 7
