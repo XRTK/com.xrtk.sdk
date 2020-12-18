@@ -9,11 +9,11 @@ using XRTK.Interfaces.TeleportSystem;
 namespace XRTK.SDK.TeleportSystem
 {
     /// <summary>
-    /// This <see cref="IMixedRealityTeleportSystem"/> handler implementation will
+    /// This <see cref="IMixedRealityTeleportSystem"/> provider implementation will
     /// perform an instant teleport to the target location.
     /// </summary>
     [System.Runtime.InteropServices.Guid("cb3ee7a8-114e-44d6-9edc-cd55049fefb6")]
-    public class InstantTeleportHandler : BaseTeleportHandler
+    public class InstantTeleportProvider : BaseTeleportProvider
     {
         [SerializeField]
         [Tooltip("Assign the transform with the camera component attached. If not set, the component uses its own transform.")]
@@ -40,7 +40,7 @@ namespace XRTK.SDK.TeleportSystem
             {
                 teleportTransform = cameraTransform.parent;
                 Debug.Assert(teleportTransform != null,
-                    $"{nameof(InstantTeleportHandler)} requires that the camera be parented under another object " +
+                    $"{nameof(InstantTeleportProvider)} requires that the camera be parented under another object " +
                     $"or a parent transform was assigned in editor.");
             }
         }
