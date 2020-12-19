@@ -53,7 +53,7 @@ namespace XRTK.SDK.TeleportSystem
             {
                 teleportTransform = cameraTransform.parent;
                 Debug.Assert(teleportTransform != null,
-                    $"{nameof(InstantTeleportProvider)} requires that the camera be parented under another object " +
+                    $"{nameof(FadingTeleportProvider)} requires that the camera be parented under another object " +
                     $"or a parent transform was assigned in editor.");
             }
 
