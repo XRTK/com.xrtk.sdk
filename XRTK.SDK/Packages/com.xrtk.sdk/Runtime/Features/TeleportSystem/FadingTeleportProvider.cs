@@ -53,7 +53,7 @@ namespace XRTK.SDK.TeleportSystem
             {
                 teleportTransform = cameraTransform.parent;
                 Debug.Assert(teleportTransform != null,
-                    $"{nameof(InstantTeleportProvider)} requires that the camera be parented under another object " +
+                    $"{nameof(FadingTeleportProvider)} requires that the camera be parented under another object " +
                     $"or a parent transform was assigned in editor.");
             }
 
@@ -70,9 +70,7 @@ namespace XRTK.SDK.TeleportSystem
                 fadeTime += Time.deltaTime;
                 var t = fadeTime / fadeDuration;
                 var frameColor = Color.Lerp(fadeInColor, fadeOutColor, t);
-                var material = fadeSphereRenderer.material;
-                material.color = frameColor;
-                fadeSphereRenderer.material = material;
+                SetColor(frameColor);
 
                 if (t >= 1f)
                 {
@@ -85,9 +83,7 @@ namespace XRTK.SDK.TeleportSystem
                 fadeTime += Time.deltaTime;
                 var t = fadeTime / fadeDuration;
                 var frameColor = Color.Lerp(fadeOutColor, fadeInColor, t);
-                var material = fadeSphereRenderer.material;
-                material.color = frameColor;
-                fadeSphereRenderer.material = material;
+                SetColor(frameColor);
 
                 if (t >= 1f)
                 {
@@ -194,41 +190,48 @@ namespace XRTK.SDK.TeleportSystem
                 // Configure the mesh renderer to not impact anything else
                 // in the scene.
                 fadeSphereRenderer = fadeSphere.GetComponent<MeshRenderer>();
-                fadeSphereRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                fadeSphereRenderer.shadowCastingMode = ShadowCastingMode.Off;
                 fadeSphereRenderer.receiveShadows = false;
                 fadeSphereRenderer.allowOcclusionWhenDynamic = false;
-                fadeSphereRenderer.lightProbeUsage = UnityEngine.Rendering.LightProbeUsage.Off;
-                fadeSphereRenderer.reflectionProbeUsage = UnityEngine.Rendering.ReflectionProbeUsage.Off;
+                fadeSphereRenderer.lightProbeUsage = LightProbeUsage.Off;
+                fadeSphereRenderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
 
-                // Finally paint the sphere black. We use the default
-                // material created on the sphere to clone its properties
-                // and paint it black with transparency enabled.
-                var blackMaterial = new Material(fadeSphereRenderer.material)
+                // Finally paint the sphere with a transparency enabled material.
+                // We use the default material created on the sphere to clone its properties.
+                var fadeMaterial = new Material(fadeSphereRenderer.material)
                 {
-                    color = fadeOutColor
+                    color = fadeInColor
                 };
 
                 if (GraphicsSettings.renderPipelineAsset.IsNull())
                 {
-                    blackMaterial.SetInt("_SrcBlend", (int)BlendMode.One);
-                    blackMaterial.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
-                    blackMaterial.SetInt("_ZWrite", 0);
-                    blackMaterial.DisableKeyword("_ALPHATEST_ON");
-                    blackMaterial.DisableKeyword("_ALPHABLEND_ON");
-                    blackMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                    blackMaterial.renderQueue = 3000;
+                    // Unity standard shader can be assumed since we created a primitive.
+                    fadeMaterial.SetInt("_SrcBlend", (int)BlendMode.One);
+                    fadeMaterial.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
+                    fadeMaterial.SetInt("_ZWrite", 0);
+                    fadeMaterial.DisableKeyword("_ALPHATEST_ON");
+                    fadeMaterial.DisableKeyword("_ALPHABLEND_ON");
+                    fadeMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                    fadeMaterial.renderQueue = 3000;
                 }
                 else
                 {
                     Debug.LogError($"{nameof(FadingTeleportProvider)} does not support render pipelines. The handler won't be able to fade in and out.");
                 }
 
-                fadeSphereRenderer.material = blackMaterial;
+                fadeSphereRenderer.material = fadeMaterial;
             }
 
             // Initially hide the sphere, we only want it to be active when
             // fading.
             fadeSphere.SetActive(false);
+        }
+
+        private void SetColor(Color color)
+        {
+            var material = fadeSphereRenderer.material;
+            material.color = color;
+            fadeSphereRenderer.material = material;
         }
     }
 }
