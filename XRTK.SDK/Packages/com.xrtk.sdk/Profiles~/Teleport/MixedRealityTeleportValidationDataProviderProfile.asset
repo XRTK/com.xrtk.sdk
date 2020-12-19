@@ -12,3 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3c644db71fa6140991a685a6b3dbb4, type: 3}
   m_Name: MixedRealityTeleportValidationDataProviderProfile
   m_EditorClassIdentifier: 
+  validLayers:
+    serializedVersion: 2
+    m_Bits: 4294967291
+  invalidLayers:
+    serializedVersion: 2
+    m_Bits: 4
+  upDirectionThreshold: 0.2
+  maxDistance: 10
