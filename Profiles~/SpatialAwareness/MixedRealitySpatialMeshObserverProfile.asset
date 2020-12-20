@@ -17,7 +17,7 @@ MonoBehaviour:
   isStationaryObserver: 0
   updateInterval: 0.25
   physicsLayer: 31
-  meshLevelOfDetail: 2000
+  meshLevelOfDetail: 1
   meshTrianglesPerCubicMeter: 0
   meshRecalculateNormals: 1
   meshVisibleMaterial: {fileID: 2100000, guid: 58998db165b741089929938ea4d1b249, type: 2}
