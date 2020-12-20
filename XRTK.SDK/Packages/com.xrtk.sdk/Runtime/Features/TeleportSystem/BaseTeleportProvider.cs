@@ -13,7 +13,7 @@ namespace XRTK.SDK.TeleportSystem
     /// Base implementation for handling <see cref="IMixedRealityTeleportSystem"/> events in a
     /// <see cref="MonoBehaviour"/> component.
     /// </summary>
-    public abstract class BaseTeleportHandler : MonoBehaviour, IMixedRealityTeleportComponentHandler
+    public abstract class BaseTeleportProvider : MonoBehaviour, IMixedRealityTeleportProvider
     {
         private IMixedRealityTeleportSystem teleportSystem;
 
