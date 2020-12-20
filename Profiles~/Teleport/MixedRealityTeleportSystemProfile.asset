@@ -12,5 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38ec5835eefd4204caf43fed844c7775, type: 3}
   m_Name: MixedRealityTeleportSystemProfile
   m_EditorClassIdentifier: 
-  configurations: []
-  teleportMode: 0
+  configurations:
+  - instancedType:
+      reference: 14199fd8-1636-4147-bb08-6475e76ed1cd
+    name: Mixed Reality Teleport Validation Data Provider
+    priority: 0
+    platformEntries:
+      runtimePlatforms:
+      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
+    profile: {fileID: 11400000, guid: f3f7a928ca0f70649a77a0f17e7465ff, type: 2}
+  teleportProvider:
+    reference: 
