@@ -60,6 +60,9 @@ namespace XRTK.SDK.UX.Pointers
             set => lineColorHotSpot = value;
         }
 
+        private bool currentDigitalInputPosition = false;
+        private float currentSingleAxisInputPosition = 0f;
+        private Vector2 currentDualAxisInputPosition = Vector2.zero;
         private bool teleportEnabled = false;
 
         private bool canTeleport = false;
@@ -219,7 +222,10 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public override void OnInputUp(InputEventData eventData) => ProcessDigitalTeleportInput(eventData, false);
+        public override void OnInputUp(InputEventData eventData)
+        {
+            ProcessDigitalTeleportInput(eventData, false);
+        }
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<float> eventData)
@@ -286,8 +292,45 @@ namespace XRTK.SDK.UX.Pointers
                 eventData.Handedness == Handedness &&
                 eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
             {
-                Debug.Log("Digital - " + isPressed);
+                currentDigitalInputPosition = isPressed;
                 eventData.Use();
+            }
+
+            if (currentDigitalInputPosition && !teleportEnabled)
+            {
+                teleportEnabled = true;
+                MixedRealityToolkit.TeleportSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
+                Debug.Log("Raise Teleport Request");
+            }
+            else if (!currentDigitalInputPosition && teleportEnabled)
+            {
+                if (canTeleport)
+                {
+                    canTeleport = false;
+                    teleportEnabled = false;
+
+                    if (TeleportValidationResult == TeleportValidationResult.Valid ||
+                        TeleportValidationResult == TeleportValidationResult.HotSpot)
+                    {
+                        MixedRealityToolkit.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
+                        Debug.Log("Raise Teleport Started");
+                    }
+                }
+
+                if (teleportEnabled)
+                {
+                    canTeleport = false;
+                    teleportEnabled = false;
+                    MixedRealityToolkit.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
+                    Debug.Log("Raise Teleport Canceled");
+                }
+            }
+
+            if (teleportEnabled &&
+                TeleportValidationResult == TeleportValidationResult.Valid ||
+                TeleportValidationResult == TeleportValidationResult.HotSpot)
+            {
+                canTeleport = true;
             }
         }
 
@@ -297,28 +340,35 @@ namespace XRTK.SDK.UX.Pointers
                 eventData.Handedness == Handedness &&
                 eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
             {
-                Debug.Log("Single Axis - " + eventData.InputData);
+                currentSingleAxisInputPosition = eventData.InputData;
                 eventData.Use();
+            }
+
+            if (currentSingleAxisInputPosition > inputThreshold)
+            {
+
+            }
+            else
+            {
+
             }
         }
 
         private void ProcessDualAxisTeleportInput(InputEventData<Vector2> eventData)
         {
-            var currentInputPosition = Vector2.zero;
-
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
                 eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
             {
-                currentInputPosition = eventData.InputData;
+                currentDualAxisInputPosition = eventData.InputData;
                 eventData.Use();
             }
 
-            if (Mathf.Abs(currentInputPosition.y) > inputThreshold ||
-                Mathf.Abs(currentInputPosition.x) > inputThreshold)
+            if (Mathf.Abs(currentDualAxisInputPosition.y) > inputThreshold ||
+                Mathf.Abs(currentDualAxisInputPosition.x) > inputThreshold)
             {
                 // Get the angle of the pointer input
-                float angle = Mathf.Atan2(currentInputPosition.x, currentInputPosition.y) * Mathf.Rad2Deg;
+                float angle = Mathf.Atan2(currentDualAxisInputPosition.x, currentDualAxisInputPosition.y) * Mathf.Rad2Deg;
 
                 // Offset the angle so it's 'forward' facing
                 angle += angleOffset;
