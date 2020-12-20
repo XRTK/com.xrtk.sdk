@@ -20,10 +20,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
         private SerializedProperty rotationAmount;
         private SerializedProperty backStrafeActivationAngle;
         private SerializedProperty strafeAmount;
-        private SerializedProperty upDirectionThreshold;
         private SerializedProperty lineColorHotSpot;
-        private SerializedProperty validLayers;
-        private SerializedProperty invalidLayers;
 
         protected override void OnEnable()
         {
@@ -37,10 +34,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
             rotationAmount = serializedObject.FindProperty(nameof(rotationAmount));
             backStrafeActivationAngle = serializedObject.FindProperty(nameof(backStrafeActivationAngle));
             strafeAmount = serializedObject.FindProperty(nameof(strafeAmount));
-            upDirectionThreshold = serializedObject.FindProperty(nameof(upDirectionThreshold));
             lineColorHotSpot = serializedObject.FindProperty(nameof(lineColorHotSpot));
-            validLayers = serializedObject.FindProperty(nameof(validLayers));
-            invalidLayers = serializedObject.FindProperty(nameof(invalidLayers));
         }
 
         public override void OnInspectorGUI()
@@ -58,10 +52,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
                 EditorGUILayout.PropertyField(rotationAmount);
                 EditorGUILayout.PropertyField(backStrafeActivationAngle);
                 EditorGUILayout.PropertyField(strafeAmount);
-                EditorGUILayout.PropertyField(upDirectionThreshold);
                 EditorGUILayout.PropertyField(lineColorHotSpot);
-                EditorGUILayout.PropertyField(validLayers);
-                EditorGUILayout.PropertyField(invalidLayers);
                 EditorGUI.indentLevel--;
             }
 
