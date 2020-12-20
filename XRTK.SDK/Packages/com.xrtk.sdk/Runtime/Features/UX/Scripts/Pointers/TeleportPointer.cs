@@ -300,7 +300,6 @@ namespace XRTK.SDK.UX.Pointers
             {
                 teleportEnabled = true;
                 MixedRealityToolkit.TeleportSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
-                Debug.Log("Raise Teleport Request");
             }
             else if (!currentDigitalInputPosition && teleportEnabled)
             {
@@ -313,7 +312,6 @@ namespace XRTK.SDK.UX.Pointers
                         TeleportValidationResult == TeleportValidationResult.HotSpot)
                     {
                         MixedRealityToolkit.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
-                        Debug.Log("Raise Teleport Started");
                     }
                 }
 
@@ -322,7 +320,6 @@ namespace XRTK.SDK.UX.Pointers
                     canTeleport = false;
                     teleportEnabled = false;
                     MixedRealityToolkit.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
-                    Debug.Log("Raise Teleport Canceled");
                 }
             }
 
