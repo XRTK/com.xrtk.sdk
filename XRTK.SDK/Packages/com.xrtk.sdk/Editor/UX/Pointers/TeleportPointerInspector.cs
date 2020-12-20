@@ -13,7 +13,6 @@ namespace XRTK.SDK.Editor.UX.Pointers
     {
         private readonly GUIContent teleportFoldoutHeader = new GUIContent("Teleport Pointer Settings");
 
-        private SerializedProperty teleportAction;
         private SerializedProperty inputThreshold;
         private SerializedProperty angleOffset;
         private SerializedProperty teleportActivationAngle;
@@ -31,7 +30,6 @@ namespace XRTK.SDK.Editor.UX.Pointers
             DrawBasePointerActions = false;
             base.OnEnable();
 
-            teleportAction = serializedObject.FindProperty(nameof(teleportAction));
             inputThreshold = serializedObject.FindProperty(nameof(inputThreshold));
             angleOffset = serializedObject.FindProperty(nameof(angleOffset));
             teleportActivationAngle = serializedObject.FindProperty(nameof(teleportActivationAngle));
@@ -50,7 +48,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
             base.OnInspectorGUI();
             serializedObject.Update();
 
-            if (teleportAction.FoldoutWithBoldLabelPropertyField(teleportFoldoutHeader))
+            if (inputThreshold.FoldoutWithBoldLabelPropertyField(teleportFoldoutHeader))
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(inputThreshold);

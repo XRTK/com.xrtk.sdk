@@ -4,7 +4,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
-using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
@@ -17,9 +16,6 @@ namespace XRTK.SDK.UX.Pointers
 {
     public class TeleportPointer : LinePointer
     {
-        [SerializeField]
-        private MixedRealityInputAction teleportAction = MixedRealityInputAction.None;
-
         [SerializeField]
         [Range(0f, 1f)]
         [Tooltip("The threshold amount for joystick input (Dead Zone)")]
@@ -63,8 +59,6 @@ namespace XRTK.SDK.UX.Pointers
             get => lineColorHotSpot;
             set => lineColorHotSpot = value;
         }
-
-        private Vector2 currentInputPosition = Vector2.zero;
 
         private bool teleportEnabled = false;
 
@@ -218,9 +212,11 @@ namespace XRTK.SDK.UX.Pointers
             // Don't process input if we've got an active teleport request in progress.
             if (IsTeleportRequestActive || !IsTeleportSystemEnabled) { return; }
 
+            var currentInputPosition = Vector2.zero;
+
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == teleportAction)
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
             {
                 currentInputPosition = eventData.InputData;
             }
