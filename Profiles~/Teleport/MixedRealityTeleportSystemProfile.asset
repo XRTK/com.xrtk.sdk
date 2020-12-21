@@ -23,3 +23,8 @@ MonoBehaviour:
     profile: {fileID: 11400000, guid: f3f7a928ca0f70649a77a0f17e7465ff, type: 2}
   teleportProvider:
     reference: 
+  teleportAction:
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 5
+    description: Teleport Direction
+    axisConstraint: 4

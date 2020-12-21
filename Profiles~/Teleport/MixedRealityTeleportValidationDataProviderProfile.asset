@@ -20,3 +20,4 @@ MonoBehaviour:
     m_Bits: 4
   upDirectionThreshold: 0.2
   maxDistance: 10
+  maxHeightDistance: 10
