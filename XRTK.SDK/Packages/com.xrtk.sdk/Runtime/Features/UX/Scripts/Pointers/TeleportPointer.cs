@@ -217,13 +217,25 @@ namespace XRTK.SDK.UX.Pointers
                 return;
             }
 
-            ProcessDigitalTeleportInput(eventData, true);
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                eventData.Handedness == Handedness &&
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+            {
+                eventData.Use();
+                ProcessDigitalTeleportInput(true);
+            }
         }
 
         /// <inheritdoc />
         public override void OnInputUp(InputEventData eventData)
         {
-            ProcessDigitalTeleportInput(eventData, false);
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                eventData.Handedness == Handedness &&
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+            {
+                eventData.Use();
+                ProcessDigitalTeleportInput(false);
+            }
         }
 
         /// <inheritdoc />
@@ -235,7 +247,13 @@ namespace XRTK.SDK.UX.Pointers
                 return;
             }
 
-            ProcessSingleAxisTeleportInput(eventData);
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                eventData.Handedness == Handedness &&
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+            {
+                eventData.Use();
+                ProcessSingleAxisTeleportInput(eventData);
+            }
         }
 
         /// <inheritdoc />
@@ -247,7 +265,13 @@ namespace XRTK.SDK.UX.Pointers
                 return;
             }
 
-            ProcessDualAxisTeleportInput(eventData);
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                eventData.Handedness == Handedness &&
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+            {
+                eventData.Use();
+                ProcessDualAxisTeleportInput(eventData);
+            }
         }
 
         #endregion IMixedRealityInputHandler Implementation
@@ -285,15 +309,9 @@ namespace XRTK.SDK.UX.Pointers
 
         #endregion IMixedRealityTeleportHandler Implementation
 
-        private void ProcessDigitalTeleportInput(InputEventData eventData, bool isPressed)
+        private void ProcessDigitalTeleportInput(bool isPressed)
         {
-            if (eventData.SourceId == InputSourceParent.SourceId &&
-                eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
-            {
-                currentDigitalInputState = isPressed;
-                eventData.Use();
-            }
+            currentDigitalInputState = isPressed;
 
             if (currentDigitalInputState && !teleportEnabled)
             {
@@ -329,26 +347,11 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        private void ProcessSingleAxisTeleportInput(InputEventData<float> eventData)
-        {
-            if (eventData.SourceId == InputSourceParent.SourceId &&
-                eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
-            {
-                ProcessDigitalTeleportInput(eventData, eventData.InputData > inputThreshold);
-                eventData.Use();
-            }
-        }
+        private void ProcessSingleAxisTeleportInput(InputEventData<float> eventData) => ProcessDigitalTeleportInput(eventData.InputData > inputThreshold);
 
         private void ProcessDualAxisTeleportInput(InputEventData<Vector2> eventData)
         {
-            if (eventData.SourceId == InputSourceParent.SourceId &&
-                eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
-            {
-                currentDualAxisInputPosition = eventData.InputData;
-                eventData.Use();
-            }
+            currentDualAxisInputPosition = eventData.InputData;
 
             if (Mathf.Abs(currentDualAxisInputPosition.y) > inputThreshold ||
                 Mathf.Abs(currentDualAxisInputPosition.x) > inputThreshold)
