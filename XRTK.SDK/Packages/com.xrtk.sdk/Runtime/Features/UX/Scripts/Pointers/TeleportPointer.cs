@@ -335,7 +335,7 @@ namespace XRTK.SDK.UX.Pointers
                 eventData.Handedness == Handedness &&
                 eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
             {
-                ProcessDigitalTeleportInput(eventData, eventData.InputData >= inputThreshold);
+                ProcessDigitalTeleportInput(eventData, eventData.InputData > inputThreshold);
                 eventData.Use();
             }
         }
@@ -350,8 +350,8 @@ namespace XRTK.SDK.UX.Pointers
                 eventData.Use();
             }
 
-            if (Mathf.Abs(currentDualAxisInputPosition.y) >= inputThreshold ||
-                Mathf.Abs(currentDualAxisInputPosition.x) >= inputThreshold)
+            if (Mathf.Abs(currentDualAxisInputPosition.y) > inputThreshold ||
+                Mathf.Abs(currentDualAxisInputPosition.x) > inputThreshold)
             {
                 // Get the angle of the pointer input
                 float angle = Mathf.Atan2(currentDualAxisInputPosition.x, currentDualAxisInputPosition.y) * Mathf.Rad2Deg;
