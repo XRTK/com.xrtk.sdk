@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d420c170b42dfe0438e2aa2a829775ed, type: 3}
+  m_Name: RightViveWandOpenVRControllerProfile
+  m_EditorClassIdentifier: 
+  controllerType:
+    reference: 506f192f-b93f-43b3-a34f-b15dfd855631
+  handedness: 2
+  visualizationProfile: {fileID: 11400000, guid: 5ee67c77447ce88409a3e04e57806963,
+    type: 2}
+  useCustomInteractions: 0
+  interactionMappingProfiles:
+  - {fileID: 11400000, guid: e8f7139785de16d4aa3d2737802a730b, type: 2}
+  - {fileID: 11400000, guid: 36e7bbfca69e8cb4f9c6348a35886dbc, type: 2}
+  - {fileID: 11400000, guid: 2faa4aa403ddeb940adc602db0760bc5, type: 2}
+  - {fileID: 11400000, guid: 2c45198f54ef53b4c84f402ec135e826, type: 2}
+  - {fileID: 11400000, guid: 8f3019784c1869244a5ccec7bf13de5a, type: 2}
+  - {fileID: 11400000, guid: 6b72992fa3a59964aa49205757050366, type: 2}
+  - {fileID: 11400000, guid: faf920b54ab386a41a82c055912ccdbc, type: 2}
+  - {fileID: 11400000, guid: 84e70a2c8259b4341954309f59d610bb, type: 2}
+  - {fileID: 11400000, guid: ecd290afe3981c7408f73069f7c3443d, type: 2}
