@@ -6,7 +6,7 @@ using System.IO;
 using UnityEditor;
 using XRTK.Editor;
 using XRTK.Extensions;
-using XRTK.Utilities.Editor;
+using XRTK.Editor.Utilities;
 
 namespace XRTK.SDK.Editor
 {
