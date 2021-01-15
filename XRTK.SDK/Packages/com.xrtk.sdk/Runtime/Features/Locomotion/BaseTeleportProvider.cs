@@ -3,33 +3,32 @@
 
 using UnityEngine;
 using XRTK.EventDatum.Teleport;
-using XRTK.Interfaces.TeleportSystem;
-using XRTK.Interfaces.TeleportSystem.Handlers;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Services;
 
-namespace XRTK.SDK.TeleportSystem
+namespace XRTK.SDK.Locomotion
 {
     /// <summary>
-    /// Base implementation for handling <see cref="IMixedRealityTeleportSystem"/> events in a
+    /// Base implementation for handling <see cref="IMixedRealityLocomotionSystem"/> events in a
     /// <see cref="MonoBehaviour"/> component.
     /// </summary>
     public abstract class BaseTeleportProvider : MonoBehaviour, IMixedRealityTeleportProvider
     {
-        private IMixedRealityTeleportSystem teleportSystem;
+        private IMixedRealityLocomotionSystem locomotionSystem;
 
         /// <summary>
-        /// Gets the active <see cref="IMixedRealityTeleportSystem"/> implementation instance.
+        /// Gets the active <see cref="IMixedRealityLocomotionSystem"/> implementation instance.
         /// </summary>
-        protected IMixedRealityTeleportSystem TeleportSystem => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetService<IMixedRealityTeleportSystem>());
+        protected IMixedRealityLocomotionSystem LocomotionSystem => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetService<IMixedRealityLocomotionSystem>());
 
         /// <summary>
         /// This method is called when the behaviour becomes enabled and active.
         /// </summary>
         protected virtual void OnEnable()
         {
-            if (MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
+            if (MixedRealityToolkit.Instance.ActiveProfile.IsLocomotionSystemEnabled)
             {
-                MixedRealityToolkit.TeleportSystem.Register(gameObject);
+                MixedRealityToolkit.LocomotionSystem.Register(gameObject);
             }
         }
 
@@ -38,7 +37,7 @@ namespace XRTK.SDK.TeleportSystem
         /// </summary>
         protected virtual void OnDisable()
         {
-            MixedRealityToolkit.TeleportSystem?.Unregister(gameObject);
+            MixedRealityToolkit.LocomotionSystem?.Unregister(gameObject);
         }
 
         /// <inheritdoc />

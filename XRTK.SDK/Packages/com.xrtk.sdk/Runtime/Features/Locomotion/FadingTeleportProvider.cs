@@ -5,12 +5,11 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using XRTK.EventDatum.Teleport;
 using XRTK.Extensions;
-using XRTK.Interfaces.TeleportSystem;
 
-namespace XRTK.SDK.TeleportSystem
+namespace XRTK.SDK.Locomotion
 {
     /// <summary>
-    /// This <see cref="IMixedRealityTeleportSystem"/> provider implementation will
+    /// This <see cref="Interfaces.LocomotionSystem.IMixedRealityLocomotionSystem"/> provider implementation will
     /// fade out the camera when teleporting and fade it back in when done.
     /// </summary>
     [System.Runtime.InteropServices.Guid("0db5b0fd-9ac3-487a-abfd-754963f4e2a3")]
@@ -134,7 +133,7 @@ namespace XRTK.SDK.TeleportSystem
             teleportTransform.position = targetPosition;
             teleportTransform.RotateAround(cameraTransform.position, Vector3.up, targetRotation.y - cameraTransform.eulerAngles.y);
 
-            TeleportSystem.RaiseTeleportComplete(teleportEventData.Pointer, teleportEventData.HotSpot);
+            LocomotionSystem.RaiseTeleportComplete(teleportEventData.Pointer, teleportEventData.HotSpot);
         }
 
         private void FadeOut()

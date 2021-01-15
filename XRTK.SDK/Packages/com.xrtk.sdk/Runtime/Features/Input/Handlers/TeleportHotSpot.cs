@@ -3,7 +3,7 @@
 
 using UnityEngine;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.TeleportSystem;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
 
@@ -30,8 +30,8 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    MixedRealityToolkit.TeleportSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
-                    MixedRealityToolkit.TeleportSystem?.RaiseTeleportRequest(eventData.Pointer, this);
+                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
+                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportRequest(eventData.Pointer, this);
                 }
             }
             else if (eventData.OldFocusedObject == gameObject)
@@ -40,7 +40,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    MixedRealityToolkit.TeleportSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
+                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
                 }
             }
         }

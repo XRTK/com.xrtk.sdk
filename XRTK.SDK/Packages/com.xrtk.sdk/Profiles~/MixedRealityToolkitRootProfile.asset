@@ -31,6 +31,11 @@ MonoBehaviour:
     reference: 2c18630a-9837-46fa-addf-6c8af34d4143
   teleportSystemProfile: {fileID: 11400000, guid: fad2fdb578e49a245ad65bbb8c602fae,
     type: 2}
+  enableLocomotionSystem: 1
+  locomotionSystemType:
+    reference: 9453c088-285e-47aa-bfbb-dafd9109fdd5
+  locomotionSystemProfile: {fileID: 11400000, guid: bedf60ab0b4468e47bdca04488caadb4,
+    type: 2}
   enableSpatialAwarenessSystem: 1
   spatialAwarenessSystemType:
     reference: 05ef9ddc-13c2-47d4-84c5-1c9cb6cc5c1c

@@ -4,12 +4,12 @@
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
+using XRTK.Definitions.LocomotionSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
-using XRTK.Interfaces.TeleportSystem;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Services;
-using XRTK.Services.Teleportation;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
@@ -70,7 +70,8 @@ namespace XRTK.SDK.UX.Pointers
 
         private bool IsTeleportSystemEnabled => MixedRealityToolkit.IsInitialized &&
                                                 MixedRealityToolkit.HasActiveProfile &&
-                                                MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled;
+                                                MixedRealityToolkit.Instance.ActiveProfile.IsLocomotionSystemEnabled &&
+                                                MixedRealityToolkit.LocomotionSystem.CanTeleport;
 
         private IMixedRealityTeleportValidationDataProvider validationDataProvider;
         private IMixedRealityTeleportValidationDataProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<IMixedRealityTeleportValidationDataProvider>());
@@ -219,7 +220,7 @@ namespace XRTK.SDK.UX.Pointers
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+                eventData.MixedRealityInputAction == MixedRealityToolkit.LocomotionSystem.TeleportAction)
             {
                 eventData.Use();
                 ProcessDigitalTeleportInput(true);
@@ -231,7 +232,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+                eventData.MixedRealityInputAction == MixedRealityToolkit.LocomotionSystem.TeleportAction)
             {
                 eventData.Use();
                 ProcessDigitalTeleportInput(false);
@@ -249,7 +250,7 @@ namespace XRTK.SDK.UX.Pointers
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+                eventData.MixedRealityInputAction == MixedRealityToolkit.LocomotionSystem.TeleportAction)
             {
                 eventData.Use();
                 ProcessSingleAxisTeleportInput(eventData);
@@ -267,7 +268,7 @@ namespace XRTK.SDK.UX.Pointers
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+                eventData.MixedRealityInputAction == MixedRealityToolkit.LocomotionSystem.TeleportAction)
             {
                 eventData.Use();
                 ProcessDualAxisTeleportInput(eventData);
@@ -316,7 +317,7 @@ namespace XRTK.SDK.UX.Pointers
             if (currentDigitalInputState && !teleportEnabled)
             {
                 teleportEnabled = true;
-                MixedRealityToolkit.TeleportSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
+                MixedRealityToolkit.LocomotionSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
             }
             else if (!currentDigitalInputState)
             {
@@ -336,13 +337,13 @@ namespace XRTK.SDK.UX.Pointers
                     if (TeleportValidationResult == TeleportValidationResult.Valid ||
                         TeleportValidationResult == TeleportValidationResult.HotSpot)
                     {
-                        MixedRealityToolkit.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
+                        MixedRealityToolkit.LocomotionSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
                     }
                 }
                 else if (teleportEnabled)
                 {
                     teleportEnabled = false;
-                    MixedRealityToolkit.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
+                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
                 }
             }
         }
@@ -371,7 +372,7 @@ namespace XRTK.SDK.UX.Pointers
                     {
                         teleportEnabled = true;
 
-                        MixedRealityToolkit.TeleportSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
+                        MixedRealityToolkit.LocomotionSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
                     }
                     else if (canMove)
                     {
@@ -442,7 +443,7 @@ namespace XRTK.SDK.UX.Pointers
                     if (TeleportValidationResult == TeleportValidationResult.Valid ||
                         TeleportValidationResult == TeleportValidationResult.HotSpot)
                     {
-                        MixedRealityToolkit.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
+                        MixedRealityToolkit.LocomotionSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
                     }
                 }
 
@@ -450,7 +451,7 @@ namespace XRTK.SDK.UX.Pointers
                 {
                     canTeleport = false;
                     teleportEnabled = false;
-                    MixedRealityToolkit.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
+                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
                 }
             }
 

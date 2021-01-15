@@ -14,8 +14,7 @@ using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Physics;
 using XRTK.Interfaces.Providers.Controllers;
-using XRTK.Interfaces.TeleportSystem;
-using XRTK.Interfaces.TeleportSystem.Handlers;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
 using XRTK.Utilities.Async;
@@ -143,10 +142,10 @@ namespace XRTK.SDK.UX.Pointers
             base.OnEnable();
 
             if (!lateRegisterTeleport &&
-                MixedRealityToolkit.TeleportSystem != null &&
-                MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
+                MixedRealityToolkit.LocomotionSystem != null &&
+                MixedRealityToolkit.Instance.ActiveProfile.IsLocomotionSystemEnabled)
             {
-                MixedRealityToolkit.TeleportSystem.Register(gameObject);
+                MixedRealityToolkit.LocomotionSystem.Register(gameObject);
             }
         }
 
@@ -154,11 +153,11 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.Start();
 
-            if (lateRegisterTeleport && MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
+            if (lateRegisterTeleport && MixedRealityToolkit.Instance.ActiveProfile.IsLocomotionSystemEnabled)
             {
                 try
                 {
-                    await MixedRealityToolkit.TeleportSystem.WaitUntil(system => system != null);
+                    await MixedRealityToolkit.LocomotionSystem.WaitUntil(system => system != null);
                 }
                 catch (Exception e)
                 {
@@ -170,7 +169,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (this == null) { return; }
 
                 lateRegisterTeleport = false;
-                MixedRealityToolkit.TeleportSystem.Register(gameObject);
+                MixedRealityToolkit.LocomotionSystem.Register(gameObject);
             }
 
             if (await MixedRealityToolkit.ValidateInputSystemAsync())
@@ -236,7 +235,7 @@ namespace XRTK.SDK.UX.Pointers
         protected override void OnDisable()
         {
             base.OnDisable();
-            MixedRealityToolkit.TeleportSystem?.Unregister(gameObject);
+            MixedRealityToolkit.LocomotionSystem?.Unregister(gameObject);
 
             IsHoldPressed = false;
             IsSelectPressed = false;

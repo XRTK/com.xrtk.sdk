@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38ec5835eefd4204caf43fed844c7775, type: 3}
-  m_Name: MixedRealityTeleportSystemProfile
+  m_Script: {fileID: 11500000, guid: 09eb879d2490c18478de9670542e9c74, type: 3}
+  m_Name: MixedRealityLocomotionSystemProfile
   m_EditorClassIdentifier: 
   configurations:
   - instancedType:
@@ -24,7 +24,19 @@ MonoBehaviour:
   teleportProvider:
     reference: 
   teleportAction:
-    profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 5
-    description: Teleport Direction
-    axisConstraint: 4
+    profileGuid: 00000000000000000000000000000000
+    id: 0
+    description: None
+    axisConstraint: 0
+  cancelTeleportAction:
+    profileGuid: 00000000000000000000000000000000
+    id: 0
+    description: None
+    axisConstraint: 0
+  movementProvider:
+    reference: 
+  moveAction:
+    profileGuid: 00000000000000000000000000000000
+    id: 0
+    description: None
+    axisConstraint: 0

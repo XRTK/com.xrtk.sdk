@@ -4,12 +4,12 @@
 using System;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
+using XRTK.Definitions.LocomotionSystem;
 using XRTK.EventDatum.Teleport;
 using XRTK.Interfaces.InputSystem;
-using XRTK.Interfaces.TeleportSystem.Handlers;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
-using XRTK.Services.Teleportation;
 using XRTK.Utilities;
 
 namespace XRTK.SDK.UX.Cursors
