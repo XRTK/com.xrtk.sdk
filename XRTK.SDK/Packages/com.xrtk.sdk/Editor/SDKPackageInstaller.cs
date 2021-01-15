@@ -6,7 +6,7 @@ using System.IO;
 using UnityEditor;
 using XRTK.Editor;
 using XRTK.Extensions;
-using XRTK.Utilities.Editor;
+using XRTK.Editor.Utilities;
 
 namespace XRTK.SDK.Editor
 {
@@ -27,13 +27,13 @@ namespace XRTK.SDK.Editor
             EditorApplication.delayCall += CheckPackage;
         }
 
-        [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", true, -1)]
+        [MenuItem("Mixed Reality Toolkit/Packages/Install SDK Package Assets...", true, -1)]
         private static bool ImportPackageAssetsValidation()
         {
             return !Directory.Exists($"{DefaultPath}\\Profiles") || !Directory.Exists($"{DefaultPath}\\Prefabs");
         }
 
-        [MenuItem("Mixed Reality Toolkit/Packages/Install XRTK.SDK Package Assets...", false, -1)]
+        [MenuItem("Mixed Reality Toolkit/Packages/Install SDK Package Assets...", false, -1)]
         private static void ImportPackageAssets()
         {
             EditorPreferences.Set($"{nameof(SDKPackageInstaller)}.Assets", false);

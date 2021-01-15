@@ -24,11 +24,13 @@ MonoBehaviour:
   enableBoundarySystem: 1
   boundarySystemType:
     reference: fe458876-cc0f-4b6f-9459-544ddf6a9263
-  boundaryVisualizationProfile: {fileID: 11400000, guid: 66c6942c137e4200b9fa363d94982582,
+  boundarySystemProfile: {fileID: 11400000, guid: 66c6942c137e4200b9fa363d94982582,
     type: 2}
   enableTeleportSystem: 1
   teleportSystemType:
     reference: 2c18630a-9837-46fa-addf-6c8af34d4143
+  teleportSystemProfile: {fileID: 11400000, guid: fad2fdb578e49a245ad65bbb8c602fae,
+    type: 2}
   enableSpatialAwarenessSystem: 1
   spatialAwarenessSystemType:
     reference: 05ef9ddc-13c2-47d4-84c5-1c9cb6cc5c1c

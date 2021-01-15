@@ -13,7 +13,6 @@ namespace XRTK.SDK.Editor.UX.Pointers
     {
         private readonly GUIContent teleportFoldoutHeader = new GUIContent("Teleport Pointer Settings");
 
-        private SerializedProperty teleportAction;
         private SerializedProperty inputThreshold;
         private SerializedProperty angleOffset;
         private SerializedProperty teleportActivationAngle;
@@ -21,17 +20,13 @@ namespace XRTK.SDK.Editor.UX.Pointers
         private SerializedProperty rotationAmount;
         private SerializedProperty backStrafeActivationAngle;
         private SerializedProperty strafeAmount;
-        private SerializedProperty upDirectionThreshold;
         private SerializedProperty lineColorHotSpot;
-        private SerializedProperty validLayers;
-        private SerializedProperty invalidLayers;
 
         protected override void OnEnable()
         {
             DrawBasePointerActions = false;
             base.OnEnable();
 
-            teleportAction = serializedObject.FindProperty(nameof(teleportAction));
             inputThreshold = serializedObject.FindProperty(nameof(inputThreshold));
             angleOffset = serializedObject.FindProperty(nameof(angleOffset));
             teleportActivationAngle = serializedObject.FindProperty(nameof(teleportActivationAngle));
@@ -39,10 +34,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
             rotationAmount = serializedObject.FindProperty(nameof(rotationAmount));
             backStrafeActivationAngle = serializedObject.FindProperty(nameof(backStrafeActivationAngle));
             strafeAmount = serializedObject.FindProperty(nameof(strafeAmount));
-            upDirectionThreshold = serializedObject.FindProperty(nameof(upDirectionThreshold));
             lineColorHotSpot = serializedObject.FindProperty(nameof(lineColorHotSpot));
-            validLayers = serializedObject.FindProperty(nameof(validLayers));
-            invalidLayers = serializedObject.FindProperty(nameof(invalidLayers));
         }
 
         public override void OnInspectorGUI()
@@ -50,7 +42,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
             base.OnInspectorGUI();
             serializedObject.Update();
 
-            if (teleportAction.FoldoutWithBoldLabelPropertyField(teleportFoldoutHeader))
+            if (inputThreshold.FoldoutWithBoldLabelPropertyField(teleportFoldoutHeader))
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(inputThreshold);
@@ -60,10 +52,7 @@ namespace XRTK.SDK.Editor.UX.Pointers
                 EditorGUILayout.PropertyField(rotationAmount);
                 EditorGUILayout.PropertyField(backStrafeActivationAngle);
                 EditorGUILayout.PropertyField(strafeAmount);
-                EditorGUILayout.PropertyField(upDirectionThreshold);
                 EditorGUILayout.PropertyField(lineColorHotSpot);
-                EditorGUILayout.PropertyField(validLayers);
-                EditorGUILayout.PropertyField(invalidLayers);
                 EditorGUI.indentLevel--;
             }
 

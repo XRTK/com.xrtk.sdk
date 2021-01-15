@@ -3,72 +3,65 @@
 
 using UnityEngine;
 using XRTK.Definitions.Controllers.Hands;
-using XRTK.EventDatum.Input;
 
 namespace XRTK.SDK.UX.Controllers.Hands
 {
-    /// <summary>
-    /// Hand controller visualizer visualizing hand mesh data.
-    /// </summary>
-    public class HandControllerMeshVisualizer : BaseHandControllerVisualizer
+    public class HandControllerMeshVisualizer : MonoBehaviour
     {
-        private MeshFilter meshFilter;
+        private Vector3[] lastHandMeshVertices;
 
         [SerializeField]
-        [Tooltip("If this is not null and hand system supports hand meshes, use this mesh to render hand mesh.")]
-        private GameObject handMeshPrefab = null;
+        private MeshFilter meshFilter = null;
 
-        /// <inheritdoc />
-        protected override void OnEnable()
+        /// <summary>
+        /// Updates the mesh visuailzation using latest hand mesh data.
+        /// </summary>
+        /// <param name="handMeshData">New hand mesh data.</param>
+        public void UpdateVisualization(HandMeshData handMeshData)
         {
-            base.OnEnable();
-
-            if (!HandControllerDataProvider.HandMeshingEnabled)
-            {
-                Debug.LogWarning("Hand meshing is disabled but a hand mesh visualizer was assigned in the visualization profile.");
-            }
-        }
-
-        /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<HandData> eventData)
-        {
-            base.OnInputChanged(eventData);
-
-            if (eventData.Handedness != Controller.ControllerHandedness)
+            if (handMeshData.IsEmpty)
             {
                 return;
             }
 
-            var handMeshData = eventData.InputData.Mesh;
-
-            if (meshFilter != null || CreateMeshFilter())
+            if (meshFilter != null)
             {
                 Mesh mesh = meshFilter.mesh;
+                if (lastHandMeshVertices == null)
+                {
+                    lastHandMeshVertices = mesh.vertices;
+                }
+
+                bool meshChanged = false;
+                // On some platforms, mesh length counts may change as the hand mesh is updated.
+                // In order to update the vertices when the array sizes change, the mesh
+                // must be cleared per instructions here:
+                // https://docs.unity3d.com/ScriptReference/Mesh.html
+                if (lastHandMeshVertices != null &&
+                    lastHandMeshVertices.Length != handMeshData.Vertices.Length)
+                {
+                    meshChanged = true;
+                    mesh.Clear();
+                }
 
                 mesh.vertices = handMeshData.Vertices;
                 mesh.normals = handMeshData.Normals;
-                mesh.triangles = handMeshData.Triangles;
+                lastHandMeshVertices = mesh.vertices;
 
-                if (handMeshData.Uvs != null && handMeshData.Uvs.Length > 0)
+                if (meshChanged)
                 {
-                    mesh.uv = handMeshData.Uvs;
+                    mesh.triangles = handMeshData.Triangles;
+                    if (handMeshData.Uvs != null && handMeshData.Uvs.Length > 0)
+                    {
+                        mesh.uv = handMeshData.Uvs;
+                    }
+
+                    mesh.RecalculateBounds();
                 }
 
-                meshFilter.transform.position = handMeshData.Position;
-                meshFilter.transform.rotation = handMeshData.Rotation;
+                //meshFilter.transform.position = handMeshData.Position;
+                //meshFilter.transform.rotation = handData.RootPose.Rotation;
             }
-        }
-
-        private bool CreateMeshFilter()
-        {
-            if (handMeshPrefab != null)
-            {
-                meshFilter = Instantiate(handMeshPrefab, HandVisualizationGameObject.transform).GetComponent<MeshFilter>();
-                return true;
-            }
-
-            Debug.LogError("Failed to create mesh filter for hand mesh visualization. No prefab assigned.");
-            return false;
         }
     }
 }

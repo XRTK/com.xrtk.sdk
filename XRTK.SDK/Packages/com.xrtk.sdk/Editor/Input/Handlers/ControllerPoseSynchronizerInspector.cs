@@ -9,7 +9,7 @@ using XRTK.SDK.Input.Handlers;
 
 namespace XRTK.SDK.Editor.Input.Handlers
 {
-    [CustomEditor(typeof(ControllerPoseSynchronizer))]
+    [CustomEditor(typeof(ControllerPoseSynchronizer), true, isFallback = true)]
     public class ControllerPoseSynchronizerInspector : UnityEditor.Editor
     {
         private static readonly GUIContent SynchronizationSettings = new GUIContent("Synchronization Settings");

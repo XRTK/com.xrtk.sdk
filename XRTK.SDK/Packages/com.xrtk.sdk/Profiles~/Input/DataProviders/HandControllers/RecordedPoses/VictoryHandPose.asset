@@ -9,11 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e575260027d17dc41a06f78eb50d0132, type: 3}
+  m_Script: {fileID: 11500000, guid: 67355724a5b4fd841bbf691ac44ad25d, type: 3}
   m_Name: VictoryHandPose
   m_EditorClassIdentifier: 
   id: victory
   description: Victory sign.
   isDefault: 0
   keyCode: 53
-  data: {fileID: 4900000, guid: 21f98e595bbf7294c96c87c187f41196, type: 3}
+  data: {fileID: 4900000, guid: f7b9fdc8704378f4a8e1f18c99edb3ac, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 1
+  - 0.06573929
+  - 0.06283465
+  - 0.39798924
+  - 0.3726366
+  gripStrength: 0.30365536

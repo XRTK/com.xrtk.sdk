@@ -9,11 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e575260027d17dc41a06f78eb50d0132, type: 3}
+  m_Script: {fileID: 11500000, guid: 67355724a5b4fd841bbf691ac44ad25d, type: 3}
   m_Name: PokeHandPose
   m_EditorClassIdentifier: 
   id: poke
   description: Index finger stretched out.
   isDefault: 0
   keyCode: 324
-  data: {fileID: 4900000, guid: 22b97ff789b664c4f9b9ee223c29eee7, type: 3}
+  data: {fileID: 4900000, guid: 5f148c90347c0dc47bbfd1ed7a2d4334, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 0.96689564
+  - 0.17719902
+  - 0.6713774
+  - 0.83242744
+  - 0.8090317
+  gripStrength: 0.6932526

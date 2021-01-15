@@ -1,23 +1,21 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
-using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
+using XRTK.Interfaces.TeleportSystem;
 using XRTK.Services;
+using XRTK.Services.Teleportation;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
 {
     public class TeleportPointer : LinePointer
     {
-        [SerializeField]
-        private MixedRealityInputAction teleportAction = MixedRealityInputAction.None;
-
         [SerializeField]
         [Range(0f, 1f)]
         [Tooltip("The threshold amount for joystick input (Dead Zone)")]
@@ -53,11 +51,6 @@ namespace XRTK.SDK.UX.Pointers
         private float strafeAmount = 0.25f;
 
         [SerializeField]
-        [Range(0f, 1f)]
-        [Tooltip("The up direction threshold to use when determining if a surface is 'flat' enough to teleport to.")]
-        private float upDirectionThreshold = 0.2f;
-
-        [SerializeField]
         [FormerlySerializedAs("LineColorHotSpot")]
         private Gradient lineColorHotSpot = new Gradient();
 
@@ -67,30 +60,8 @@ namespace XRTK.SDK.UX.Pointers
             set => lineColorHotSpot = value;
         }
 
-        [SerializeField]
-        [FormerlySerializedAs("ValidLayers")]
-        [Tooltip("Layers that are considered 'valid' for navigation")]
-        private LayerMask validLayers = Physics.DefaultRaycastLayers;
-
-        protected LayerMask ValidLayers
-        {
-            get => validLayers;
-            set => validLayers = value;
-        }
-
-        [SerializeField]
-        [FormerlySerializedAs("InvalidLayers")]
-        [Tooltip("Layers that are considered 'invalid' for navigation")]
-        private LayerMask invalidLayers = Physics.IgnoreRaycastLayer;
-
-        protected LayerMask InvalidLayers
-        {
-            get => invalidLayers;
-            set => invalidLayers = value;
-        }
-
-        private Vector2 currentInputPosition = Vector2.zero;
-
+        private bool currentDigitalInputState = false;
+        private Vector2 currentDualAxisInputPosition = Vector2.zero;
         private bool teleportEnabled = false;
 
         private bool canTeleport = false;
@@ -101,22 +72,25 @@ namespace XRTK.SDK.UX.Pointers
                                                 MixedRealityToolkit.HasActiveProfile &&
                                                 MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled;
 
+        private IMixedRealityTeleportValidationDataProvider validationDataProvider;
+        private IMixedRealityTeleportValidationDataProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<IMixedRealityTeleportValidationDataProvider>());
+
         /// <summary>
         /// The result from the last raycast.
         /// </summary>
-        public TeleportSurfaceResult TeleportSurfaceResult { get; private set; } = TeleportSurfaceResult.None;
+        public TeleportValidationResult TeleportValidationResult { get; private set; } = TeleportValidationResult.None;
 
-        protected Gradient GetLineGradient(TeleportSurfaceResult targetResult)
+        protected Gradient GetLineGradient(TeleportValidationResult targetResult)
         {
             switch (targetResult)
             {
-                case TeleportSurfaceResult.None:
+                case TeleportValidationResult.None:
                     return LineColorNoTarget;
-                case TeleportSurfaceResult.Valid:
+                case TeleportValidationResult.Valid:
                     return LineColorValid;
-                case TeleportSurfaceResult.Invalid:
+                case TeleportValidationResult.Invalid:
                     return LineColorInvalid;
-                case TeleportSurfaceResult.HotSpot:
+                case TeleportValidationResult.HotSpot:
                     return lineColorHotSpot;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
@@ -135,7 +109,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 if (TeleportHotSpot != null &&
                     TeleportHotSpot.OverrideTargetOrientation &&
-                    TeleportSurfaceResult == TeleportSurfaceResult.HotSpot)
+                    TeleportValidationResult == TeleportValidationResult.HotSpot)
                 {
                     return TeleportHotSpot.TargetOrientation;
                 }
@@ -173,7 +147,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             // Use the results from the last update to set our NavigationResult
             float clearWorldLength = 0f;
-            TeleportSurfaceResult = TeleportSurfaceResult.None;
+            TeleportValidationResult = TeleportValidationResult.None;
 
             if (IsInteractionEnabled)
             {
@@ -182,31 +156,7 @@ namespace XRTK.SDK.UX.Pointers
                 // If we hit something
                 if (Result.CurrentPointerTarget != null)
                 {
-                    // Check if it's in our valid layers
-                    if (((1 << Result.CurrentPointerTarget.layer) & validLayers.value) != 0)
-                    {
-                        // See if it's a hot spot
-                        if (TeleportHotSpot != null && TeleportHotSpot.IsActive)
-                        {
-                            TeleportSurfaceResult = TeleportSurfaceResult.HotSpot;
-                        }
-                        else
-                        {
-                            // If it's NOT a hotspot, check if the hit normal is too steep 
-                            // (Hotspots override dot requirements)
-                            TeleportSurfaceResult = Vector3.Dot(Result.LastRaycastHit.normal, Vector3.up) > upDirectionThreshold
-                                ? TeleportSurfaceResult.Valid
-                                : TeleportSurfaceResult.Invalid;
-                        }
-                    }
-                    else if (((1 << Result.CurrentPointerTarget.layer) & invalidLayers) != 0)
-                    {
-                        TeleportSurfaceResult = TeleportSurfaceResult.Invalid;
-                    }
-                    else
-                    {
-                        TeleportSurfaceResult = TeleportSurfaceResult.None;
-                    }
+                    TeleportValidationResult = ValidationDataProvider.IsValid(Result, TeleportHotSpot);
 
                     // Use the step index to determine the length of the hit
                     for (int i = 0; i <= Result.RayStepIndex; i++)
@@ -215,7 +165,7 @@ namespace XRTK.SDK.UX.Pointers
                         {
                             if (MixedRealityRaycaster.DebugEnabled)
                             {
-                                Color debugColor = TeleportSurfaceResult != TeleportSurfaceResult.None
+                                Color debugColor = TeleportValidationResult != TeleportValidationResult.None
                                     ? Color.yellow
                                     : Color.cyan;
 
@@ -234,7 +184,7 @@ namespace XRTK.SDK.UX.Pointers
 
                     // Clamp the end of the parabola to the result hit's point
                     LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, LineCastResolution);
-                    BaseCursor?.SetVisibility(TeleportSurfaceResult == TeleportSurfaceResult.Valid || TeleportSurfaceResult == TeleportSurfaceResult.HotSpot);
+                    BaseCursor?.SetVisibility(TeleportValidationResult == TeleportValidationResult.Valid || TeleportValidationResult == TeleportValidationResult.HotSpot);
                 }
                 else
                 {
@@ -245,7 +195,7 @@ namespace XRTK.SDK.UX.Pointers
                 // Set the line color
                 for (int i = 0; i < LineRenderers.Length; i++)
                 {
-                    LineRenderers[i].LineColor = GetLineGradient(TeleportSurfaceResult);
+                    LineRenderers[i].LineColor = GetLineGradient(TeleportValidationResult);
                 }
             }
             else
@@ -259,23 +209,155 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityInputHandler Implementation
 
         /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<Vector2> eventData)
+        public override void OnInputDown(InputEventData eventData)
         {
             // Don't process input if we've got an active teleport request in progress.
-            if (IsTeleportRequestActive || !IsTeleportSystemEnabled) { return; }
+            if (eventData.used || IsTeleportRequestActive || !IsTeleportSystemEnabled)
+            {
+                return;
+            }
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == teleportAction)
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
             {
-                currentInputPosition = eventData.InputData;
+                eventData.Use();
+                ProcessDigitalTeleportInput(true);
+            }
+        }
+
+        /// <inheritdoc />
+        public override void OnInputUp(InputEventData eventData)
+        {
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                eventData.Handedness == Handedness &&
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+            {
+                eventData.Use();
+                ProcessDigitalTeleportInput(false);
+            }
+        }
+
+        /// <inheritdoc />
+        public override void OnInputChanged(InputEventData<float> eventData)
+        {
+            // Don't process input if we've got an active teleport request in progress.
+            if (eventData.used || IsTeleportRequestActive || !IsTeleportSystemEnabled)
+            {
+                return;
             }
 
-            if (Mathf.Abs(currentInputPosition.y) > inputThreshold ||
-                Mathf.Abs(currentInputPosition.x) > inputThreshold)
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                eventData.Handedness == Handedness &&
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+            {
+                eventData.Use();
+                ProcessSingleAxisTeleportInput(eventData);
+            }
+        }
+
+        /// <inheritdoc />
+        public override void OnInputChanged(InputEventData<Vector2> eventData)
+        {
+            // Don't process input if we've got an active teleport request in progress.
+            if (eventData.used || IsTeleportRequestActive || !IsTeleportSystemEnabled)
+            {
+                return;
+            }
+
+            if (eventData.SourceId == InputSourceParent.SourceId &&
+                eventData.Handedness == Handedness &&
+                eventData.MixedRealityInputAction == MixedRealityToolkit.TeleportSystem.TeleportAction)
+            {
+                eventData.Use();
+                ProcessDualAxisTeleportInput(eventData);
+            }
+        }
+
+        #endregion IMixedRealityInputHandler Implementation
+
+        #region IMixedRealityTeleportHandler Implementation
+
+        /// <inheritdoc />
+        public override void OnTeleportRequest(TeleportEventData eventData)
+        {
+            // Only turn off the pointer if we're not the one sending the request
+            if (eventData.Pointer.PointerId == PointerId)
+            {
+                IsTeleportRequestActive = false;
+            }
+            else
+            {
+                IsTeleportRequestActive = true;
+                BaseCursor?.SetVisibility(false);
+            }
+        }
+
+        /// <inheritdoc />
+        public override void OnTeleportCompleted(TeleportEventData eventData)
+        {
+            IsTeleportRequestActive = false;
+            BaseCursor?.SetVisibility(false);
+        }
+
+        /// <inheritdoc />
+        public override void OnTeleportCanceled(TeleportEventData eventData)
+        {
+            IsTeleportRequestActive = false;
+            BaseCursor?.SetVisibility(false);
+        }
+
+        #endregion IMixedRealityTeleportHandler Implementation
+
+        private void ProcessDigitalTeleportInput(bool isPressed)
+        {
+            currentDigitalInputState = isPressed;
+
+            if (currentDigitalInputState && !teleportEnabled)
+            {
+                teleportEnabled = true;
+                MixedRealityToolkit.TeleportSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
+            }
+            else if (!currentDigitalInputState)
+            {
+                var canTeleport = false;
+
+                if (teleportEnabled &&
+                TeleportValidationResult == TeleportValidationResult.Valid ||
+                TeleportValidationResult == TeleportValidationResult.HotSpot)
+                {
+                    canTeleport = true;
+                }
+
+                if (canTeleport)
+                {
+                    teleportEnabled = false;
+
+                    if (TeleportValidationResult == TeleportValidationResult.Valid ||
+                        TeleportValidationResult == TeleportValidationResult.HotSpot)
+                    {
+                        MixedRealityToolkit.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
+                    }
+                }
+                else if (teleportEnabled)
+                {
+                    teleportEnabled = false;
+                    MixedRealityToolkit.TeleportSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
+                }
+            }
+        }
+
+        private void ProcessSingleAxisTeleportInput(InputEventData<float> eventData) => ProcessDigitalTeleportInput(eventData.InputData > inputThreshold);
+
+        private void ProcessDualAxisTeleportInput(InputEventData<Vector2> eventData)
+        {
+            currentDualAxisInputPosition = eventData.InputData;
+
+            if (Mathf.Abs(currentDualAxisInputPosition.y) > inputThreshold ||
+                Mathf.Abs(currentDualAxisInputPosition.x) > inputThreshold)
             {
                 // Get the angle of the pointer input
-                float angle = Mathf.Atan2(currentInputPosition.x, currentInputPosition.y) * Mathf.Rad2Deg;
+                float angle = Mathf.Atan2(currentDualAxisInputPosition.x, currentDualAxisInputPosition.y) * Mathf.Rad2Deg;
 
                 // Offset the angle so it's 'forward' facing
                 angle += angleOffset;
@@ -357,8 +439,8 @@ namespace XRTK.SDK.UX.Pointers
                     canTeleport = false;
                     teleportEnabled = false;
 
-                    if (TeleportSurfaceResult == TeleportSurfaceResult.Valid ||
-                        TeleportSurfaceResult == TeleportSurfaceResult.HotSpot)
+                    if (TeleportValidationResult == TeleportValidationResult.Valid ||
+                        TeleportValidationResult == TeleportValidationResult.HotSpot)
                     {
                         MixedRealityToolkit.TeleportSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
                     }
@@ -373,46 +455,11 @@ namespace XRTK.SDK.UX.Pointers
             }
 
             if (teleportEnabled &&
-                TeleportSurfaceResult == TeleportSurfaceResult.Valid ||
-                TeleportSurfaceResult == TeleportSurfaceResult.HotSpot)
+                TeleportValidationResult == TeleportValidationResult.Valid ||
+                TeleportValidationResult == TeleportValidationResult.HotSpot)
             {
                 canTeleport = true;
             }
         }
-
-        #endregion IMixedRealityInputHandler Implementation
-
-        #region IMixedRealityTeleportHandler Implementation
-
-        /// <inheritdoc />
-        public override void OnTeleportRequest(TeleportEventData eventData)
-        {
-            // Only turn off the pointer if we're not the one sending the request
-            if (eventData.Pointer.PointerId == PointerId)
-            {
-                IsTeleportRequestActive = false;
-            }
-            else
-            {
-                IsTeleportRequestActive = true;
-                BaseCursor?.SetVisibility(false);
-            }
-        }
-
-        /// <inheritdoc />
-        public override void OnTeleportCompleted(TeleportEventData eventData)
-        {
-            IsTeleportRequestActive = false;
-            BaseCursor?.SetVisibility(false);
-        }
-
-        /// <inheritdoc />
-        public override void OnTeleportCanceled(TeleportEventData eventData)
-        {
-            IsTeleportRequestActive = false;
-            BaseCursor?.SetVisibility(false);
-        }
-
-        #endregion IMixedRealityTeleportHandler Implementation
     }
 }

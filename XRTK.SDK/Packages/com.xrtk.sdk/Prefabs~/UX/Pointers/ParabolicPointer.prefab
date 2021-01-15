@@ -112,6 +112,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -123,6 +124,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -801,7 +803,6 @@ MonoBehaviour:
   rotationAmount: 90
   backStrafeActivationAngle: 45
   strafeAmount: 0.25
-  upDirectionThreshold: 0.2
   lineColorHotSpot:
     serializedVersion: 2
     key0: {r: 0, g: 0, b: 1, a: 0}
@@ -831,12 +832,6 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 4
-  validLayers:
-    serializedVersion: 2
-    m_Bits: 1
-  invalidLayers:
-    serializedVersion: 2
-    m_Bits: 4
   minParabolaVelocity: 5
   maxParabolaVelocity: 20
   minDistanceModifier: 1

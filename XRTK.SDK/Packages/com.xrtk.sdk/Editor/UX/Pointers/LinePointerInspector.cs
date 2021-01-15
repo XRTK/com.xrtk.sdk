@@ -8,7 +8,7 @@ using XRTK.SDK.UX.Pointers;
 
 namespace XRTK.SDK.Editor.UX.Pointers
 {
-    [CustomEditor(typeof(LinePointer))]
+    [CustomEditor(typeof(LinePointer), true, isFallback = true)]
     public class LinePointerInspector : BaseControllerPointerInspector
     {
         private const int MAX_RECOMMENDED_LINECAST_RESOLUTION = 20;

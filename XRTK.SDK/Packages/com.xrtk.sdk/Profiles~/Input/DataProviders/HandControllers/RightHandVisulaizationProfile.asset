@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: RightHandVisulaizationProfile
   m_EditorClassIdentifier: 
   controllerVisualizationType:
-    reference: 0b653537-d237-4622-acc6-e351209a5882
+    reference: 5d844e0b-f913-46b8-bc3b-fa6429e62c60
   useDefaultModels: 0
-  model: {fileID: 4856844564559928852, guid: 58cc7659d29f83f47b10dfd3bc4d1c97, type: 3}
+  model: {fileID: 7709636661657395508, guid: 79eeb06cd1ed4224eb6387ce28855a3c, type: 3}
   pointerPose:
     profileGuid: 00000000000000000000000000000000
     id: 0

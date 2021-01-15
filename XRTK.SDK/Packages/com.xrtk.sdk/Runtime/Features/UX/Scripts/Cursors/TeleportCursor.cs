@@ -4,12 +4,12 @@
 using System;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
-using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Teleport;
 using XRTK.Interfaces.InputSystem;
-using XRTK.Interfaces.TeleportSystem;
+using XRTK.Interfaces.TeleportSystem.Handlers;
 using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
+using XRTK.Services.Teleportation;
 using XRTK.Utilities;
 
 namespace XRTK.SDK.UX.Cursors
@@ -58,14 +58,14 @@ namespace XRTK.SDK.UX.Cursors
             {
                 if (pointer.IsInteractionEnabled)
                 {
-                    switch (pointer.TeleportSurfaceResult)
+                    switch (pointer.TeleportValidationResult)
                     {
-                        case TeleportSurfaceResult.None:
+                        case TeleportValidationResult.None:
                             return CursorStateEnum.Release;
-                        case TeleportSurfaceResult.Invalid:
+                        case TeleportValidationResult.Invalid:
                             return CursorStateEnum.ObserveHover;
-                        case TeleportSurfaceResult.HotSpot:
-                        case TeleportSurfaceResult.Valid:
+                        case TeleportValidationResult.HotSpot:
+                        case TeleportValidationResult.Valid:
                             return CursorStateEnum.ObserveHover;
                         default:
                             throw new ArgumentOutOfRangeException();

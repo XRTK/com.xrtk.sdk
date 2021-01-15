@@ -43,14 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71894c53357d52a44b03004f02e70846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handedness: 1
-  destroyOnSourceLost: 1
-  useSourcePoseData: 1
-  poseAction:
-    profileGuid: 00000000000000000000000000000000
-    id: 0
-    description: None
-    axisConstraint: 0
+  wristPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
+    type: 3}
   jointPrefab: {fileID: 3141352679402889276, guid: ecbaba8bdbeef32459e87a1ce06bfd36,
     type: 3}
   palmPrefab: {fileID: 6797406804172968804, guid: 80997b0aa2ab2d7429bb5e7f1cddbace,
