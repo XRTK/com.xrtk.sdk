@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 using XRTK.EventDatum.Teleport;
 using XRTK.Extensions;
 using XRTK.Interfaces.TeleportSystem;
+using XRTK.Services;
 
 namespace XRTK.SDK.TeleportSystem
 {
@@ -134,7 +135,7 @@ namespace XRTK.SDK.TeleportSystem
             teleportTransform.position = targetPosition;
             teleportTransform.RotateAround(cameraTransform.position, Vector3.up, targetRotation.y - cameraTransform.eulerAngles.y);
 
-            TeleportSystem.RaiseTeleportComplete(teleportEventData.Pointer, teleportEventData.HotSpot);
+            MixedRealityToolkit.TeleportSystem.RaiseTeleportComplete(teleportEventData.Pointer, teleportEventData.HotSpot);
         }
 
         private void FadeOut()

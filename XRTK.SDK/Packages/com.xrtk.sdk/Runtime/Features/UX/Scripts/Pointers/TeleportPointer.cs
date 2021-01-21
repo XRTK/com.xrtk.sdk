@@ -70,7 +70,7 @@ namespace XRTK.SDK.UX.Pointers
 
         private bool IsTeleportSystemEnabled => MixedRealityToolkit.IsInitialized &&
                                                 MixedRealityToolkit.HasActiveProfile &&
-                                                MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled;
+                                                MixedRealityToolkit.TeleportSystem != null;
 
         private IMixedRealityTeleportValidationDataProvider validationDataProvider;
         private IMixedRealityTeleportValidationDataProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<IMixedRealityTeleportValidationDataProvider>());

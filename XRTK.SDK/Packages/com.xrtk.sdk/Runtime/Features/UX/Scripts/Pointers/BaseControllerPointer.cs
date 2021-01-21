@@ -143,8 +143,7 @@ namespace XRTK.SDK.UX.Pointers
             base.OnEnable();
 
             if (!lateRegisterTeleport &&
-                MixedRealityToolkit.TeleportSystem != null &&
-                MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
+                MixedRealityToolkit.TeleportSystem != null)
             {
                 MixedRealityToolkit.TeleportSystem.Register(gameObject);
             }
@@ -154,7 +153,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.Start();
 
-            if (lateRegisterTeleport && MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
+            if (lateRegisterTeleport)
             {
                 try
                 {

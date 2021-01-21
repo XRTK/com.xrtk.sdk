@@ -1,6 +1,7 @@
 ﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using UnityEngine;
 using XRTK.EventDatum.Teleport;
 using XRTK.Interfaces.TeleportSystem;
@@ -15,22 +16,12 @@ namespace XRTK.SDK.TeleportSystem
     /// </summary>
     public abstract class BaseTeleportProvider : MonoBehaviour, IMixedRealityTeleportProvider
     {
-        private IMixedRealityTeleportSystem teleportSystem;
-
-        /// <summary>
-        /// Gets the active <see cref="IMixedRealityTeleportSystem"/> implementation instance.
-        /// </summary>
-        protected IMixedRealityTeleportSystem TeleportSystem => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetService<IMixedRealityTeleportSystem>());
-
         /// <summary>
         /// This method is called when the behaviour becomes enabled and active.
         /// </summary>
         protected virtual void OnEnable()
         {
-            if (MixedRealityToolkit.Instance.ActiveProfile.IsTeleportSystemEnabled)
-            {
-                MixedRealityToolkit.TeleportSystem.Register(gameObject);
-            }
+            MixedRealityToolkit.TeleportSystem?.Register(gameObject);
         }
 
         /// <summary>
