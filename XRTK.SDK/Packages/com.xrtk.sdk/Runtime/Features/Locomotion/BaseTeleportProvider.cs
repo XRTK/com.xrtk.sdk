@@ -9,7 +9,7 @@ using XRTK.Services;
 namespace XRTK.SDK.Locomotion
 {
     /// <summary>
-    /// Base implementation for handling <see cref="IMixedRealityLocomotionSystem"/> events in a
+    /// Base implementation for handling <see cref="IMixedRealityLocomotionSystem"/> teleport events in a
     /// <see cref="MonoBehaviour"/> component.
     /// </summary>
     public abstract class BaseTeleportProvider : MonoBehaviour, IMixedRealityTeleportProvider
