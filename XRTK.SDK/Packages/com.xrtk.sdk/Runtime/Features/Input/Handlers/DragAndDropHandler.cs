@@ -6,7 +6,6 @@ using XRTK.Definitions.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
-using XRTK.Services;
 using XRTK.Utilities;
 
 namespace XRTK.SDK.Input.Handlers
@@ -124,7 +123,7 @@ namespace XRTK.SDK.Input.Handlers
             currentInputSource = eventData.InputSource;
             currentPointer = eventData.Pointer;
 
-            Vector3 initialDraggingPosition = MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(currentPointer, out var focusDetails)
+            Vector3 initialDraggingPosition = FocusProvider.TryGetFocusDetails(currentPointer, out var focusDetails)
                     ? focusDetails.EndPoint
                     : hostTransform.position;
 
@@ -202,7 +201,7 @@ namespace XRTK.SDK.Input.Handlers
             // TODO: robertes: Fix push/pop and single-handler model so that multiple HandDraggable components can be active at once.
 
             // Add self as a modal input handler, to get all inputs during the manipulation
-            MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
+            InputSystem.PushModalInputHandler(gameObject);
 
             isDragging = true;
 
@@ -326,7 +325,7 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             // Remove self as a modal input handler
-            MixedRealityToolkit.InputSystem.PopModalInputHandler();
+            InputSystem.PopModalInputHandler();
 
             isDragging = false;
 

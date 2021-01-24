@@ -1,7 +1,9 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System;
 using UnityEngine;
+using XRTK.Interfaces.InputSystem;
 using XRTK.Services;
 
 namespace XRTK.SDK.Input
@@ -11,39 +13,52 @@ namespace XRTK.SDK.Input
     /// </summary>
     public class InputSystemGlobalListener : MonoBehaviour
     {
+        private IMixedRealityInputSystem inputSystem = null;
+
+        protected IMixedRealityInputSystem InputSystem
+            => inputSystem ?? (inputSystem = MixedRealityToolkit.GetSystem<IMixedRealityInputSystem>());
+
         private bool lateInitialize = true;
 
         protected virtual void OnEnable()
         {
             if (!lateInitialize &&
-                MixedRealityToolkit.IsInitialized &&
-                MixedRealityToolkit.InputSystem != null)
+                MixedRealityToolkit.IsInitialized)
             {
-                MixedRealityToolkit.InputSystem.Register(gameObject);
+                InputSystem?.Register(gameObject);
             }
         }
 
         protected virtual async void Start()
         {
-            if (lateInitialize &&
-                await MixedRealityToolkit.ValidateInputSystemAsync())
+            if (lateInitialize)
             {
+                try
+                {
+                    inputSystem = await MixedRealityToolkit.GetSystemAsync<IMixedRealityInputSystem>();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    return;
+                }
+
                 // We've been destroyed during the await.
                 if (this == null) { return; }
 
                 lateInitialize = false;
-                MixedRealityToolkit.InputSystem.Register(gameObject);
+                InputSystem.Register(gameObject);
             }
         }
 
         protected virtual void OnDisable()
         {
-            MixedRealityToolkit.InputSystem?.Unregister(gameObject);
+            InputSystem?.Unregister(gameObject);
         }
 
         protected virtual void OnDestroy()
         {
-            MixedRealityToolkit.InputSystem?.Unregister(gameObject);
+            InputSystem?.Unregister(gameObject);
         }
     }
 }

@@ -8,7 +8,6 @@ using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.SDK.Input;
 using XRTK.SDK.UX.Pointers;
-using XRTK.Services;
 
 namespace XRTK.SDK.UX.Cursors
 {
@@ -313,10 +312,10 @@ namespace XRTK.SDK.UX.Cursors
         protected virtual void RegisterManagers()
         {
             // Register the cursor as a listener, so that it can always get input events it cares about
-            MixedRealityToolkit.InputSystem.Register(gameObject);
+            InputSystem.Register(gameObject);
 
             // Setup the cursor to be able to respond to input being globally enabled / disabled
-            if (MixedRealityToolkit.InputSystem.IsInputEnabled)
+            if (InputSystem.IsInputEnabled)
             {
                 OnInputEnabled();
             }
@@ -325,8 +324,8 @@ namespace XRTK.SDK.UX.Cursors
                 OnInputDisabled();
             }
 
-            MixedRealityToolkit.InputSystem.InputEnabled += OnInputEnabled;
-            MixedRealityToolkit.InputSystem.InputDisabled += OnInputDisabled;
+            InputSystem.InputEnabled += OnInputEnabled;
+            InputSystem.InputDisabled += OnInputDisabled;
         }
 
         /// <summary>
@@ -334,11 +333,11 @@ namespace XRTK.SDK.UX.Cursors
         /// </summary>
         protected virtual void UnregisterManagers()
         {
-            if (MixedRealityToolkit.InputSystem != null)
+            if (InputSystem != null)
             {
-                MixedRealityToolkit.InputSystem.InputEnabled -= OnInputEnabled;
-                MixedRealityToolkit.InputSystem.InputDisabled -= OnInputDisabled;
-                MixedRealityToolkit.InputSystem.Unregister(gameObject);
+                InputSystem.InputEnabled -= OnInputEnabled;
+                InputSystem.InputDisabled -= OnInputDisabled;
+                InputSystem.Unregister(gameObject);
             }
         }
 
@@ -353,9 +352,9 @@ namespace XRTK.SDK.UX.Cursors
                 return;
             }
 
-            if (!MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out var focusDetails))
+            if (!InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out var focusDetails))
             {
-                if (MixedRealityToolkit.InputSystem.FocusProvider.IsPointerRegistered(Pointer))
+                if (InputSystem.FocusProvider.IsPointerRegistered(Pointer))
                 {
                     Debug.LogError($"{name}: Unable to get focus details for {pointer.GetType().Name}!");
                 }
@@ -363,7 +362,7 @@ namespace XRTK.SDK.UX.Cursors
                 return;
             }
 
-            var newTargetedObject = MixedRealityToolkit.InputSystem.FocusProvider.GetFocusedObject(Pointer);
+            var newTargetedObject = InputSystem.FocusProvider.GetFocusedObject(Pointer);
             Vector3 lookForward;
 
             // Normalize scale on before update

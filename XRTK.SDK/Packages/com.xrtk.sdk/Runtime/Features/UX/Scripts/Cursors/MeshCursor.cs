@@ -1,11 +1,13 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 using XRTK.Definitions.InputSystem;
+using XRTK.Interfaces.CameraSystem;
 using XRTK.Services;
+using XRTK.Utilities;
 
 namespace XRTK.SDK.UX.Cursors
 {
@@ -63,9 +65,13 @@ namespace XRTK.SDK.UX.Cursors
             if (targetRenderer == null) { return; }
 
             var targetTransform = targetRenderer.transform;
-            var cameraPosition = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform.position;
+            var targetCamera = MixedRealityToolkit.TryGetSystem<IMixedRealityCameraSystem>(out var cameraSystem)
+                ? cameraSystem.MainCameraRig.PlayerCamera
+                : CameraCache.Main;
+
+            var cameraPosition = targetCamera.transform.position;
             var distance = (cameraPosition - targetTransform.position).magnitude;
-            var size = distance * fixedSize * MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.fieldOfView;
+            var size = distance * fixedSize * targetCamera.fieldOfView;
 
             targetTransform.localScale = Vector3.one * size;
             targetTransform.localPosition = new Vector3(fixedSizeOffset.x * size, fixedSizeOffset.y * size, fixedSizeOffset.z * size);

@@ -4,10 +4,12 @@
 using UnityEngine;
 using XRTK.Definitions.Devices;
 using XRTK.EventDatum.Input;
+using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.Providers.Controllers.Simulation.Hands;
 using XRTK.Services;
+using XRTK.Utilities;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
@@ -76,7 +78,9 @@ namespace XRTK.SDK.UX.Pointers
             {
                 controller = value;
                 InputSourceParent = value.InputSource;
-                RaycastOrigin = MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform;
+                RaycastOrigin = CameraSystem != null
+                    ? CameraSystem.MainCameraRig.CameraTransform
+                    : CameraCache.Main.transform;
                 Handedness = value.ControllerHandedness;
                 gameObject.name = "Spatial Mouse Pointer";
                 TrackingState = TrackingState.NotApplicable;
@@ -86,7 +90,10 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override bool TryGetPointingRay(out Ray pointingRay)
         {
-            pointingRay = MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
+            var playerCamera = CameraSystem != null
+                ? CameraSystem.MainCameraRig.PlayerCamera
+                : CameraCache.Main;
+            pointingRay = playerCamera.ScreenPointToRay(UnityEngine.Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
             return true;
         }
 
@@ -132,7 +139,7 @@ namespace XRTK.SDK.UX.Pointers
         public override void OnPostRaycast()
         {
             transform.position = Result.EndPoint;
-            transform.LookAt(MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform);
+            transform.LookAt(CameraSystem != null ? CameraSystem.MainCameraRig.CameraTransform : CameraCache.Main.transform);
         }
 
         #endregion IMixedRealityPointer Implementaiton
@@ -259,7 +266,7 @@ namespace XRTK.SDK.UX.Pointers
                 RayStabilizer = null;
             }
 
-            foreach (var inputSource in MixedRealityToolkit.InputSystem.DetectedInputSources)
+            foreach (var inputSource in InputSystem.DetectedInputSources)
             {
                 if (inputSource.SourceId == Controller.InputSource.SourceId)
                 {

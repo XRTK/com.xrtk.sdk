@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
@@ -69,7 +69,7 @@ namespace XRTK.SDK.UX
 
                     if (grabbedCollider == null) { return; }
 
-                    MixedRealityToolkit.InputSystem.PushModalInputHandler(gameObject);
+                    InputSystem?.PushModalInputHandler(gameObject);
 
                     BoundingBoxParent.currentInputSource = eventData.InputSource;
                     BoundingBoxParent.currentPointer = pointer;
@@ -104,7 +104,7 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.currentPointer = null;
                     BoundingBoxParent.grabbedHandle = null;
                     BoundingBoxParent.ResetHandleVisibility();
-                    MixedRealityToolkit.InputSystem.PopModalInputHandler();
+                    InputSystem?.PopModalInputHandler();
                     BoundingBoxParent.BoundingBoxCollider.transform.SetLayerRecursively(cachedTargetPrevLayer);
                     BoundingBoxParent.transform.SetCollidersActive(true, ref parentColliderCache);
                     transform.SetCollidersActive(true, ref colliderCache);
@@ -128,7 +128,7 @@ namespace XRTK.SDK.UX
                     BoundingBoxParent.currentPointer = null;
                     BoundingBoxParent.grabbedHandle = null;
                     BoundingBoxParent.ResetHandleVisibility();
-                    MixedRealityToolkit.InputSystem.PopModalInputHandler();
+                    InputSystem?.PopModalInputHandler();
                 }
             }
         }
@@ -526,6 +526,11 @@ namespace XRTK.SDK.UX
 
         private IMixedRealityPointer currentPointer;
         private IMixedRealityInputSource currentInputSource;
+
+        private IMixedRealityInputSystem inputSystem = null;
+
+        protected IMixedRealityInputSystem InputSystem
+            => inputSystem ?? (inputSystem = MixedRealityToolkit.GetSystem<IMixedRealityInputSystem>());
 
         private ManipulationHandler manipulationHandler;
 

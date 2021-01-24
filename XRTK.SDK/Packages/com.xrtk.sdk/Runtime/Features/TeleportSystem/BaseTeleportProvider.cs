@@ -15,12 +15,17 @@ namespace XRTK.SDK.TeleportSystem
     /// </summary>
     public abstract class BaseTeleportProvider : MonoBehaviour, IMixedRealityTeleportProvider
     {
+        private IMixedRealityTeleportSystem teleportSystem = null;
+
+        protected IMixedRealityTeleportSystem TeleportSystem
+            => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetSystem<IMixedRealityTeleportSystem>());
+
         /// <summary>
         /// This method is called when the behaviour becomes enabled and active.
         /// </summary>
         protected virtual void OnEnable()
         {
-            MixedRealityToolkit.TeleportSystem?.Register(gameObject);
+            TeleportSystem?.Register(gameObject);
         }
 
         /// <summary>
@@ -28,7 +33,7 @@ namespace XRTK.SDK.TeleportSystem
         /// </summary>
         protected virtual void OnDisable()
         {
-            MixedRealityToolkit.TeleportSystem?.Unregister(gameObject);
+            TeleportSystem?.Unregister(gameObject);
         }
 
         /// <inheritdoc />
