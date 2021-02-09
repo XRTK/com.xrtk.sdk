@@ -10,6 +10,7 @@ using XRTK.EventDatum.Input;
 using XRTK.Extensions;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Interfaces.SpatialAwarenessSystem;
 using XRTK.SDK.UX;
 using XRTK.Services;
 using XRTK.Utilities;
@@ -524,7 +525,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <summary>
         /// The current valid layer mask for any associated pointers when interacting with this object.
         /// </summary>
-        protected LayerMask[] LayerMasks => PrimaryPointer?.PointerRaycastLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks;
+        protected LayerMask[] LayerMasks => PrimaryPointer?.PointerRaycastLayerMasksOverride ?? FocusProvider.GlobalPointerRaycastLayerMasks;
 
         #endregion Properties
 
@@ -867,12 +868,12 @@ namespace XRTK.SDK.Input.Handlers
                 PrimaryPointer = eventData.Pointer;
             }
 
-            MixedRealityToolkit.InputSystem?.PushModalInputHandler(gameObject);
+            InputSystem?.PushModalInputHandler(gameObject);
 
-            if (MixedRealityToolkit.SpatialAwarenessSystem != null)
+            if (MixedRealityToolkit.TryGetSystem<IMixedRealitySpatialAwarenessSystem>(out var spatialAwarenessSystem))
             {
-                prevSpatialMeshDisplay = MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility;
-                MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = spatialMeshVisibility;
+                prevSpatialMeshDisplay = spatialAwarenessSystem.SpatialMeshVisibility;
+                spatialAwarenessSystem.SpatialMeshVisibility = spatialMeshVisibility;
             }
 
             prevPosition = manipulationTarget.position;
@@ -923,9 +924,9 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!IsBeingHeld) { return; }
 
-            if (MixedRealityToolkit.SpatialAwarenessSystem != null)
+            if (MixedRealityToolkit.TryGetSystem<IMixedRealitySpatialAwarenessSystem>(out var spatialAwarenessSystem))
             {
-                MixedRealityToolkit.SpatialAwarenessSystem.SpatialMeshVisibility = prevSpatialMeshDisplay;
+                spatialAwarenessSystem.SpatialMeshVisibility = prevSpatialMeshDisplay;
             }
 
             if (prevPosition != Vector3.zero)
@@ -940,7 +941,7 @@ namespace XRTK.SDK.Input.Handlers
                 manipulationTarget.rotation = prevRotation;
             }
 
-            MixedRealityToolkit.InputSystem?.PopModalInputHandler();
+            InputSystem?.PopModalInputHandler();
 
             body.isKinematic = true;
 

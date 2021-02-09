@@ -6,6 +6,7 @@ using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.LocomotionSystem;
 using XRTK.EventDatum.Teleport;
+using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.LocomotionSystem;
 using XRTK.SDK.UX.Pointers;
@@ -88,9 +89,9 @@ namespace XRTK.SDK.UX.Cursors
                 return;
             }
 
-            if (!MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out var focusDetails))
+            if (!InputSystem.FocusProvider.TryGetFocusDetails(Pointer, out var focusDetails))
             {
-                if (MixedRealityToolkit.InputSystem.FocusProvider.IsPointerRegistered(Pointer))
+                if (InputSystem.FocusProvider.IsPointerRegistered(Pointer))
                 {
                     Debug.LogError($"{gameObject.name}: Unable to get focus details for {pointer.GetType().Name}!");
                 }
@@ -105,8 +106,8 @@ namespace XRTK.SDK.UX.Cursors
 
             transform.position = focusDetails.EndPoint;
 
-            var cameraTransform = MixedRealityToolkit.CameraSystem != null
-                ? MixedRealityToolkit.CameraSystem.MainCameraRig.CameraTransform
+            var cameraTransform = MixedRealityToolkit.TryGetSystem<IMixedRealityCameraSystem>(out var cameraSystem)
+                ? cameraSystem.MainCameraRig.CameraTransform
                 : CameraCache.Main.transform;
             var forward = cameraTransform.forward;
             forward.y = 0f;

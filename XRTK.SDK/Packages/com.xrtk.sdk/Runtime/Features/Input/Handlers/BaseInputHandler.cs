@@ -1,7 +1,8 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using XRTK.Interfaces.InputSystem;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -10,6 +11,12 @@ namespace XRTK.SDK.Input.Handlers
     /// </summary>
     public abstract class BaseInputHandler : InputSystemGlobalListener
     {
+
+        private IMixedRealityFocusProvider focusProvider = null;
+
+        protected IMixedRealityFocusProvider FocusProvider
+            => focusProvider ?? (focusProvider = InputSystem?.FocusProvider);
+
         [SerializeField]
         [Tooltip("Is Focus required to receive input events on this GameObject?")]
         private bool isFocusRequired = true;

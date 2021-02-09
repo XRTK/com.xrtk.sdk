@@ -10,14 +10,15 @@ using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.EventDatum.Teleport;
 using XRTK.Extensions;
+using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.Interfaces.Physics;
 using XRTK.Interfaces.Providers.Controllers;
-using XRTK.Interfaces.LocomotionSystem;
+using XRTK.Interfaces.TeleportSystem;
+using XRTK.Interfaces.TeleportSystem.Handlers;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
-using XRTK.Utilities.Async;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
@@ -135,6 +136,16 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
+        private IMixedRealityTeleportSystem teleportSystem = null;
+
+        protected IMixedRealityTeleportSystem TeleportSystem
+            => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetSystem<IMixedRealityTeleportSystem>());
+
+        private IMixedRealityCameraSystem cameraSystem = null;
+
+        protected IMixedRealityCameraSystem CameraSystem
+            => cameraSystem ?? (cameraSystem = MixedRealityToolkit.GetSystem<IMixedRealityCameraSystem>());
+
         #region MonoBehaviour Implementation
 
         protected override void OnEnable()
@@ -142,10 +153,9 @@ namespace XRTK.SDK.UX.Pointers
             base.OnEnable();
 
             if (!lateRegisterTeleport &&
-                MixedRealityToolkit.LocomotionSystem != null &&
-                MixedRealityToolkit.Instance.ActiveProfile.IsLocomotionSystemEnabled)
+                MixedRealityToolkit.TryGetSystem(out teleportSystem))
             {
-                MixedRealityToolkit.LocomotionSystem.Register(gameObject);
+                TeleportSystem.Register(gameObject);
             }
         }
 
@@ -153,11 +163,11 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.Start();
 
-            if (lateRegisterTeleport && MixedRealityToolkit.Instance.ActiveProfile.IsLocomotionSystemEnabled)
+            if (lateRegisterTeleport)
             {
                 try
                 {
-                    await MixedRealityToolkit.LocomotionSystem.WaitUntil(system => system != null);
+                    teleportSystem = await MixedRealityToolkit.GetSystemAsync<IMixedRealityTeleportSystem>();
                 }
                 catch (Exception e)
                 {
@@ -169,14 +179,11 @@ namespace XRTK.SDK.UX.Pointers
                 if (this == null) { return; }
 
                 lateRegisterTeleport = false;
-                MixedRealityToolkit.LocomotionSystem.Register(gameObject);
+                TeleportSystem.Register(gameObject);
+                SetCursor();
             }
-
-            if (await MixedRealityToolkit.ValidateInputSystemAsync())
+            else
             {
-                // We've been destroyed during the await.
-                if (this == null) { return; }
-
                 SetCursor();
             }
         }
@@ -185,7 +192,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             if (InteractionMode.HasFlags(InteractionMode.Near) &&
                 nearInteractionCollider != null &&
-                other.IsValidCollision(PointerRaycastLayerMasksOverride ?? MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks))
+                other.IsValidCollision(PointerRaycastLayerMasksOverride ?? InputSystem.FocusProvider.GlobalPointerRaycastLayerMasks))
             {
                 CapturedNearInteractionObject = other.gameObject;
 
@@ -193,9 +200,8 @@ namespace XRTK.SDK.UX.Pointers
                 // gets updated before raising the event. If we don't update
                 // the focus provider here, the event will not be raised on the
                 // capture near interaction object.
-                MixedRealityToolkit.InputSystem.FocusProvider.Update();
-
-                MixedRealityToolkit.InputSystem.RaiseOnInputDown(InputSourceParent, Handedness, pointerAction);
+                InputSystem.FocusProvider.Update();
+                InputSystem.RaiseOnInputDown(InputSourceParent, Handedness, pointerAction);
             }
         }
 
@@ -209,9 +215,8 @@ namespace XRTK.SDK.UX.Pointers
                 // gets updated before raising the event. If we don't update
                 // the focus provider here, the event will not be raised on the
                 // capture near interaction object.
-                MixedRealityToolkit.InputSystem.FocusProvider.Update();
-
-                MixedRealityToolkit.InputSystem.RaiseOnInputPressed(InputSourceParent, Handedness, pointerAction);
+                InputSystem.FocusProvider.Update();
+                InputSystem.RaiseOnInputPressed(InputSourceParent, Handedness, pointerAction);
             }
         }
 
@@ -225,9 +230,9 @@ namespace XRTK.SDK.UX.Pointers
                 // gets updated before raising the event. If we don't update
                 // the focus provider here, the event will not be raised on the
                 // capture near interaction object.
-                MixedRealityToolkit.InputSystem.FocusProvider.Update();
+                InputSystem.FocusProvider.Update();
 
-                MixedRealityToolkit.InputSystem.RaiseOnInputUp(InputSourceParent, Handedness, pointerAction);
+                InputSystem.RaiseOnInputUp(InputSourceParent, Handedness, pointerAction);
                 CapturedNearInteractionObject = null;
             }
         }
@@ -235,7 +240,7 @@ namespace XRTK.SDK.UX.Pointers
         protected override void OnDisable()
         {
             base.OnDisable();
-            MixedRealityToolkit.LocomotionSystem?.Unregister(gameObject);
+            TeleportSystem?.Unregister(gameObject);
 
             IsHoldPressed = false;
             IsSelectPressed = false;
@@ -267,7 +272,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 if (pointerId == 0)
                 {
-                    pointerId = MixedRealityToolkit.InputSystem.FocusProvider.GenerateNewPointerId();
+                    pointerId = InputSystem.FocusProvider.GenerateNewPointerId();
                 }
 
                 return pointerId;
@@ -430,9 +435,9 @@ namespace XRTK.SDK.UX.Pointers
             {
                 if (overrideGlobalPointerExtent)
                 {
-                    if (MixedRealityToolkit.InputSystem?.FocusProvider != null)
+                    if (InputSystem?.FocusProvider != null)
                     {
-                        return MixedRealityToolkit.InputSystem.FocusProvider.GlobalPointingExtent;
+                        return InputSystem.FocusProvider.GlobalPointingExtent;
                     }
                 }
 
@@ -591,7 +596,7 @@ namespace XRTK.SDK.UX.Pointers
 
                 if (IsSelectPressed)
                 {
-                    MixedRealityToolkit.InputSystem.RaisePointerUp(this, pointerAction);
+                    InputSystem.RaisePointerUp(this, pointerAction);
                 }
 
                 IsSelectPressed = false;
@@ -618,8 +623,8 @@ namespace XRTK.SDK.UX.Pointers
                 if (eventData.MixedRealityInputAction == pointerAction)
                 {
                     IsSelectPressed = false;
-                    MixedRealityToolkit.InputSystem.RaisePointerClicked(this, pointerAction);
-                    MixedRealityToolkit.InputSystem.RaisePointerUp(this, pointerAction);
+                    InputSystem.RaisePointerClicked(this, pointerAction);
+                    InputSystem.RaisePointerUp(this, pointerAction);
                 }
             }
         }
@@ -641,7 +646,7 @@ namespace XRTK.SDK.UX.Pointers
                 {
                     IsSelectPressed = true;
                     HasSelectPressedOnce = true;
-                    MixedRealityToolkit.InputSystem.RaisePointerDown(this, pointerAction);
+                    InputSystem.RaisePointerDown(this, pointerAction);
                 }
             }
         }

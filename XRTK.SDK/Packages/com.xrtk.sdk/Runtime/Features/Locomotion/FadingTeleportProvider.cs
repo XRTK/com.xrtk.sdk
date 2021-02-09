@@ -15,6 +15,10 @@ namespace XRTK.SDK.Locomotion
     [System.Runtime.InteropServices.Guid("0db5b0fd-9ac3-487a-abfd-754963f4e2a3")]
     public class FadingTeleportProvider : BaseTeleportProvider
     {
+        private static readonly int SrcBlend = Shader.PropertyToID("_SrcBlend");
+        private static readonly int DstBlend = Shader.PropertyToID("_DstBlend");
+        private static readonly int ZWrite = Shader.PropertyToID("_ZWrite");
+
         [SerializeField]
         [Tooltip("Assign the transform with the camera component attached. If not set, the component uses its own transform.")]
         private Transform cameraTransform = null;
@@ -205,9 +209,9 @@ namespace XRTK.SDK.Locomotion
                 if (GraphicsSettings.renderPipelineAsset.IsNull())
                 {
                     // Unity standard shader can be assumed since we created a primitive.
-                    fadeMaterial.SetInt("_SrcBlend", (int)BlendMode.One);
-                    fadeMaterial.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
-                    fadeMaterial.SetInt("_ZWrite", 0);
+                    fadeMaterial.SetInt(SrcBlend, (int)BlendMode.One);
+                    fadeMaterial.SetInt(DstBlend, (int)BlendMode.OneMinusSrcAlpha);
+                    fadeMaterial.SetInt(ZWrite, 0);
                     fadeMaterial.DisableKeyword("_ALPHATEST_ON");
                     fadeMaterial.DisableKeyword("_ALPHABLEND_ON");
                     fadeMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");

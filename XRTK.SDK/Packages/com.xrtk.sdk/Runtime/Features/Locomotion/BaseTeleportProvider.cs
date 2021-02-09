@@ -3,33 +3,29 @@
 
 using UnityEngine;
 using XRTK.EventDatum.Teleport;
-using XRTK.Interfaces.LocomotionSystem;
+using XRTK.Interfaces.TeleportSystem;
+using XRTK.Interfaces.TeleportSystem.Handlers;
 using XRTK.Services;
 
-namespace XRTK.SDK.Locomotion
+namespace XRTK.SDK.TeleportSystem
 {
     /// <summary>
-    /// Base implementation for handling <see cref="IMixedRealityLocomotionSystem"/> teleport events in a
+    /// Base implementation for handling <see cref="IMixedRealityTeleportSystem"/> events in a
     /// <see cref="MonoBehaviour"/> component.
     /// </summary>
     public abstract class BaseTeleportProvider : MonoBehaviour, IMixedRealityTeleportProvider
     {
-        private IMixedRealityLocomotionSystem locomotionSystem;
+        private IMixedRealityTeleportSystem teleportSystem = null;
 
-        /// <summary>
-        /// Gets the active <see cref="IMixedRealityLocomotionSystem"/> implementation instance.
-        /// </summary>
-        protected IMixedRealityLocomotionSystem LocomotionSystem => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetService<IMixedRealityLocomotionSystem>());
+        protected IMixedRealityTeleportSystem TeleportSystem
+            => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetSystem<IMixedRealityTeleportSystem>());
 
         /// <summary>
         /// This method is called when the behaviour becomes enabled and active.
         /// </summary>
         protected virtual void OnEnable()
         {
-            if (MixedRealityToolkit.Instance.ActiveProfile.IsLocomotionSystemEnabled)
-            {
-                MixedRealityToolkit.LocomotionSystem.Register(gameObject);
-            }
+            TeleportSystem?.Register(gameObject);
         }
 
         /// <summary>
@@ -37,7 +33,7 @@ namespace XRTK.SDK.Locomotion
         /// </summary>
         protected virtual void OnDisable()
         {
-            MixedRealityToolkit.LocomotionSystem?.Unregister(gameObject);
+            TeleportSystem?.Unregister(gameObject);
         }
 
         /// <inheritdoc />

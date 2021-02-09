@@ -27,6 +27,7 @@ MonoBehaviour:
   rightControllerTrackedKey: 32
   rotationSpeed: 100
   handPoseAnimationSpeed: 8
+  gripThreshold: 0.8
   renderingMode: 1
   handPhysicsEnabled: 0
   useTriggers: 0

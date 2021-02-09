@@ -3,7 +3,7 @@
 
 using UnityEngine;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.LocomotionSystem;
+using XRTK.Interfaces.TeleportSystem;
 using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
 
@@ -15,6 +15,11 @@ namespace XRTK.SDK.Input.Handlers
     /// </summary>
     public class TeleportHotSpot : BaseFocusHandler, IMixedRealityTeleportHotSpot
     {
+        private IMixedRealityTeleportSystem teleportSystem = null;
+
+        protected IMixedRealityTeleportSystem TeleportSystem
+            => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetSystem<IMixedRealityTeleportSystem>());
+
         #region IMixedRealityFocusHandler Implementation
 
         /// <inheritdoc />
@@ -30,8 +35,8 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
-                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportRequest(eventData.Pointer, this);
+                    TeleportSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
+                    TeleportSystem?.RaiseTeleportRequest(eventData.Pointer, this);
                 }
             }
             else if (eventData.OldFocusedObject == gameObject)
@@ -40,7 +45,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    MixedRealityToolkit.LocomotionSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
+                    TeleportSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
                 }
             }
         }
