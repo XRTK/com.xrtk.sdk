@@ -129,7 +129,8 @@ namespace XRTK.SDK.UX.Cursors
                 return Vector3.zero;
             }
 
-            if (MixedRealityToolkit.InputSystem != null && MixedRealityToolkit.InputSystem.FocusProvider.TryGetFocusDetails(cursor.Pointer, out var focusDetails))
+            if (MixedRealityToolkit.TryGetSystem<IMixedRealityInputSystem>(out var inputSystem) &&
+                inputSystem.FocusProvider.TryGetFocusDetails(cursor.Pointer, out var focusDetails))
             {
                 // Else, consider the modifiers on the cursor modifier, but don't snap
                 return focusDetails.EndPoint + HostTransform.TransformVector(CursorPositionOffset);
@@ -199,9 +200,9 @@ namespace XRTK.SDK.UX.Cursors
 
         private void OnDisable()
         {
-            if (MixedRealityToolkit.InputSystem != null)
+            if (MixedRealityToolkit.TryGetSystem<IMixedRealityInputSystem>(out var inputSystem))
             {
-                foreach (var inputSource in MixedRealityToolkit.InputSystem.DetectedInputSources)
+                foreach (var inputSource in inputSystem.DetectedInputSources)
                 {
                     foreach (var pointer in inputSource.Pointers)
                     {

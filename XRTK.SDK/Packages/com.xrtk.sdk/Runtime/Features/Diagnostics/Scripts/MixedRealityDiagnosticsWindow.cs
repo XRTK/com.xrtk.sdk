@@ -4,6 +4,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XRTK.Interfaces.DiagnosticsSystem;
 using XRTK.SDK.Utilities.Solvers;
 using XRTK.Services;
 
@@ -36,6 +37,11 @@ namespace XRTK.SDK.DiagnosticsSystem
         /// </summary>
         public bool IsPinned => solverHandler.enabled;
 
+        private IMixedRealityDiagnosticsSystem diagnosticsSystem;
+
+        private IMixedRealityDiagnosticsSystem DiagnosticsSystem
+            => diagnosticsSystem ?? (diagnosticsSystem = MixedRealityToolkit.GetSystem<IMixedRealityDiagnosticsSystem>());
+
         protected virtual void OnValidate()
         {
             if (solverHandler == null)
@@ -51,7 +57,7 @@ namespace XRTK.SDK.DiagnosticsSystem
                 solverHandler = GetComponent<SolverHandler>();
             }
 
-            applicationSignatureText.text = MixedRealityToolkit.DiagnosticsSystem.ApplicationSignature;
+            applicationSignatureText.text = DiagnosticsSystem.ApplicationSignature;
         }
 
         /// <summary>
