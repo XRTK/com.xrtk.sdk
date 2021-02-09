@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using XRTK.EventDatum.Teleport;
 using XRTK.Extensions;
+using XRTK.SDK.TeleportSystem;
 
 namespace XRTK.SDK.Locomotion
 {

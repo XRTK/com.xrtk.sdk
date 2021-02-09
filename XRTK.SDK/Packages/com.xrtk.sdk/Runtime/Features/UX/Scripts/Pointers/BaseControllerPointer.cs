@@ -13,10 +13,9 @@ using XRTK.Extensions;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Interfaces.Physics;
 using XRTK.Interfaces.Providers.Controllers;
-using XRTK.Interfaces.TeleportSystem;
-using XRTK.Interfaces.TeleportSystem.Handlers;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
 using XRTK.Utilities.Physics;
@@ -136,10 +135,10 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        private IMixedRealityTeleportSystem teleportSystem = null;
+        private IMixedRealityLocomotionSystem locomotionSystem = null;
 
-        protected IMixedRealityTeleportSystem TeleportSystem
-            => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetSystem<IMixedRealityTeleportSystem>());
+        protected IMixedRealityLocomotionSystem LocomotionSystem
+            => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetSystem<IMixedRealityLocomotionSystem>());
 
         private IMixedRealityCameraSystem cameraSystem = null;
 
@@ -153,9 +152,9 @@ namespace XRTK.SDK.UX.Pointers
             base.OnEnable();
 
             if (!lateRegisterTeleport &&
-                MixedRealityToolkit.TryGetSystem(out teleportSystem))
+                MixedRealityToolkit.TryGetSystem(out locomotionSystem))
             {
-                TeleportSystem.Register(gameObject);
+                LocomotionSystem.Register(gameObject);
             }
         }
 
@@ -167,7 +166,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 try
                 {
-                    teleportSystem = await MixedRealityToolkit.GetSystemAsync<IMixedRealityTeleportSystem>();
+                    locomotionSystem = await MixedRealityToolkit.GetSystemAsync<IMixedRealityLocomotionSystem>();
                 }
                 catch (Exception e)
                 {
@@ -179,7 +178,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (this == null) { return; }
 
                 lateRegisterTeleport = false;
-                TeleportSystem.Register(gameObject);
+                LocomotionSystem.Register(gameObject);
                 SetCursor();
             }
             else
@@ -240,7 +239,7 @@ namespace XRTK.SDK.UX.Pointers
         protected override void OnDisable()
         {
             base.OnDisable();
-            TeleportSystem?.Unregister(gameObject);
+            LocomotionSystem?.Unregister(gameObject);
 
             IsHoldPressed = false;
             IsSelectPressed = false;

@@ -3,8 +3,7 @@
 
 using UnityEngine;
 using XRTK.EventDatum.Teleport;
-using XRTK.Interfaces.TeleportSystem;
-using XRTK.Interfaces.TeleportSystem.Handlers;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Services;
 
 namespace XRTK.SDK.TeleportSystem
@@ -15,17 +14,17 @@ namespace XRTK.SDK.TeleportSystem
     /// </summary>
     public abstract class BaseTeleportProvider : MonoBehaviour, IMixedRealityTeleportProvider
     {
-        private IMixedRealityTeleportSystem teleportSystem = null;
+        private IMixedRealityLocomotionSystem locomotionSystem = null;
 
-        protected IMixedRealityTeleportSystem TeleportSystem
-            => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetSystem<IMixedRealityTeleportSystem>());
+        protected IMixedRealityLocomotionSystem LocomotionSystem
+            => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetSystem<IMixedRealityLocomotionSystem>());
 
         /// <summary>
         /// This method is called when the behaviour becomes enabled and active.
         /// </summary>
         protected virtual void OnEnable()
         {
-            TeleportSystem?.Register(gameObject);
+            LocomotionSystem?.Register(gameObject);
         }
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace XRTK.SDK.TeleportSystem
         /// </summary>
         protected virtual void OnDisable()
         {
-            TeleportSystem?.Unregister(gameObject);
+            LocomotionSystem?.Unregister(gameObject);
         }
 
         /// <inheritdoc />
