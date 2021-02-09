@@ -3,7 +3,6 @@
 
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
-using XRTK.Services;
 
 namespace XRTK.SDK.UX.Cursors
 {
@@ -142,7 +141,7 @@ namespace XRTK.SDK.UX.Cursors
             }
 
             // handle scale of main cursor go
-            float distance = Vector3.Distance(MixedRealityToolkit.InputSystem.GazeProvider.GazeOrigin, transform.position);
+            float distance = Vector3.Distance(InputSystem.GazeProvider.GazeOrigin, transform.position);
             float smoothScaling = 1 - Pointer.PointerExtent * distanceScaleFactor;
             transform.localScale = initialScale * (distance * distanceScaleFactor + smoothScaling);
         }

@@ -4,7 +4,7 @@
 using UnityEngine;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
-using XRTK.Services;
+using XRTK.Utilities;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
@@ -65,10 +65,15 @@ namespace XRTK.SDK.UX.Pointers
         public override bool TryGetPointerPosition(out Vector3 position)
         {
             position = Vector3.zero;
+
             if (fingerId < 0) { return false; }
+
+            var playerCamera = CameraSystem != null
+                ? CameraSystem.MainCameraRig.PlayerCamera
+                : CameraCache.Main;
             position = Result.CurrentPointerTarget != null
                 ? Result.EndPoint
-                : MixedRealityToolkit.CameraSystem.MainCameraRig.PlayerCamera.ScreenPointToRay(UnityEngine.Input.GetTouch(FingerId).position).GetPoint(PointerExtent);
+                : playerCamera.ScreenPointToRay(UnityEngine.Input.GetTouch(FingerId).position).GetPoint(PointerExtent);
             return true;
         }
 
