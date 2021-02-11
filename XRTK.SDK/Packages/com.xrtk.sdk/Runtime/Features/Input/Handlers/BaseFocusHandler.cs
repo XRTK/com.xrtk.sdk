@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using UnityEngine;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
 {
@@ -30,6 +31,16 @@ namespace XRTK.SDK.Input.Handlers
             get => focusEnabled;
             set => focusEnabled = value;
         }
+
+        private IMixedRealityInputSystem inputSystem = null;
+
+        protected IMixedRealityInputSystem InputSystem
+            => inputSystem ?? (inputSystem = MixedRealityToolkit.GetSystem<IMixedRealityInputSystem>());
+
+        private IMixedRealityFocusProvider focusProvider = null;
+
+        protected IMixedRealityFocusProvider FocusProvider
+            => focusProvider ?? (focusProvider = InputSystem?.FocusProvider);
 
         /// <summary>
         /// Does this object currently have focus by any <see cref="IMixedRealityPointer"/>?
