@@ -16,7 +16,6 @@
     "type": "git",
     "url": "git+https://github.com/XRTK/SDK.git"
   },
-  "src": "Assets/XRTK.Core",
   "author": "XRTK Team (https://github.com/XRTK)",
   "dependencies": {
     "com.xrtk.core": "0.2.6",
