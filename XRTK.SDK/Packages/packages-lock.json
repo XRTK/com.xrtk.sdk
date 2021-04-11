@@ -91,7 +91,7 @@
     },
     "com.unity.xr.legacyinputhelpers": {
       "version": "2.1.7",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.vr": "1.0.0",
@@ -128,8 +128,8 @@
       "url": "https://packages.unity.com"
     },
     "com.xrtk.core": {
-      "version": "0.2.9",
-      "depth": 0,
+      "version": "0.2.10-preview.2",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
@@ -145,7 +145,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.xrtk.core": "0.2.9",
+        "com.xrtk.core": "0.2.10-preview.2",
         "com.unity.textmeshpro": "2.1.4"
       }
     },
