@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67355724a5b4fd841bbf691ac44ad25d, type: 3}
+  m_Name: ThumbsUpHandPose
+  m_EditorClassIdentifier: 
+  id: thumbs-up
+  description: OK sign.
+  isDefault: 0
+  keyCode: 52
+  data: {fileID: 4900000, guid: f8236cb3fbe55ed499df0418bb28c0cd, type: 3}
+  didBake: 1
+  isGripping: 1
+  fingerCurlStrengths:
+  - 0.29784977
+  - 0.85514337
+  - 0.86561483
+  - 0.83954275
+  - 0.8154361
+  gripStrength: 0.9714226

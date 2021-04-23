@@ -1,31 +1,46 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Create a report to identify a potential issue
 title: ''
-labels: bug
+labels: Bug
 assignees: ''
-
 ---
 
+# XRTK - Mixed Reality Toolkit Bug Report
+
 ## Describe the bug
-A clear and concise description of what the bug is.
+<!-- Please provide a clear and concise description of what the bug is. -->
 
 ## To Reproduce
-Steps to reproduce the behavior:
+<!-- Include Steps to reproduce the behavior: -->
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
 ## Expected behavior
-A clear and concise description of what you expected to happen.
+<!--  A clear and concise description of what you expected to happen. -->
+
+## Actual behavior
+<!-- What is actually happening -->
 
 ## Screenshots
-If applicable, add screenshots to help explain your problem.
+<!-- If applicable, add screenshots to help explain your problem. -->
 
-## Information(please complete the following information):
- - Version: [e.g. 2018.3.1f1]
-- Release or Commit sha: [e.g. Latest Release]
+## Your Setup
+<!-- please complete any/all the following information. -->
+
+- **Operation System:**
+    - [ ] Windows
+    - [ ] MacOs
+    - [ ] Linux
+    - [ ] Other <!-- Please Specify Platform -->
+- **Unity Version:** <!-- Please Specify Version --> 2019.4.19f
+- **XRTK Packages**
+    - [ ] com.xrtk.core 0.2.0 <!-- Please Specify Version or commit sha -->
+    - [ ] com.xrtk.sdk 0.2.0 <!-- Please Specify Version or commit sha -->
+    <!-- - [ ] com.xrtk.other 0.2.0 -->
 
 ## Additional context
-Add any other context about the problem here.
+<!--  Add any other context about the problem here. -->

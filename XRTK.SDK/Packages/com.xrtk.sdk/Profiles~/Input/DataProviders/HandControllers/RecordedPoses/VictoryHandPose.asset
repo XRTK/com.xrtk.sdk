@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67355724a5b4fd841bbf691ac44ad25d, type: 3}
+  m_Name: VictoryHandPose
+  m_EditorClassIdentifier: 
+  id: victory
+  description: Victory sign.
+  isDefault: 0
+  keyCode: 53
+  data: {fileID: 4900000, guid: f7b9fdc8704378f4a8e1f18c99edb3ac, type: 3}
+  didBake: 1
+  isGripping: 0
+  fingerCurlStrengths:
+  - 1
+  - 0.06573929
+  - 0.06283465
+  - 0.39798924
+  - 0.3726366
+  gripStrength: 0.30365536
