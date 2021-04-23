@@ -24,7 +24,7 @@ namespace XRTK.SDK.UX.Controllers.Hands
         private BoxCollider handBoundsModeCollider;
         private const float fingerColliderRadius = .007f;
         private const int capsuleColliderZAxis = 2;
-        HandControllerJointsVisualizer jointsVisualizer;
+        private HandControllerJointsVisualizer jointsVisualizer;
         private HandControllerMeshVisualizer meshVisualizer;
 
         [SerializeField]

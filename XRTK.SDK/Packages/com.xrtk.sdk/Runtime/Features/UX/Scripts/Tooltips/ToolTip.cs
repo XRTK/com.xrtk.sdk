@@ -445,7 +445,9 @@ namespace XRTK.SDK.UX.ToolTips
         {
 
             if (Application.isPlaying)
+            {
                 return;
+            }
 
             if (!EnforceHierarchy())
             {
