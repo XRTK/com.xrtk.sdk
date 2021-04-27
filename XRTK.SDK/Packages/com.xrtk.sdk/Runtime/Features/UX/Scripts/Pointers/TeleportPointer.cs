@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 using XRTK.Definitions.LocomotionSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
-using XRTK.EventDatum.Teleport;
+using XRTK.EventDatum.Locomotion;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Services;
@@ -276,7 +276,7 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public override void OnTeleportRequest(TeleportEventData eventData)
+        public override void OnLocomotionRequest(LocomotionEventData eventData)
         {
             // Only turn off the pointer if we're not the one sending the request
             if (eventData.Pointer.PointerId == PointerId)
@@ -291,14 +291,14 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public override void OnTeleportCompleted(TeleportEventData eventData)
+        public override void OnLocomotionCompleted(LocomotionEventData eventData)
         {
             IsTeleportRequestActive = false;
             BaseCursor?.SetVisibility(false);
         }
 
         /// <inheritdoc />
-        public override void OnTeleportCanceled(TeleportEventData eventData)
+        public override void OnLocomotionCanceled(LocomotionEventData eventData)
         {
             IsTeleportRequestActive = false;
             BaseCursor?.SetVisibility(false);

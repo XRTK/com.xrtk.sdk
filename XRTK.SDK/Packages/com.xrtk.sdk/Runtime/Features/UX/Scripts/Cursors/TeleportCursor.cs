@@ -5,7 +5,7 @@ using System;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.LocomotionSystem;
-using XRTK.EventDatum.Teleport;
+using XRTK.EventDatum.Locomotion;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.LocomotionSystem;
@@ -15,7 +15,7 @@ using XRTK.Utilities;
 
 namespace XRTK.SDK.UX.Cursors
 {
-    public class TeleportCursor : AnimatedCursor, IMixedRealityTeleportHandler
+    public class TeleportCursor : AnimatedCursor, IMixedRealityLocomotionHandler
     {
         [SerializeField]
         [Tooltip("Arrow Transform to point in the Teleporting direction.")]
@@ -125,22 +125,22 @@ namespace XRTK.SDK.UX.Cursors
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public void OnTeleportRequest(TeleportEventData eventData)
+        public void OnLocomotionRequest(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Observe);
         }
 
         /// <inheritdoc />
-        public void OnTeleportStarted(TeleportEventData eventData)
+        public void OnLocomotionStarted(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Release);
         }
 
         /// <inheritdoc />
-        public void OnTeleportCompleted(TeleportEventData eventData) { }
+        public void OnLocomotionCompleted(LocomotionEventData eventData) { }
 
         /// <inheritdoc />
-        public void OnTeleportCanceled(TeleportEventData eventData)
+        public void OnLocomotionCanceled(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Release);
         }

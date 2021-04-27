@@ -8,7 +8,7 @@ using XRTK.Definitions;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
-using XRTK.EventDatum.Teleport;
+using XRTK.EventDatum.Locomotion;
 using XRTK.Extensions;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
@@ -28,7 +28,7 @@ namespace XRTK.SDK.UX.Pointers
     [DisallowMultipleComponent]
     public abstract class BaseControllerPointer : ControllerPoseSynchronizer,
         IMixedRealityPointer,
-        IMixedRealityTeleportHandler
+        IMixedRealityLocomotionHandler
     {
         [SerializeField]
         private GameObject cursorPrefab = null;
@@ -655,7 +655,7 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public virtual void OnTeleportRequest(TeleportEventData eventData)
+        public virtual void OnLocomotionRequest(LocomotionEventData eventData)
         {
             // Only turn off pointers that aren't making the request.
             IsTeleportRequestActive = true;
@@ -663,7 +663,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnTeleportStarted(TeleportEventData eventData)
+        public virtual void OnLocomotionStarted(LocomotionEventData eventData)
         {
             // Turn off all pointers while we teleport.
             IsTeleportRequestActive = true;
@@ -671,7 +671,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnTeleportCompleted(TeleportEventData eventData)
+        public virtual void OnLocomotionCompleted(LocomotionEventData eventData)
         {
             // Turn all our pointers back on.
             IsTeleportRequestActive = false;
@@ -679,7 +679,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnTeleportCanceled(TeleportEventData eventData)
+        public virtual void OnLocomotionCanceled(LocomotionEventData eventData)
         {
             // Turn all our pointers back on.
             IsTeleportRequestActive = false;
