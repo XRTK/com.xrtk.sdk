@@ -21,22 +21,19 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
     profile: {fileID: 11400000, guid: f3f7a928ca0f70649a77a0f17e7465ff, type: 2}
+  startupBehavior: 0
   teleportProvider:
-    reference: 
+    reference: 0db5b0fd-9ac3-487a-abfd-754963f4e2a3
   teleportAction:
-    profileGuid: 00000000000000000000000000000000
-    id: 0
-    description: None
-    axisConstraint: 0
-  cancelTeleportAction:
-    profileGuid: 00000000000000000000000000000000
-    id: 0
-    description: None
-    axisConstraint: 0
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 5
+    description: Teleport Direction
+    axisConstraint: 4
+  movementCancelsTeleport: 1
   movementProvider:
-    reference: 
+    reference: ea92be29-4cab-4ae8-aee0-daf18a59656f
   moveAction:
-    profileGuid: 00000000000000000000000000000000
-    id: 0
-    description: None
-    axisConstraint: 0
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 13
+    description: Movement Direction
+    axisConstraint: 4
