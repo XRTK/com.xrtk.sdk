@@ -155,7 +155,7 @@ namespace XRTK.SDK.UX.Pointers
             if (!lateRegisterTeleport &&
                 MixedRealityToolkit.TryGetSystem(out teleportSystem))
             {
-                TeleportSystem.Register(gameObject);
+                teleportSystem.Register(gameObject);
             }
         }
 
