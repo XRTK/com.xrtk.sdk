@@ -30,6 +30,7 @@ MonoBehaviour:
     description: Teleport Direction
     axisConstraint: 4
   movementCancelsTeleport: 1
+  movementSpeed: 5
   movementProvider:
     reference: ea92be29-4cab-4ae8-aee0-daf18a59656f
   moveAction:
