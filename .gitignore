@@ -19,6 +19,7 @@ project.lock.json
 *.package
 TextMesh Pro.meta
 TextMesh Pro/
+*packages-lock.json
 
 # ============ #
 # Certificates #
@@ -75,9 +76,3 @@ ThirdParty.meta
 XRTK-Core/Assets/StreamingAssets/GltfModels/
 XRTK-Core/Assets/StreamingAssets/GltfModels.meta
 XRTK-Core/Assets/StreamingAssets.meta
-
-XRTK.SDK/Assets/XRTK.Generated/SDK.meta
-XRTK.SDK/Assets/XRTK.Generated/SDK/Profiles
-XRTK.SDK/Assets/XRTK.Generated/SDK/Profiles.meta
-XRTK.SDK/Assets/XRTK.Generated/SDK/Prefabs
-XRTK.SDK/Assets/XRTK.Generated/SDK/Prefabs.meta
