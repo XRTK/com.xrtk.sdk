@@ -69,26 +69,24 @@ namespace XRTK.SDK.UX.Pointers
 
         private bool canMove = false;
 
-        private IMixedRealityTeleportValidationDataProvider validationDataProvider;
-        private IMixedRealityTeleportValidationDataProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<IMixedRealityTeleportValidationDataProvider>());
+        private IMixedRealityTeleportValidationProvider validationDataProvider;
+        private IMixedRealityTeleportValidationProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<IMixedRealityTeleportValidationProvider>());
 
         /// <summary>
         /// The result from the last raycast.
         /// </summary>
-        public TeleportValidationResult TeleportValidationResult { get; private set; } = TeleportValidationResult.None;
+        public TeleportValidationResult TeleportValidationResult { get; private set; } = TeleportValidationResult.Default;
 
         protected Gradient GetLineGradient(TeleportValidationResult targetResult)
         {
             switch (targetResult)
             {
-                case TeleportValidationResult.None:
+                case TeleportValidationResult.Default:
                     return LineColorNoTarget;
                 case TeleportValidationResult.Valid:
-                    return LineColorValid;
+                    return TeleportHotSpot != null ? LineColorHotSpot : LineColorValid;
                 case TeleportValidationResult.Invalid:
                     return LineColorInvalid;
-                case TeleportValidationResult.HotSpot:
-                    return lineColorHotSpot;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
             }
@@ -106,7 +104,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 if (TeleportHotSpot != null &&
                     TeleportHotSpot.OverrideTargetOrientation &&
-                    TeleportValidationResult == TeleportValidationResult.HotSpot)
+                    TeleportValidationResult == TeleportValidationResult.Valid)
                 {
                     return TeleportHotSpot.TargetOrientation;
                 }
@@ -144,7 +142,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             // Use the results from the last update to set our NavigationResult
             float clearWorldLength = 0f;
-            TeleportValidationResult = TeleportValidationResult.None;
+            TeleportValidationResult = TeleportValidationResult.Default;
 
             if (IsInteractionEnabled)
             {
@@ -162,7 +160,7 @@ namespace XRTK.SDK.UX.Pointers
                         {
                             if (MixedRealityRaycaster.DebugEnabled)
                             {
-                                Color debugColor = TeleportValidationResult != TeleportValidationResult.None
+                                Color debugColor = TeleportValidationResult != TeleportValidationResult.Default
                                     ? Color.yellow
                                     : Color.cyan;
 
@@ -181,7 +179,7 @@ namespace XRTK.SDK.UX.Pointers
 
                     // Clamp the end of the parabola to the result hit's point
                     LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, LineCastResolution);
-                    BaseCursor?.SetVisibility(TeleportValidationResult == TeleportValidationResult.Valid || TeleportValidationResult == TeleportValidationResult.HotSpot);
+                    BaseCursor?.SetVisibility(TeleportValidationResult == TeleportValidationResult.Valid);
                 }
                 else
                 {
@@ -317,8 +315,7 @@ namespace XRTK.SDK.UX.Pointers
             }
             else if (!currentDigitalInputState)
             {
-                bool isValid = TeleportValidationResult == TeleportValidationResult.Valid ||
-                               TeleportValidationResult == TeleportValidationResult.HotSpot;
+                bool isValid = TeleportValidationResult == TeleportValidationResult.Valid;
 
                 if (teleportEnabled && isValid)
                 {
@@ -425,8 +422,7 @@ namespace XRTK.SDK.UX.Pointers
                     canTeleport = false;
                     teleportEnabled = false;
 
-                    if (TeleportValidationResult == TeleportValidationResult.Valid ||
-                        TeleportValidationResult == TeleportValidationResult.HotSpot)
+                    if (TeleportValidationResult == TeleportValidationResult.Valid)
                     {
                         LocomotionSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
                     }
@@ -441,8 +437,7 @@ namespace XRTK.SDK.UX.Pointers
             }
 
             if (teleportEnabled &&
-                TeleportValidationResult == TeleportValidationResult.Valid ||
-                TeleportValidationResult == TeleportValidationResult.HotSpot)
+                TeleportValidationResult == TeleportValidationResult.Valid)
             {
                 canTeleport = true;
             }
