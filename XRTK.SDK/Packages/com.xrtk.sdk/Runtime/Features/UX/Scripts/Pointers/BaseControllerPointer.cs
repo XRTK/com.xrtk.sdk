@@ -8,7 +8,6 @@ using XRTK.Definitions;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
-using XRTK.EventDatum.Locomotion;
 using XRTK.Extensions;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
@@ -18,6 +17,7 @@ using XRTK.Interfaces.Physics;
 using XRTK.Interfaces.Providers.Controllers;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
+using XRTK.Services.LocomotionSystem;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers

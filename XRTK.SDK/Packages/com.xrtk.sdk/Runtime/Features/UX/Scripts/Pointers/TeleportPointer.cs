@@ -4,13 +4,12 @@
 using System;
 using UnityEngine;
 using UnityEngine.Serialization;
-using XRTK.Definitions.LocomotionSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
-using XRTK.EventDatum.Locomotion;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Services;
+using XRTK.Services.LocomotionSystem;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
@@ -75,13 +74,13 @@ namespace XRTK.SDK.UX.Pointers
         /// <summary>
         /// The result from the last raycast.
         /// </summary>
-        public TeleportValidationResult TeleportValidationResult { get; private set; } = TeleportValidationResult.Default;
+        public TeleportValidationResult TeleportValidationResult { get; private set; } = TeleportValidationResult.Unknown;
 
         protected Gradient GetLineGradient(TeleportValidationResult targetResult)
         {
             switch (targetResult)
             {
-                case TeleportValidationResult.Default:
+                case TeleportValidationResult.Unknown:
                     return LineColorNoTarget;
                 case TeleportValidationResult.Valid:
                     return TeleportHotSpot != null ? LineColorHotSpot : LineColorValid;
@@ -142,7 +141,7 @@ namespace XRTK.SDK.UX.Pointers
         {
             // Use the results from the last update to set our NavigationResult
             float clearWorldLength = 0f;
-            TeleportValidationResult = TeleportValidationResult.Default;
+            TeleportValidationResult = TeleportValidationResult.Unknown;
 
             if (IsInteractionEnabled)
             {
@@ -160,7 +159,7 @@ namespace XRTK.SDK.UX.Pointers
                         {
                             if (MixedRealityRaycaster.DebugEnabled)
                             {
-                                Color debugColor = TeleportValidationResult != TeleportValidationResult.Default
+                                Color debugColor = TeleportValidationResult != TeleportValidationResult.Unknown
                                     ? Color.yellow
                                     : Color.cyan;
 
