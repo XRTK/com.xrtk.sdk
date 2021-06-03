@@ -4,13 +4,12 @@
 using System;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
-using XRTK.Definitions.LocomotionSystem;
-using XRTK.EventDatum.Locomotion;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.LocomotionSystem;
 using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
+using XRTK.Services.LocomotionSystem;
 using XRTK.Utilities;
 
 namespace XRTK.SDK.UX.Cursors
@@ -61,7 +60,7 @@ namespace XRTK.SDK.UX.Cursors
                 {
                     switch (pointer.TeleportValidationResult)
                     {
-                        case TeleportValidationResult.Default:
+                        case TeleportValidationResult.Unknown:
                             return CursorStateEnum.Release;
                         case TeleportValidationResult.Invalid:
                             return CursorStateEnum.ObserveHover;

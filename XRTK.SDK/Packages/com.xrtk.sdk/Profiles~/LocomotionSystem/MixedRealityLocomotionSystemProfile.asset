@@ -14,25 +14,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configurations:
   - instancedType:
-      reference: 14199fd8-1636-4147-bb08-6475e76ed1cd
-    name: Mixed Reality Teleport Validation Data Provider
-    priority: 0
+      reference: 497d2054-a467-4d6d-9d79-bd01aa6b4c22
+    name: Blink Teleport Locomotion Provider
+    priority: 3
     platformEntries:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
-    profile: {fileID: 11400000, guid: f3f7a928ca0f70649a77a0f17e7465ff, type: 2}
-  startupBehavior: 0
-  teleportProvider:
-    reference: 0db5b0fd-9ac3-487a-abfd-754963f4e2a3
+    profile: {fileID: 11400000, guid: bbd192ddedf8a4c4386bfe5035f1ed1d, type: 2}
+  - instancedType:
+      reference: b3156486-94f3-4a02-98a9-a1c26fbf92d8
+    name: Dash Teleport Locomotion Provider
+    priority: 1
+    platformEntries:
+      runtimePlatforms:
+      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
+    profile: {fileID: 11400000, guid: de2b5c4133cc8a6469434b0924a876c8, type: 2}
+  - instancedType:
+      reference: 790cdfd8-89c7-41c9-8dab-6b32e1e9d0a9
+    name: Instant Teleport Locomotion Provider
+    priority: 2
+    platformEntries:
+      runtimePlatforms:
+      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
+    profile: {fileID: 0}
+  - instancedType:
+      reference: 1be53dfa-b8ae-4eb8-8459-17a5df87ade5
+    name: Smooth Locomotion Provider
+    priority: 3
+    platformEntries:
+      runtimePlatforms:
+      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
+    profile: {fileID: 11400000, guid: afbaf6cc7c17ee64c9681f5e02283ad5, type: 2}
+  - instancedType:
+      reference: 14199fd8-1636-4147-bb08-6475e76ed1cd
+    name: Teleport Validation Data Provider
+    priority: 3
+    platformEntries:
+      runtimePlatforms:
+      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
+    profile: {fileID: 11400000, guid: 94c8a2bcf62dc8a48b0689864b14ca4a, type: 2}
+  teleportStartupBehaviour: 0
   teleportAction:
     profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 5
     description: Teleport Direction
     axisConstraint: 4
+  movementStartupBehaviour: 0
   movementCancelsTeleport: 1
-  movementSpeed: 5
-  movementProvider:
-    reference: ea92be29-4cab-4ae8-aee0-daf18a59656f
   moveAction:
     profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 13
