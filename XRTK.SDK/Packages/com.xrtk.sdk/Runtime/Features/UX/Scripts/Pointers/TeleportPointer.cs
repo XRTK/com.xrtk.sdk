@@ -273,7 +273,7 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public override void OnLocomotionRequest(LocomotionEventData eventData)
+        public override void OnTeleportRequest(LocomotionEventData eventData)
         {
             // Only turn off the pointer if we're not the one sending the request
             if (eventData.Pointer.PointerId == PointerId)
@@ -288,14 +288,14 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public override void OnLocomotionCompleted(LocomotionEventData eventData)
+        public override void OnTeleportCompleted(LocomotionEventData eventData)
         {
             IsTeleportRequestActive = false;
             BaseCursor?.SetVisibility(false);
         }
 
         /// <inheritdoc />
-        public override void OnLocomotionCanceled(LocomotionEventData eventData)
+        public override void OnTeleportCanceled(LocomotionEventData eventData)
         {
             IsTeleportRequestActive = false;
             BaseCursor?.SetVisibility(false);

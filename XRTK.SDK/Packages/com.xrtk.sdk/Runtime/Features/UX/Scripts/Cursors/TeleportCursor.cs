@@ -123,22 +123,22 @@ namespace XRTK.SDK.UX.Cursors
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public void OnLocomotionRequest(LocomotionEventData eventData)
+        public void OnTeleportRequest(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Observe);
         }
 
         /// <inheritdoc />
-        public void OnLocomotionStarted(LocomotionEventData eventData)
+        public void OnTeleportStarted(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Release);
         }
 
         /// <inheritdoc />
-        public void OnLocomotionCompleted(LocomotionEventData eventData) { }
+        public void OnTeleportCompleted(LocomotionEventData eventData) { }
 
         /// <inheritdoc />
-        public void OnLocomotionCanceled(LocomotionEventData eventData)
+        public void OnTeleportCanceled(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Release);
         }

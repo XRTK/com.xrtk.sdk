@@ -655,7 +655,7 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public virtual void OnLocomotionRequest(LocomotionEventData eventData)
+        public virtual void OnTeleportRequest(LocomotionEventData eventData)
         {
             // Only turn off pointers that aren't making the request.
             IsTeleportRequestActive = true;
@@ -663,7 +663,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnLocomotionStarted(LocomotionEventData eventData)
+        public virtual void OnTeleportStarted(LocomotionEventData eventData)
         {
             // Turn off all pointers while we teleport.
             IsTeleportRequestActive = true;
@@ -671,7 +671,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnLocomotionCompleted(LocomotionEventData eventData)
+        public virtual void OnTeleportCompleted(LocomotionEventData eventData)
         {
             // Turn all our pointers back on.
             IsTeleportRequestActive = false;
@@ -679,7 +679,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnLocomotionCanceled(LocomotionEventData eventData)
+        public virtual void OnTeleportCanceled(LocomotionEventData eventData)
         {
             // Turn all our pointers back on.
             IsTeleportRequestActive = false;
