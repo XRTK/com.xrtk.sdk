@@ -655,7 +655,7 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public virtual void OnTeleportRequest(LocomotionEventData eventData)
+        public virtual void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
             // Only turn off pointers that aren't making the request.
             IsTeleportRequestActive = true;

@@ -123,7 +123,7 @@ namespace XRTK.SDK.UX.Cursors
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public void OnTeleportRequest(LocomotionEventData eventData)
+        public void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Observe);
         }

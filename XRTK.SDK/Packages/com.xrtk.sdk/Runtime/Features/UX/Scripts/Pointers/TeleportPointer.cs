@@ -273,7 +273,7 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityTeleportHandler Implementation
 
         /// <inheritdoc />
-        public override void OnTeleportRequest(LocomotionEventData eventData)
+        public override void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
             // Only turn off the pointer if we're not the one sending the request
             if (eventData.Pointer.PointerId == PointerId)
