@@ -13,4 +13,9 @@ MonoBehaviour:
   m_Name: SmoothLocomotionDataProviderProfile
   m_EditorClassIdentifier: 
   startupBehaviour: 0
+  inputAction:
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 13
+    description: Movement Direction
+    axisConstraint: 4
   speed: 5
