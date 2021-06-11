@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a02896ddb887445babbe61ec8a4025, type: 3}
-  m_Name: MixedRealityBlinkTeleportLocomotionProviderProfile
+  m_Script: {fileID: 11500000, guid: be10300813b42df439ce19d38438c7fb, type: 3}
+  m_Name: DashTeleportLocomotionDataProviderProfile
   m_EditorClassIdentifier: 
-  fadeDuration: 0.25
+  startupBehaviour: 1
+  dashDuration: 0.25

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09eb879d2490c18478de9670542e9c74, type: 3}
-  m_Name: MixedRealityLocomotionSystemProfile
+  m_Name: LocomotionSystemProfile
   m_EditorClassIdentifier: 
   configurations:
   - instancedType:
@@ -53,13 +53,11 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
     profile: {fileID: 11400000, guid: 94c8a2bcf62dc8a48b0689864b14ca4a, type: 2}
-  teleportStartupBehaviour: 0
   teleportAction:
     profileGuid: 399335ccc89c4d12b79f3539ca7771db
     id: 5
     description: Teleport Direction
     axisConstraint: 4
-  movementStartupBehaviour: 0
   movementCancelsTeleport: 1
   moveAction:
     profileGuid: 399335ccc89c4d12b79f3539ca7771db
