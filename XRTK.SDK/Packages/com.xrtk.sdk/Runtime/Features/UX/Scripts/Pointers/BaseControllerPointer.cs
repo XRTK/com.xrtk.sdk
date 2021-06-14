@@ -28,7 +28,7 @@ namespace XRTK.SDK.UX.Pointers
     [DisallowMultipleComponent]
     public abstract class BaseControllerPointer : ControllerPoseSynchronizer,
         IMixedRealityPointer,
-        IMixedRealityLocomotionHandler
+        IMixedRealityLocomotionSystemHandler
     {
         [SerializeField]
         private GameObject cursorPrefab = null;
@@ -90,7 +90,7 @@ namespace XRTK.SDK.UX.Pointers
 
         /// <summary>
         /// Gets the currently captured near interaction object. Only applicable
-        /// if <see cref="XRTK.Definitions.InteractionMode.Both"/> or <see cref="XRTK.Definitions.InteractionMode.Near"/>.
+        /// if <see cref="InteractionMode.Both"/> or <see cref="InteractionMode.Near"/>.
         /// </summary>
         protected GameObject CapturedNearInteractionObject { get; private set; } = null;
 
@@ -311,7 +311,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public IMixedRealityTeleportHotSpot TeleportHotSpot { get; set; }
+        public ITeleportHotSpot TeleportHotSpot { get; set; }
 
         [SerializeField]
         private InteractionMode interactionMode = InteractionMode.Both;
@@ -652,40 +652,52 @@ namespace XRTK.SDK.UX.Pointers
 
         #endregion  IMixedRealityInputHandler Implementation
 
-        #region IMixedRealityTeleportHandler Implementation
+        #region IMixedRealityLocomotionSystemHandler Implementation
 
         /// <inheritdoc />
         public virtual void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
-            // Only turn off pointers that aren't making the request.
-            IsTeleportRequestActive = true;
-            BaseCursor?.SetVisibility(false);
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                // Only turn off pointers that aren't making the request.
+                IsTeleportRequestActive = true;
+                BaseCursor?.SetVisibility(false);
+            }
         }
 
         /// <inheritdoc />
         public virtual void OnTeleportStarted(LocomotionEventData eventData)
         {
-            // Turn off all pointers while we teleport.
-            IsTeleportRequestActive = true;
-            BaseCursor?.SetVisibility(false);
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                // Turn off all pointers while we teleport.
+                IsTeleportRequestActive = true;
+                BaseCursor?.SetVisibility(false);
+            }
         }
 
         /// <inheritdoc />
         public virtual void OnTeleportCompleted(LocomotionEventData eventData)
         {
-            // Turn all our pointers back on.
-            IsTeleportRequestActive = false;
-            BaseCursor?.SetVisibility(true);
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                // Turn all our pointers back on.
+                IsTeleportRequestActive = false;
+                BaseCursor?.SetVisibility(true);
+            }
         }
 
         /// <inheritdoc />
         public virtual void OnTeleportCanceled(LocomotionEventData eventData)
         {
-            // Turn all our pointers back on.
-            IsTeleportRequestActive = false;
-            BaseCursor?.SetVisibility(true);
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                // Turn all our pointers back on.
+                IsTeleportRequestActive = false;
+                BaseCursor?.SetVisibility(true);
+            }
         }
 
-        #endregion IMixedRealityTeleportHandler Implementation
+        #endregion IMixedRealityLocomotionSystemHandler Implementation
     }
 }

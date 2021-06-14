@@ -13,7 +13,7 @@ namespace XRTK.SDK.Input.Handlers
     /// SDK component handling teleportation to a specific position and orientation when a user focuses
     /// this <see cref="GameObject"/> and triggers the teleport action.
     /// </summary>
-    public class TeleportHotSpot : BaseFocusHandler, IMixedRealityTeleportHotSpot
+    public class TeleportHotSpot : BaseFocusHandler, ITeleportHotSpot
     {
         private IMixedRealityLocomotionSystem locomotionSystem = null;
 
@@ -27,7 +27,10 @@ namespace XRTK.SDK.Input.Handlers
         {
             base.OnBeforeFocusChange(eventData);
 
-            if (!(eventData.Pointer is TeleportPointer)) { return; }
+            if (!(eventData.Pointer is TeleportPointer teleportPointer))
+            {
+                return;
+            }
 
             if (eventData.NewFocusedObject == gameObject)
             {
@@ -35,8 +38,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    LocomotionSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
-                    LocomotionSystem?.RaiseTeleportRequest(eventData.Pointer, this);
+                    LocomotionSystem?.RaiseTeleportCanceled(teleportPointer.RequestingLocomotionProvider, teleportPointer, this);
                 }
             }
             else if (eventData.OldFocusedObject == gameObject)
@@ -45,14 +47,14 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    LocomotionSystem?.RaiseTeleportCanceled(eventData.Pointer, this);
+                    LocomotionSystem?.RaiseTeleportCanceled(teleportPointer.RequestingLocomotionProvider, teleportPointer, this);
                 }
             }
         }
 
         #endregion IMixedRealityFocusHandler Implementation
 
-        #region IMixedRealityTeleportTarget Implementation
+        #region ITeleportHotSpot Implementation
 
         /// <inheritdoc />
         public Vector3 Position => transform.position;
@@ -78,7 +80,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public GameObject GameObjectReference => gameObject;
 
-        #endregion IMixedRealityTeleportTarget Implementation
+        #endregion ITeleportHotSpot Implementation
 
         private void OnDrawGizmos()
         {

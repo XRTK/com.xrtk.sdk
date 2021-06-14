@@ -68,13 +68,19 @@ namespace XRTK.SDK.UX.Pointers
 
         private bool canMove = false;
 
-        private IMixedRealityTeleportValidationProvider validationDataProvider;
-        private IMixedRealityTeleportValidationProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<IMixedRealityTeleportValidationProvider>());
+        private ITeleportValidationProvider validationDataProvider;
+        private ITeleportValidationProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<ITeleportValidationProvider>());
 
         /// <summary>
         /// The result from the last raycast.
         /// </summary>
         public TeleportValidationResult TeleportValidationResult { get; private set; } = TeleportValidationResult.Unknown;
+
+        /// <summary>
+        /// Gets the <see cref="ILocomotionProvider"/> that is currently requesting a teleport target
+        /// from this pointer. May be null if no requested was recieved by the pointer.
+        /// </summary>
+        public ILocomotionProvider RequestingLocomotionProvider { get; private set; }
 
         protected Gradient GetLineGradient(TeleportValidationResult targetResult)
         {
@@ -203,29 +209,16 @@ namespace XRTK.SDK.UX.Pointers
         #region IMixedRealityInputHandler Implementation
 
         /// <inheritdoc />
-        public override void OnInputDown(InputEventData eventData)
+        public override void OnInputUp(InputEventData eventData)
         {
-            // Don't process input if we've got an active teleport request in progress.
-            if (eventData.used || IsTeleportRequestActive || LocomotionSystem == null)
+            if (eventData.used || !IsTeleportRequestActive || LocomotionSystem == null)
             {
                 return;
             }
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == LocomotionSystem.TeleportAction)
-            {
-                eventData.Use();
-                ProcessDigitalTeleportInput(true);
-            }
-        }
-
-        /// <inheritdoc />
-        public override void OnInputUp(InputEventData eventData)
-        {
-            if (eventData.SourceId == InputSourceParent.SourceId &&
-                eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == LocomotionSystem.TeleportAction)
+                eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
             {
                 eventData.Use();
                 ProcessDigitalTeleportInput(false);
@@ -235,15 +228,14 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<float> eventData)
         {
-            // Don't process input if we've got an active teleport request in progress.
-            if (eventData.used || IsTeleportRequestActive || LocomotionSystem == null)
+            if (eventData.used || !IsTeleportRequestActive || LocomotionSystem == null)
             {
                 return;
             }
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == LocomotionSystem.TeleportAction)
+                eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
             {
                 eventData.Use();
                 ProcessSingleAxisTeleportInput(eventData);
@@ -253,15 +245,14 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Vector2> eventData)
         {
-            // Don't process input if we've got an active teleport request in progress.
-            if (eventData.used || IsTeleportRequestActive || LocomotionSystem == null)
+            if (eventData.used || !IsTeleportRequestActive || LocomotionSystem == null)
             {
                 return;
             }
 
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == LocomotionSystem.TeleportAction)
+                eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
             {
                 eventData.Use();
                 ProcessDualAxisTeleportInput(eventData);
@@ -270,61 +261,60 @@ namespace XRTK.SDK.UX.Pointers
 
         #endregion IMixedRealityInputHandler Implementation
 
-        #region IMixedRealityTeleportHandler Implementation
+        #region IMixedRealityLocomotionSystemHandler Implementation
 
         /// <inheritdoc />
         public override void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
-            // Only turn off the pointer if we're not the one sending the request
-            if (eventData.Pointer.PointerId == PointerId)
+            base.OnTeleportTargetRequested(eventData);
+            if (IsTeleportRequestActive)
             {
-                IsTeleportRequestActive = false;
-            }
-            else
-            {
-                IsTeleportRequestActive = true;
-                BaseCursor?.SetVisibility(false);
+                RequestingLocomotionProvider = eventData.LocomotionProvider;
+                teleportEnabled = true;
             }
         }
 
         /// <inheritdoc />
         public override void OnTeleportCompleted(LocomotionEventData eventData)
         {
-            IsTeleportRequestActive = false;
-            BaseCursor?.SetVisibility(false);
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                IsTeleportRequestActive = false;
+                RequestingLocomotionProvider = null;
+                BaseCursor?.SetVisibility(false);
+            }
         }
 
         /// <inheritdoc />
         public override void OnTeleportCanceled(LocomotionEventData eventData)
         {
-            IsTeleportRequestActive = false;
-            BaseCursor?.SetVisibility(false);
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                IsTeleportRequestActive = false;
+                RequestingLocomotionProvider = null;
+                BaseCursor?.SetVisibility(false);
+            }
         }
 
-        #endregion IMixedRealityTeleportHandler Implementation
+        #endregion IMixedRealityLocomotionSystemHandler Implementation
 
         private void ProcessDigitalTeleportInput(bool isPressed)
         {
             currentDigitalInputState = isPressed;
 
-            if (currentDigitalInputState && !teleportEnabled)
-            {
-                teleportEnabled = true;
-                LocomotionSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
-            }
-            else if (!currentDigitalInputState)
+            if (!currentDigitalInputState)
             {
                 bool isValid = TeleportValidationResult == TeleportValidationResult.Valid;
 
                 if (teleportEnabled && isValid)
                 {
                     teleportEnabled = false;
-                    LocomotionSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
+                    LocomotionSystem?.RaiseTeleportStarted(RequestingLocomotionProvider, this, TeleportHotSpot);
                 }
                 else if (teleportEnabled)
                 {
                     teleportEnabled = false;
-                    LocomotionSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
+                    LocomotionSystem?.RaiseTeleportCanceled(RequestingLocomotionProvider, this, TeleportHotSpot);
                 }
             }
         }
@@ -351,9 +341,9 @@ namespace XRTK.SDK.UX.Pointers
 
                     if (absoluteAngle < teleportActivationAngle)
                     {
-                        teleportEnabled = true;
+                        //teleportEnabled = true;
 
-                        LocomotionSystem?.RaiseTeleportRequest(this, TeleportHotSpot);
+                        //LocomotionSystem?.RaiseTeleportTargetRequest(this, TeleportHotSpot);
                     }
                     else if (canMove)
                     {
@@ -423,7 +413,7 @@ namespace XRTK.SDK.UX.Pointers
 
                     if (TeleportValidationResult == TeleportValidationResult.Valid)
                     {
-                        LocomotionSystem?.RaiseTeleportStarted(this, TeleportHotSpot);
+                        LocomotionSystem?.RaiseTeleportStarted(RequestingLocomotionProvider, this, TeleportHotSpot);
                     }
                 }
 
@@ -431,7 +421,7 @@ namespace XRTK.SDK.UX.Pointers
                 {
                     canTeleport = false;
                     teleportEnabled = false;
-                    LocomotionSystem?.RaiseTeleportCanceled(this, TeleportHotSpot);
+                    LocomotionSystem?.RaiseTeleportCanceled(RequestingLocomotionProvider, this, TeleportHotSpot);
                 }
             }
 

@@ -14,7 +14,7 @@ using XRTK.Utilities;
 
 namespace XRTK.SDK.UX.Cursors
 {
-    public class TeleportCursor : AnimatedCursor, IMixedRealityLocomotionHandler
+    public class TeleportCursor : AnimatedCursor, IMixedRealityLocomotionSystemHandler
     {
         [SerializeField]
         [Tooltip("Arrow Transform to point in the Teleporting direction.")]
