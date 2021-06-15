@@ -58,7 +58,7 @@ namespace XRTK.SDK.UX.Cursors
             {
                 if (pointer.IsInteractionEnabled)
                 {
-                    switch (pointer.TeleportValidationResult)
+                    switch (pointer.ValidationResult)
                     {
                         case TeleportValidationResult.Unknown:
                             return CursorStateEnum.Release;
@@ -120,7 +120,7 @@ namespace XRTK.SDK.UX.Cursors
 
         #endregion IMixedRealityCursor Implementation
 
-        #region IMixedRealityTeleportHandler Implementation
+        #region IMixedRealityLocomotionSystemHandler Implementation
 
         /// <inheritdoc />
         public void OnTeleportTargetRequested(LocomotionEventData eventData)
@@ -143,6 +143,6 @@ namespace XRTK.SDK.UX.Cursors
             OnCursorStateChange(CursorStateEnum.Release);
         }
 
-        #endregion IMixedRealityTeleportHandler Implementation
+        #endregion IMixedRealityLocomotionSystemHandler Implementation
     }
 }

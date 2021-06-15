@@ -154,7 +154,7 @@ namespace XRTK.SDK.UX.Pointers
             if (!lateRegisterTeleport &&
                 MixedRealityToolkit.TryGetSystem(out locomotionSystem))
             {
-                LocomotionSystem.Register(gameObject);
+                locomotionSystem.Register(gameObject);
             }
         }
 
@@ -657,45 +657,33 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public virtual void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
-            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
-            {
-                // Only turn off pointers that aren't making the request.
-                IsTeleportRequestActive = true;
-                BaseCursor?.SetVisibility(false);
-            }
+            // Only turn off pointers that aren't making the request.
+            IsTeleportRequestActive = true;
+            BaseCursor?.SetVisibility(false);
         }
 
         /// <inheritdoc />
         public virtual void OnTeleportStarted(LocomotionEventData eventData)
         {
-            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
-            {
-                // Turn off all pointers while we teleport.
-                IsTeleportRequestActive = true;
-                BaseCursor?.SetVisibility(false);
-            }
+            // Turn off all pointers while we teleport.
+            IsTeleportRequestActive = true;
+            BaseCursor?.SetVisibility(false);
         }
 
         /// <inheritdoc />
         public virtual void OnTeleportCompleted(LocomotionEventData eventData)
         {
-            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
-            {
-                // Turn all our pointers back on.
-                IsTeleportRequestActive = false;
-                BaseCursor?.SetVisibility(true);
-            }
+            // Turn all our pointers back on.
+            IsTeleportRequestActive = false;
+            BaseCursor?.SetVisibility(true);
         }
 
         /// <inheritdoc />
         public virtual void OnTeleportCanceled(LocomotionEventData eventData)
         {
-            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
-            {
-                // Turn all our pointers back on.
-                IsTeleportRequestActive = false;
-                BaseCursor?.SetVisibility(true);
-            }
+            // Turn all our pointers back on.
+            IsTeleportRequestActive = false;
+            BaseCursor?.SetVisibility(true);
         }
 
         #endregion IMixedRealityLocomotionSystemHandler Implementation

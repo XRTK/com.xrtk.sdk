@@ -4,7 +4,6 @@
 using UnityEngine;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.LocomotionSystem;
-using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
@@ -27,7 +26,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             base.OnBeforeFocusChange(eventData);
 
-            if (!(eventData.Pointer is TeleportPointer teleportPointer))
+            if (!(eventData.Pointer is ITeleportTargetProvider targetProvider))
             {
                 return;
             }
@@ -38,7 +37,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    LocomotionSystem?.RaiseTeleportCanceled(teleportPointer.RequestingLocomotionProvider, teleportPointer, this);
+                    LocomotionSystem?.RaiseTeleportCanceled(targetProvider.RequestingLocomotionProvider, eventData.Pointer, this);
                 }
             }
             else if (eventData.OldFocusedObject == gameObject)
@@ -47,7 +46,7 @@ namespace XRTK.SDK.Input.Handlers
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
-                    LocomotionSystem?.RaiseTeleportCanceled(teleportPointer.RequestingLocomotionProvider, teleportPointer, this);
+                    LocomotionSystem?.RaiseTeleportCanceled(targetProvider.RequestingLocomotionProvider, eventData.Pointer, this);
                 }
             }
         }
