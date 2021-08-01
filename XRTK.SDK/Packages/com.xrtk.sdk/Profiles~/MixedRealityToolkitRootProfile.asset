@@ -61,5 +61,3 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
     profile: {fileID: 11400000, guid: 4f3217bd00647e147a746a49f672b6d8, type: 2}
-  registeredServiceProvidersProfile: {fileID: 11400000, guid: acea2c25fd504369954fa833a8c4ea5b,
-    type: 2}
