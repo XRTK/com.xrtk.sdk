@@ -15,11 +15,6 @@ namespace XRTK.SDK.Editor.UX.Pointers
 
         private SerializedProperty inputThreshold;
         private SerializedProperty angleOffset;
-        private SerializedProperty teleportActivationAngle;
-        private SerializedProperty rotateActivationAngle;
-        private SerializedProperty rotationAmount;
-        private SerializedProperty backStrafeActivationAngle;
-        private SerializedProperty strafeAmount;
         private SerializedProperty lineColorHotSpot;
 
         protected override void OnEnable()
@@ -29,11 +24,6 @@ namespace XRTK.SDK.Editor.UX.Pointers
 
             inputThreshold = serializedObject.FindProperty(nameof(inputThreshold));
             angleOffset = serializedObject.FindProperty(nameof(angleOffset));
-            teleportActivationAngle = serializedObject.FindProperty(nameof(teleportActivationAngle));
-            rotateActivationAngle = serializedObject.FindProperty(nameof(rotateActivationAngle));
-            rotationAmount = serializedObject.FindProperty(nameof(rotationAmount));
-            backStrafeActivationAngle = serializedObject.FindProperty(nameof(backStrafeActivationAngle));
-            strafeAmount = serializedObject.FindProperty(nameof(strafeAmount));
             lineColorHotSpot = serializedObject.FindProperty(nameof(lineColorHotSpot));
         }
 
@@ -47,11 +37,6 @@ namespace XRTK.SDK.Editor.UX.Pointers
                 EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(inputThreshold);
                 EditorGUILayout.PropertyField(angleOffset);
-                EditorGUILayout.PropertyField(teleportActivationAngle);
-                EditorGUILayout.PropertyField(rotateActivationAngle);
-                EditorGUILayout.PropertyField(rotationAmount);
-                EditorGUILayout.PropertyField(backStrafeActivationAngle);
-                EditorGUILayout.PropertyField(strafeAmount);
                 EditorGUILayout.PropertyField(lineColorHotSpot);
                 EditorGUI.indentLevel--;
             }

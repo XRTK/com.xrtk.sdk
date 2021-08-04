@@ -310,9 +310,6 @@ namespace XRTK.SDK.UX.Pointers
             set => cursorModifier = value;
         }
 
-        /// <inheritdoc />
-        public ITeleportHotSpot TeleportHotSpot { get; set; }
-
         [SerializeField]
         private InteractionMode interactionMode = InteractionMode.Both;
 

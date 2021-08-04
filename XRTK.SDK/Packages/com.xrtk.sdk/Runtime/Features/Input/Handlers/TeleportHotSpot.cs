@@ -33,7 +33,7 @@ namespace XRTK.SDK.Input.Handlers
 
             if (eventData.NewFocusedObject == gameObject)
             {
-                eventData.Pointer.TeleportHotSpot = this;
+                eventData.Pointer.HotSpot = this;
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
@@ -42,7 +42,7 @@ namespace XRTK.SDK.Input.Handlers
             }
             else if (eventData.OldFocusedObject == gameObject)
             {
-                eventData.Pointer.TeleportHotSpot = null;
+                eventData.Pointer.HotSpot = null;
 
                 if (eventData.Pointer.IsInteractionEnabled)
                 {
