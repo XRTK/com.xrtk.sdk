@@ -75,16 +75,24 @@ namespace XRTK.SDK.UX.Pointers
         /// <summary>
         /// True if select is pressed right now
         /// </summary>
-        protected bool IsSelectPressed = false;
+        protected bool IsSelectPressed { get; set; } = false;
 
         /// <summary>
         /// True if select has been pressed once since this component was enabled
         /// </summary>
-        protected bool HasSelectPressedOnce = false;
+        protected bool HasSelectPressedOnce { get; set; } = false;
 
-        protected bool IsHoldPressed = false;
+        /// <summary>
+        /// Gets or sets whether this pointer is currently pressed and hold.
+        /// </summary>
+        protected bool IsHoldPressed { get; set; } = false;
 
-        protected bool IsTeleportRequestActive = false;
+        /// <summary>
+        /// Gets or sets whether there is currently ANY teleportation request by the
+        /// <see cref="IMixedRealityLocomotionSystem"/> active. This is used to temporarily
+        /// disable pointers that may interfere with teleportation.
+        /// </summary>
+        protected bool IsTeleportRequestActive { get; set; } = false;
 
         private bool lateRegisterTeleport = true;
 
