@@ -119,6 +119,7 @@ namespace XRTK.SDK.UX.Pointers
             // Use the results from the last update to set our NavigationResult
             float clearWorldLength = 0f;
             ValidationResult = TeleportValidationResult.None;
+            TargetPose = null;
 
             if (IsInteractionEnabled)
             {
@@ -138,10 +139,6 @@ namespace XRTK.SDK.UX.Pointers
                         ValidationResult == TeleportValidationResult.HotSpot)
                     {
                         TargetPose = new MixedRealityPose(Result.EndPoint, Quaternion.Euler(0f, PointerOrientation, 0f));
-                    }
-                    else
-                    {
-                        TargetPose = null;
                     }
 
                     // Use the step index to determine the length of the hit
@@ -187,7 +184,6 @@ namespace XRTK.SDK.UX.Pointers
             else
             {
                 LineBase.enabled = false;
-                TargetPose = null;
             }
         }
 
