@@ -7,7 +7,6 @@ using UnityEngine.Serialization;
 using XRTK.Definitions.Physics;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
-using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Services;
@@ -221,7 +220,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 // This teleport target provider is able to provide a target
                 // for the requested input source.
-                ((ITeleportLocomotionProvider)eventData.LocomotionProvider).AddTargetProvider(this);
+                ((ITeleportLocomotionProvider)eventData.LocomotionProvider).SetTargetProvider(this);
 
                 teleportEnabled = true;
                 IsTeleportRequestActive = false;
@@ -238,7 +237,6 @@ namespace XRTK.SDK.UX.Pointers
             teleportEnabled = false;
             IsTeleportRequestActive = false;
             BaseCursor?.SetVisibility(false);
-            ((ITeleportLocomotionProvider)eventData.LocomotionProvider).RemoveTargetProvider(this);
         }
 
         /// <inheritdoc />
@@ -250,7 +248,6 @@ namespace XRTK.SDK.UX.Pointers
                 teleportEnabled = false;
                 IsTeleportRequestActive = false;
                 BaseCursor?.SetVisibility(false);
-                ((ITeleportLocomotionProvider)eventData.LocomotionProvider).RemoveTargetProvider(this);
             }
         }
 
