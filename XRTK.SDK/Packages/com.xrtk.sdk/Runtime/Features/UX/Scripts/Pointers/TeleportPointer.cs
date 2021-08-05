@@ -213,24 +213,6 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public override void OnInputChanged(InputEventData<float> eventData)
-        {
-            // Don't process input if we've got an active teleport request in progress.
-            if (eventData.used || IsTeleportRequestActive || LocomotionSystem == null)
-            {
-                return;
-            }
-
-            if (eventData.SourceId == InputSourceParent.SourceId &&
-                eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
-            {
-                eventData.Use();
-                ProcessSingleAxisTeleportInput(eventData);
-            }
-        }
-
-        /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Vector2> eventData)
         {
             // Don't process input if we've got an active teleport request in progress.
