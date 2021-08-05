@@ -1,25 +1,38 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.LocomotionSystem;
-using XRTK.Services;
 
 namespace XRTK.SDK.Input.Handlers
 {
     /// <summary>
-    /// SDK component handling teleportation to a specific position and orientation when a user focuses
-    /// this <see cref="GameObject"/> and triggers the teleport action.
+    /// Default implementation for <see cref="ITeleportHotSpot"/>. Place the component on a game object
+    /// to make it a hotspot for teleportation.
     /// </summary>
     public class TeleportHotSpot : BaseFocusHandler, ITeleportHotSpot
     {
-        private IMixedRealityLocomotionSystem locomotionSystem = null;
+        [SerializeField]
+        [Tooltip("Should the destination orientation be overridden? " +
+                 "Useful when you want to orient the user in a specific direction when they teleport to this position. " +
+                 "Override orientation is the transform forward of the GameObject this component is attached to.")]
+        private bool overrideOrientation = false;
 
-        protected IMixedRealityLocomotionSystem LocomotionSystem
-            => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetSystem<IMixedRealityLocomotionSystem>());
+        /// <inheritdoc />
+        public bool OverrideTargetOrientation => overrideOrientation;
 
-        #region IMixedRealityFocusHandler Implementation
+        /// <inheritdoc />
+        public Vector3 Position => transform.position;
+
+        /// <inheritdoc />
+        public Vector3 Normal => transform.up;
+
+        /// <inheritdoc />
+        public bool IsActive => isActiveAndEnabled;
+
+        /// <inheritdoc />
+        public float TargetOrientation => transform.eulerAngles.y;
 
         /// <inheritdoc />
         public override void OnBeforeFocusChange(FocusEventData eventData)
@@ -33,53 +46,13 @@ namespace XRTK.SDK.Input.Handlers
 
             if (eventData.NewFocusedObject == gameObject)
             {
-                eventData.Pointer.HotSpot = this;
-
-                if (eventData.Pointer.IsInteractionEnabled)
-                {
-                    LocomotionSystem?.RaiseTeleportCanceled(targetProvider.RequestingLocomotionProvider, eventData.Pointer, this);
-                }
+                targetProvider.HotSpot = this;
             }
             else if (eventData.OldFocusedObject == gameObject)
             {
-                eventData.Pointer.HotSpot = null;
-
-                if (eventData.Pointer.IsInteractionEnabled)
-                {
-                    LocomotionSystem?.RaiseTeleportCanceled(targetProvider.RequestingLocomotionProvider, eventData.Pointer, this);
-                }
+                targetProvider.HotSpot = null;
             }
         }
-
-        #endregion IMixedRealityFocusHandler Implementation
-
-        #region ITeleportHotSpot Implementation
-
-        /// <inheritdoc />
-        public Vector3 Position => transform.position;
-
-        /// <inheritdoc />
-        public Vector3 Normal => transform.up;
-
-        /// <inheritdoc />
-        public bool IsActive => isActiveAndEnabled;
-
-        [SerializeField]
-        [Tooltip("Should the destination orientation be overridden? " +
-                 "Useful when you want to orient the user in a specific direction when they teleport to this position. " +
-                 "Override orientation is the transform forward of the GameObject this component is attached to.")]
-        private bool overrideOrientation = false;
-
-        /// <inheritdoc />
-        public bool OverrideTargetOrientation => overrideOrientation;
-
-        /// <inheritdoc />
-        public float TargetOrientation => transform.eulerAngles.y;
-
-        /// <inheritdoc />
-        public GameObject GameObjectReference => gameObject;
-
-        #endregion ITeleportHotSpot Implementation
 
         private void OnDrawGizmos()
         {
