@@ -28,12 +28,9 @@ namespace XRTK.SDK.UX.Pointers
             set => lineColorHotSpot = value;
         }
 
-        private bool currentDigitalInputState = false;
         private Vector2 currentDualAxisInputPosition = Vector2.zero;
         private bool teleportEnabled = false;
-
         private bool canTeleport = false;
-
         private bool canMove = false;
 
         private ITeleportValidationProvider validationDataProvider;
@@ -46,10 +43,10 @@ namespace XRTK.SDK.UX.Pointers
         public IMixedRealityInputSource InputSource => InputSourceParent;
 
         /// <inheritdoc />
-        public MixedRealityPose? TargetPose { get; }
+        public MixedRealityPose? TargetPose { get; private set; }
 
         /// <inheritdoc />
-        public ITeleportHotSpot HotSpot { get; set; }
+        public ITeleportHotSpot HotSpot { get; private set; }
 
         /// <inheritdoc />
         public TeleportValidationResult ValidationResult { get; private set; } = TeleportValidationResult.None;
@@ -130,7 +127,22 @@ namespace XRTK.SDK.UX.Pointers
                 // If we hit something
                 if (Result.CurrentPointerTarget != null)
                 {
+                    // Check for hotspot hit.
+                    HotSpot = Result.CurrentPointerTarget.GetComponent<ITeleportHotSpot>();
+
+                    // Validate whether hit target is a valid teleportation target.
                     ValidationResult = ValidationDataProvider.IsValid(Result, HotSpot);
+
+                    // Set target pose if we have a valid target.
+                    if (ValidationResult == TeleportValidationResult.Valid ||
+                        ValidationResult == TeleportValidationResult.HotSpot)
+                    {
+                        TargetPose = new MixedRealityPose(Result.EndPoint, Quaternion.Euler(0f, PointerOrientation, 0f));
+                    }
+                    else
+                    {
+                        TargetPose = null;
+                    }
 
                     // Use the step index to determine the length of the hit
                     for (int i = 0; i <= Result.RayStepIndex; i++)
@@ -175,42 +187,13 @@ namespace XRTK.SDK.UX.Pointers
             else
             {
                 LineBase.enabled = false;
+                TargetPose = null;
             }
         }
 
         #endregion IMixedRealityPointer Implementation
 
         #region IMixedRealityInputHandler Implementation
-
-        /// <inheritdoc />
-        public override void OnInputDown(InputEventData eventData)
-        {
-            // Don't process input if we've got an active teleport request in progress.
-            if (eventData.used || IsTeleportRequestActive || LocomotionSystem == null)
-            {
-                return;
-            }
-
-            if (eventData.SourceId == InputSourceParent.SourceId &&
-                eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
-            {
-                eventData.Use();
-                ProcessDigitalTeleportInput(true);
-            }
-        }
-
-        /// <inheritdoc />
-        public override void OnInputUp(InputEventData eventData)
-        {
-            if (eventData.SourceId == InputSourceParent.SourceId &&
-                eventData.Handedness == Handedness &&
-                eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
-            {
-                eventData.Use();
-                ProcessDigitalTeleportInput(false);
-            }
-        }
 
         /// <inheritdoc />
         public override void OnInputChanged(InputEventData<Vector2> eventData)
@@ -270,27 +253,6 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         #endregion IMixedRealityTeleportHandler Implementation
-
-        private void ProcessDigitalTeleportInput(bool isPressed)
-        {
-            currentDigitalInputState = isPressed;
-            if (!currentDigitalInputState)
-            {
-                bool isValid = ValidationResult == TeleportValidationResult.Valid ||
-                               ValidationResult == TeleportValidationResult.HotSpot;
-
-                if (teleportEnabled && isValid)
-                {
-                    teleportEnabled = false;
-                    LocomotionSystem?.RaiseTeleportStarted(RequestingLocomotionProvider, this, HotSpot);
-                }
-                else if (teleportEnabled)
-                {
-                    teleportEnabled = false;
-                    LocomotionSystem?.RaiseTeleportCanceled(RequestingLocomotionProvider, this, HotSpot);
-                }
-            }
-        }
 
         private void ProcessDualAxisTeleportInput(InputEventData<Vector2> eventData)
         {

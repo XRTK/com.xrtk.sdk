@@ -2,7 +2,6 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
-using XRTK.EventDatum.Input;
 using XRTK.Interfaces.LocomotionSystem;
 
 namespace XRTK.SDK.Input.Handlers
@@ -33,26 +32,6 @@ namespace XRTK.SDK.Input.Handlers
 
         /// <inheritdoc />
         public float TargetOrientation => transform.eulerAngles.y;
-
-        /// <inheritdoc />
-        public override void OnBeforeFocusChange(FocusEventData eventData)
-        {
-            base.OnBeforeFocusChange(eventData);
-
-            if (!(eventData.Pointer is ITeleportTargetProvider targetProvider))
-            {
-                return;
-            }
-
-            if (eventData.NewFocusedObject == gameObject)
-            {
-                targetProvider.HotSpot = this;
-            }
-            else if (eventData.OldFocusedObject == gameObject)
-            {
-                targetProvider.HotSpot = null;
-            }
-        }
 
         private void OnDrawGizmos()
         {
