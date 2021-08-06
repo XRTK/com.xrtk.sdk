@@ -662,9 +662,12 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public virtual void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
-            // Only turn off pointers that aren't making the request.
-            IsTeleportRequestActive = true;
-            BaseCursor?.SetVisibility(false);
+            // Only turn off pointers that are on the input source making the request.
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                IsTeleportRequestActive = true;
+                BaseCursor?.SetVisibility(false);
+            }
         }
 
         /// <inheritdoc />
