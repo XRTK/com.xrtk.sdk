@@ -28,7 +28,7 @@ namespace XRTK.SDK.UX.Pointers
     [DisallowMultipleComponent]
     public abstract class BaseControllerPointer : ControllerPoseSynchronizer,
         IMixedRealityPointer,
-        IMixedRealityLocomotionSystemHandler
+        ILocomotionSystemHandler
     {
         [SerializeField]
         private GameObject cursorPrefab = null;
@@ -89,7 +89,7 @@ namespace XRTK.SDK.UX.Pointers
 
         /// <summary>
         /// Gets or sets whether there is currently ANY teleportation request by the
-        /// <see cref="IMixedRealityLocomotionSystem"/> active. This is used to temporarily
+        /// <see cref="ILocomotionSystem"/> active. This is used to temporarily
         /// disable pointers that may interfere with teleportation.
         /// </summary>
         protected bool IsTeleportRequestActive { get; set; } = false;
@@ -143,10 +143,10 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        private IMixedRealityLocomotionSystem locomotionSystem = null;
+        private ILocomotionSystem locomotionSystem = null;
 
-        protected IMixedRealityLocomotionSystem LocomotionSystem
-            => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetSystem<IMixedRealityLocomotionSystem>());
+        protected ILocomotionSystem LocomotionSystem
+            => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetSystem<ILocomotionSystem>());
 
         private IMixedRealityCameraSystem cameraSystem = null;
 
@@ -174,7 +174,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 try
                 {
-                    locomotionSystem = await MixedRealityToolkit.GetSystemAsync<IMixedRealityLocomotionSystem>();
+                    locomotionSystem = await MixedRealityToolkit.GetSystemAsync<ILocomotionSystem>();
                 }
                 catch (Exception e)
                 {

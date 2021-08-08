@@ -199,7 +199,7 @@ namespace XRTK.SDK.UX.Pointers
                 return;
             }
 
-            if (eventData.SourceId == InputSourceParent.SourceId &&
+            if (eventData.SourceId == InputSource.SourceId &&
                 eventData.Handedness == Handedness &&
                 eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
             {
