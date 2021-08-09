@@ -18,25 +18,24 @@ namespace XRTK.SDK.UX.Pointers
     public class TeleportPointer : LinePointer, ITeleportTargetProvider
     {
         [SerializeField]
+        [Tooltip("Gradient color to apply when targeting a hotspot.")]
         [FormerlySerializedAs("LineColorHotSpot")]
         private Gradient lineColorHotSpot = new Gradient();
 
+        /// <summary>
+        /// Gradient color to apply when targeting a hotspot.
+        /// </summary>
         protected Gradient LineColorHotSpot
         {
             get => lineColorHotSpot;
             set => lineColorHotSpot = value;
         }
 
-        //private Vector2 currentDualAxisInputPosition = Vector2.zero;
-        private bool teleportEnabled = false;
-        //private bool canTeleport = false;
-        //private bool canMove = false;
-
         private ITeleportValidationProvider validationDataProvider;
         private ITeleportValidationProvider ValidationDataProvider => validationDataProvider ?? (validationDataProvider = MixedRealityToolkit.GetService<ITeleportValidationProvider>());
 
         /// <inheritdoc />
-        public ITeleportLocomotionProvider RequestingLocomotionProvider { get; private set; }
+        public ILocomotionProvider RequestingLocomotionProvider { get; private set; }
 
         /// <inheritdoc />
         public IMixedRealityInputSource InputSource => InputSourceParent;
@@ -50,6 +49,15 @@ namespace XRTK.SDK.UX.Pointers
         /// <inheritdoc />
         public TeleportValidationResult ValidationResult { get; private set; } = TeleportValidationResult.None;
 
+        /// <inheritdoc />
+        public bool IsTargeting { get; private set; }
+
+        /// <summary>
+        /// Gets the gradient color for the teleport parabolic line depending on a the validation result
+        /// for the current teleport target.
+        /// </summary>
+        /// <param name="targetResult">Validation result for current target.</param>
+        /// <returns></returns>
         protected Gradient GetLineGradient(TeleportValidationResult targetResult)
         {
             switch (targetResult)
@@ -61,16 +69,29 @@ namespace XRTK.SDK.UX.Pointers
                 case TeleportValidationResult.Invalid:
                     return LineColorInvalid;
                 case TeleportValidationResult.HotSpot:
-                    return lineColorHotSpot;
+                    return LineColorHotSpot;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
             }
         }
 
+        /// <summary>
+        /// Resets the pointer / target provider to defaults
+        /// so a new target request can be served.
+        /// </summary>
+        protected void ResetToDefaults()
+        {
+            IsTargeting = false;
+            IsTeleportRequestActive = false;
+            BaseCursor?.SetVisibility(false);
+            RequestingLocomotionProvider = null;
+            PointerOrientation = 0f;
+        }
+
         #region IMixedRealityPointer Implementation
 
         /// <inheritdoc />
-        public override bool IsInteractionEnabled => !IsTeleportRequestActive && teleportEnabled;
+        public override bool IsInteractionEnabled => !IsTeleportRequestActive && IsTargeting;
 
         /// <inheritdoc />
         public override float PointerOrientation
@@ -194,17 +215,19 @@ namespace XRTK.SDK.UX.Pointers
         public override void OnInputChanged(InputEventData<Vector2> eventData)
         {
             // Don't process input if we've got an active teleport request in progress.
-            if (eventData.used || IsTeleportRequestActive || LocomotionSystem == null)
+            if (eventData.used || IsTeleportRequestActive)
             {
                 return;
             }
 
-            if (eventData.SourceId == InputSource.SourceId &&
+            // Only if we are currently answering to a teleport target
+            // request, we care for input change to reorient the pointer if needed.
+            if (RequestingLocomotionProvider != null &&
+                eventData.SourceId == InputSource.SourceId &&
                 eventData.Handedness == Handedness &&
                 eventData.MixedRealityInputAction == RequestingLocomotionProvider.InputAction)
             {
-                eventData.Use();
-                //ProcessDualAxisTeleportInput(eventData);
+                PointerOrientation = Mathf.Atan2(eventData.InputData.x, eventData.InputData.y) * Mathf.Rad2Deg;
             }
         }
 
@@ -222,8 +245,9 @@ namespace XRTK.SDK.UX.Pointers
                 // for the requested input source.
                 ((ITeleportLocomotionProvider)eventData.LocomotionProvider).SetTargetProvider(this);
 
-                teleportEnabled = true;
+                IsTargeting = true;
                 IsTeleportRequestActive = false;
+                RequestingLocomotionProvider = eventData.LocomotionProvider;
             }
         }
 
@@ -234,9 +258,7 @@ namespace XRTK.SDK.UX.Pointers
             // is this teleport provider's own teleport operation and act differently
             // depending on whether yes or not. But for now we'll make any teleport completion
             // basically cancel out any other teleport pointer as well.
-            teleportEnabled = false;
-            IsTeleportRequestActive = false;
-            BaseCursor?.SetVisibility(false);
+            ResetToDefaults();
         }
 
         /// <inheritdoc />
@@ -245,125 +267,10 @@ namespace XRTK.SDK.UX.Pointers
             // Only cancel teleport if this target provider's teleport was canceled.
             if (eventData.EventSource.SourceId == InputSource.SourceId)
             {
-                teleportEnabled = false;
-                IsTeleportRequestActive = false;
-                BaseCursor?.SetVisibility(false);
+                ResetToDefaults();
             }
         }
 
         #endregion IMixedRealityTeleportHandler Implementation
-
-        //private void ProcessDualAxisTeleportInput(InputEventData<Vector2> eventData)
-        //{
-        //    currentDualAxisInputPosition = eventData.InputData;
-
-        //    if (Mathf.Abs(currentDualAxisInputPosition.y) > inputThreshold ||
-        //        Mathf.Abs(currentDualAxisInputPosition.x) > inputThreshold)
-        //    {
-        //        // Get the angle of the pointer input
-        //        float angle = Mathf.Atan2(currentDualAxisInputPosition.x, currentDualAxisInputPosition.y) * Mathf.Rad2Deg;
-
-        //        // Offset the angle so it's 'forward' facing
-        //        angle += angleOffset;
-        //        PointerOrientation = angle;
-
-        //        if (!teleportEnabled)
-        //        {
-        //            float absoluteAngle = Mathf.Abs(angle);
-
-        //            if (absoluteAngle < teleportActivationAngle)
-        //            {
-        //                teleportEnabled = true;
-
-        //                LocomotionSystem?.RaiseTeleportRequest(this, HotSpot);
-        //            }
-        //            else if (canMove)
-        //            {
-        //                // wrap the angle value.
-        //                if (absoluteAngle > 180f)
-        //                {
-        //                    absoluteAngle = Mathf.Abs(absoluteAngle - 360f);
-        //                }
-
-        //                // Calculate the offset rotation angle from the 90 degree mark.
-        //                // Half the rotation activation angle amount to make sure the activation angle stays centered at 90.
-        //                float offsetRotationAngle = 90f - rotateActivationAngle;
-
-        //                // subtract it from our current angle reading
-        //                offsetRotationAngle = absoluteAngle - offsetRotationAngle;
-
-        //                // if it's less than zero, then we don't have activation
-        //                if (offsetRotationAngle > 0)
-        //                {
-        //                    var cameraRig = CameraSystem.MainCameraRig;
-
-        //                    Debug.Assert(cameraRig != null, $"{nameof(TeleportPointer)} requires the {nameof(IMixedRealityCameraSystem)} be enabled with a valid {nameof(IMixedRealityCameraRig)}!");
-
-        //                    // check to make sure we're still under our activation threshold.
-        //                    if (offsetRotationAngle < rotateActivationAngle)
-        //                    {
-        //                        canMove = false;
-        //                        // Rotate the camera by the rotation amount.  If our angle is positive then rotate in the positive direction, otherwise in the opposite direction.
-        //                        cameraRig.PlayspaceTransform.RotateAround(cameraRig.CameraTransform.position, Vector3.up, angle >= 0.0f ? rotationAmount : -rotationAmount);
-        //                    }
-        //                    else // We may be trying to strafe backwards.
-        //                    {
-        //                        // Calculate the offset rotation angle from the 180 degree mark.
-        //                        // Half the strafe activation angle to make sure the activation angle stays centered at 180f
-        //                        float offsetStrafeAngle = 180f - backStrafeActivationAngle;
-        //                        // subtract it from our current angle reading
-        //                        offsetStrafeAngle = absoluteAngle - offsetStrafeAngle;
-
-        //                        // Check to make sure we're still under our activation threshold.
-        //                        if (offsetStrafeAngle > 0 && offsetStrafeAngle < backStrafeActivationAngle)
-        //                        {
-        //                            canMove = false;
-        //                            var playspacePosition = cameraRig.PlayspaceTransform.position;
-        //                            var height = playspacePosition.y;
-        //                            var newPosition = -cameraRig.CameraTransform.forward * strafeAmount + playspacePosition;
-        //                            newPosition.y = height;
-        //                            cameraRig.PlayspaceTransform.position = newPosition;
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (!canTeleport && !teleportEnabled)
-        //        {
-        //            // Reset the move flag when the user stops moving the joystick
-        //            // but hasn't yet started teleport request.
-        //            canMove = true;
-        //        }
-
-        //        if (canTeleport)
-        //        {
-        //            canTeleport = false;
-        //            teleportEnabled = false;
-
-        //            if (ValidationResult == TeleportValidationResult.Valid ||
-        //                ValidationResult == TeleportValidationResult.HotSpot)
-        //            {
-        //                LocomotionSystem?.RaiseTeleportStarted(RequestingLocomotionProvider, this, HotSpot);
-        //            }
-        //        }
-
-        //        if (teleportEnabled)
-        //        {
-        //            canTeleport = false;
-        //            teleportEnabled = false;
-        //            LocomotionSystem?.RaiseTeleportCanceled(RequestingLocomotionProvider, this, HotSpot);
-        //        }
-        //    }
-
-        //    if (teleportEnabled &&
-        //        ValidationResult == TeleportValidationResult.Valid ||
-        //        ValidationResult == TeleportValidationResult.HotSpot)
-        //    {
-        //        canTeleport = true;
-        //    }
-        //}
     }
 }
