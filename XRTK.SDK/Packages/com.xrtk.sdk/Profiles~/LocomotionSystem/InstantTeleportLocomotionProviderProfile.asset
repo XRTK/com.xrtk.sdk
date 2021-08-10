@@ -9,12 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d88a85df93f14046a20d9b5521fe3e1, type: 3}
+  m_Script: {fileID: 11500000, guid: c038ff534c016844ba74f0c6bc390efc, type: 3}
   m_Name: InstantTeleportLocomotionProviderProfile
   m_EditorClassIdentifier: 
   startupBehaviour: 0
   inputAction:
     profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 16
-    description: Grip Press
-    axisConstraint: 2
+    id: 5
+    description: Teleport Direction
+    axisConstraint: 4
+  inputThreshold: 0.5
+  angleOffset: 0
+  teleportActivationAngle: 45
+  rotateActivationAngle: 22.5
+  rotationAmount: 90
+  backStrafeActivationAngle: 45
+  strafeAmount: 0.25

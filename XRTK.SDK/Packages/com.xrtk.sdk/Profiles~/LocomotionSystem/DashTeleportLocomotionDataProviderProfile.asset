@@ -13,4 +13,16 @@ MonoBehaviour:
   m_Name: DashTeleportLocomotionDataProviderProfile
   m_EditorClassIdentifier: 
   startupBehaviour: 1
+  inputThreshold: 0.5
+  angleOffset: 0
+  teleportActivationAngle: 45
+  rotateActivationAngle: 22.5
+  rotationAmount: 90
+  backStrafeActivationAngle: 45
+  strafeAmount: 0.25
+  inputAction:
+    profileGuid: 399335ccc89c4d12b79f3539ca7771db
+    id: 5
+    description: Teleport Direction
+    axisConstraint: 4
   dashDuration: 0.25
