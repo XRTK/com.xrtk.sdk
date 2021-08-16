@@ -53,12 +53,4 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
     profile: {fileID: 11400000, guid: 5d2262be3279f8a4d9e12658f61a3225, type: 2}
-  - instancedType:
-      reference: e6a350da-0953-44f7-b02f-8697c0c7e201
-    name: Transform Path On Rails Locomotion Provider
-    priority: 4
-    platformEntries:
-      runtimePlatforms:
-      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
-    profile: {fileID: 11400000, guid: 9cf5acc38f5d8454e9c2deca29b2e417, type: 2}
   teleportCooldown: 0
