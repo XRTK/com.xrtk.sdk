@@ -44,7 +44,7 @@ namespace XRTK.SDK.UX.Pointers
         public MixedRealityPose? TargetPose { get; private set; }
 
         /// <inheritdoc />
-        public ITeleportHotSpot HotSpot { get; private set; }
+        public ITeleportAnchor HotSpot { get; private set; }
 
         /// <inheritdoc />
         public TeleportValidationResult ValidationResult { get; private set; } = TeleportValidationResult.None;
@@ -149,7 +149,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (Result.CurrentPointerTarget != null)
                 {
                     // Check for hotspot hit.
-                    HotSpot = Result.CurrentPointerTarget.GetComponent<ITeleportHotSpot>();
+                    HotSpot = Result.CurrentPointerTarget.GetComponent<ITeleportAnchor>();
 
                     // Validate whether hit target is a valid teleportation target.
                     ValidationResult = ValidationDataProvider.IsValid(Result, HotSpot);
