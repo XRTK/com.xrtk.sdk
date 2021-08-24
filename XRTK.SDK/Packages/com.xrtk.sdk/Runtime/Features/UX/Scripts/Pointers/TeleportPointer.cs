@@ -18,17 +18,17 @@ namespace XRTK.SDK.UX.Pointers
     public class TeleportPointer : LinePointer, ITeleportTargetProvider
     {
         [SerializeField]
-        [Tooltip("Gradient color to apply when targeting a hotspot.")]
-        [FormerlySerializedAs("LineColorHotSpot")]
-        private Gradient lineColorHotSpot = new Gradient();
+        [Tooltip("Gradient color to apply when targeting an anchor.")]
+        [FormerlySerializedAs("lineColorHotSpot")]
+        private Gradient lineColorAnchor = new Gradient();
 
         /// <summary>
-        /// Gradient color to apply when targeting a hotspot.
+        /// Gradient color to apply when targeting an <see cref="ITeleportAnchor"/>.
         /// </summary>
-        protected Gradient LineColorHotSpot
+        protected Gradient LineColorAnchor
         {
-            get => lineColorHotSpot;
-            set => lineColorHotSpot = value;
+            get => lineColorAnchor;
+            set => lineColorAnchor = value;
         }
 
         private ITeleportValidationProvider validationDataProvider;
@@ -44,7 +44,7 @@ namespace XRTK.SDK.UX.Pointers
         public MixedRealityPose? TargetPose { get; private set; }
 
         /// <inheritdoc />
-        public ITeleportAnchor HotSpot { get; private set; }
+        public ITeleportAnchor Anchor { get; private set; }
 
         /// <inheritdoc />
         public TeleportValidationResult ValidationResult { get; private set; } = TeleportValidationResult.None;
@@ -68,8 +68,8 @@ namespace XRTK.SDK.UX.Pointers
                     return LineColorValid;
                 case TeleportValidationResult.Invalid:
                     return LineColorInvalid;
-                case TeleportValidationResult.HotSpot:
-                    return LineColorHotSpot;
+                case TeleportValidationResult.Anchor:
+                    return LineColorAnchor;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(targetResult), targetResult, null);
             }
@@ -98,11 +98,11 @@ namespace XRTK.SDK.UX.Pointers
         {
             get
             {
-                if (HotSpot != null &&
-                    HotSpot.OverrideTargetOrientation &&
-                    ValidationResult == TeleportValidationResult.HotSpot)
+                if (Anchor != null &&
+                    Anchor.OverrideTargetOrientation &&
+                    ValidationResult == TeleportValidationResult.Anchor)
                 {
-                    return HotSpot.TargetOrientation;
+                    return Anchor.TargetOrientation;
                 }
 
                 return base.PointerOrientation;
@@ -148,15 +148,15 @@ namespace XRTK.SDK.UX.Pointers
                 // If we hit something
                 if (Result.CurrentPointerTarget != null)
                 {
-                    // Check for hotspot hit.
-                    HotSpot = Result.CurrentPointerTarget.GetComponent<ITeleportAnchor>();
+                    // Check for anchor hit.
+                    Anchor = Result.CurrentPointerTarget.GetComponent<ITeleportAnchor>();
 
                     // Validate whether hit target is a valid teleportation target.
-                    ValidationResult = ValidationDataProvider.IsValid(Result, HotSpot);
+                    ValidationResult = ValidationDataProvider.IsValid(Result, Anchor);
 
                     // Set target pose if we have a valid target.
                     if (ValidationResult == TeleportValidationResult.Valid ||
-                        ValidationResult == TeleportValidationResult.HotSpot)
+                        ValidationResult == TeleportValidationResult.Anchor)
                     {
                         TargetPose = new MixedRealityPose(Result.EndPoint, Quaternion.Euler(0f, PointerOrientation, 0f));
                     }
@@ -187,7 +187,7 @@ namespace XRTK.SDK.UX.Pointers
 
                     // Clamp the end of the parabola to the result hit's point
                     LineBase.LineEndClamp = LineBase.GetNormalizedLengthFromWorldLength(clearWorldLength, LineCastResolution);
-                    BaseCursor?.SetVisibility(ValidationResult == TeleportValidationResult.Valid || ValidationResult == TeleportValidationResult.HotSpot);
+                    BaseCursor?.SetVisibility(ValidationResult == TeleportValidationResult.Valid || ValidationResult == TeleportValidationResult.Anchor);
                 }
                 else
                 {

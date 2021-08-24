@@ -64,7 +64,7 @@ namespace XRTK.SDK.UX.Cursors
                             return CursorStateEnum.Release;
                         case TeleportValidationResult.Invalid:
                             return CursorStateEnum.ObserveHover;
-                        case TeleportValidationResult.HotSpot:
+                        case TeleportValidationResult.Anchor:
                         case TeleportValidationResult.Valid:
                             return CursorStateEnum.ObserveHover;
                         default:

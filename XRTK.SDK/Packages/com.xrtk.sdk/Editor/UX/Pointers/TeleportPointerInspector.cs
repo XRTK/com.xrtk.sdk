@@ -13,14 +13,14 @@ namespace XRTK.SDK.Editor.UX.Pointers
     {
         private readonly GUIContent teleportFoldoutHeader = new GUIContent("Teleport Pointer Settings");
 
-        private SerializedProperty lineColorHotSpot;
+        private SerializedProperty lineColorAnchor;
 
         protected override void OnEnable()
         {
             DrawBasePointerActions = false;
             base.OnEnable();
 
-            lineColorHotSpot = serializedObject.FindProperty(nameof(lineColorHotSpot));
+            lineColorAnchor = serializedObject.FindProperty(nameof(lineColorAnchor));
         }
 
         public override void OnInspectorGUI()
@@ -28,10 +28,10 @@ namespace XRTK.SDK.Editor.UX.Pointers
             base.OnInspectorGUI();
             serializedObject.Update();
 
-            if (lineColorHotSpot.FoldoutWithBoldLabelPropertyField(teleportFoldoutHeader))
+            if (lineColorAnchor.FoldoutWithBoldLabelPropertyField(teleportFoldoutHeader))
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(lineColorHotSpot);
+                EditorGUILayout.PropertyField(lineColorAnchor);
                 EditorGUI.indentLevel--;
             }
 
