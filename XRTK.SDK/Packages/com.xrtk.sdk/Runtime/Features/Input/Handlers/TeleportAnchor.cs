@@ -7,10 +7,10 @@ using XRTK.Interfaces.LocomotionSystem;
 namespace XRTK.SDK.Input.Handlers
 {
     /// <summary>
-    /// Default implementation for <see cref="ITeleportAnchor"/>. Place the component on a game object
-    /// to make it a hotspot for teleportation.
+    /// Default implementation for <see cref="ITeleportAnchor"/>.
+    /// Place the component on a game object to make it an anchor for teleportation.
     /// </summary>
-    public class TeleportHotSpot : BaseFocusHandler, ITeleportAnchor
+    public class TeleportAnchor : BaseFocusHandler, ITeleportAnchor
     {
         [SerializeField]
         [Tooltip("Should the destination orientation be overridden? " +
