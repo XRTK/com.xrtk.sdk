@@ -4,7 +4,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using XRTK.EventDatum.Diagnostics;
+using XRTK.EventDatum.DiagnosticsSystem;
 using XRTK.Interfaces.DiagnosticsSystem.Handlers;
 using XRTK.Services.DiagnosticsSystem;
 

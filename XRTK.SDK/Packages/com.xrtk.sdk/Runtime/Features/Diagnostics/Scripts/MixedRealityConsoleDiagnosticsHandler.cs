@@ -5,7 +5,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using XRTK.Attributes;
-using XRTK.EventDatum.Diagnostics;
+using XRTK.EventDatum.DiagnosticsSystem;
 using XRTK.Interfaces.DiagnosticsSystem.Handlers;
 
 namespace XRTK.SDK.DiagnosticsSystem
