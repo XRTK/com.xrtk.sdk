@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c3c644db71fa6140991a685a6b3dbb4, type: 3}
-  m_Name: MixedRealityTeleportValidationDataProviderProfile
+  m_Script: {fileID: 11500000, guid: 6e4a3b46462f88f47ae4fd4e024c1f82, type: 3}
+  m_Name: TeleportValidationProviderProfile
   m_EditorClassIdentifier: 
+  hotSpotsOnly: 0
   validLayers:
     serializedVersion: 2
     m_Bits: 4294967291

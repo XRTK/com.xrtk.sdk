@@ -4,18 +4,17 @@
 using System;
 using UnityEngine;
 using XRTK.Definitions.InputSystem;
-using XRTK.EventDatum.Teleport;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
-using XRTK.Interfaces.TeleportSystem.Handlers;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.SDK.UX.Pointers;
 using XRTK.Services;
-using XRTK.Services.Teleportation;
+using XRTK.Services.LocomotionSystem;
 using XRTK.Utilities;
 
 namespace XRTK.SDK.UX.Cursors
 {
-    public class TeleportCursor : AnimatedCursor, IMixedRealityTeleportHandler
+    public class TeleportCursor : AnimatedCursor, ILocomotionSystemHandler
     {
         [SerializeField]
         [Tooltip("Arrow Transform to point in the Teleporting direction.")]
@@ -59,13 +58,13 @@ namespace XRTK.SDK.UX.Cursors
             {
                 if (pointer.IsInteractionEnabled)
                 {
-                    switch (pointer.TeleportValidationResult)
+                    switch (pointer.ValidationResult)
                     {
                         case TeleportValidationResult.None:
                             return CursorStateEnum.Release;
                         case TeleportValidationResult.Invalid:
                             return CursorStateEnum.ObserveHover;
-                        case TeleportValidationResult.HotSpot:
+                        case TeleportValidationResult.Anchor:
                         case TeleportValidationResult.Valid:
                             return CursorStateEnum.ObserveHover;
                         default:
@@ -122,29 +121,29 @@ namespace XRTK.SDK.UX.Cursors
 
         #endregion IMixedRealityCursor Implementation
 
-        #region IMixedRealityTeleportHandler Implementation
+        #region IMixedRealityLocomotionSystemHandler Implementation
 
         /// <inheritdoc />
-        public void OnTeleportRequest(TeleportEventData eventData)
+        public void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Observe);
         }
 
         /// <inheritdoc />
-        public void OnTeleportStarted(TeleportEventData eventData)
+        public void OnTeleportStarted(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Release);
         }
 
         /// <inheritdoc />
-        public void OnTeleportCompleted(TeleportEventData eventData) { }
+        public void OnTeleportCompleted(LocomotionEventData eventData) { }
 
         /// <inheritdoc />
-        public void OnTeleportCanceled(TeleportEventData eventData)
+        public void OnTeleportCanceled(LocomotionEventData eventData)
         {
             OnCursorStateChange(CursorStateEnum.Release);
         }
 
-        #endregion IMixedRealityTeleportHandler Implementation
+        #endregion IMixedRealityLocomotionSystemHandler Implementation
     }
 }

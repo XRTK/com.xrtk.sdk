@@ -24,7 +24,7 @@ MonoBehaviour:
   - instancedType:
       reference: 18c9caf0-8d36-4add-bb49-cdf7561cf793
     name: Mixed Reality Input System
-    priority: 1
+    priority: 0
     platformEntries:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
@@ -32,11 +32,19 @@ MonoBehaviour:
   - instancedType:
       reference: fe458876-cc0f-4b6f-9459-544ddf6a9263
     name: Mixed Reality Boundary System
-    priority: 2
+    priority: 1
     platformEntries:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
     profile: {fileID: 11400000, guid: 66c6942c137e4200b9fa363d94982582, type: 2}
+  - instancedType:
+      reference: 9453c088-285e-47aa-bfbb-dafd9109fdd5
+    name: Locomotion System
+    priority: 2
+    platformEntries:
+      runtimePlatforms:
+      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
+    profile: {fileID: 11400000, guid: 6c712a7ae61c3a94c97a821ae431e3d9, type: 2}
   - instancedType:
       reference: 05ef9ddc-13c2-47d4-84c5-1c9cb6cc5c1c
     name: Mixed Reality Spatial Awareness System
@@ -45,14 +53,6 @@ MonoBehaviour:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
     profile: {fileID: 11400000, guid: 41ce31a4954544c58d16f6b3c4c88f4b, type: 2}
-  - instancedType:
-      reference: 2c18630a-9837-46fa-addf-6c8af34d4143
-    name: Mixed Reality Teleport System
-    priority: 4
-    platformEntries:
-      runtimePlatforms:
-      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
-    profile: {fileID: 11400000, guid: fad2fdb578e49a245ad65bbb8c602fae, type: 2}
   - instancedType:
       reference: 2044b5ae-8f50-4b66-b508-d8087356c140
     name: Mixed Reality Diagnostics System
