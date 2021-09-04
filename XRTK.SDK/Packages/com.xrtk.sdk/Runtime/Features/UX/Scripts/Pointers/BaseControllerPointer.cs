@@ -8,17 +8,16 @@ using XRTK.Definitions;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
-using XRTK.EventDatum.Teleport;
 using XRTK.Extensions;
 using XRTK.Interfaces.CameraSystem;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
+using XRTK.Interfaces.LocomotionSystem;
 using XRTK.Interfaces.Physics;
 using XRTK.Interfaces.Providers.Controllers;
-using XRTK.Interfaces.TeleportSystem;
-using XRTK.Interfaces.TeleportSystem.Handlers;
 using XRTK.SDK.Input.Handlers;
 using XRTK.Services;
+using XRTK.Services.LocomotionSystem;
 using XRTK.Utilities.Physics;
 
 namespace XRTK.SDK.UX.Pointers
@@ -29,7 +28,7 @@ namespace XRTK.SDK.UX.Pointers
     [DisallowMultipleComponent]
     public abstract class BaseControllerPointer : ControllerPoseSynchronizer,
         IMixedRealityPointer,
-        IMixedRealityTeleportHandler
+        ILocomotionSystemHandler
     {
         [SerializeField]
         private GameObject cursorPrefab = null;
@@ -76,22 +75,30 @@ namespace XRTK.SDK.UX.Pointers
         /// <summary>
         /// True if select is pressed right now
         /// </summary>
-        protected bool IsSelectPressed = false;
+        protected bool IsSelectPressed { get; set; } = false;
 
         /// <summary>
         /// True if select has been pressed once since this component was enabled
         /// </summary>
-        protected bool HasSelectPressedOnce = false;
+        protected bool HasSelectPressedOnce { get; set; } = false;
 
-        protected bool IsHoldPressed = false;
+        /// <summary>
+        /// Gets or sets whether this pointer is currently pressed and hold.
+        /// </summary>
+        protected bool IsHoldPressed { get; set; } = false;
 
-        protected bool IsTeleportRequestActive = false;
+        /// <summary>
+        /// Gets or sets whether there is currently ANY teleportation request by the
+        /// <see cref="ILocomotionSystem"/> active. This is used to temporarily
+        /// disable pointers that may interfere with teleportation.
+        /// </summary>
+        protected bool IsTeleportRequestActive { get; set; } = false;
 
         private bool lateRegisterTeleport = true;
 
         /// <summary>
         /// Gets the currently captured near interaction object. Only applicable
-        /// if <see cref="XRTK.Definitions.InteractionMode.Both"/> or <see cref="XRTK.Definitions.InteractionMode.Near"/>.
+        /// if <see cref="InteractionMode.Both"/> or <see cref="InteractionMode.Near"/>.
         /// </summary>
         protected GameObject CapturedNearInteractionObject { get; private set; } = null;
 
@@ -136,10 +143,10 @@ namespace XRTK.SDK.UX.Pointers
             }
         }
 
-        private IMixedRealityTeleportSystem teleportSystem = null;
+        private ILocomotionSystem locomotionSystem = null;
 
-        protected IMixedRealityTeleportSystem TeleportSystem
-            => teleportSystem ?? (teleportSystem = MixedRealityToolkit.GetSystem<IMixedRealityTeleportSystem>());
+        protected ILocomotionSystem LocomotionSystem
+            => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetSystem<ILocomotionSystem>());
 
         private IMixedRealityCameraSystem cameraSystem = null;
 
@@ -153,9 +160,9 @@ namespace XRTK.SDK.UX.Pointers
             base.OnEnable();
 
             if (!lateRegisterTeleport &&
-                MixedRealityToolkit.TryGetSystem(out teleportSystem))
+                MixedRealityToolkit.TryGetSystem(out locomotionSystem))
             {
-                teleportSystem.Register(gameObject);
+                locomotionSystem.Register(gameObject);
             }
         }
 
@@ -167,7 +174,7 @@ namespace XRTK.SDK.UX.Pointers
             {
                 try
                 {
-                    teleportSystem = await MixedRealityToolkit.GetSystemAsync<IMixedRealityTeleportSystem>();
+                    locomotionSystem = await MixedRealityToolkit.GetSystemAsync<ILocomotionSystem>();
                 }
                 catch (Exception e)
                 {
@@ -179,7 +186,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (this == null) { return; }
 
                 lateRegisterTeleport = false;
-                TeleportSystem.Register(gameObject);
+                LocomotionSystem.Register(gameObject);
                 SetCursor();
             }
             else
@@ -240,7 +247,7 @@ namespace XRTK.SDK.UX.Pointers
         protected override void OnDisable()
         {
             base.OnDisable();
-            TeleportSystem?.Unregister(gameObject);
+            LocomotionSystem?.Unregister(gameObject);
 
             IsHoldPressed = false;
             IsSelectPressed = false;
@@ -310,9 +317,6 @@ namespace XRTK.SDK.UX.Pointers
             }
             set => cursorModifier = value;
         }
-
-        /// <inheritdoc />
-        public IMixedRealityTeleportHotSpot TeleportHotSpot { get; set; }
 
         [SerializeField]
         private InteractionMode interactionMode = InteractionMode.Both;
@@ -653,18 +657,21 @@ namespace XRTK.SDK.UX.Pointers
 
         #endregion  IMixedRealityInputHandler Implementation
 
-        #region IMixedRealityTeleportHandler Implementation
+        #region IMixedRealityLocomotionSystemHandler Implementation
 
         /// <inheritdoc />
-        public virtual void OnTeleportRequest(TeleportEventData eventData)
+        public virtual void OnTeleportTargetRequested(LocomotionEventData eventData)
         {
-            // Only turn off pointers that aren't making the request.
-            IsTeleportRequestActive = true;
-            BaseCursor?.SetVisibility(false);
+            // Only turn off pointers that are on the input source making the request.
+            if (eventData.EventSource.SourceId == InputSourceParent.SourceId)
+            {
+                IsTeleportRequestActive = true;
+                BaseCursor?.SetVisibility(false);
+            }
         }
 
         /// <inheritdoc />
-        public virtual void OnTeleportStarted(TeleportEventData eventData)
+        public virtual void OnTeleportStarted(LocomotionEventData eventData)
         {
             // Turn off all pointers while we teleport.
             IsTeleportRequestActive = true;
@@ -672,7 +679,7 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnTeleportCompleted(TeleportEventData eventData)
+        public virtual void OnTeleportCompleted(LocomotionEventData eventData)
         {
             // Turn all our pointers back on.
             IsTeleportRequestActive = false;
@@ -680,13 +687,13 @@ namespace XRTK.SDK.UX.Pointers
         }
 
         /// <inheritdoc />
-        public virtual void OnTeleportCanceled(TeleportEventData eventData)
+        public virtual void OnTeleportCanceled(LocomotionEventData eventData)
         {
             // Turn all our pointers back on.
             IsTeleportRequestActive = false;
             BaseCursor?.SetVisibility(true);
         }
 
-        #endregion IMixedRealityTeleportHandler Implementation
+        #endregion IMixedRealityLocomotionSystemHandler Implementation
     }
 }
