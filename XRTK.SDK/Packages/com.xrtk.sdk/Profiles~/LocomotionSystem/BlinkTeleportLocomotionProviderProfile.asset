@@ -23,6 +23,5 @@ MonoBehaviour:
   teleportActivationAngle: 45
   rotateActivationAngle: 22.5
   rotationAmount: 90
-  backStrafeActivationAngle: 45
-  strafeAmount: 0.25
   fadeDuration: 0.25
+  fadeMaterial: {fileID: 2100000, guid: 3725a8df888ad854ca0f0979c213867a, type: 2}
