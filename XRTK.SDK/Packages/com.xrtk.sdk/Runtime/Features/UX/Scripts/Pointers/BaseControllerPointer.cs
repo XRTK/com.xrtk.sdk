@@ -186,7 +186,7 @@ namespace XRTK.SDK.UX.Pointers
                 if (this == null) { return; }
 
                 lateRegisterTeleport = false;
-                LocomotionSystem.Register(gameObject);
+                LocomotionSystem?.Register(gameObject);
                 SetCursor();
             }
             else
