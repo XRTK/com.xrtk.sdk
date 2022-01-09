@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using XRTK.Editor;
-using XRTK.Extensions;
 using XRTK.Editor.Utilities;
 
 namespace XRTK.SDK.Editor
@@ -14,12 +13,12 @@ namespace XRTK.SDK.Editor
     internal static class SDKPackageInstaller
     {
         private static readonly string DefaultPath = $"{MixedRealityPreferences.ProfileGenerationPath}SDK";
-        private static readonly string HiddenProfilePath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).BackSlashes()}\\{MixedRealityPreferences.HIDDEN_PROFILES_PATH}");
-        private static readonly string HiddenPrefabPath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder)).BackSlashes()}\\{MixedRealityPreferences.HIDDEN_PREFABS_PATH}");
+        private static readonly string HiddenProfilePath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder))}{Path.DirectorySeparatorChar}{MixedRealityPreferences.HIDDEN_PROFILES_PATH}");
+        private static readonly string HiddenPrefabPath = Path.GetFullPath($"{PathFinderUtility.ResolvePath<IPathFinder>(typeof(SdkPathFinder))}{Path.DirectorySeparatorChar}{MixedRealityPreferences.HIDDEN_PREFABS_PATH}");
         private static readonly Dictionary<string, string> DefaultSdkAssets = new Dictionary<string, string>
         {
-            {HiddenProfilePath,  $"{DefaultPath}\\Profiles"},
-            {HiddenPrefabPath, $"{DefaultPath}\\Prefabs"}
+            {HiddenProfilePath,  $"{DefaultPath}{Path.DirectorySeparatorChar}Profiles"},
+            {HiddenPrefabPath, $"{DefaultPath}{Path.DirectorySeparatorChar}Prefabs"}
         };
 
         static SDKPackageInstaller()
@@ -30,7 +29,8 @@ namespace XRTK.SDK.Editor
         [MenuItem("Mixed Reality Toolkit/Packages/Install SDK Package Assets...", true, -1)]
         private static bool ImportPackageAssetsValidation()
         {
-            return !Directory.Exists($"{DefaultPath}\\Profiles") || !Directory.Exists($"{DefaultPath}\\Prefabs");
+            return !Directory.Exists($"{DefaultPath}{Path.DirectorySeparatorChar}Profiles") ||
+                   !Directory.Exists($"{DefaultPath}{Path.DirectorySeparatorChar}Prefabs");
         }
 
         [MenuItem("Mixed Reality Toolkit/Packages/Install SDK Package Assets...", false, -1)]
