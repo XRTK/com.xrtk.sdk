@@ -65,6 +65,11 @@ obj/
 .idea/
 _ReSharper.Caches
 
+# ==================== #
+# System Specific List #
+# ==================== #
+.DS_Store
+
 # ===================== #
 # Project Specific List #
 # ===================== #
