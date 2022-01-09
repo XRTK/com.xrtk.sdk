@@ -29,7 +29,8 @@ namespace XRTK.SDK.Editor
         [MenuItem("Mixed Reality Toolkit/Packages/Install SDK Package Assets...", true, -1)]
         private static bool ImportPackageAssetsValidation()
         {
-            return !Directory.Exists($"{DefaultPath}{Path.DirectorySeparatorChar}Profiles") || !Directory.Exists($"{DefaultPath}{Path.DirectorySeparatorChar}Prefabs");
+            return !Directory.Exists($"{DefaultPath}{Path.DirectorySeparatorChar}Profiles") ||
+                   !Directory.Exists($"{DefaultPath}{Path.DirectorySeparatorChar}Prefabs");
         }
 
         [MenuItem("Mixed Reality Toolkit/Packages/Install SDK Package Assets...", false, -1)]
