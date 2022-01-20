@@ -170,28 +170,24 @@ namespace XRTK.SDK.UX.Pointers
         {
             base.Start();
 
+            SetCursor();
+
             if (lateRegisterTeleport)
             {
                 try
                 {
                     locomotionSystem = await MixedRealityToolkit.GetSystemAsync<ILocomotionSystem>();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.LogError(e);
                     return;
                 }
 
                 // We've been destroyed during the await.
-                if (this == null) { return; }
+                if (this.IsNull()) { return; }
 
                 lateRegisterTeleport = false;
                 LocomotionSystem?.Register(gameObject);
-                SetCursor();
-            }
-            else
-            {
-                SetCursor();
             }
         }
 
