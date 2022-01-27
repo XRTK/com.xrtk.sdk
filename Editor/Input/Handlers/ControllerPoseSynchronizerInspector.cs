@@ -18,6 +18,7 @@ namespace XRTK.SDK.Editor.Input.Handlers
         private SerializedProperty useSourcePoseData;
         private SerializedProperty poseAction;
         private SerializedProperty handedness;
+        private SerializedProperty destroyOnSourceLost;
 
         protected bool DrawHandednessProperty = true;
 
@@ -26,6 +27,7 @@ namespace XRTK.SDK.Editor.Input.Handlers
             useSourcePoseData = serializedObject.FindProperty(nameof(useSourcePoseData));
             poseAction = serializedObject.FindProperty(nameof(poseAction));
             handedness = serializedObject.FindProperty(nameof(handedness));
+            destroyOnSourceLost = serializedObject.FindProperty(nameof(destroyOnSourceLost));
         }
 
         public override void OnInspectorGUI()
@@ -58,6 +60,8 @@ namespace XRTK.SDK.Editor.Input.Handlers
                         handedness.enumValueIndex = (int)currentHandedness;
                     }
                 }
+
+                EditorGUILayout.PropertyField(destroyOnSourceLost);
 
                 EditorGUI.indentLevel--;
             }
