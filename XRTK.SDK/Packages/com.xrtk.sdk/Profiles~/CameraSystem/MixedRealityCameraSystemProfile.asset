@@ -19,12 +19,7 @@ MonoBehaviour:
     priority: 0
     platformEntries:
       runtimePlatforms:
-      - reference: dac9ead8-54f9-4935-a27f-9f82f465c972
-      - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
-      - reference: bcac2cef-e793-47b8-9db7-116af668cb66
-      - reference: 97344133-03b4-4314-9581-e42d1aac91ba
-      - reference: a2ffb628-3ce7-4759-9c66-8f2ba8d16fc2
-      - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
+      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
     profile: {fileID: 11400000, guid: c02516a14adf1ff45b2e6feaefd1d090, type: 2}
   globalCameraProfile: {fileID: 11400000, guid: c02516a14adf1ff45b2e6feaefd1d090,
     type: 2}

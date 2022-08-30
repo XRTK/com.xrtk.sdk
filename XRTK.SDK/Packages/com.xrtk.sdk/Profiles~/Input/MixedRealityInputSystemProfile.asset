@@ -14,56 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   configurations:
   - instancedType:
-      reference: 4d4d36e3-6acb-45e5-8316-0b15a098ea2f
-    name: Unity Touch Data Provider
-    priority: 0
-    platformEntries:
-      runtimePlatforms:
-      - reference: dac9ead8-54f9-4935-a27f-9f82f465c972
-      - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
-      - reference: bcac2cef-e793-47b8-9db7-116af668cb66
-      - reference: 97344133-03b4-4314-9581-e42d1aac91ba
-      - reference: 7dc72b4e-34f6-4b26-afd7-cde0c51f83a3
-      - reference: a2ffb628-3ce7-4759-9c66-8f2ba8d16fc2
-      - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
-    profile: {fileID: 11400000, guid: 30f1afb97be1db54e9e04aa6b965b410, type: 2}
-  - instancedType:
-      reference: a4d8d13b-253c-469a-a3a2-ecfe16dd969f
-    name: Unity Joystick Data Provider
-    priority: 1
-    platformEntries:
-      runtimePlatforms:
-      - reference: dac9ead8-54f9-4935-a27f-9f82f465c972
-      - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
-      - reference: bcac2cef-e793-47b8-9db7-116af668cb66
-      - reference: 97344133-03b4-4314-9581-e42d1aac91ba
-      - reference: a2ffb628-3ce7-4759-9c66-8f2ba8d16fc2
-      - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
-    profile: {fileID: 11400000, guid: 69ab987a62681cf4d9f4042ef17b0ddd, type: 2}
-  - instancedType:
-      reference: 9b116969-7f4b-4cf9-9d5a-4fba7793f50e
-    name: OpenVR Data Controller Data Provider
-    priority: 2
-    platformEntries:
-      runtimePlatforms:
-      - reference: dac9ead8-54f9-4935-a27f-9f82f465c972
-      - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
-      - reference: 97344133-03b4-4314-9581-e42d1aac91ba
-      - reference: a2ffb628-3ce7-4759-9c66-8f2ba8d16fc2
-      - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
-    profile: {fileID: 11400000, guid: b120d542bee585744b5567157705b9f3, type: 2}
-  - instancedType:
       reference: 07512ffc-5128-434c-b7bf-5cd7ca8ef853
     name: Simulated Hand Controller Data Provider
-    priority: 3
+    priority: 2
     platformEntries:
       runtimePlatforms:
       - reference: 3324b4a2-30f0-4145-bb06-cd65b8945487
     profile: {fileID: 11400000, guid: 6bd4ff02967a9b24197b8cd2593ddfa4, type: 2}
   - instancedType:
-      reference: 12e24f3d-7689-4863-a403-dd7a80da3c25
-    name: Windows Speech Data Provider
-    priority: 4
+      reference: 9d96d660-cb10-48b8-b2a7-3262adb2ab14
+    name: Windows Dictation Data Provider
+    priority: 3
     platformEntries:
       runtimePlatforms:
       - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
@@ -71,15 +32,15 @@ MonoBehaviour:
       - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
     profile: {fileID: 0}
   - instancedType:
-      reference: 9d96d660-cb10-48b8-b2a7-3262adb2ab14
-    name: Windows Dictation Data Provider
-    priority: 5
+      reference: 12e24f3d-7689-4863-a403-dd7a80da3c25
+    name: Windows Speech Data Provider
+    priority: 1
     platformEntries:
       runtimePlatforms:
       - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
       - reference: 7dc72b4e-34f6-4b26-afd7-cde0c51f83a3
       - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
-    profile: {fileID: 0}
+    profile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90, type: 2}
   focusProviderType:
     reference: 249d4d78-cadd-45ba-9438-db9fc2509213
   gazeProviderType:
@@ -93,7 +54,8 @@ MonoBehaviour:
   drawDebugPointingRays: 1
   debugPointingRayColors:
   - {r: 0, g: 1, b: 0, a: 1}
-  handMeshingEnabled: 1
+  gripThreshold: 0.8
+  renderingMode: 1
   handPhysicsEnabled: 0
   useTriggers: 0
   boundsMode: 0
