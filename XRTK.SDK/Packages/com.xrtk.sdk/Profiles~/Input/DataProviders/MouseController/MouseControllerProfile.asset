@@ -16,15 +16,5 @@ MonoBehaviour:
     reference: a80e17f6-8221-49c3-bc4b-cab495c91d6c
   handedness: 7
   visualizationProfile: {fileID: 0}
-  useCustomInteractions: 1
-  interactionMappingProfiles:
-  - {fileID: 11400000, guid: 4dd348d11c4dd1c49a278635f86bf5b1, type: 2}
-  - {fileID: 11400000, guid: d5b88eaa28302494987eb8cca1d7e6bf, type: 2}
-  - {fileID: 11400000, guid: 7547e87574e61b4469153f95bd0bfe5b, type: 2}
-  - {fileID: 11400000, guid: 1761708feeca67a46bad7c43e68cd925, type: 2}
-  - {fileID: 11400000, guid: 7e688039fbdb82946a13a2916f9bf3d0, type: 2}
-  - {fileID: 11400000, guid: 783119be32701b345adcb6b380373103, type: 2}
-  - {fileID: 11400000, guid: fc571069ed3eafc4dbca010302bcfffb, type: 2}
-  - {fileID: 11400000, guid: e57f35d28adbaee4eb8c3d8327de9ba5, type: 2}
-  - {fileID: 11400000, guid: 6d778a3c9bb21ce4f8545572854ea17d, type: 2}
-  - {fileID: 11400000, guid: a62843b5b9c4fd24c9a6ec63cebd2159, type: 2}
+  pointerProfiles:
+  - {fileID: 11400000, guid: c9b96ce0cb2d7d4459e3ebdfc2736793, type: 2}

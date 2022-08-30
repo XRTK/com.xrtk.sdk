@@ -15,14 +15,23 @@ MonoBehaviour:
   controllerVisualizationType:
     reference: ea41f336-8b46-4aea-a8b4-8b93b52e67a9
   useDefaultModels: 1
-  model: {fileID: 1370450866519632, guid: ee0e0dd1dc6d457794091bf89f804f8f, type: 3}
+  controllerModel: {fileID: 1760394390528354, guid: 3c945620dae24228acea8b9402529ce6,
+    type: 3}
   pointerPose:
-    profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 4
-    description: Pointer Pose
-    axisConstraint: 7
+    m_Name: Pointer Pose
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: d813f61d-6068-484e-854a-410c9f6a11f2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   alternatePointerPose:
-    profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 3
-    description: Grip Pose
-    axisConstraint: 7
+    m_Name: Alternate Pointer Pose
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a7ef5723-f412-4b74-8d7e-7004a98cecf6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0

@@ -21,3 +21,20 @@ MonoBehaviour:
   drawDebugPointingRays: 0
   debugPointingRayColors:
   - {r: 0, g: 1, b: 0, a: 1}
+  inputAction:
+    m_Name: Input
+    m_Type: 2
+    m_ExpectedControlType: Vector2
+    m_Id: 0c2d0de2-396a-4848-953e-f97ae599a81f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: bdd2c031-fc3a-405c-a846-e5197c7c3cab
+      m_Path: <Mouse>/position
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input
+      m_Flags: 0
+    m_Flags: 1
