@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using XRTK.Definitions;
 using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
@@ -58,11 +59,11 @@ namespace XRTK.SDK.UX.Pointers
 
         [SerializeField]
         [Tooltip("The hold action that will enable the raise the input event for this pointer.")]
-        private MixedRealityInputAction activeHoldAction = MixedRealityInputAction.None;
+        private InputAction activeHoldAction = null;
 
         [SerializeField]
         [Tooltip("The action that will enable the raise the input event for this pointer.")]
-        private MixedRealityInputAction pointerAction = MixedRealityInputAction.None;
+        private InputAction pointerAction = null;
 
         [SerializeField]
         [Tooltip("Does the interaction require hold?")]
@@ -614,12 +615,12 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 interactionMode.HasFlags(InteractionMode.Far))
             {
-                if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
+                if (requiresHoldAction && eventData.InputAction == activeHoldAction)
                 {
                     IsHoldPressed = false;
                 }
 
-                if (eventData.MixedRealityInputAction == pointerAction)
+                if (eventData.InputAction == pointerAction)
                 {
                     IsSelectPressed = false;
                     InputSystem.RaisePointerClicked(this, pointerAction);
@@ -636,12 +637,12 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 interactionMode.HasFlags(InteractionMode.Far))
             {
-                if (requiresHoldAction && eventData.MixedRealityInputAction == activeHoldAction)
+                if (requiresHoldAction && eventData.InputAction == activeHoldAction)
                 {
                     IsHoldPressed = true;
                 }
 
-                if (eventData.MixedRealityInputAction == pointerAction)
+                if (eventData.InputAction == pointerAction)
                 {
                     IsSelectPressed = true;
                     HasSelectPressedOnce = true;

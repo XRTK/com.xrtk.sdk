@@ -14,8 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startupBehaviour: 0
   inputAction:
-    profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 13
-    description: Movement Direction
-    axisConstraint: 4
+    m_Name: Input
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: 443affa7-a4aa-4627-bf1e-351a37c1c45a
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 1c584bd5-18ac-46ff-b5dd-eb159ac1a145
+      m_Path: <Gamepad>/rightStick
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input
+      m_Flags: 0
+    m_Flags: 0
   speed: 5

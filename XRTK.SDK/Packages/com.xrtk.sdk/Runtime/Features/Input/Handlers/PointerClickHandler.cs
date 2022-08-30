@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
@@ -31,9 +31,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public void OnPointerDown(MixedRealityPointerEventData eventData)
         {
-            if (onPointerDownActionEvent.InputAction == MixedRealityInputAction.None) { return; }
+            if (onPointerDownActionEvent.InputAction == null) { return; }
 
-            if (onPointerDownActionEvent.InputAction == eventData.MixedRealityInputAction)
+            if (onPointerDownActionEvent.InputAction == eventData.InputAction)
             {
                 onPointerDownActionEvent.UnityEvent.Invoke();
             }
@@ -42,9 +42,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public void OnPointerUp(MixedRealityPointerEventData eventData)
         {
-            if (onPointerUpActionEvent.InputAction == MixedRealityInputAction.None) { return; }
+            if (onPointerUpActionEvent.InputAction == null) { return; }
 
-            if (onPointerUpActionEvent.InputAction == eventData.MixedRealityInputAction)
+            if (onPointerUpActionEvent.InputAction == eventData.InputAction)
             {
                 onPointerUpActionEvent.UnityEvent.Invoke();
             }
@@ -53,9 +53,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public void OnPointerClicked(MixedRealityPointerEventData eventData)
         {
-            if (onPointerClickedActionEvent.InputAction == MixedRealityInputAction.None) { return; }
+            if (onPointerClickedActionEvent.InputAction == null) { return; }
 
-            if (onPointerClickedActionEvent.InputAction == eventData.MixedRealityInputAction)
+            if (onPointerClickedActionEvent.InputAction == eventData.InputAction)
             {
                 onPointerClickedActionEvent.UnityEvent.Invoke();
             }

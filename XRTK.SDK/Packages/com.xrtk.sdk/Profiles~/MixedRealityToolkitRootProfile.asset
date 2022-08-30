@@ -15,7 +15,7 @@ MonoBehaviour:
   configurations:
   - instancedType:
       reference: 5c656ee3-fe7c-4fb3-b3ee-df3fc0d0973d
-    name: Mixed Reality Camera System
+    name: Camera System
     priority: 0
     platformEntries:
       runtimePlatforms:
@@ -23,7 +23,7 @@ MonoBehaviour:
     profile: {fileID: 11400000, guid: 2b0ab6f5348646cebf8585d46c3a3edc, type: 2}
   - instancedType:
       reference: 18c9caf0-8d36-4add-bb49-cdf7561cf793
-    name: Mixed Reality Input System
+    name: Input System
     priority: 0
     platformEntries:
       runtimePlatforms:
@@ -31,7 +31,7 @@ MonoBehaviour:
     profile: {fileID: 11400000, guid: a176466fbf4e44a087639abca7e5ba47, type: 2}
   - instancedType:
       reference: fe458876-cc0f-4b6f-9459-544ddf6a9263
-    name: Mixed Reality Boundary System
+    name: Boundary System
     priority: 1
     platformEntries:
       runtimePlatforms:
@@ -47,7 +47,7 @@ MonoBehaviour:
     profile: {fileID: 11400000, guid: 6c712a7ae61c3a94c97a821ae431e3d9, type: 2}
   - instancedType:
       reference: 05ef9ddc-13c2-47d4-84c5-1c9cb6cc5c1c
-    name: Mixed Reality Spatial Awareness System
+    name: Spatial Awareness System
     priority: 3
     platformEntries:
       runtimePlatforms:
@@ -55,7 +55,7 @@ MonoBehaviour:
     profile: {fileID: 11400000, guid: 41ce31a4954544c58d16f6b3c4c88f4b, type: 2}
   - instancedType:
       reference: 2044b5ae-8f50-4b66-b508-d8087356c140
-    name: Mixed Reality Diagnostics System
+    name: Diagnostics System
     priority: 4
     platformEntries:
       runtimePlatforms:

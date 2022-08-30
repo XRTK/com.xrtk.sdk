@@ -16,7 +16,7 @@ MonoBehaviour:
   - instancedType:
       reference: 07512ffc-5128-434c-b7bf-5cd7ca8ef853
     name: Simulated Hand Controller Data Provider
-    priority: 2
+    priority: 0
     platformEntries:
       runtimePlatforms:
       - reference: 3324b4a2-30f0-4145-bb06-cd65b8945487
@@ -24,7 +24,7 @@ MonoBehaviour:
   - instancedType:
       reference: 9d96d660-cb10-48b8-b2a7-3262adb2ab14
     name: Windows Dictation Data Provider
-    priority: 3
+    priority: 0
     platformEntries:
       runtimePlatforms:
       - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
@@ -68,8 +68,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1251200226ad995498472e45aaf12178, type: 2}
   - {fileID: 11400000, guid: 5e6bcc3863bdc634d82a8a59598a070b, type: 2}
   - {fileID: 11400000, guid: 2f6c29c72cd30c74f9717c932bd87a4a, type: 2}
-  inputActionsProfile: {fileID: 11400000, guid: 399335ccc89c4d12b79f3539ca7771db,
-    type: 2}
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,
     type: 2}
   gesturesProfile: {fileID: 11400000, guid: 47280a6380eb40d5952dc5a5da00a89e, type: 2}
+  inputActions: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}

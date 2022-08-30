@@ -14,14 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startupBehaviour: 0
   inputAction:
-    profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 5
-    description: Teleport Direction
-    axisConstraint: 4
+    m_Name: Input
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: e9f2cb60-7592-44e3-8f01-502b1d62a8e2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f4d0b0ec-b8a4-4ebe-8d6b-379961ea73b2
+      m_Path: <Gamepad>/rightStick
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input
+      m_Flags: 0
+    m_Flags: 0
   inputThreshold: 0.5
   angleOffset: 0
   teleportActivationAngle: 45
   rotateActivationAngle: 22.5
   rotationAmount: 90
-  backStrafeActivationAngle: 45
-  strafeAmount: 0.25

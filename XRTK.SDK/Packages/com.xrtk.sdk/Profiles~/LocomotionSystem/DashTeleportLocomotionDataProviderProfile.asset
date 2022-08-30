@@ -13,16 +13,26 @@ MonoBehaviour:
   m_Name: DashTeleportLocomotionDataProviderProfile
   m_EditorClassIdentifier: 
   startupBehaviour: 1
+  inputAction:
+    m_Name: Input
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: e5e50552-bf88-4f4b-94c5-c35df381e36d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: d97bcba8-1adc-44c0-a9e5-0503e8093ff2
+      m_Path: <Gamepad>/rightStick
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input
+      m_Flags: 0
+    m_Flags: 0
   inputThreshold: 0.5
   angleOffset: 0
   teleportActivationAngle: 45
   rotateActivationAngle: 22.5
   rotationAmount: 90
-  backStrafeActivationAngle: 45
-  strafeAmount: 0.25
-  inputAction:
-    profileGuid: 399335ccc89c4d12b79f3539ca7771db
-    id: 5
-    description: Teleport Direction
-    axisConstraint: 4
   dashDuration: 0.25

@@ -16,37 +16,52 @@ MonoBehaviour:
   recognitionConfidenceLevel: 1
   speechCommands:
   - keyword: Menu
-    keyCode: 0
-    action:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+    inputAction:
+      m_Name: Input
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 84ce61af-f3e7-437b-93d9-d8cb5a02c70d
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
   - keyword: Toggle Diagnostics
-    keyCode: 0
-    action:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+    inputAction:
+      m_Name: Input
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 8b8c2d3f-43bb-4bc2-b7de-88fa691fba35
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
   - keyword: Toggle Frame Rate
-    keyCode: 0
-    action:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+    inputAction:
+      m_Name: Input
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 0108e274-6a63-4887-9b57-f2260ab696ee
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
   - keyword: Toggle Processor
-    keyCode: 0
-    action:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+    inputAction:
+      m_Name: Input
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 4b98c189-35f0-4cfa-9833-46b9a1eead8f
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
   - keyword: Toggle Memory
-    keyCode: 0
-    action:
-      profileGuid: 00000000000000000000000000000000
-      id: 0
-      description: None
-      axisConstraint: 0
+    inputAction:
+      m_Name: Input
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: e110fc9f-f50b-47fa-85bc-0d36f7443076
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0

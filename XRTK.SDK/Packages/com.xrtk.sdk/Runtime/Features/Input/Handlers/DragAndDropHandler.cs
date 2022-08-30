@@ -1,8 +1,8 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
-using XRTK.Definitions.InputSystem;
+using UnityEngine.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem;
 using XRTK.Interfaces.InputSystem.Handlers;
@@ -27,7 +27,7 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action that will start/stop the dragging.")]
-        private MixedRealityInputAction dragAction = MixedRealityInputAction.None;
+        private InputAction dragAction;
 
         [SerializeField]
         [Tooltip("Transform that will be dragged. Defaults to the object of the component.")]
@@ -112,7 +112,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (eventData.MixedRealityInputAction != dragAction)
+            if (eventData.InputAction != dragAction)
             {
                 // If we're not grabbing.
                 return;

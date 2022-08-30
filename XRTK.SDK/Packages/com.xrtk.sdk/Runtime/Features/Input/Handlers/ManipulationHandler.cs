@@ -3,7 +3,7 @@
 
 using System;
 using UnityEngine;
-using XRTK.Definitions.InputSystem;
+using UnityEngine.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.Definitions.SpatialAwarenessSystem;
 using XRTK.EventDatum.Input;
@@ -35,12 +35,12 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to select the GameObject and begin/end the manipulation phase")]
-        private MixedRealityInputAction selectAction = MixedRealityInputAction.None;
+        private InputAction selectAction;
 
         /// <summary>
         /// The action to use to select the GameObject and begin/end the manipulation phase
         /// </summary>
-        public MixedRealityInputAction SelectAction
+        public InputAction SelectAction
         {
             get => selectAction;
             set => selectAction = value;
@@ -48,12 +48,12 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to enable pressed actions")]
-        private MixedRealityInputAction touchpadPressAction = MixedRealityInputAction.None;
+        private InputAction touchpadPressAction;
 
         /// <summary>
         /// The action to use to enable pressed actions
         /// </summary>
-        public MixedRealityInputAction TouchpadPressAction
+        public InputAction TouchpadPressAction
         {
             get => touchpadPressAction;
             set => touchpadPressAction = value;
@@ -71,12 +71,12 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to rotate the GameObject")]
-        private MixedRealityInputAction rotateAction = MixedRealityInputAction.None;
+        private InputAction rotateAction = null;
 
         /// <summary>
         /// The action to use to rotate the GameObject
         /// </summary>
-        public MixedRealityInputAction RotateAction
+        public InputAction RotateAction
         {
             get => rotateAction;
             set => rotateAction = value;
@@ -84,12 +84,12 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to scale the GameObject")]
-        private MixedRealityInputAction scaleAction = MixedRealityInputAction.None;
+        private InputAction scaleAction = null;
 
         /// <summary>
         /// The action to use to scale the GameObject
         /// </summary>
-        public MixedRealityInputAction ScaleAction
+        public InputAction ScaleAction
         {
             get => scaleAction;
             set => scaleAction = value;
@@ -97,12 +97,12 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to nudge the pointer extent closer or further away from the pointer source")]
-        private MixedRealityInputAction nudgeAction = MixedRealityInputAction.None;
+        private InputAction nudgeAction = null;
 
         /// <summary>
         /// The action to use to nudge the <see cref="GameObject"/> closer or further away from the pointer source.
         /// </summary>
-        public MixedRealityInputAction NudgeAction
+        public InputAction NudgeAction
         {
             get => nudgeAction;
             set => nudgeAction = value;
@@ -110,12 +110,12 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to immediately cancel any current manipulation.")]
-        private MixedRealityInputAction cancelAction = MixedRealityInputAction.None;
+        private InputAction cancelAction = null;
 
         /// <summary>
         /// The action to use to immediately cancel any current manipulation.
         /// </summary>
-        public MixedRealityInputAction CancelAction
+        public InputAction CancelAction
         {
             get => cancelAction;
             set => cancelAction = value;
@@ -619,11 +619,11 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputDown(InputEventData eventData)
         {
-            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+            if (eventData.InputAction == null) { return; }
 
             if (!eventData.used &&
                 IsBeingHeld &&
-                eventData.MixedRealityInputAction == cancelAction)
+                eventData.InputAction == cancelAction)
             {
                 EndHold(true);
                 eventData.Use();
@@ -633,11 +633,11 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputUp(InputEventData eventData)
         {
-            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+            if (eventData.InputAction == null) { return; }
 
             if (!eventData.used &&
                 IsBeingHeld &&
-                eventData.MixedRealityInputAction == cancelAction)
+                eventData.InputAction == cancelAction)
             {
                 EndHold(true);
                 eventData.Use();
@@ -647,7 +647,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<float> eventData)
         {
-            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+            if (eventData.InputAction == null) { return; }
 
             if (!IsBeingHeld ||
                 primaryInputSource == null ||
@@ -656,7 +656,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (eventData.MixedRealityInputAction == touchpadPressAction)
+            if (eventData.InputAction == touchpadPressAction)
             {
                 if (eventData.InputData <= 0.00001f)
                 {
@@ -671,7 +671,7 @@ namespace XRTK.SDK.Input.Handlers
             if (IsRotating) { return; }
 
             if (!IsPressed &&
-                eventData.MixedRealityInputAction == touchpadPressAction &&
+                eventData.InputAction == touchpadPressAction &&
                 eventData.InputData >= pressThreshold)
             {
                 IsPressed = true;
@@ -679,7 +679,7 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             if (IsPressed &&
-                eventData.MixedRealityInputAction == touchpadPressAction &&
+                eventData.InputAction == touchpadPressAction &&
                 eventData.InputData <= pressThreshold)
             {
                 IsPressed = false;
@@ -690,7 +690,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<Vector2> eventData)
         {
-            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+            if (eventData.InputAction == null) { return; }
 
             // reset this in case we are rotating only.
             IsScalingPossible = false;
@@ -704,9 +704,9 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             // Filter our actions
-            if (eventData.MixedRealityInputAction != nudgeAction ||
-                eventData.MixedRealityInputAction != scaleAction ||
-                eventData.MixedRealityInputAction != rotateAction)
+            if (eventData.InputAction != nudgeAction ||
+                eventData.InputAction != scaleAction ||
+                eventData.InputAction != rotateAction)
             {
                 return;
             }
@@ -715,7 +715,7 @@ namespace XRTK.SDK.Input.Handlers
             absoluteInputData.x = Mathf.Abs(absoluteInputData.x);
             absoluteInputData.y = Mathf.Abs(absoluteInputData.y);
 
-            IsRotationPossible = eventData.MixedRealityInputAction == rotateAction &&
+            IsRotationPossible = eventData.InputAction == rotateAction &&
                                  (absoluteInputData.x >= rotationZone.x ||
                                   absoluteInputData.y >= rotationZone.x);
 
@@ -736,8 +736,8 @@ namespace XRTK.SDK.Input.Handlers
 
             if (!IsPressed || IsRotating) { return; }
 
-            IsScalingPossible = eventData.MixedRealityInputAction == scaleAction && absoluteInputData.x > 0f;
-            IsNudgePossible = eventData.MixedRealityInputAction == nudgeAction && absoluteInputData.y > 0f;
+            IsScalingPossible = eventData.InputAction == scaleAction && absoluteInputData.x > 0f;
+            IsNudgePossible = eventData.InputAction == nudgeAction && absoluteInputData.y > 0f;
 
             // Check to make sure that input values fall between min/max zone values
             if (IsScalingPossible &&
@@ -796,9 +796,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnPointerDown(MixedRealityPointerEventData eventData)
         {
-            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+            if (eventData.InputAction == null) { return; }
 
-            if (eventData.MixedRealityInputAction == selectAction)
+            if (eventData.InputAction == selectAction)
             {
                 if (!useHold)
                 {
@@ -812,10 +812,10 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnPointerUp(MixedRealityPointerEventData eventData)
         {
-            if (eventData.MixedRealityInputAction == MixedRealityInputAction.None) { return; }
+            if (eventData.InputAction == null) { return; }
 
             if (eventData.used ||
-                eventData.MixedRealityInputAction != selectAction)
+                eventData.InputAction != selectAction)
             {
                 return;
             }

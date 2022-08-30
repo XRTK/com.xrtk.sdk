@@ -159,7 +159,7 @@ namespace XRTK.SDK.UX.Pointers
                 isInteractionEnabled = true;
             }
 
-            if (eventData.Controller is SimulatedMixedRealityHandController)
+            if (eventData.Controller is ISimulatedControllerDataProvider)
             {
                 isInteractionEnabled = false;
                 BaseCursor?.SetVisibility(false);
@@ -176,7 +176,7 @@ namespace XRTK.SDK.UX.Pointers
                 isInteractionEnabled = false;
             }
 
-            if (eventData.Controller is SimulatedMixedRealityHandController)
+            if (eventData.Controller is ISimulatedControllerDataProvider)
             {
                 isInteractionEnabled = true;
                 BaseCursor?.SetVisibility(true);
@@ -242,7 +242,7 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.MixedRealityInputAction)
+                    PoseAction == eventData.InputAction)
                 {
                     UpdateMousePosition(eventData.InputData);
                 }

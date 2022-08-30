@@ -24,7 +24,7 @@ MonoBehaviour:
   - instancedType:
       reference: 1b5e5a67-864c-4a3d-a099-5a46ead399a8
     name: Frame Diagnostics Data Provider
-    priority: 1
+    priority: 0
     platformEntries:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
@@ -32,7 +32,7 @@ MonoBehaviour:
   - instancedType:
       reference: 06916f29-4640-475e-8bf6-313c6b831fcf
     name: Console Diagnostics Data Provider
-    priority: 2
+    priority: 1
     platformEntries:
       runtimePlatforms:
       - reference: c6bf6315-2e9c-4602-827d-2d4871d29422

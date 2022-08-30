@@ -1,9 +1,9 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using XRTK.Definitions.Devices;
-using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Utilities;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
@@ -103,10 +103,10 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The input action that will drive the Transform's pose, position, or rotation.")]
-        private MixedRealityInputAction poseAction = MixedRealityInputAction.None;
+        private InputAction poseAction;
 
         /// <inheritdoc />
-        public MixedRealityInputAction PoseAction
+        public InputAction PoseAction
         {
             get => poseAction;
             set => poseAction = value;
@@ -191,7 +191,7 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.MixedRealityInputAction)
+                    PoseAction == eventData.InputAction)
                 {
                     IsTracked = true;
                     TrackingState = TrackingState.Tracked;
@@ -206,7 +206,7 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.MixedRealityInputAction)
+                    PoseAction == eventData.InputAction)
                 {
                     IsTracked = true;
                     TrackingState = TrackingState.Tracked;
@@ -221,7 +221,7 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.MixedRealityInputAction)
+                    PoseAction == eventData.InputAction)
                 {
                     IsTracked = true;
                     TrackingState = TrackingState.Tracked;

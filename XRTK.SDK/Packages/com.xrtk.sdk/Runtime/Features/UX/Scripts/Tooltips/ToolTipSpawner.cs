@@ -1,9 +1,9 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) XRTK. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Threading.Tasks;
 using UnityEngine;
-using XRTK.Definitions.InputSystem;
+using UnityEngine.InputSystem;
 using XRTK.EventDatum.Input;
 using XRTK.Interfaces.InputSystem.Handlers;
 using XRTK.SDK.Input.Handlers;
@@ -58,7 +58,7 @@ namespace XRTK.SDK.UX.ToolTips
 
         [SerializeField]
         [Tooltip("The action that will be used for when to spawn or toggle the tooltip.")]
-        private MixedRealityInputAction tooltipToggleAction = MixedRealityInputAction.None;
+        private InputAction tooltipToggleAction;
 
         [SerializeField]
         [Range(0f, 5f)]
@@ -142,7 +142,7 @@ namespace XRTK.SDK.UX.ToolTips
         /// <inheritdoc />
         void IMixedRealityInputHandler.OnInputDown(InputEventData eventData)
         {
-            if (tooltipToggleAction.Id == eventData.MixedRealityInputAction.Id)
+            if (tooltipToggleAction == eventData.InputAction)
             {
                 tappedTime = Time.unscaledTime;
 
