@@ -159,7 +159,7 @@ namespace XRTK.SDK.UX.Pointers
                 isInteractionEnabled = true;
             }
 
-            if (eventData.Controller is ISimulatedControllerDataProvider)
+            if (eventData.Controller is IMixedRealitySimulatedController)
             {
                 isInteractionEnabled = false;
                 BaseCursor?.SetVisibility(false);
@@ -176,7 +176,7 @@ namespace XRTK.SDK.UX.Pointers
                 isInteractionEnabled = false;
             }
 
-            if (eventData.Controller is ISimulatedControllerDataProvider)
+            if (eventData.Controller is IMixedRealitySimulatedController)
             {
                 isInteractionEnabled = true;
                 BaseCursor?.SetVisibility(true);
