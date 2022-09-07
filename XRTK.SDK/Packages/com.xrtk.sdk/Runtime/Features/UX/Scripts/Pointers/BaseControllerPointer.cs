@@ -6,7 +6,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using XRTK.Definitions;
-using XRTK.Definitions.InputSystem;
 using XRTK.Definitions.Physics;
 using XRTK.EventDatum.Input;
 using XRTK.Extensions;
@@ -59,11 +58,11 @@ namespace XRTK.SDK.UX.Pointers
 
         [SerializeField]
         [Tooltip("The hold action that will enable the raise the input event for this pointer.")]
-        private InputAction activeHoldAction = null;
+        private InputActionReference activeHoldAction = null;
 
         [SerializeField]
         [Tooltip("The action that will enable the raise the input event for this pointer.")]
-        private InputAction pointerAction = null;
+        private InputActionReference pointerAction = null;
 
         [SerializeField]
         [Tooltip("Does the interaction require hold?")]
@@ -139,7 +138,7 @@ namespace XRTK.SDK.UX.Pointers
                 }
                 else
                 {
-                    Debug.LogError($"No IMixedRealityCursor component found on {cursorInstance.name}");
+                    Debug.LogError($"No {nameof(IMixedRealityCursor)} component found on {cursorInstance.name}");
                 }
             }
         }
@@ -234,7 +233,6 @@ namespace XRTK.SDK.UX.Pointers
                 // the focus provider here, the event will not be raised on the
                 // capture near interaction object.
                 InputSystem.FocusProvider.Update();
-
                 InputSystem.RaiseOnInputUp(InputSourceParent, Handedness, pointerAction);
                 CapturedNearInteractionObject = null;
             }
@@ -615,12 +613,12 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 interactionMode.HasFlags(InteractionMode.Far))
             {
-                if (requiresHoldAction && eventData.InputAction == activeHoldAction)
+                if (requiresHoldAction && eventData.InputAction == activeHoldAction.action)
                 {
                     IsHoldPressed = false;
                 }
 
-                if (eventData.InputAction == pointerAction)
+                if (eventData.InputAction == pointerAction.action)
                 {
                     IsSelectPressed = false;
                     InputSystem.RaisePointerClicked(this, pointerAction);
@@ -637,12 +635,12 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 interactionMode.HasFlags(InteractionMode.Far))
             {
-                if (requiresHoldAction && eventData.InputAction == activeHoldAction)
+                if (requiresHoldAction && eventData.InputAction == activeHoldAction.action)
                 {
                     IsHoldPressed = true;
                 }
 
-                if (eventData.InputAction == pointerAction)
+                if (eventData.InputAction == pointerAction.action)
                 {
                     IsSelectPressed = true;
                     HasSelectPressedOnce = true;

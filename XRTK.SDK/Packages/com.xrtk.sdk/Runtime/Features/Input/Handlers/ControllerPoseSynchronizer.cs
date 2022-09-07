@@ -103,13 +103,13 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The input action that will drive the Transform's pose, position, or rotation.")]
-        private InputAction poseAction;
+        private InputActionReference poseAction;
 
         /// <inheritdoc />
         public InputAction PoseAction
         {
-            get => poseAction;
-            set => poseAction = value;
+            get => poseAction.action;
+            set => poseAction.Set(value);
         }
 
         #endregion IMixedRealityControllerPoseSynchronizer Implementation

@@ -27,7 +27,7 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action that will start/stop the dragging.")]
-        private InputAction dragAction;
+        private InputActionReference dragAction;
 
         [SerializeField]
         [Tooltip("Transform that will be dragged. Defaults to the object of the component.")]
@@ -112,7 +112,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (eventData.InputAction != dragAction)
+            if (eventData.InputAction != dragAction.action)
             {
                 // If we're not grabbing.
                 return;
@@ -123,7 +123,7 @@ namespace XRTK.SDK.Input.Handlers
             currentInputSource = eventData.InputSource;
             currentPointer = eventData.Pointer;
 
-            Vector3 initialDraggingPosition = FocusProvider.TryGetFocusDetails(currentPointer, out var focusDetails)
+            var initialDraggingPosition = FocusProvider.TryGetFocusDetails(currentPointer, out var focusDetails)
                     ? focusDetails.EndPoint
                     : hostTransform.position;
 

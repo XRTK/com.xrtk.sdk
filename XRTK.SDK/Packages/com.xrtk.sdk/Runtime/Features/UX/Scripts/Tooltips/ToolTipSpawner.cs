@@ -58,7 +58,7 @@ namespace XRTK.SDK.UX.ToolTips
 
         [SerializeField]
         [Tooltip("The action that will be used for when to spawn or toggle the tooltip.")]
-        private InputAction tooltipToggleAction;
+        private InputActionReference tooltipToggleAction;
 
         [SerializeField]
         [Range(0f, 5f)]
@@ -142,7 +142,7 @@ namespace XRTK.SDK.UX.ToolTips
         /// <inheritdoc />
         void IMixedRealityInputHandler.OnInputDown(InputEventData eventData)
         {
-            if (tooltipToggleAction == eventData.InputAction)
+            if (eventData.InputAction == tooltipToggleAction.action)
             {
                 tappedTime = Time.unscaledTime;
 

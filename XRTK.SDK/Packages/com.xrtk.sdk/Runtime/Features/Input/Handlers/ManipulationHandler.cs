@@ -35,7 +35,7 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to select the GameObject and begin/end the manipulation phase")]
-        private InputAction selectAction;
+        private InputActionReference selectAction = null;
 
         /// <summary>
         /// The action to use to select the GameObject and begin/end the manipulation phase
@@ -43,12 +43,12 @@ namespace XRTK.SDK.Input.Handlers
         public InputAction SelectAction
         {
             get => selectAction;
-            set => selectAction = value;
+            set => selectAction.Set(value);
         }
 
         [SerializeField]
         [Tooltip("The action to use to enable pressed actions")]
-        private InputAction touchpadPressAction;
+        private InputActionReference touchpadPressAction;
 
         /// <summary>
         /// The action to use to enable pressed actions
@@ -56,7 +56,7 @@ namespace XRTK.SDK.Input.Handlers
         public InputAction TouchpadPressAction
         {
             get => touchpadPressAction;
-            set => touchpadPressAction = value;
+            set => touchpadPressAction.Set(value);
         }
 
         [Range(0f, 1f)]
@@ -71,7 +71,7 @@ namespace XRTK.SDK.Input.Handlers
 
         [SerializeField]
         [Tooltip("The action to use to rotate the GameObject")]
-        private InputAction rotateAction = null;
+        private InputActionReference rotateAction = null;
 
         /// <summary>
         /// The action to use to rotate the GameObject
@@ -79,12 +79,12 @@ namespace XRTK.SDK.Input.Handlers
         public InputAction RotateAction
         {
             get => rotateAction;
-            set => rotateAction = value;
+            set => rotateAction.Set(value);
         }
 
         [SerializeField]
         [Tooltip("The action to use to scale the GameObject")]
-        private InputAction scaleAction = null;
+        private InputActionReference scaleAction = null;
 
         /// <summary>
         /// The action to use to scale the GameObject
@@ -92,12 +92,12 @@ namespace XRTK.SDK.Input.Handlers
         public InputAction ScaleAction
         {
             get => scaleAction;
-            set => scaleAction = value;
+            set => scaleAction.Set(value);
         }
 
         [SerializeField]
         [Tooltip("The action to use to nudge the pointer extent closer or further away from the pointer source")]
-        private InputAction nudgeAction = null;
+        private InputActionReference nudgeAction = null;
 
         /// <summary>
         /// The action to use to nudge the <see cref="GameObject"/> closer or further away from the pointer source.
@@ -105,12 +105,12 @@ namespace XRTK.SDK.Input.Handlers
         public InputAction NudgeAction
         {
             get => nudgeAction;
-            set => nudgeAction = value;
+            set => nudgeAction.Set(value);
         }
 
         [SerializeField]
         [Tooltip("The action to use to immediately cancel any current manipulation.")]
-        private InputAction cancelAction = null;
+        private InputActionReference cancelAction = null;
 
         /// <summary>
         /// The action to use to immediately cancel any current manipulation.
@@ -118,7 +118,7 @@ namespace XRTK.SDK.Input.Handlers
         public InputAction CancelAction
         {
             get => cancelAction;
-            set => cancelAction = value;
+            set => cancelAction.Set(value);
         }
 
         #endregion Input Actions
@@ -619,11 +619,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputDown(InputEventData eventData)
         {
-            if (eventData.InputAction == null) { return; }
-
             if (!eventData.used &&
                 IsBeingHeld &&
-                eventData.InputAction == cancelAction)
+                eventData.InputAction == cancelAction.action)
             {
                 EndHold(true);
                 eventData.Use();
@@ -633,11 +631,9 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputUp(InputEventData eventData)
         {
-            if (eventData.InputAction == null) { return; }
-
             if (!eventData.used &&
                 IsBeingHeld &&
-                eventData.InputAction == cancelAction)
+                eventData.InputAction == cancelAction.action)
             {
                 EndHold(true);
                 eventData.Use();
@@ -647,8 +643,6 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<float> eventData)
         {
-            if (eventData.InputAction == null) { return; }
-
             if (!IsBeingHeld ||
                 primaryInputSource == null ||
                 eventData.InputSource.SourceId != primaryInputSource.SourceId)
@@ -656,7 +650,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (eventData.InputAction == touchpadPressAction)
+            if (eventData.InputAction == touchpadPressAction.action)
             {
                 if (eventData.InputData <= 0.00001f)
                 {
@@ -671,7 +665,7 @@ namespace XRTK.SDK.Input.Handlers
             if (IsRotating) { return; }
 
             if (!IsPressed &&
-                eventData.InputAction == touchpadPressAction &&
+                eventData.InputAction == touchpadPressAction.action &&
                 eventData.InputData >= pressThreshold)
             {
                 IsPressed = true;
@@ -679,7 +673,7 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             if (IsPressed &&
-                eventData.InputAction == touchpadPressAction &&
+                eventData.InputAction == touchpadPressAction.action &&
                 eventData.InputData <= pressThreshold)
             {
                 IsPressed = false;
@@ -704,9 +698,9 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             // Filter our actions
-            if (eventData.InputAction != nudgeAction ||
-                eventData.InputAction != scaleAction ||
-                eventData.InputAction != rotateAction)
+            if (eventData.InputAction != nudgeAction.action ||
+                eventData.InputAction != scaleAction.action ||
+                eventData.InputAction != rotateAction.action)
             {
                 return;
             }
@@ -715,7 +709,7 @@ namespace XRTK.SDK.Input.Handlers
             absoluteInputData.x = Mathf.Abs(absoluteInputData.x);
             absoluteInputData.y = Mathf.Abs(absoluteInputData.y);
 
-            IsRotationPossible = eventData.InputAction == rotateAction &&
+            IsRotationPossible = eventData.InputAction == rotateAction.action &&
                                  (absoluteInputData.x >= rotationZone.x ||
                                   absoluteInputData.y >= rotationZone.x);
 
@@ -736,8 +730,8 @@ namespace XRTK.SDK.Input.Handlers
 
             if (!IsPressed || IsRotating) { return; }
 
-            IsScalingPossible = eventData.InputAction == scaleAction && absoluteInputData.x > 0f;
-            IsNudgePossible = eventData.InputAction == nudgeAction && absoluteInputData.y > 0f;
+            IsScalingPossible = eventData.InputAction == scaleAction.action && absoluteInputData.x > 0f;
+            IsNudgePossible = eventData.InputAction == nudgeAction.action && absoluteInputData.y > 0f;
 
             // Check to make sure that input values fall between min/max zone values
             if (IsScalingPossible &&
@@ -798,7 +792,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (eventData.InputAction == null) { return; }
 
-            if (eventData.InputAction == selectAction)
+            if (eventData.InputAction == selectAction.action)
             {
                 if (!useHold)
                 {
@@ -815,7 +809,7 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.InputAction == null) { return; }
 
             if (eventData.used ||
-                eventData.InputAction != selectAction)
+                eventData.InputAction != selectAction.action)
             {
                 return;
             }
