@@ -17,19 +17,4 @@ MonoBehaviour:
   handedness: 1
   visualizationProfile: {fileID: 11400000, guid: d03625d21fb0bfb41b6642f492e27754,
     type: 2}
-  useCustomInteractions: 0
-  interactionMappingProfiles:
-  - {fileID: 11400000, guid: b7f65e3d3581e3d46ba01ecb4fedd827, type: 2}
-  - {fileID: 11400000, guid: ac477884d2650664bab2f52184673eee, type: 2}
-  - {fileID: 11400000, guid: 96140c34e5c8322468a744646a7b64fe, type: 2}
-  - {fileID: 11400000, guid: 8e01cb476d731534093fe5edd227c54c, type: 2}
-  - {fileID: 11400000, guid: b24f94bd93cab98498809436cb5b685f, type: 2}
-  - {fileID: 11400000, guid: 80556dee026997f4ba146ffda4710f79, type: 2}
-  - {fileID: 11400000, guid: 65fe769960045eb4284e122669355d0f, type: 2}
-  - {fileID: 11400000, guid: 7a31aa9670c8b0046ab22a9a8c86aabd, type: 2}
-  - {fileID: 11400000, guid: 3265960ea5cd94f499bf02eb746a79af, type: 2}
-  - {fileID: 11400000, guid: 8d21414d16a88d647a33e521cfaf2d6e, type: 2}
-  - {fileID: 11400000, guid: ebcc386ca12a0f440b56ea95c751f7ee, type: 2}
-  - {fileID: 11400000, guid: baeb171c54652534f80427c4473e14c6, type: 2}
-  - {fileID: 11400000, guid: fe2c817c85de12f45862c078fc767994, type: 2}
-  - {fileID: 11400000, guid: 8b71ccb1d13b24940886b9129cd99584, type: 2}
+  pointerProfiles: []

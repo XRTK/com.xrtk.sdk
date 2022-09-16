@@ -621,7 +621,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!eventData.used &&
                 IsBeingHeld &&
-                eventData.InputAction == cancelAction.action)
+                eventData.Context.action == CancelAction)
             {
                 EndHold(true);
                 eventData.Use();
@@ -633,7 +633,7 @@ namespace XRTK.SDK.Input.Handlers
         {
             if (!eventData.used &&
                 IsBeingHeld &&
-                eventData.InputAction == cancelAction.action)
+                eventData.Context.action == CancelAction)
             {
                 EndHold(true);
                 eventData.Use();
@@ -650,7 +650,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (eventData.InputAction == touchpadPressAction.action)
+            if (eventData.Context.action == TouchpadPressAction)
             {
                 if (eventData.InputData <= 0.00001f)
                 {
@@ -665,7 +665,7 @@ namespace XRTK.SDK.Input.Handlers
             if (IsRotating) { return; }
 
             if (!IsPressed &&
-                eventData.InputAction == touchpadPressAction.action &&
+                eventData.Context.action == TouchpadPressAction &&
                 eventData.InputData >= pressThreshold)
             {
                 IsPressed = true;
@@ -673,7 +673,7 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             if (IsPressed &&
-                eventData.InputAction == touchpadPressAction.action &&
+                eventData.Context.action == TouchpadPressAction &&
                 eventData.InputData <= pressThreshold)
             {
                 IsPressed = false;
@@ -684,8 +684,6 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnInputChanged(InputEventData<Vector2> eventData)
         {
-            if (eventData.InputAction == null) { return; }
-
             // reset this in case we are rotating only.
             IsScalingPossible = false;
 
@@ -698,9 +696,9 @@ namespace XRTK.SDK.Input.Handlers
             }
 
             // Filter our actions
-            if (eventData.InputAction != nudgeAction.action ||
-                eventData.InputAction != scaleAction.action ||
-                eventData.InputAction != rotateAction.action)
+            if (eventData.Context.action != NudgeAction ||
+                eventData.Context.action != ScaleAction ||
+                eventData.Context.action != RotateAction)
             {
                 return;
             }
@@ -709,7 +707,7 @@ namespace XRTK.SDK.Input.Handlers
             absoluteInputData.x = Mathf.Abs(absoluteInputData.x);
             absoluteInputData.y = Mathf.Abs(absoluteInputData.y);
 
-            IsRotationPossible = eventData.InputAction == rotateAction.action &&
+            IsRotationPossible = eventData.Context.action == RotateAction &&
                                  (absoluteInputData.x >= rotationZone.x ||
                                   absoluteInputData.y >= rotationZone.x);
 
@@ -730,8 +728,8 @@ namespace XRTK.SDK.Input.Handlers
 
             if (!IsPressed || IsRotating) { return; }
 
-            IsScalingPossible = eventData.InputAction == scaleAction.action && absoluteInputData.x > 0f;
-            IsNudgePossible = eventData.InputAction == nudgeAction.action && absoluteInputData.y > 0f;
+            IsScalingPossible = eventData.Context.action == ScaleAction && absoluteInputData.x > 0f;
+            IsNudgePossible = eventData.Context.action == NudgeAction && absoluteInputData.y > 0f;
 
             // Check to make sure that input values fall between min/max zone values
             if (IsScalingPossible &&
@@ -790,9 +788,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnPointerDown(MixedRealityPointerEventData eventData)
         {
-            if (eventData.InputAction == null) { return; }
-
-            if (eventData.InputAction == selectAction.action)
+            if (eventData.Context.action == SelectAction)
             {
                 if (!useHold)
                 {
@@ -806,10 +802,8 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public virtual void OnPointerUp(MixedRealityPointerEventData eventData)
         {
-            if (eventData.InputAction == null) { return; }
-
             if (eventData.used ||
-                eventData.InputAction != selectAction.action)
+                eventData.Context.action != SelectAction)
             {
                 return;
             }

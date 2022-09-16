@@ -191,7 +191,7 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.InputAction)
+                    PoseAction == eventData.Context.action)
                 {
                     IsTracked = true;
                     TrackingState = TrackingState.Tracked;
@@ -206,7 +206,7 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.InputAction)
+                    PoseAction == eventData.Context.action)
                 {
                     IsTracked = true;
                     TrackingState = TrackingState.Tracked;
@@ -221,7 +221,7 @@ namespace XRTK.SDK.Input.Handlers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.InputAction)
+                    PoseAction == eventData.Context.action)
                 {
                     IsTracked = true;
                     TrackingState = TrackingState.Tracked;

@@ -31,7 +31,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public void OnPointerDown(MixedRealityPointerEventData eventData)
         {
-            if (onPointerDownActionEvent.InputAction == eventData.InputAction)
+            if (onPointerDownActionEvent.InputAction == eventData.Context.action)
             {
                 onPointerDownActionEvent.UnityEvent.Invoke();
             }
@@ -40,7 +40,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public void OnPointerUp(MixedRealityPointerEventData eventData)
         {
-            if (onPointerUpActionEvent.InputAction == eventData.InputAction)
+            if (onPointerUpActionEvent.InputAction == eventData.Context.action)
             {
                 onPointerUpActionEvent.UnityEvent.Invoke();
             }
@@ -49,7 +49,7 @@ namespace XRTK.SDK.Input.Handlers
         /// <inheritdoc />
         public void OnPointerClicked(MixedRealityPointerEventData eventData)
         {
-            if (onPointerClickedActionEvent.InputAction == eventData.InputAction)
+            if (onPointerClickedActionEvent.InputAction == eventData.Context.action)
             {
                 onPointerClickedActionEvent.UnityEvent.Invoke();
             }

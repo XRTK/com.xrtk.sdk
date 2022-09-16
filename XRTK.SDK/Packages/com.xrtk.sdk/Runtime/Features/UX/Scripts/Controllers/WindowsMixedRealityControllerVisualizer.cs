@@ -267,7 +267,7 @@ namespace XRTK.SDK.UX.Controllers
             if (eventData.SourceId != Controller?.InputSource.SourceId) { return; }
 
             if (!UseSourcePoseData &&
-                PoseAction == eventData.InputAction)
+                PoseAction == eventData.Context.action)
             {
                 IsTracked = true;
                 TrackingState = TrackingState.Tracked;

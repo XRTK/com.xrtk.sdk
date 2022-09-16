@@ -241,7 +241,7 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == Controller?.InputSource.SourceId)
             {
                 if (!UseSourcePoseData &&
-                    PoseAction == eventData.InputAction)
+                    eventData.Context.action == PoseAction)
                 {
                     UpdateMousePosition(eventData.InputData);
                 }

@@ -12,43 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a16673d92d4e8fa24750357b3cf906, type: 3}
   m_Name: MixedRealityInputSystemProfile
   m_EditorClassIdentifier: 
-  configurations:
-  - instancedType:
-      reference: 067ce7d4-8277-4e18-834e-3dc712074b72
-    name: Mouse Data Provider
-    priority: 0
-    platformEntries:
-      runtimePlatforms:
-      - reference: c6bf6315-2e9c-4602-827d-2d4871d29422
-    profile: {fileID: 11400000, guid: a2a4350cf0bc6a84cb524749c3c95eae, type: 2}
-  - instancedType:
-      reference: 9d96d660-cb10-48b8-b2a7-3262adb2ab14
-    name: Windows Dictation Data Provider
-    priority: 1
-    platformEntries:
-      runtimePlatforms:
-      - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
-      - reference: 7dc72b4e-34f6-4b26-afd7-cde0c51f83a3
-      - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
-    profile: {fileID: 0}
-  - instancedType:
-      reference: 12e24f3d-7689-4863-a403-dd7a80da3c25
-    name: Windows Speech Data Provider
-    priority: 2
-    platformEntries:
-      runtimePlatforms:
-      - reference: c838c4f5-a87e-48c7-8742-09a4d85fc3bc
-      - reference: 7dc72b4e-34f6-4b26-afd7-cde0c51f83a3
-      - reference: 58de2d2a-db5f-4090-a949-4028b8ea3afd
-    profile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90, type: 2}
-  - instancedType:
-      reference: 07512ffc-5128-434c-b7bf-5cd7ca8ef853
-    name: Simulated Hand Controller Data Provider
-    priority: 2
-    platformEntries:
-      runtimePlatforms:
-      - reference: 3324b4a2-30f0-4145-bb06-cd65b8945487
-    profile: {fileID: 11400000, guid: 6bd4ff02967a9b24197b8cd2593ddfa4, type: 2}
+  configurations: []
   focusProviderType:
     reference: 249d4d78-cadd-45ba-9438-db9fc2509213
   gazeProviderType:
@@ -78,5 +42,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2f6c29c72cd30c74f9717c932bd87a4a, type: 2}
   speechCommandsProfile: {fileID: 11400000, guid: 89759c8b9c98420794a5d650ce3b2f90,
     type: 2}
-  inputActions: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+  inputActions: {fileID: -944628639613478452, guid: 3b50c118cf564234b80ab5475ca59613,
     type: 3}

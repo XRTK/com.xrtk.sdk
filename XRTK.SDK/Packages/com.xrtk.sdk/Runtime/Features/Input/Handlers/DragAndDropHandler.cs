@@ -29,6 +29,8 @@ namespace XRTK.SDK.Input.Handlers
         [Tooltip("The action that will start/stop the dragging.")]
         private InputActionReference dragAction;
 
+        public InputAction DragAction => dragAction;
+
         [SerializeField]
         [Tooltip("Transform that will be dragged. Defaults to the object of the component.")]
         private Transform hostTransform;
@@ -112,7 +114,7 @@ namespace XRTK.SDK.Input.Handlers
                 return;
             }
 
-            if (eventData.InputAction != dragAction.action)
+            if (eventData.Context.action != DragAction)
             {
                 // If we're not grabbing.
                 return;

@@ -60,9 +60,13 @@ namespace XRTK.SDK.UX.Pointers
         [Tooltip("The hold action that will enable the raise the input event for this pointer.")]
         private InputActionReference activeHoldAction = null;
 
+        public InputAction ActiveHoldAction => activeHoldAction;
+
         [SerializeField]
         [Tooltip("The action that will enable the raise the input event for this pointer.")]
         private InputActionReference pointerAction = null;
+
+        public InputAction PointerAction => pointerAction;
 
         [SerializeField]
         [Tooltip("Does the interaction require hold?")]
@@ -146,12 +150,12 @@ namespace XRTK.SDK.UX.Pointers
         private ILocomotionSystem locomotionSystem = null;
 
         protected ILocomotionSystem LocomotionSystem
-            => locomotionSystem ?? (locomotionSystem = MixedRealityToolkit.GetSystem<ILocomotionSystem>());
+            => locomotionSystem ??= MixedRealityToolkit.GetSystem<ILocomotionSystem>();
 
         private IMixedRealityCameraSystem cameraSystem = null;
 
         protected IMixedRealityCameraSystem CameraSystem
-            => cameraSystem ?? (cameraSystem = MixedRealityToolkit.GetSystem<IMixedRealityCameraSystem>());
+            => cameraSystem ??= MixedRealityToolkit.GetSystem<IMixedRealityCameraSystem>();
 
         #region MonoBehaviour Implementation
 
@@ -203,7 +207,8 @@ namespace XRTK.SDK.UX.Pointers
                 // the focus provider here, the event will not be raised on the
                 // capture near interaction object.
                 InputSystem.FocusProvider.Update();
-                InputSystem.RaiseOnInputDown(InputSourceParent, Handedness, pointerAction);
+                // TODO Figure out how to raise synthetic input down.
+                InputSystem.RaiseOnInputDown(InputSourceParent, Handedness, default);
             }
         }
 
@@ -218,7 +223,8 @@ namespace XRTK.SDK.UX.Pointers
                 // the focus provider here, the event will not be raised on the
                 // capture near interaction object.
                 InputSystem.FocusProvider.Update();
-                InputSystem.RaiseOnInputPressed(InputSourceParent, Handedness, pointerAction);
+                // TODO Figure out how to raise synthetic input pressed.
+                InputSystem.RaiseOnInputPressed(InputSourceParent, Handedness, default);
             }
         }
 
@@ -233,7 +239,8 @@ namespace XRTK.SDK.UX.Pointers
                 // the focus provider here, the event will not be raised on the
                 // capture near interaction object.
                 InputSystem.FocusProvider.Update();
-                InputSystem.RaiseOnInputUp(InputSourceParent, Handedness, pointerAction);
+                // TODO Figure out how to raise synthetic input up.
+                InputSystem.RaiseOnInputUp(InputSourceParent, Handedness, default);
                 CapturedNearInteractionObject = null;
             }
         }
@@ -594,7 +601,7 @@ namespace XRTK.SDK.UX.Pointers
 
                 if (IsSelectPressed)
                 {
-                    InputSystem.RaisePointerUp(this, pointerAction);
+                    InputSystem.RaisePointerUp(this, eventData.Context);
                 }
 
                 IsSelectPressed = false;
@@ -613,16 +620,16 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 interactionMode.HasFlags(InteractionMode.Far))
             {
-                if (requiresHoldAction && eventData.InputAction == activeHoldAction.action)
+                if (requiresHoldAction && eventData.Context.action == ActiveHoldAction)
                 {
                     IsHoldPressed = false;
                 }
 
-                if (eventData.InputAction == pointerAction.action)
+                if (eventData.Context.action == PointerAction)
                 {
                     IsSelectPressed = false;
-                    InputSystem.RaisePointerClicked(this, pointerAction);
-                    InputSystem.RaisePointerUp(this, pointerAction);
+                    InputSystem.RaisePointerClicked(this, eventData.Context);
+                    InputSystem.RaisePointerUp(this, eventData.Context);
                 }
             }
         }
@@ -635,16 +642,16 @@ namespace XRTK.SDK.UX.Pointers
             if (eventData.SourceId == InputSourceParent.SourceId &&
                 interactionMode.HasFlags(InteractionMode.Far))
             {
-                if (requiresHoldAction && eventData.InputAction == activeHoldAction.action)
+                if (requiresHoldAction && eventData.Context.action == ActiveHoldAction)
                 {
                     IsHoldPressed = true;
                 }
 
-                if (eventData.InputAction == pointerAction.action)
+                if (eventData.Context.action == PointerAction)
                 {
                     IsSelectPressed = true;
                     HasSelectPressedOnce = true;
-                    InputSystem.RaisePointerDown(this, pointerAction);
+                    InputSystem.RaisePointerDown(this, eventData.Context);
                 }
             }
         }

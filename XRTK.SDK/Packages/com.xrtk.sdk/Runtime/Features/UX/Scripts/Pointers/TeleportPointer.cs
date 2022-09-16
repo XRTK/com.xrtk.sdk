@@ -225,7 +225,7 @@ namespace XRTK.SDK.UX.Pointers
             if (RequestingLocomotionProvider != null &&
                 eventData.SourceId == InputSource.SourceId &&
                 eventData.Handedness == Handedness &&
-                eventData.InputAction == RequestingLocomotionProvider.InputAction)
+                eventData.Context.action == RequestingLocomotionProvider.InputAction)
             {
                 PointerOrientation = Mathf.Atan2(eventData.InputData.x, eventData.InputData.y) * Mathf.Rad2Deg;
             }
